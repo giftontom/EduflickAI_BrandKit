@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Eduflick AI · Leadership Program Brochure · Cohort 02 · 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   EDUFLICK AI · LEADERSHIP PROGRAM BROCHURE v2 · 12 PAGES · A4
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --i-50:#EEF0FF; --i-100:#DCE0FF; --i-200:#B7C0FF; --i-300:#8B97FF;
+  --i-400:#6E78F5; --i-500:#5B5BF0; --i-600:#4B3FE0; --i-700:#3A2BB8;
+  --i-800:#261A82; --i-900:#150D52; --i-ink:#0B0822;
+  --paper:#F5F2EA; --paper-2:#ECE7DA; --paper-dim:#C9C5BA;
+  --ink:#0A0B10; --ink-2:#11131C; --ink-3:#181B28;
+  --muted:#7A7F90;
+  --line:rgba(10,11,16,0.08);
+  --line-2:rgba(10,11,16,0.14);
+}
+
+body{
+  font-family:'Manrope',sans-serif;
+  background:var(--paper-dim);
+  color:var(--ink);
+  font-size:13px;line-height:1.55;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ─── A4 SHEET ─── */
+.sheet{
+  width:794px;height:1123px;overflow:hidden;
+  background:var(--paper);
+  margin:24px auto;
+  box-shadow:0 2px 32px rgba(0,0,0,.28);
+  page-break-after:always;
+  display:flex;flex-direction:column;position:relative;
+}
+
+.i-bar{
+  height:3px;flex-shrink:0;
+  background:linear-gradient(90deg,var(--i-500) 0%,var(--i-300) 50%,var(--i-500) 100%);
+}
+
+.bd{flex:1;padding:48px;overflow:hidden}
+
+/* ─── Section eyebrow ─── */
+.slabel{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.slabel span{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:500;letter-spacing:0.24em;text-transform:uppercase;color:var(--i-500)}
+.slabel::after{content:'';flex:0 0 60px;height:1px;background:var(--line-2)}
+.slabel.light span{color:var(--i-200)}
+.slabel.light::after{background:rgba(245,242,234,0.18)}
+
+/* ─── Headings ─── */
+h2{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:28px;
+  letter-spacing:-0.035em;color:var(--ink);text-transform:lowercase;
+  line-height:1.08;margin-bottom:10px;
+}
+h2 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-500)}
+h2.light{color:var(--paper)}
+h2.light em{color:var(--i-200)}
+p.deck{font-size:13px;color:var(--muted);line-height:1.7;font-weight:500;max-width:56ch}
+p.deck strong{color:var(--ink);font-weight:600}
+p.editorial{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:18px;line-height:1.45;color:var(--muted);
+  max-width:52ch;margin-bottom:8px;
+}
+p.editorial b{color:var(--ink);font-weight:400;font-style:italic}
+
+/* ─── Inner header ─── */
+.page-hd{
+  background:var(--i-ink);
+  padding:14px 48px;
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+  position:relative;overflow:hidden;
+}
+.page-hd::after{
+  content:'';position:absolute;top:-60px;right:-30px;
+  width:160px;height:160px;
+  background:radial-gradient(circle,rgba(91,91,240,0.12),transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.page-hd .ph-mark{flex-shrink:0;position:relative;z-index:1}
+.page-hd .ph-name{font-weight:800;font-size:13px;letter-spacing:-0.02em;color:var(--paper);text-transform:lowercase;position:relative;z-index:1}
+.page-hd .ph-name em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300)}
+.page-hd .ph-sub{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(245,242,234,0.4);letter-spacing:0.18em;text-transform:uppercase;margin-left:auto;position:relative;z-index:1}
+
+/* ─── Footer ─── */
+.page-ft{
+  background:var(--paper-2);
+  border-top:1px solid var(--line);
+  padding:13px 48px;
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.page-ft .pf-l{display:flex;align-items:center;gap:8px}
+.page-ft .pf-l span{font-size:10px;font-weight:600;color:var(--ink);letter-spacing:-0.01em}
+.page-ft .pf-l span em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--i-500);font-weight:400}
+.page-ft .pf-pn{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--i-500);letter-spacing:0.18em}
+
+/* ═══════════════════════════════════════════
+   PAGE 1 · COVER
+   ═══════════════════════════════════════════ */
+.cover-sheet{
+  background:radial-gradient(140% 100% at 0% 100%, var(--i-500) 0%, var(--i-700) 38%, var(--i-ink) 100%);
+  position:relative;overflow:hidden;color:var(--paper);
+}
+.cover-sheet::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(245,242,234,0.08) 1px,transparent 1px);
+  background-size:22px 22px;pointer-events:none;z-index:1;
+}
+.cover-sheet::after{
+  content:'';position:absolute;top:-220px;right:-180px;
+  width:680px;height:680px;
+  background:radial-gradient(circle,rgba(91,91,240,0.36),transparent 65%);
+  border-radius:50%;pointer-events:none;z-index:0;
+}
+
+.cover-content{
+  flex:1;display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;z-index:2;
+  padding:72px 64px 56px;
+}
+.cover-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+.cover-mark-row{display:flex;align-items:center;gap:18px}
+.cover-mark-row svg{
+  flex-shrink:0;
+  filter:drop-shadow(0 8px 48px rgba(91,91,240,0.55));
+  animation:cover-breathe 4.5s ease-in-out infinite;
+}
+@keyframes cover-breathe{
+  0%,100%{transform:scale(1);filter:drop-shadow(0 8px 48px rgba(91,91,240,0.55))}
+  50%{transform:scale(1.025);filter:drop-shadow(0 14px 64px rgba(91,91,240,0.75))}
+}
+.cover-mark-meta{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:rgba(245,242,234,0.5);letter-spacing:0.2em;
+  text-transform:uppercase;line-height:1.8;
+}
+.cover-mark-meta b{color:var(--paper);font-weight:500}
+.cover-edition{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:rgba(245,242,234,0.5);letter-spacing:0.24em;
+  text-transform:uppercase;line-height:1.8;text-align:right;
+}
+.cover-edition b{color:var(--paper);font-weight:500}
+
+.cover-headline{max-width:640px}
+.cover-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--i-200);letter-spacing:0.32em;text-transform:uppercase;
+  margin-bottom:22px;display:flex;align-items:center;gap:14px;
+}
+.cover-eyebrow::before{content:'';width:32px;height:1.5px;background:var(--i-200)}
+.cover-wordmark{
+  font-family:'Manrope',sans-serif;font-weight:900;
+  font-size:76px;letter-spacing:-0.055em;
+  color:var(--paper);text-transform:lowercase;
+  line-height:0.88;margin-bottom:18px;
+}
+.cover-wordmark em{
+  font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;
+  color:var(--i-200);letter-spacing:-0.025em;
+}
+.cover-program-line{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:26px;line-height:1.25;
+  color:rgba(245,242,234,0.78);max-width:22ch;
+  margin-bottom:18px;
+}
+.cover-program-line em{color:var(--i-200);font-style:italic}
+.cover-program-tag{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:rgba(245,242,234,0.6);letter-spacing:0.22em;text-transform:uppercase;
+}
+
+.cover-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+.cover-feed-preview{display:flex;flex-direction:column;gap:7px}
+.fp-card{
+  width:268px;
+  background:rgba(245,242,234,0.06);
+  border:1px solid rgba(245,242,234,0.14);
+  border-radius:10px;
+  padding:12px 16px;
+}
+.fp-card .fp-t{
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:12.5px;
+  color:var(--paper);letter-spacing:-0.01em;margin-bottom:3px;
+}
+.fp-card .fp-t em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-200)}
+.fp-card .fp-m{
+  font-family:'JetBrains Mono',monospace;font-size:7.5px;
+  color:rgba(245,242,234,0.55);letter-spacing:0.14em;text-transform:uppercase;
+}
+.fp-card.dim-3{opacity:0.65}
+.fp-card.dim-2{opacity:0.45}
+.fp-card.dim-1{opacity:0.28}
+
+.cover-4m{position:relative;width:132px;height:132px;flex-shrink:0}
+.cover-4m svg{width:100%;height:100%;animation:cover-rotate 24s linear infinite}
+@keyframes cover-rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.cover-4m-label{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  text-align:center;pointer-events:none;
+}
+.cover-4m-label .n{font-family:'Manrope',sans-serif;font-weight:900;font-size:42px;color:var(--paper);letter-spacing:-0.04em;line-height:1}
+.cover-4m-label .n em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-200);font-size:24px}
+.cover-4m-label .u{font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(245,242,234,0.55);letter-spacing:0.22em;text-transform:uppercase;margin-top:4px}
+
+.cover-footer-line{
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:rgba(245,242,234,0.5);letter-spacing:0.22em;text-transform:uppercase;
+}
+.cover-footer-line b{color:var(--paper);font-weight:500}
+
+/* ═══════════════════════════════════════════
+   PAGE 2 · VISION
+   ═══════════════════════════════════════════ */
+.vision-hero h1{
+  font-family:'Manrope',sans-serif;font-weight:900;
+  font-size:52px;letter-spacing:-0.045em;line-height:0.96;
+  color:var(--ink);text-transform:lowercase;
+  margin-bottom:22px;max-width:14ch;
+}
+.vision-hero h1 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-500)}
+.vision-lead{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:20px;line-height:1.45;color:var(--ink);
+  max-width:52ch;margin-bottom:14px;
+}
+.vision-lead b{color:var(--i-500);font-weight:400;font-style:italic}
+.vision-body{
+  font-size:13px;color:var(--muted);line-height:1.7;font-weight:500;
+  max-width:58ch;margin-bottom:32px;
+}
+.vision-body strong{color:var(--ink);font-weight:600}
+
+.vision-anchor{
+  margin-top:24px;
+  background:linear-gradient(140deg,var(--i-ink),var(--i-700));
+  border-radius:14px;
+  padding:28px 32px;
+  display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;
+  position:relative;overflow:hidden;
+}
+.vision-anchor::after{
+  content:'';position:absolute;bottom:-30px;right:-15px;
+  width:140px;height:140px;
+  background:radial-gradient(circle,rgba(91,91,240,0.2),transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.vision-anchor svg{flex-shrink:0;position:relative;z-index:1}
+.vision-anchor .va-copy{position:relative;z-index:1}
+.vision-anchor .va-copy h3{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:18px;
+  letter-spacing:-0.02em;color:var(--paper);text-transform:lowercase;
+  margin-bottom:6px;
+}
+.vision-anchor .va-copy h3 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-200)}
+.vision-anchor .va-copy p{
+  font-size:11.5px;color:rgba(245,242,234,0.7);
+  line-height:1.6;margin:0;
+}
+
+/* ═══════════════════════════════════════════
+   PAGE 3 · OVERVIEW · AUDIENCE + GLANCE
+   ═══════════════════════════════════════════ */
+.audience-strip{display:flex;gap:8px;margin:16px 0 36px;flex-wrap:wrap}
+.audience-card{
+  flex:1;min-width:110px;
+  background:var(--paper-2);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:20px 14px 18px;
+  text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.audience-card .ac-mark{width:28px;height:28px;color:var(--i-500)}
+.audience-card .ac-mark svg{display:block;width:100%;height:100%}
+.audience-card .ac-name{
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:11.5px;
+  letter-spacing:-0.005em;color:var(--ink);text-transform:lowercase;
+  line-height:1.2;
+}
+
+.glance-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+.glance-card{
+  background:var(--i-ink);border-radius:14px;
+  padding:24px 18px 22px;position:relative;overflow:hidden;
+}
+.glance-card::after{
+  content:'';position:absolute;bottom:-30px;right:-20px;
+  width:90px;height:90px;
+  background:radial-gradient(circle,rgba(91,91,240,0.22),transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.glance-card .gc-lbl{
+  font-family:'JetBrains Mono',monospace;font-size:8px;
+  color:var(--i-200);letter-spacing:0.22em;text-transform:uppercase;
+  margin-bottom:10px;position:relative;z-index:1;
+}
+.glance-card .gc-val{
+  font-family:'Manrope',sans-serif;font-weight:900;font-size:28px;
+  letter-spacing:-0.04em;color:var(--paper);line-height:1.02;
+  text-transform:lowercase;position:relative;z-index:1;
+}
+.glance-card .gc-val em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300);font-size:20px}
+.glance-card .gc-sub{
+  font-family:'JetBrains Mono',monospace;font-size:8.5px;
+  color:rgba(245,242,234,0.4);letter-spacing:0.08em;
+  margin-top:8px;position:relative;z-index:1;
+}
+
+/* ═══════════════════════════════════════════
+   CURRICULUM MONTH PAGES (4-8)
+   ═══════════════════════════════════════════ */
+.month-chip{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(91,91,240,0.1);
+  border:1px solid rgba(91,91,240,0.26);
+  color:var(--i-500);
+  font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;
+  letter-spacing:0.24em;text-transform:uppercase;
+  padding:7px 14px;border-radius:20px;
+  margin-bottom:18px;
+}
+.curriculum-hero{
+  display:grid;grid-template-columns:1.55fr 1fr;
+  gap:32px;align-items:start;
+  margin-bottom:28px;padding-bottom:22px;
+  border-bottom:1px solid var(--line);
+}
+.ch-content h2{font-size:30px;margin-bottom:12px}
+.ch-content .editorial{margin-bottom:0;max-width:42ch}
+.ch-numeral{
+  display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-start;
+  text-align:right;padding-top:4px;
+}
+.ch-numeral .month-num{
+  font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;
+  font-size:104px;color:var(--i-500);line-height:0.85;letter-spacing:-0.04em;
+}
+.ch-numeral .month-lbl{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--muted);letter-spacing:0.26em;text-transform:uppercase;
+  margin-top:8px;
+}
+.ch-numeral .month-theme{
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;
+  color:var(--ink);letter-spacing:-0.01em;text-transform:lowercase;
+  margin-top:10px;max-width:14ch;text-align:right;
+}
+.ch-numeral .month-theme em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-500)}
+
+.focus-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.focus-card{
+  background:var(--paper-2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:22px 20px 24px;
+  position:relative;
+}
+.focus-card .fc-mark{width:38px;height:38px;color:var(--i-500);margin-bottom:14px}
+.focus-card .fc-mark svg{display:block;width:100%;height:100%}
+.focus-card .fc-title{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:14px;
+  letter-spacing:-0.02em;color:var(--ink);text-transform:lowercase;
+  margin-bottom:8px;line-height:1.2;
+}
+.focus-card .fc-title em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-500)}
+.focus-card .fc-desc{font-size:11px;color:var(--muted);line-height:1.6}
+.focus-card .fc-tools{
+  font-family:'JetBrains Mono',monospace;font-size:8.5px;
+  color:var(--i-500);letter-spacing:0.06em;text-transform:lowercase;
+  margin-top:12px;padding-top:10px;
+  border-top:1px dashed var(--line-2);
+}
+.focus-card .fc-tools b{color:var(--ink);font-weight:500;letter-spacing:0.18em;text-transform:uppercase;font-size:8px;display:block;margin-bottom:3px}
+
+/* Capstone callout */
+.capstone-callout{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+  margin-top:22px;
+}
+.capstone-card{
+  background:rgba(245,242,234,0.05);
+  border:1px solid rgba(245,242,234,0.1);
+  border-radius:12px;
+  padding:20px 22px;
+  color:var(--paper);
+}
+.capstone-card .cap-num{
+  font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;
+  font-size:32px;color:var(--i-300);line-height:1;margin-bottom:8px;
+}
+.capstone-card .cap-name{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:14px;
+  letter-spacing:-0.015em;color:var(--paper);text-transform:lowercase;
+  margin-bottom:6px;line-height:1.2;
+}
+.capstone-card .cap-name em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-200)}
+.capstone-card .cap-desc{font-size:10.5px;color:rgba(245,242,234,0.5);line-height:1.55}
+
+/* Dark band */
+.dark-band{
+  margin:24px -48px;
+  background:linear-gradient(150deg,var(--i-ink),var(--i-700));
+  padding:36px 48px 40px;
+  position:relative;overflow:hidden;
+}
+.dark-band::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(245,242,234,0.06) 1.2px,transparent 1.2px);
+  background-size:18px 18px;pointer-events:none;z-index:0;
+}
+.dark-band > *{position:relative;z-index:1}
+
+/* ═══════════════════════════════════════════
+   PAGE 9 · TECH STACK
+   ═══════════════════════════════════════════ */
+.stack-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:14px}
+.stack-card{
+  background:var(--paper-2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:24px 22px;
+}
+.stack-card .sc-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.stack-card .sc-mark{width:32px;height:32px;color:var(--i-500);flex-shrink:0}
+.stack-card .sc-mark svg{display:block;width:100%;height:100%}
+.stack-card .sc-cat{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:14px;
+  letter-spacing:-0.02em;color:var(--ink);text-transform:lowercase;
+  line-height:1.1;
+}
+.stack-card .sc-cat em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-500)}
+.stack-card .sc-desc{
+  font-size:10.5px;color:var(--muted);
+  line-height:1.5;margin-bottom:14px;
+}
+.stack-chips{display:flex;flex-wrap:wrap;gap:6px}
+.stack-chip{
+  background:var(--paper);
+  border:1px solid var(--line-2);
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  color:var(--ink);letter-spacing:0.04em;
+  padding:5px 11px;border-radius:14px;
+}
+.stack-chip.feat{background:rgba(91,91,240,0.08);border-color:rgba(91,91,240,0.3);color:var(--i-500);font-weight:500}
+.stack-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--i-500);color:var(--paper);
+  font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:500;
+  min-width:22px;height:20px;border-radius:10px;padding:0 7px;
+  letter-spacing:0.06em;margin-left:6px;
+}
+
+/* ═══════════════════════════════════════════
+   PAGE 10 · PORTFOLIO + CAREERS
+   ═══════════════════════════════════════════ */
+.portfolio-split{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;margin-top:14px}
+.portfolio-side h3{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:18px;
+  letter-spacing:-0.025em;color:var(--ink);text-transform:lowercase;
+  margin-bottom:14px;
+}
+.portfolio-side h3 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-500)}
+.deliverable-stack{display:flex;flex-direction:column;gap:10px}
+.deliverable-card{
+  background:var(--paper-2);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:16px 18px;
+  display:flex;align-items:flex-start;gap:14px;
+}
+.deliverable-card .dc-mark{flex-shrink:0;width:30px;height:30px;color:var(--i-500);margin-top:2px}
+.deliverable-card .dc-mark svg{display:block;width:100%;height:100%}
+.deliverable-card .dc-body{flex:1}
+.deliverable-card .dc-title{
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:12.5px;
+  letter-spacing:-0.01em;color:var(--ink);text-transform:lowercase;
+  margin-bottom:3px;
+}
+.deliverable-card .dc-desc{font-size:10.5px;color:var(--muted);line-height:1.55}
+
+.career-stack{display:flex;flex-direction:column;gap:8px}
+.career-card{
+  background:var(--i-ink);
+  border-radius:10px;
+  padding:13px 18px;
+  display:flex;align-items:center;gap:12px;
+  position:relative;overflow:hidden;
+}
+.career-card::after{
+  content:'';position:absolute;bottom:-20px;right:-15px;
+  width:60px;height:60px;
+  background:radial-gradient(circle,rgba(91,91,240,0.2),transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.career-card .cc-mark{flex-shrink:0;width:18px;height:18px;color:var(--i-300);position:relative;z-index:1}
+.career-card .cc-mark svg{display:block;width:100%;height:100%}
+.career-card .cc-name{
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:12.5px;
+  letter-spacing:-0.005em;color:var(--paper);text-transform:lowercase;
+  position:relative;z-index:1;
+}
+
+.portfolio-footer{
+  margin-top:24px;padding:22px 28px;
+  background:linear-gradient(140deg,var(--i-ink),var(--i-700));
+  border-radius:14px;
+  position:relative;overflow:hidden;
+}
+.portfolio-footer::after{
+  content:'';position:absolute;bottom:-30px;right:-15px;
+  width:140px;height:140px;
+  background:radial-gradient(circle,rgba(91,91,240,0.2),transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.portfolio-footer p{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:17px;color:var(--paper);line-height:1.4;margin:0;
+  position:relative;z-index:1;max-width:60ch;
+}
+.portfolio-footer p b{color:var(--i-200);font-weight:400}
+
+/* ═══════════════════════════════════════════
+   PAGE 11 · LEARNING ECOSYSTEM
+   ═══════════════════════════════════════════ */
+.hub-band{
+  margin:20px 0 0;
+  background:linear-gradient(150deg,var(--i-ink),var(--i-700));
+  padding:44px 48px 44px;
+  position:relative;overflow:hidden;
+  flex:1;
+}
+.hub-band::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(245,242,234,0.06) 1.2px,transparent 1.2px);
+  background-size:18px 18px;pointer-events:none;z-index:0;
+}
+.hub-band::after{
+  content:'';position:absolute;top:50%;left:50%;
+  width:500px;height:400px;margin:-200px 0 0 -250px;
+  background:radial-gradient(ellipse,rgba(91,91,240,0.18),transparent 70%);
+  pointer-events:none;z-index:0;
+}
+.hub-band > *{position:relative;z-index:1}
+
+.hub-hero{margin-bottom:32px;max-width:42ch}
+.hub-hero h2{
+  font-family:'Manrope',sans-serif;font-weight:900;
+  font-size:34px;letter-spacing:-0.04em;line-height:1;
+  color:var(--paper);text-transform:lowercase;
+  margin-bottom:14px;
+}
+.hub-hero h2 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-200)}
+.hub-hero p{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:17px;line-height:1.45;color:rgba(245,242,234,0.7);
+}
+
+.eco-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
+.eco-card{
+  background:rgba(245,242,234,0.05);
+  border:1px solid rgba(245,242,234,0.1);
+  border-radius:14px;
+  padding:26px 22px;color:var(--paper);
+  position:relative;overflow:hidden;
+}
+.eco-card .eco-mark{width:38px;height:38px;color:var(--i-300);margin-bottom:16px}
+.eco-card .eco-mark svg{display:block;width:100%;height:100%}
+.eco-card .eco-title{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:14.5px;
+  letter-spacing:-0.02em;color:var(--paper);text-transform:lowercase;
+  margin-bottom:8px;line-height:1.2;
+}
+.eco-card .eco-title em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-200)}
+.eco-card .eco-desc{font-size:11px;color:rgba(245,242,234,0.55);line-height:1.6}
+
+.hub-meta{
+  margin-top:24px;padding-top:24px;
+  border-top:1px solid rgba(245,242,234,0.12);
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;
+}
+.hub-meta-block{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:rgba(245,242,234,0.5);letter-spacing:0.08em;line-height:1.7;
+}
+.hub-meta-block b{
+  display:block;color:var(--paper);font-weight:500;
+  letter-spacing:0.22em;text-transform:uppercase;
+  font-size:8.5px;margin-bottom:6px;
+}
+
+/* ═══════════════════════════════════════════
+   PAGE 12 · BACK COVER
+   ═══════════════════════════════════════════ */
+.large-cta-page{
+  flex:1;
+  background:linear-gradient(150deg,var(--i-ink) 0%,var(--i-700) 60%,var(--i-500) 100%);
+  display:flex;flex-direction:column;
+  padding:64px 56px 48px;
+  position:relative;overflow:hidden;color:var(--paper);
+}
+.large-cta-page::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(245,242,234,0.08) 1px,transparent 1px);
+  background-size:22px 22px;pointer-events:none;z-index:1;
+}
+.large-cta-page::after{
+  content:'';position:absolute;top:-200px;right:-180px;
+  width:680px;height:680px;
+  background:radial-gradient(circle,rgba(91,91,240,0.36),transparent 65%);
+  border-radius:50%;pointer-events:none;z-index:0;
+}
+.large-cta-page > *{position:relative;z-index:2}
+
+.lc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:auto}
+.lc-mark-row{display:flex;align-items:center;gap:18px}
+.lc-mark-row svg{filter:drop-shadow(0 8px 48px rgba(91,91,240,0.5))}
+.lc-mark-meta{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:rgba(245,242,234,0.5);letter-spacing:0.2em;
+  text-transform:uppercase;line-height:1.8;
+}
+.lc-mark-meta b{color:var(--paper);font-weight:500}
+.lc-edition{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:rgba(245,242,234,0.5);letter-spacing:0.24em;
+  text-transform:uppercase;line-height:1.8;text-align:right;
+}
+.lc-edition b{color:var(--paper);font-weight:500}
+
+.lc-middle{padding:40px 0;max-width:560px}
+.lc-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--i-200);letter-spacing:0.32em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;gap:14px;
+}
+.lc-eyebrow::before{content:'';width:32px;height:1.5px;background:var(--i-200)}
+.lc-headline{
+  font-family:'Manrope',sans-serif;font-weight:900;
+  font-size:64px;letter-spacing:-0.05em;line-height:0.92;
+  color:var(--paper);text-transform:lowercase;
+  margin-bottom:18px;max-width:14ch;
+}
+.lc-headline em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-200)}
+.lc-sub{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:21px;line-height:1.4;
+  color:rgba(245,242,234,0.78);max-width:42ch;
+}
+.lc-sub em{color:var(--i-200);font-style:italic}
+
+.lc-bottom{margin-top:auto;display:grid;grid-template-columns:1.5fr 1fr;gap:48px;align-items:end;padding-top:32px;border-top:1px solid rgba(245,242,234,0.14)}
+.lc-contact{
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;
+  color:rgba(245,242,234,0.65);letter-spacing:0.06em;
+}
+.lc-contact .lc-row{
+  display:flex;align-items:baseline;gap:14px;padding:5px 0;
+  border-bottom:1px dashed rgba(245,242,234,0.1);
+}
+.lc-contact .lc-row:last-child{border-bottom:none}
+.lc-contact .lc-row .lc-key{
+  min-width:96px;color:rgba(245,242,234,0.4);
+  letter-spacing:0.22em;text-transform:uppercase;
+  font-size:8.5px;font-weight:500;
+}
+.lc-contact .lc-row .lc-val{color:var(--paper);font-weight:500}
+
+.lc-cta-area{display:flex;flex-direction:column;align-items:flex-end;gap:18px}
+.lc-fee-block{text-align:right}
+.lc-fee-block .lc-fee-lbl{
+  font-family:'JetBrains Mono',monospace;font-size:8.5px;
+  color:rgba(245,242,234,0.5);letter-spacing:0.22em;
+  text-transform:uppercase;margin-bottom:4px;
+}
+.lc-fee-block .lc-fee-amt{
+  font-family:'Manrope',sans-serif;font-weight:900;font-size:38px;
+  letter-spacing:-0.045em;color:var(--paper);line-height:1;
+}
+.lc-fee-block .lc-fee-amt em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-200);font-size:22px}
+.lc-cta-btn{
+  background:var(--paper);color:var(--ink);
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:14px;
+  letter-spacing:-0.01em;text-transform:lowercase;
+  padding:18px 32px;border-radius:12px;text-decoration:none;
+  display:inline-flex;align-items:center;gap:10px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.32);
+}
+.lc-cta-btn em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-500)}
+
+.lc-footer{
+  margin-top:24px;display:flex;justify-content:space-between;align-items:baseline;
+  font-family:'JetBrains Mono',monospace;font-size:8.5px;
+  color:rgba(245,242,234,0.4);letter-spacing:0.2em;text-transform:uppercase;
+}
+.lc-footer b{color:var(--paper);font-weight:500}
+
+/* ─── PDF DOWNLOAD ─── */
+.pdf-download-btn{
+  position:fixed;top:24px;right:24px;z-index:9999;
+  padding:12px 22px;border:none;border-radius:12px;cursor:pointer;
+  background:var(--i-500);color:var(--paper);
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;
+  letter-spacing:-0.01em;
+  box-shadow:0 4px 24px rgba(91,91,240,0.4);
+  display:flex;align-items:center;gap:8px;
+}
+.pdf-download-btn:hover{background:var(--i-400)}
+.pdf-download-btn:disabled{opacity:0.6;cursor:wait}
+
+@media print{
+  body{background:#fff}
+  .sheet{box-shadow:none;margin:0;height:297mm;width:210mm}
+  .pdf-download-btn{display:none!important}
+  *{animation:none!important}
+  @page{margin:0;size:A4}
+}
+</style>
+</head>
+<body>
+
+<button class="pdf-download-btn" id="downloadPdfBtn" type="button">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+  Download PDF
+</button>
+
+<!-- ============= REUSABLE SVG SYMBOLS ============= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="b-mark" viewBox="0 0 180 180">
+      <title>Eduflick mark</title>
+      <path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="b-mark-stack" viewBox="0 0 180 180">
+      <g transform="translate(22 -8) scale(0.84)" opacity="0.32"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="currentColor"/></g>
+      <g transform="translate(11 6) scale(0.92)" opacity="0.6"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="currentColor"/></g>
+      <path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="b-mark-spark" viewBox="0 0 180 180">
+      <path d="M52 28 L90 0 L128 28 L114 22 L90 36 L66 22 Z" fill="currentColor"/>
+      <g transform="translate(0 24)">
+        <path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="currentColor"/>
+      </g>
+    </symbol>
+    <symbol id="b-sixty-ring" viewBox="0 0 128 128">
+      <circle cx="64" cy="64" r="60" fill="none" stroke="rgba(245,242,234,0.18)" stroke-width="2"/>
+      <path d="M64 4 A 60 60 0 1 1 4 64" fill="none" stroke="#B7C0FF" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="64" cy="4" r="3" fill="#B7C0FF"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ════════════════════════════════════════════
+     PAGE 1 · FRONT COVER
+     ════════════════════════════════════════════ -->
+<div class="sheet cover-sheet">
+  <div class="i-bar"></div>
+  <div class="cover-content">
+    <div class="cover-top">
+      <div class="cover-mark-row">
+        <svg width="60" height="60" viewBox="0 0 180 180" role="img" aria-label="Eduflick mark"><use href="#b-mark" fill="#F5F2EA"/></svg>
+        <div class="cover-mark-meta">
+          <b>EDUFLICK / AI</b><br>
+          ONE SHAPE · ONE NOTCH
+        </div>
+      </div>
+      <div class="cover-edition">
+        <b>PROGRAM BROCHURE</b><br>
+        COHORT 02 · 2026<br>
+        12 PAGES · A4
+      </div>
+    </div>
+
+    <div class="cover-headline">
+      <div class="cover-eyebrow">the eduflick AI leadership program</div>
+      <div class="cover-wordmark">master the future.<br><em>lead with AI.</em></div>
+      <div class="cover-program-line">a 4-month offline <em>professional certification</em> program</div>
+      <div class="cover-program-tag">cohort 02 · admissions open · thiruvananthapuram</div>
+    </div>
+
+    <div class="cover-bottom">
+      <div class="cover-feed-preview">
+        <div class="fp-card dim-1">
+          <div class="fp-t">month 04 · <em>leadership.</em></div>
+          <div class="fp-m">CAPSTONE · TEAM PROJECT</div>
+        </div>
+        <div class="fp-card dim-2">
+          <div class="fp-t">month 03 · <em>business ops.</em></div>
+          <div class="fp-m">REPORTING · AUTOMATION</div>
+        </div>
+        <div class="fp-card dim-3">
+          <div class="fp-t">month 02 · <em>content + code.</em></div>
+          <div class="fp-m">BRAND · DEV · AGENTS</div>
+        </div>
+        <div class="fp-card">
+          <div class="fp-t">month 01 · <em>foundations.</em></div>
+          <div class="fp-m">PROMPTS · PRODUCTIVITY · READY</div>
+        </div>
+      </div>
+      <div class="cover-4m">
+        <svg viewBox="0 0 128 128" role="img" aria-label="Four month duration"><use href="#b-sixty-ring"/></svg>
+        <div class="cover-4m-label">
+          <div class="n">4<em>M</em></div>
+          <div class="u">cohort length</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="i-bar"></div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 2 · THE AI LEADERSHIP VISION
+     ════════════════════════════════════════════ -->
+<div class="sheet">
+  <div class="page-hd">
+    <svg class="ph-mark" width="22" height="22" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#F5F2EA"/></svg>
+    <div class="ph-name">eduflick <em>AI</em> · leadership program</div>
+    <div class="ph-sub">The Vision</div>
+  </div>
+  <div class="i-bar"></div>
+
+  <div class="bd">
+    <div class="slabel"><span>The Vision</span></div>
+    <div class="vision-hero">
+      <h1>move beyond using AI.<br><em>start architecting it.</em></h1>
+      <p class="vision-lead">The AI Leadership Program is a <b>structured, hands-on offline training experience</b> designed to help learners build highly practical AI implementation skills. We focus strictly on real-world execution using the modern tools and workflows currently adopted by top startups, agencies, businesses, and technology teams.</p>
+      <p class="vision-body">This is <strong>not a theoretical bootcamp.</strong> Through a practical, task-driven learning model, you will complete daily assignments, mini-projects, workflow systems, and a final capstone implementation project. You will graduate not just as an AI user, but as an AI leader.</p>
+    </div>
+
+    <div class="vision-anchor">
+      <svg width="64" height="64" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#B7C0FF"/></svg>
+      <div class="va-copy">
+        <h3>the eduflick <em>method.</em></h3>
+        <p>One concept. One workflow. Then ship it. Every module ends with a built artifact — not a quiz, not a certificate — a real working system you can show your future employer or client.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="i-bar"></div>
+  <div class="page-ft">
+    <div class="pf-l">
+      <svg width="14" height="14" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#5B5BF0"/></svg>
+      <span>eduflick <em>AI</em> · A Tomatrix Technologies Venture</span>
+    </div>
+    <div class="pf-pn">02 / 12</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 3 · PROGRAM OVERVIEW
+     ════════════════════════════════════════════ -->
+<div class="sheet">
+  <div class="page-hd">
+    <svg class="ph-mark" width="22" height="22" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#F5F2EA"/></svg>
+    <div class="ph-name">eduflick <em>AI</em> · leadership program</div>
+    <div class="ph-sub">Program Overview</div>
+  </div>
+  <div class="i-bar"></div>
+
+  <div class="bd">
+    <div class="slabel"><span>Who Is This For</span></div>
+    <h2>built for ambitious <em>implementers.</em></h2>
+    <p class="deck">This program is engineered for people ready to implement AI solutions across real organizations — not just discuss them.</p>
+
+    <div class="audience-strip">
+      <div class="audience-card">
+        <div class="ac-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="ac-name">graduates</div>
+      </div>
+      <div class="audience-card">
+        <div class="ac-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="ac-name">college students</div>
+      </div>
+      <div class="audience-card">
+        <div class="ac-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="ac-name">working professionals</div>
+      </div>
+      <div class="audience-card">
+        <div class="ac-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="ac-name">career switchers</div>
+      </div>
+      <div class="audience-card">
+        <div class="ac-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="ac-name">entrepreneurs</div>
+      </div>
+    </div>
+
+    <div class="slabel"><span>At a Glance</span></div>
+    <h2>the program <em>in four numbers.</em></h2>
+
+    <div class="glance-strip">
+      <div class="glance-card">
+        <div class="gc-lbl">Duration</div>
+        <div class="gc-val">4 <em>months</em></div>
+        <div class="gc-sub">16 weeks · daily sessions</div>
+      </div>
+      <div class="glance-card">
+        <div class="gc-lbl">Mode</div>
+        <div class="gc-val"><em>offline</em></div>
+        <div class="gc-sub">in-person cohort · no remote</div>
+      </div>
+      <div class="glance-card">
+        <div class="gc-lbl">Investment</div>
+        <div class="gc-val">₹30,000</div>
+        <div class="gc-sub">all-inclusive · cohort 02</div>
+      </div>
+      <div class="glance-card">
+        <div class="gc-lbl">Location</div>
+        <div class="gc-val">tvm <em>· india</em></div>
+        <div class="gc-sub">UXP innovation hub</div>
+      </div>
+    </div>
+
+    <div class="vision-anchor" style="margin-top:32px">
+      <svg width="56" height="56" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark-stack" fill="#B7C0FF"/></svg>
+      <div class="va-copy">
+        <h3>powered by <em>tomatrix technologies.</em></h3>
+        <p>The program is hosted at the UXP Innovation Hub in Thiruvananthapuram — an enterprise-grade facility with full mentorship from Tomatrix Technologies product managers and AI faculty.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="i-bar"></div>
+  <div class="page-ft">
+    <div class="pf-l">
+      <svg width="14" height="14" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#5B5BF0"/></svg>
+      <span>eduflick <em>AI</em> · A Tomatrix Technologies Venture</span>
+    </div>
+    <div class="pf-pn">03 / 12</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 4 · MONTH 1 · FOUNDATIONS
+     ════════════════════════════════════════════ -->
+<div class="sheet">
+  <div class="page-hd">
+    <svg class="ph-mark" width="22" height="22" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#F5F2EA"/></svg>
+    <div class="ph-name">eduflick <em>AI</em> · leadership program</div>
+    <div class="ph-sub">Curriculum · Month 01</div>
+  </div>
+  <div class="i-bar"></div>
+
+  <div class="bd">
+    <span class="month-chip">Month 01 · Foundations</span>
+    <div class="curriculum-hero">
+      <div class="ch-content">
+        <h2>building the <em>AI engine.</em></h2>
+        <p class="editorial"><b>A formidable foundation in AI ecosystems, advanced prompting methodologies, and professional productivity systems.</b> The month every learner needs before they can lead.</p>
+      </div>
+      <div class="ch-numeral">
+        <div class="month-num">01</div>
+        <div class="month-lbl">Foundations</div>
+        <div class="month-theme">prompts · productivity · <em>presentations.</em></div>
+      </div>
+    </div>
+
+    <div class="slabel"><span>Core Focus Areas</span></div>
+    <div class="focus-grid">
+      <div class="focus-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="fc-title">prompt <em>engineering.</em></div>
+        <div class="fc-desc">Master instruction-based and role prompting to generate professional reports, resumes, and business communications.</div>
+        <div class="fc-tools"><b>tools</b>claude · chatgpt · google ai studio</div>
+      </div>
+      <div class="focus-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark-stack"/></svg></div>
+        <div class="fc-title">productivity <em>systems.</em></div>
+        <div class="fc-desc">Build AI-powered meeting summaries, note-taking workflows, and dynamic documentation templates.</div>
+        <div class="fc-tools"><b>tools</b>notion ai · claude</div>
+      </div>
+      <div class="focus-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="fc-title">presentation <em>architecture.</em></div>
+        <div class="fc-desc">Rapidly build professional pitch decks and presentation outlines for stakeholders and investors.</div>
+        <div class="fc-tools"><b>tools</b>gamma · canva</div>
+      </div>
+    </div>
+
+    <div class="dark-band">
+      <div class="slabel light"><span>By End of Month</span></div>
+      <h2 class="light">graduate <em>artifacts.</em></h2>
+      <div class="capstone-callout">
+        <div class="capstone-card">
+          <div class="cap-num">i.</div>
+          <div class="cap-name">prompting playbook</div>
+          <div class="cap-desc">A personal library of role and instruction prompts you can re-use at work.</div>
+        </div>
+        <div class="capstone-card">
+          <div class="cap-num">ii.</div>
+          <div class="cap-name">notion workflow</div>
+          <div class="cap-desc">AI-powered note + meeting + documentation system, live in your workspace.</div>
+        </div>
+        <div class="capstone-card">
+          <div class="cap-num">iii.</div>
+          <div class="cap-name">pitch deck</div>
+          <div class="cap-desc">A 10-slide investor or stakeholder deck generated and refined with AI.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="i-bar"></div>
+  <div class="page-ft">
+    <div class="pf-l">
+      <svg width="14" height="14" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#5B5BF0"/></svg>
+      <span>eduflick <em>AI</em> · A Tomatrix Technologies Venture</span>
+    </div>
+    <div class="pf-pn">04 / 12</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 5 · MONTH 2 PART A · CONTENT SYSTEMS
+     ════════════════════════════════════════════ -->
+<div class="sheet">
+  <div class="page-hd">
+    <svg class="ph-mark" width="22" height="22" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#F5F2EA"/></svg>
+    <div class="ph-name">eduflick <em>AI</em> · leadership program</div>
+    <div class="ph-sub">Curriculum · Month 02 · Part A</div>
+  </div>
+  <div class="i-bar"></div>
+
+  <div class="bd">
+    <span class="month-chip">Month 02 · Part A · Content</span>
+    <div class="curriculum-hero">
+      <div class="ch-content">
+        <h2>automating brand <em>&amp; content.</em></h2>
+        <p class="editorial"><b>Develop complete AI-powered content creation workflows</b> for marketing, branding, and global communication. Transition from consumer of AI to author with AI.</p>
+      </div>
+      <div class="ch-numeral">
+        <div class="month-num">02<em>A</em></div>
+        <div class="month-lbl">Content Systems</div>
+        <div class="month-theme">visuals · video · <em>campaigns.</em></div>
+      </div>
+    </div>
+
+    <div class="slabel"><span>Core Focus Areas</span></div>
+    <div class="focus-grid">
+      <div class="focus-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark-spark"/></svg></div>
+        <div class="fc-title">visual <em>storytelling.</em></div>
+        <div class="fc-desc">Create AI-generated brand presentations and startup pitch decks with the visual language of premium agencies.</div>
+        <div class="fc-tools"><b>tools</b>gamma · canva · ideogram</div>
+      </div>
+      <div class="focus-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="fc-title">video <em>generation.</em></div>
+        <div class="fc-desc">Produce high-quality marketing video scripts and AI avatar explainer content with full studio polish.</div>
+        <div class="fc-tools"><b>tools</b>heygen · claude</div>
+      </div>
+      <div class="focus-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="fc-title">campaign <em>design.</em></div>
+        <div class="fc-desc">Generate ad creatives, campaign posters, and brand communication systems at the speed of thought.</div>
+        <div class="fc-tools"><b>tools</b>ideogram · canva</div>
+      </div>
+    </div>
+
+    <div class="vision-anchor" style="margin-top:30px">
+      <svg width="56" height="56" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#B7C0FF"/></svg>
+      <div class="va-copy">
+        <h3>this month you'll <em>ship</em> a real campaign.</h3>
+        <p>By the end of Part A, every learner walks out with a full multi-channel campaign — written copy, generated visuals, an AI-avatar explainer video, and a posted social rollout — all built within the cohort window.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="i-bar"></div>
+  <div class="page-ft">
+    <div class="pf-l">
+      <svg width="14" height="14" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#5B5BF0"/></svg>
+      <span>eduflick <em>AI</em> · A Tomatrix Technologies Venture</span>
+    </div>
+    <div class="pf-pn">05 / 12</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 6 · MONTH 2 PART B · SOFTWARE
+     ════════════════════════════════════════════ -->
+<div class="sheet">
+  <div class="page-hd">
+    <svg class="ph-mark" width="22" height="22" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#F5F2EA"/></svg>
+    <div class="ph-name">eduflick <em>AI</em> · leadership program</div>
+    <div class="ph-sub">Curriculum · Month 02 · Part B</div>
+  </div>
+  <div class="i-bar"></div>
+
+  <div class="bd">
+    <span class="month-chip">Month 02 · Part B · Software</span>
+    <div class="curriculum-hero">
+      <div class="ch-content">
+        <h2>development <em>without limits.</em></h2>
+        <p class="editorial"><b>AI-assisted development workflows and automation systems</b> for modern software environments. No traditional coding background required — the AI is the partner.</p>
+      </div>
+      <div class="ch-numeral">
+        <div class="month-num">02<em>B</em></div>
+        <div class="month-lbl">Software &amp; Automation</div>
+        <div class="month-theme">code · automate · <em>orchestrate.</em></div>
+      </div>
+    </div>
+
+    <div class="slabel"><span>Core Focus Areas</span></div>
+    <div class="focus-grid">
+      <div class="focus-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="fc-title">AI-assisted <em>coding.</em></div>
+        <div class="fc-desc">Set up environments to generate frontend UI layouts and build mini CRUD applications from natural language briefs.</div>
+        <div class="fc-tools"><b>tools</b>cursor · vs code · replit</div>
+      </div>
+      <div class="focus-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="fc-title">workflow <em>automation.</em></div>
+        <div class="fc-desc">Build email automation systems and operational flow triggers across your tools — no script writing needed.</div>
+        <div class="fc-tools"><b>tools</b>zapier · n8n</div>
+      </div>
+      <div class="focus-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark-stack"/></svg></div>
+        <div class="fc-title">agentic <em>systems.</em></div>
+        <div class="fc-desc">Explore multi-tool orchestration and build multi-step AI workflow assistants that act on their own.</div>
+        <div class="fc-tools"><b>tools</b>google adk · claude · openai</div>
+      </div>
+    </div>
+
+    <div class="dark-band">
+      <div class="slabel light"><span>By End of Month</span></div>
+      <h2 class="light">graduate <em>artifacts.</em></h2>
+      <div class="capstone-callout">
+        <div class="capstone-card">
+          <div class="cap-num">i.</div>
+          <div class="cap-name">deployed mini-app</div>
+          <div class="cap-desc">A working CRUD web app built with cursor + deployed to vercel or netlify, fully yours.</div>
+        </div>
+        <div class="capstone-card">
+          <div class="cap-num">ii.</div>
+          <div class="cap-name">automation flow</div>
+          <div class="cap-desc">A live zapier or n8n workflow connecting at least three tools you use every day.</div>
+        </div>
+        <div class="capstone-card">
+          <div class="cap-num">iii.</div>
+          <div class="cap-name">agent assistant</div>
+          <div class="cap-desc">A multi-step AI agent that completes a real business task with minimal supervision.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="i-bar"></div>
+  <div class="page-ft">
+    <div class="pf-l">
+      <svg width="14" height="14" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#5B5BF0"/></svg>
+      <span>eduflick <em>AI</em> · A Tomatrix Technologies Venture</span>
+    </div>
+    <div class="pf-pn">06 / 12</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 7 · MONTH 3 · BUSINESS OPERATIONS
+     ════════════════════════════════════════════ -->
+<div class="sheet">
+  <div class="page-hd">
+    <svg class="ph-mark" width="22" height="22" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#F5F2EA"/></svg>
+    <div class="ph-name">eduflick <em>AI</em> · leadership program</div>
+    <div class="ph-sub">Curriculum · Month 03</div>
+  </div>
+  <div class="i-bar"></div>
+
+  <div class="bd">
+    <span class="month-chip">Month 03 · Business Ops</span>
+    <div class="curriculum-hero">
+      <div class="ch-content">
+        <h2>scaling enterprise <em>efficiency.</em></h2>
+        <p class="editorial"><b>Apply your AI systems directly inside real business environments.</b> Operational workflows that drive executive action — not slideware.</p>
+      </div>
+      <div class="ch-numeral">
+        <div class="month-num">03</div>
+        <div class="month-lbl">Business Ops</div>
+        <div class="month-theme">reporting · process · <em>decisions.</em></div>
+      </div>
+    </div>
+
+    <div class="slabel"><span>Core Focus Areas</span></div>
+    <div class="focus-grid">
+      <div class="focus-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="fc-title">reporting <em>automation.</em></div>
+        <div class="fc-desc">Generate automated reports and analytics systems pulling directly from your existing data and dashboards.</div>
+        <div class="fc-tools"><b>tools</b>excel ai · power bi · claude</div>
+      </div>
+      <div class="focus-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="fc-title">process <em>optimization.</em></div>
+        <div class="fc-desc">Build employee onboarding workflows and automate standard operating procedures across departments.</div>
+        <div class="fc-tools"><b>tools</b>notion · zapier · n8n</div>
+      </div>
+      <div class="focus-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark-stack"/></svg></div>
+        <div class="fc-title">decision <em>support.</em></div>
+        <div class="fc-desc">Develop AI insights dashboards and business intelligence summaries to optimize corporate workflows.</div>
+        <div class="fc-tools"><b>tools</b>power bi · claude · gpt</div>
+      </div>
+    </div>
+
+    <div class="vision-anchor" style="margin-top:30px">
+      <svg width="56" height="56" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark-stack" fill="#B7C0FF"/></svg>
+      <div class="va-copy">
+        <h3>real businesses. <em>real impact.</em></h3>
+        <p>This month every learner adopts a real organization — a startup, a small business, or a nonprofit — and ships a working automation system that measurably saves them time before the cohort ends.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="i-bar"></div>
+  <div class="page-ft">
+    <div class="pf-l">
+      <svg width="14" height="14" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#5B5BF0"/></svg>
+      <span>eduflick <em>AI</em> · A Tomatrix Technologies Venture</span>
+    </div>
+    <div class="pf-pn">07 / 12</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 8 · MONTH 4 · LEADERSHIP + CAPSTONE
+     ════════════════════════════════════════════ -->
+<div class="sheet">
+  <div class="page-hd">
+    <svg class="ph-mark" width="22" height="22" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#F5F2EA"/></svg>
+    <div class="ph-name">eduflick <em>AI</em> · leadership program</div>
+    <div class="ph-sub">Curriculum · Month 04 · Capstone</div>
+  </div>
+  <div class="i-bar"></div>
+
+  <div class="bd">
+    <span class="month-chip">Month 04 · Capstone</span>
+    <div class="curriculum-hero">
+      <div class="ch-content">
+        <h2>from practitioner <em>to leader.</em></h2>
+        <p class="editorial"><b>The project management, team collaboration, and consulting workflows</b> required to lead AI transformations. The month you stop following and start directing.</p>
+      </div>
+      <div class="ch-numeral">
+        <div class="month-num">04</div>
+        <div class="month-lbl">Leadership</div>
+        <div class="month-theme">lead · ship · <em>defend.</em></div>
+      </div>
+    </div>
+
+    <div class="dark-band">
+      <div class="slabel light"><span>The Capstone Implementation</span></div>
+      <h2 class="light">choose your <em>capstone path.</em></h2>
+      <p style="color:rgba(245,242,234,0.7);font-size:12px;line-height:1.65;max-width:54ch;margin-bottom:8px">Plan, develop, and present a massive final project. Three options — one is yours:</p>
+
+      <div class="capstone-callout">
+        <div class="capstone-card">
+          <div class="cap-num">i.</div>
+          <div class="cap-name">AI dashboard <em>system.</em></div>
+          <div class="cap-desc">A live analytics + AI-insights dashboard for a real business or department, deployed end-to-end.</div>
+        </div>
+        <div class="capstone-card">
+          <div class="cap-num">ii.</div>
+          <div class="cap-name">AI workflow <em>platform.</em></div>
+          <div class="cap-desc">A multi-agent automation platform that orchestrates a real operational pipeline.</div>
+        </div>
+        <div class="capstone-card">
+          <div class="cap-num">iii.</div>
+          <div class="cap-name">AI business <em>automation.</em></div>
+          <div class="cap-desc">A productionized AI tool or service tackling a measurable bottleneck in an organization.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slabel" style="margin-top:24px"><span>Closing Ceremony</span></div>
+    <h2>the <em>review session.</em></h2>
+    <p class="deck">The program concludes with an industry review session, a technical demonstration, and a comprehensive portfolio review — in front of mentors, partner companies, and peer learners.</p>
+  </div>
+
+  <div class="i-bar"></div>
+  <div class="page-ft">
+    <div class="pf-l">
+      <svg width="14" height="14" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#5B5BF0"/></svg>
+      <span>eduflick <em>AI</em> · A Tomatrix Technologies Venture</span>
+    </div>
+    <div class="pf-pn">08 / 12</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 9 · THE MASTER TECH STACK
+     ════════════════════════════════════════════ -->
+<div class="sheet">
+  <div class="page-hd">
+    <svg class="ph-mark" width="22" height="22" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#F5F2EA"/></svg>
+    <div class="ph-name">eduflick <em>AI</em> · leadership program</div>
+    <div class="ph-sub">The Master Tech Stack</div>
+  </div>
+  <div class="i-bar"></div>
+
+  <div class="bd">
+    <div class="slabel"><span>The Master Tech Stack</span></div>
+    <h2>industry-standard <em>tools.</em></h2>
+    <p class="deck">Hands-on expertise with the market's most powerful platforms — the same stack top startups, agencies, and enterprise teams use today.</p>
+
+    <div class="stack-grid">
+      <div class="stack-card">
+        <div class="sc-head">
+          <div class="sc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+          <div class="sc-cat">productivity <em>&amp; reasoning</em> <span class="stack-badge">4</span></div>
+        </div>
+        <div class="sc-desc">The thinking partners — for prompting, drafting, summarising, and decision-making.</div>
+        <div class="stack-chips">
+          <span class="stack-chip feat">Claude</span>
+          <span class="stack-chip feat">ChatGPT</span>
+          <span class="stack-chip">Google AI Studio</span>
+          <span class="stack-chip">Notion AI</span>
+        </div>
+      </div>
+      <div class="stack-card">
+        <div class="sc-head">
+          <div class="sc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark-spark"/></svg></div>
+          <div class="sc-cat">content <em>&amp; design</em> <span class="stack-badge">4</span></div>
+        </div>
+        <div class="sc-desc">The creative bench — for visuals, decks, videos, and brand systems shipped fast.</div>
+        <div class="stack-chips">
+          <span class="stack-chip feat">Canva</span>
+          <span class="stack-chip feat">Gamma</span>
+          <span class="stack-chip">HeyGen</span>
+          <span class="stack-chip">Ideogram</span>
+        </div>
+      </div>
+      <div class="stack-card">
+        <div class="sc-head">
+          <div class="sc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+          <div class="sc-cat">development <em>&amp; deployment</em> <span class="stack-badge">6</span></div>
+        </div>
+        <div class="sc-desc">The build floor — AI-native coding environments, notebooks, and zero-config hosting.</div>
+        <div class="stack-chips">
+          <span class="stack-chip feat">Cursor</span>
+          <span class="stack-chip">VS Code</span>
+          <span class="stack-chip">Replit</span>
+          <span class="stack-chip">Google Colab</span>
+          <span class="stack-chip">Vercel</span>
+          <span class="stack-chip">Netlify</span>
+        </div>
+      </div>
+      <div class="stack-card">
+        <div class="sc-head">
+          <div class="sc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+          <div class="sc-cat">automation <em>&amp; agents</em> <span class="stack-badge">3</span></div>
+        </div>
+        <div class="sc-desc">The action layer — to wire tools together and let AI workflows run on their own.</div>
+        <div class="stack-chips">
+          <span class="stack-chip feat">Zapier</span>
+          <span class="stack-chip feat">n8n</span>
+          <span class="stack-chip">Google Agent Dev Kit</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="vision-anchor" style="margin-top:24px">
+      <svg width="56" height="56" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark-stack" fill="#B7C0FF"/></svg>
+      <div class="va-copy">
+        <h3>not a tool review. <em>a tool fluency.</em></h3>
+        <p>The cohort doesn't just demo these platforms — every learner builds with each one in real assignments. By graduation, your toolkit is reflex, not reference.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="i-bar"></div>
+  <div class="page-ft">
+    <div class="pf-l">
+      <svg width="14" height="14" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#5B5BF0"/></svg>
+      <span>eduflick <em>AI</em> · A Tomatrix Technologies Venture</span>
+    </div>
+    <div class="pf-pn">09 / 12</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 10 · PORTFOLIO + CAREERS
+     ════════════════════════════════════════════ -->
+<div class="sheet">
+  <div class="page-hd">
+    <svg class="ph-mark" width="22" height="22" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#F5F2EA"/></svg>
+    <div class="ph-name">eduflick <em>AI</em> · leadership program</div>
+    <div class="ph-sub">Portfolio &amp; Career Pathways</div>
+  </div>
+  <div class="i-bar"></div>
+
+  <div class="bd">
+    <div class="slabel"><span>Portfolio Outputs</span></div>
+    <h2>proof of <em>expertise.</em></h2>
+    <p class="deck">You don't just graduate with a certificate — you graduate with a professional AI portfolio that recruiters and clients can verify.</p>
+
+    <div class="portfolio-split">
+      <div class="portfolio-side">
+        <h3>your <em>deliverables.</em></h3>
+        <div class="deliverable-stack">
+          <div class="deliverable-card">
+            <div class="dc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark-spark"/></svg></div>
+            <div class="dc-body">
+              <div class="dc-title">AI marketing campaign + avatar video</div>
+              <div class="dc-desc">A complete multi-channel campaign with brand visuals, copy, and a polished AI-avatar explainer.</div>
+            </div>
+          </div>
+          <div class="deliverable-card">
+            <div class="dc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+            <div class="dc-body">
+              <div class="dc-title">functional automation workflow + web app</div>
+              <div class="dc-desc">A live deployed mini-application plus a multi-tool automation pipeline you built yourself.</div>
+            </div>
+          </div>
+          <div class="deliverable-card">
+            <div class="dc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark-stack"/></svg></div>
+            <div class="dc-body">
+              <div class="dc-title">business reporting dashboard + ops system</div>
+              <div class="dc-desc">An AI-insights dashboard for a real operation, with reporting automation behind it.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="portfolio-side">
+        <h3>career <em>pathways.</em></h3>
+        <p style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:14px">Step into high-growth roles — or create your own. Every graduate leaves prepared for freelancing, consulting, and full-time implementation roles.</p>
+        <div class="career-stack">
+          <div class="career-card">
+            <div class="cc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+            <div class="cc-name">AI software developer</div>
+          </div>
+          <div class="career-card">
+            <div class="cc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+            <div class="cc-name">automation specialist</div>
+          </div>
+          <div class="career-card">
+            <div class="cc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+            <div class="cc-name">AI product associate</div>
+          </div>
+          <div class="career-card">
+            <div class="cc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+            <div class="cc-name">AI process consultant</div>
+          </div>
+          <div class="career-card">
+            <div class="cc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+            <div class="cc-name">freelancer · implementation</div>
+          </div>
+          <div class="career-card">
+            <div class="cc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+            <div class="cc-name">founder · AI-native startup</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="portfolio-footer">
+      <p><b>fluency, not credentials.</b> The portfolio is the proof. Every deliverable is shippable, demoable, and yours to keep — long after the cohort ends.</p>
+    </div>
+  </div>
+
+  <div class="i-bar"></div>
+  <div class="page-ft">
+    <div class="pf-l">
+      <svg width="14" height="14" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#5B5BF0"/></svg>
+      <span>eduflick <em>AI</em> · A Tomatrix Technologies Venture</span>
+    </div>
+    <div class="pf-pn">10 / 12</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 11 · THE LEARNING ECOSYSTEM
+     ════════════════════════════════════════════ -->
+<div class="sheet">
+  <div class="page-hd">
+    <svg class="ph-mark" width="22" height="22" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#F5F2EA"/></svg>
+    <div class="ph-name">eduflick <em>AI</em> · leadership program</div>
+    <div class="ph-sub">The Learning Ecosystem</div>
+  </div>
+  <div class="i-bar"></div>
+
+  <div class="hub-band">
+    <div class="slabel light"><span>The Thiruvananthapuram Hub</span></div>
+    <div class="hub-hero">
+      <h2 class="light">a strictly offline, <em>immersive</em> experience.</h2>
+      <p>Hosted in a fully furnished, enterprise-grade facility at the UXP Innovation Hub in Thiruvananthapuram — where presence is the prerequisite and the room is the multiplier.</p>
+    </div>
+
+    <div class="eco-grid">
+      <div class="eco-card">
+        <div class="eco-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark-stack"/></svg></div>
+        <div class="eco-title">collaborate <em>in person.</em></div>
+        <div class="eco-desc">Network and build alongside driven peers. Share ideas, troubleshoot complex workflows, and exchange real-time feedback — the kind no async channel can replicate.</div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="eco-title">access enterprise <em>infrastructure.</em></div>
+        <div class="eco-desc">Execute heavy AI models and development tasks on uninterrupted commercial power and high-speed Wi-Fi. No laptop battery anxiety, no flaky cafe Wi-Fi.</div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="eco-title">receive direct <em>mentorship.</em></div>
+        <div class="eco-desc">Immediate, over-the-shoulder guidance from dedicated product managers and specialized AI faculty. Course-correct in minutes, not days.</div>
+      </div>
+    </div>
+
+    <div class="hub-meta">
+      <div class="hub-meta-block">
+        <b>Address</b>
+        UXP Innovation Hub<br>
+        Software Room · 12th Floor<br>
+        Thiruvananthapuram · Kerala
+      </div>
+      <div class="hub-meta-block">
+        <b>Schedule</b>
+        Mon–Sat · in-person<br>
+        4-month residency<br>
+        Cohort 02 · 2026
+      </div>
+      <div class="hub-meta-block">
+        <b>Facilities</b>
+        Enterprise power + wi-fi<br>
+        Dedicated workstations<br>
+        Mentor-on-call faculty
+      </div>
+    </div>
+  </div>
+
+  <div class="page-ft">
+    <div class="pf-l">
+      <svg width="14" height="14" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#5B5BF0"/></svg>
+      <span>eduflick <em>AI</em> · A Tomatrix Technologies Venture</span>
+    </div>
+    <div class="pf-pn">11 / 12</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 12 · BACK COVER
+     ════════════════════════════════════════════ -->
+<div class="sheet">
+  <div class="i-bar"></div>
+  <div class="large-cta-page">
+    <div class="lc-top">
+      <div class="lc-mark-row">
+        <svg width="56" height="56" viewBox="0 0 180 180" role="img" aria-label="Eduflick mark"><use href="#b-mark" fill="#F5F2EA"/></svg>
+        <div class="lc-mark-meta">
+          <b>EDUFLICK / AI</b><br>
+          ONE SHAPE · ONE NOTCH
+        </div>
+      </div>
+      <div class="lc-edition">
+        <b>ADMISSIONS OPEN</b><br>
+        COHORT 02 · 2026<br>
+        THIRUVANANTHAPURAM
+      </div>
+    </div>
+
+    <div class="lc-middle">
+      <div class="lc-eyebrow">secure your seat today</div>
+      <div class="lc-headline">don't wait for the future. <em>build it.</em></div>
+      <div class="lc-sub">Admissions for the upcoming Thiruvananthapuram cohort are <em>currently open.</em> Seats are limited by the facility — first applied, first reviewed.</div>
+    </div>
+
+    <div class="lc-bottom">
+      <div class="lc-contact">
+        <div class="lc-row">
+          <span class="lc-key">Website</span>
+          <span class="lc-val">www.eduflick.com</span>
+        </div>
+        <div class="lc-row">
+          <span class="lc-key">Email</span>
+          <span class="lc-val">admissions@eduflick.com</span>
+        </div>
+        <div class="lc-row">
+          <span class="lc-key">Phone</span>
+          <span class="lc-val">[insert contact number]</span>
+        </div>
+        <div class="lc-row">
+          <span class="lc-key">Location</span>
+          <span class="lc-val">UXP Innovation Hub · Thiruvananthapuram</span>
+        </div>
+      </div>
+      <div class="lc-cta-area">
+        <div class="lc-fee-block">
+          <div class="lc-fee-lbl">Program Fee</div>
+          <div class="lc-fee-amt">₹30,000<em>.</em></div>
+        </div>
+        <a href="https://www.eduflick.com" class="lc-cta-btn">apply <em>now</em><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </div>
+
+    <div class="lc-footer">
+      <span><b>TOMATRIX TECHNOLOGIES PVT LTD</b></span>
+      <span>&copy; 2026 · ALL RIGHTS RESERVED</span>
+    </div>
+  </div>
+  <div class="i-bar"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+/* ─── Resolve CSS var() references ─── */
+function resolveVar(value, root) {
+  if (typeof value !== 'string' || !value.startsWith('var(')) return value;
+  const inner = value.slice(4, -1).trim();
+  const resolved = getComputedStyle(root).getPropertyValue(inner).trim();
+  return resolved || '#000';
+}
+
+/* ─── Replace <use> with inline SVG cloned from the symbol def ─── */
+function resolveUseElements(container) {
+  const root = document.documentElement;
+  container.querySelectorAll('use').forEach(function(use) {
+    var href = use.getAttribute('href') || use.getAttribute('xlink:href');
+    if (!href || href.charAt(0) !== '#') return;
+    var symbol = document.getElementById(href.slice(1));
+    if (!symbol) return;
+
+    var svgNS = 'http://www.w3.org/2000/svg';
+    var group = document.createElementNS(svgNS, 'g');
+
+    /* Resolve the effective fill colour.
+       If <use> has an explicit fill attr, use that (resolving any var()).
+       Otherwise read the computed colour — currentColor resolves to the
+       CSS `color` property, which html2canvas won't follow on inlined paths. */
+    var useFill = use.getAttribute('fill');
+    var fillColor;
+    if (useFill) {
+      fillColor = resolveVar(useFill, root);
+    } else {
+      fillColor = getComputedStyle(use).color;
+    }
+    /* Guard against unresolved / default black */
+    if (!fillColor || fillColor === 'rgb(0, 0, 0)') {
+      fillColor = getComputedStyle(use.parentElement).color;
+    }
+
+    /* Copy presentation attributes from <use> to the wrapper group */
+    var keepAttrs = ['x','y','width','height','transform','opacity','role','aria-label'];
+    for (var a = 0; a < use.attributes.length; a++) {
+      var attr = use.attributes[a];
+      if (attr.name === 'href' || attr.name === 'xlink:href' || attr.name === 'fill') continue;
+      if (keepAttrs.indexOf(attr.name) !== -1) {
+        group.setAttribute(attr.name, attr.value);
+      }
+    }
+
+    /* Deep-clone every child of the symbol */
+    var children = Array.prototype.slice.call(symbol.children);
+    for (var c = 0; c < children.length; c++) {
+      var clone = children[c].cloneNode(true);
+      if (fillColor) {
+        if (clone.getAttribute('fill') === 'currentColor') {
+          clone.setAttribute('fill', fillColor);
+        }
+        var curColorEls = clone.querySelectorAll ? clone.querySelectorAll('[fill="currentColor"]') : [];
+        for (var cc = 0; cc < curColorEls.length; cc++) {
+          curColorEls[cc].setAttribute('fill', fillColor);
+        }
+      }
+      group.appendChild(clone);
+    }
+
+    use.parentNode.replaceChild(group, use);
+  });
+
+  /* Strip CSS filter() from SVGs — html2canvas renders them as blank */
+  container.querySelectorAll('svg').forEach(function(svg) {
+    svg.style.setProperty('filter', 'none', 'important');
+  });
+}
+
+/* ─── PDF Download ─── */
+document.getElementById('downloadPdfBtn').addEventListener('click', async function(){
+  var btn = this;
+  if (typeof html2canvas === 'undefined' || !window.jspdf) {
+    alert('PDF libraries still loading. Please wait a moment and try again.');
+    return;
+  }
+  btn.disabled = true;
+  var originalHTML = btn.innerHTML;
+  btn.textContent = 'Generating…';
+  try {
+    var sheets = document.querySelectorAll('.sheet');
+    var jsPDF = window.jspdf.jsPDF;
+    var pdf = null;
+    var hiddenContainer = document.createElement('div');
+    hiddenContainer.style.cssText = 'position:absolute;left:-9999px;top:0;width:794px;';
+    document.body.appendChild(hiddenContainer);
+
+    for (var i = 0; i < sheets.length; i++) {
+      btn.textContent = 'Page ' + (i + 1) + ' of ' + sheets.length + '…';
+
+      /* Clone the sheet into the hidden container so CSS variables inherit */
+      var clone = sheets[i].cloneNode(true);
+      hiddenContainer.innerHTML = '';
+      hiddenContainer.appendChild(clone);
+
+      /* Strip screen-only styles from the clone */
+      clone.style.margin = '0';
+      clone.style.boxShadow = 'none';
+
+      /* Resolve every <use> → inline SVG, drop CSS filters */
+      resolveUseElements(clone);
+
+      var canvas;
+      try {
+        canvas = await html2canvas(clone, {
+          scale: 2, useCORS: true, backgroundColor: '#F5F2EA', logging: false,
+          allowTaint: true, width: 794, height: 1123
+        });
+      } catch (e) {
+        console.warn('Retrying page ' + (i + 1) + ' at lower scale...', e);
+        canvas = await html2canvas(clone, {
+          scale: 1, useCORS: true, backgroundColor: '#F5F2EA', logging: false,
+          allowTaint: true, width: 794, height: 1123
+        });
+      }
+
+      var imgWidth = 210;
+      var imgHeight = (canvas.height * imgWidth) / canvas.width;
+      if (i === 0) {
+        pdf = new jsPDF({ unit: 'mm', format: [imgWidth, imgHeight], orientation: 'portrait' });
+      } else {
+        pdf.addPage([imgWidth, imgHeight]);
+      }
+      var imgData = canvas.toDataURL('image/jpeg', 0.92);
+      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+    }
+
+    document.body.removeChild(hiddenContainer);
+    pdf.save('Eduflick_AI_Leadership_Program_Brochure_v2.pdf');
+  } catch (err) {
+    console.error('PDF generation failed:', err);
+    alert('PDF generation failed: ' + err.message);
+  }
+  btn.disabled = false;
+  btn.innerHTML = originalHTML;
+});
+</script>
+</body>
+</html>

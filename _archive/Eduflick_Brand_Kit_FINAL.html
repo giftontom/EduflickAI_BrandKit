@@ -1,0 +1,1180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Eduflick AI · Brand Kit v2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0A0B10;
+    --ink-2:#11131C;
+    --ink-3:#181B28;
+    --line:rgba(245,242,234,0.08);
+    --line-2:rgba(245,242,234,0.16);
+    --paper:#F5F2EA;
+    --paper-2:#ECE7DA;
+    --paper-dim:#C9C5BA;
+    --muted:#7A7F90;
+    --warn:#FF6E5A;
+
+    --i-50:#EEF0FF;
+    --i-100:#DCE0FF;
+    --i-200:#B7C0FF;
+    --i-300:#8B97FF;
+    --i-400:#6E78F5;
+    --i-500:#5B5BF0;
+    --i-600:#4B3FE0;
+    --i-700:#3A2BB8;
+    --i-800:#261A82;
+    --i-900:#150D52;
+    --i-ink:#0B0822;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--ink);color:var(--paper);font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased}
+  body{
+    background:
+      radial-gradient(1200px 700px at 100% 0%, rgba(91,91,240,0.10), transparent 60%),
+      radial-gradient(900px 600px at 0% 100%, rgba(91,91,240,0.05), transparent 60%),
+      var(--ink);
+    min-height:100vh;
+  }
+  .page{max-width:1380px;margin:0 auto;padding:64px 48px 96px}
+  svg{display:block}
+
+  /* ============= TYPOGRAPHY UTILITIES ============= */
+  .display{font-family:'Manrope',sans-serif;font-weight:900;letter-spacing:-0.05em;line-height:0.9;text-transform:lowercase}
+  .display em{font-family:'Instrument Serif',serif;font-weight:400;font-style:italic;letter-spacing:-0.02em;color:var(--i-300)}
+  .heading{font-family:'Manrope',sans-serif;font-weight:800;letter-spacing:-0.03em;line-height:1.05;text-transform:lowercase}
+  .heading em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300)}
+  .editorial{font-family:'Instrument Serif',serif;font-style:italic;line-height:1.3;color:var(--paper)}
+  .body{font-family:'Manrope',sans-serif;font-weight:500;font-size:16px;line-height:1.6;color:var(--paper-dim);max-width:60ch}
+  .mono{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:var(--paper-dim);line-height:1.7}
+  .mono.up{text-transform:uppercase;letter-spacing:0.2em;color:var(--muted)}
+
+  /* ============= HEADER ============= */
+  .header{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:flex-end;margin-bottom:56px;padding-bottom:32px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:var(--i-300);margin:0 0 20px;display:flex;gap:14px;align-items:center}
+  .eyebrow::before{content:'';width:32px;height:2px;background:var(--i-300)}
+  h1.h1{font-family:'Manrope',sans-serif;font-weight:900;font-size:clamp(56px,7vw,104px);line-height:0.88;letter-spacing:-0.055em;margin:0;color:var(--paper);text-transform:lowercase}
+  h1.h1 em{font-family:'Instrument Serif',serif;font-weight:400;font-style:italic;color:var(--i-300);letter-spacing:-0.025em}
+  .meta{text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.8;color:var(--muted);letter-spacing:0.04em;max-width:320px}
+  .meta b{color:var(--paper);font-weight:500}
+  .meta .v{display:inline-block;padding:4px 10px;border:1px solid var(--i-500);color:var(--i-300);border-radius:3px;font-size:10px;letter-spacing:0.22em;margin-bottom:8px}
+
+  /* ============= SECTIONS ============= */
+  section{margin-top:88px}
+  .section-head{display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:baseline;margin-bottom:32px}
+  .section-head h2{font-family:'Manrope',sans-serif;font-weight:800;font-size:34px;letter-spacing:-0.035em;margin:0;text-transform:lowercase;color:var(--paper)}
+  .section-head h2 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300)}
+  .section-head .rule{height:1px;background:var(--line)}
+  .section-head .id{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:0.22em;text-transform:uppercase}
+
+  /* ============= CARDS ============= */
+  .card{background:var(--ink-2);border:1px solid var(--line);border-radius:18px;padding:28px}
+  .card .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:14px}
+
+  /* ============= AT A GLANCE ============= */
+  .glance{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;margin-bottom:24px}
+  .glance-main{background:linear-gradient(150deg,var(--i-700) 0%,var(--i-ink) 80%);border-radius:24px;padding:56px 56px 48px;position:relative;overflow:hidden}
+  .glance-main::after{content:'';position:absolute;top:-100px;right:-80px;width:480px;height:480px;background:radial-gradient(circle,rgba(245,242,234,0.10),transparent 70%);pointer-events:none}
+  .glance-main .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--i-100);letter-spacing:0.24em;text-transform:uppercase;margin-bottom:24px;position:relative;z-index:1}
+  .glance-main h2{font-family:'Manrope',sans-serif;font-weight:900;font-size:clamp(42px,4.6vw,62px);line-height:0.96;letter-spacing:-0.045em;margin:0 0 20px;color:var(--paper);text-transform:lowercase;position:relative;z-index:1}
+  .glance-main h2 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-100)}
+  .glance-main p{font-family:'Instrument Serif',serif;font-size:21px;line-height:1.4;color:rgba(245,242,234,0.85);margin:0;max-width:46ch;position:relative;z-index:1}
+  .glance-side{display:grid;gap:24px}
+  .glance-card{background:var(--ink-2);border:1px solid var(--line);border-radius:18px;padding:28px 28px 24px}
+  .glance-card .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:10px}
+  .glance-card .val{font-family:'Manrope',sans-serif;font-weight:800;font-size:24px;letter-spacing:-0.025em;color:var(--paper);text-transform:lowercase;line-height:1.1}
+  .glance-card .val em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300)}
+  .glance-card .sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--paper-dim);letter-spacing:0.04em;line-height:1.6;margin-top:8px}
+
+  /* ============= MANIFESTO ============= */
+  .manifesto{background:var(--ink-2);border:1px solid var(--line);border-radius:22px;padding:64px 72px;margin-top:24px}
+  .manifesto-lead{font-family:'Manrope',sans-serif;font-weight:900;font-size:clamp(36px,4vw,54px);line-height:1;letter-spacing:-0.04em;color:var(--paper);text-transform:lowercase;margin:0 0 32px;max-width:18ch}
+  .manifesto-lead em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300)}
+  .manifesto-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .principle{background:var(--ink-2);padding:28px 24px;display:flex;flex-direction:column;gap:14px}
+  .principle .n{font-family:'Instrument Serif',serif;font-style:italic;font-size:32px;color:var(--i-300);line-height:1}
+  .principle .t{font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;letter-spacing:-0.01em;color:var(--paper);text-transform:lowercase;line-height:1.2}
+  .principle .d{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--paper-dim);line-height:1.6;letter-spacing:0.02em}
+
+  /* ============= MARK SECTION ============= */
+  .mark-hero{background:var(--ink-2);border:1px solid var(--line);border-radius:22px;overflow:hidden;display:grid;grid-template-columns:1.1fr 1fr;min-height:480px}
+  .mark-stage{background:radial-gradient(440px 360px at 50% 50%,rgba(91,91,240,0.18),transparent 70%),linear-gradient(140deg,var(--i-ink) 0%,var(--ink) 100%);display:flex;align-items:center;justify-content:center;border-right:1px solid var(--line);position:relative}
+  .mark-stage::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(245,242,234,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(245,242,234,0.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
+  .mark-stage svg{position:relative;z-index:1}
+  .mark-copy{padding:48px 48px 40px;display:flex;flex-direction:column;justify-content:center;gap:24px}
+  .mark-copy .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--i-300);letter-spacing:0.22em;text-transform:uppercase}
+  .mark-copy h3{font-family:'Manrope',sans-serif;font-weight:900;font-size:54px;line-height:0.95;letter-spacing:-0.045em;margin:0;color:var(--paper);text-transform:lowercase}
+  .mark-copy h3 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300)}
+  .mark-copy p{font-family:'Instrument Serif',serif;font-size:21px;line-height:1.45;color:var(--paper-dim);margin:0;max-width:42ch}
+  .mark-copy p b{color:var(--paper);font-style:italic;font-weight:400}
+  .mark-specs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding-top:24px;border-top:1px dashed var(--line)}
+  .mark-specs > div{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.6;color:var(--muted);letter-spacing:0.06em}
+  .mark-specs b{display:block;color:var(--paper);font-weight:500;letter-spacing:0.16em;text-transform:uppercase;font-size:10px;margin-bottom:5px}
+
+  /* ============= CONSTRUCTION ============= */
+  .build-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:24px}
+  .build-left{background:var(--ink-2);border:1px solid var(--line);border-radius:18px;padding:32px}
+  .build-right{display:grid;grid-template-rows:1fr 1fr;gap:24px}
+  .build-detail{background:var(--ink-2);border:1px solid var(--line);border-radius:18px;padding:28px;display:grid;grid-template-rows:auto 1fr;gap:18px}
+  .build-detail .text{font-family:'Instrument Serif',serif;font-size:18px;line-height:1.4;color:var(--paper-dim)}
+  .build-detail .text b{color:var(--paper);font-style:italic;font-weight:400}
+  .blue-stage{background:linear-gradient(rgba(91,91,240,0.10) 1px,transparent 1px),linear-gradient(90deg,rgba(91,91,240,0.10) 1px,transparent 1px),var(--ink);background-size:20px 20px;border-radius:12px;border:1px solid var(--line);padding:24px;display:flex;align-items:center;justify-content:center}
+
+  /* ============= COLOR ============= */
+  .palette{background:var(--ink-2);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+  .palette-head{padding:28px 32px 24px;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--line)}
+  .palette-head h4{font-family:'Manrope',sans-serif;font-weight:800;font-size:24px;letter-spacing:-0.025em;margin:0 0 6px;text-transform:lowercase;color:var(--paper)}
+  .palette-head h4 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300)}
+  .palette-head .tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.22em;text-transform:uppercase}
+  .palette-head .badge{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 10px;border-radius:3px;letter-spacing:0.22em;background:rgba(91,91,240,0.16);color:var(--i-300);border:1px solid rgba(91,91,240,0.4)}
+  .ramp{display:grid;grid-template-columns:repeat(7,1fr)}
+  .swatch{aspect-ratio:1/1.15;padding:16px 14px 14px;display:flex;flex-direction:column;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.3}
+  .swatch .num{font-weight:500;letter-spacing:0.16em}
+  .swatch .hex{letter-spacing:0.04em}
+  .palette-foot{padding:24px 32px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px;border-top:1px solid var(--line)}
+  .palette-foot > div{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.7;color:var(--paper-dim);letter-spacing:0.04em}
+  .palette-foot b{display:block;color:var(--paper);font-weight:500;letter-spacing:0.18em;text-transform:uppercase;font-size:10px;margin-bottom:6px}
+
+  /* Indigo ramp */
+  .i-1{background:#EEF0FF;color:#0B0822}
+  .i-2{background:#DCE0FF;color:#0B0822}
+  .i-3{background:#B7C0FF;color:#0B0822}
+  .i-4{background:#5B5BF0;color:#FFFFFF}
+  .i-5{background:#3A2BB8;color:#F5F2EA}
+  .i-6{background:#261A82;color:#F5F2EA}
+  .i-7{background:#0B0822;color:#F5F2EA}
+  /* Neutral ramp */
+  .n-1{background:#F5F2EA;color:#0A0B10}
+  .n-2{background:#ECE7DA;color:#0A0B10}
+  .n-3{background:#C9C5BA;color:#0A0B10}
+  .n-4{background:#7A7F90;color:#F5F2EA}
+  .n-5{background:#2A2D38;color:#F5F2EA}
+  .n-6{background:#11131C;color:#F5F2EA}
+  .n-7{background:#0A0B10;color:#F5F2EA}
+
+  /* ============= TYPE ============= */
+  .type{background:var(--ink-2);border:1px solid var(--line);border-radius:22px;padding:40px 48px}
+  .type-row{display:grid;grid-template-columns:240px 1fr;gap:32px;align-items:center;padding:28px 0;border-bottom:1px dashed var(--line)}
+  .type-row:first-child{padding-top:8px}
+  .type-row:last-child{border-bottom:none;padding-bottom:8px}
+  .type-row .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.06em;line-height:1.7}
+  .type-row .lbl b{display:block;color:var(--paper);letter-spacing:0.22em;text-transform:uppercase;font-size:10px;margin-bottom:8px;font-weight:500}
+  .t-display{font-family:'Manrope',sans-serif;font-weight:900;font-size:88px;letter-spacing:-0.05em;line-height:0.9;color:var(--paper);text-transform:lowercase}
+  .t-display em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300)}
+  .t-heading{font-family:'Manrope',sans-serif;font-weight:800;font-size:40px;letter-spacing:-0.03em;line-height:1.05;color:var(--paper)}
+  .t-editorial{font-family:'Instrument Serif',serif;font-style:italic;font-size:30px;line-height:1.25;color:var(--paper)}
+  .t-body{font-family:'Manrope',sans-serif;font-weight:500;font-size:17px;line-height:1.55;color:var(--paper-dim);max-width:56ch}
+  .t-mono{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.65;color:var(--paper-dim);letter-spacing:0.06em}
+  .t-mono b{color:var(--i-300)}
+
+  /* ============= LOCKUPS ============= */
+  .locks{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .lock{background:var(--ink-2);border:1px solid var(--line);border-radius:18px;padding:24px;display:grid;gap:14px}
+  .lock .stg{height:170px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+  .lock .stg.dark{background:var(--ink)}
+  .lock .stg.paper{background:var(--paper)}
+  .lock .stg.indigo{background:var(--i-500)}
+  .lock .stg.indigo-ink{background:var(--i-ink)}
+  .lock .stg.outline{background:transparent;border:1px dashed var(--line)}
+  .lock .ttl{display:flex;justify-content:space-between;align-items:center}
+  .lock .ttl .id{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--paper);letter-spacing:0.18em;text-transform:uppercase}
+  .lock .ttl .when{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase}
+  .lock .desc{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--paper-dim);letter-spacing:0.06em;line-height:1.6}
+  .wm{display:flex;align-items:center;gap:12px}
+  .wm svg{transform:translateY(1px)}
+  .wm .nm{font-family:'Manrope',sans-serif;font-weight:800;font-size:32px;letter-spacing:-0.038em;line-height:1}
+  .wm .ai{font-family:'Manrope',sans-serif;font-weight:800;font-size:32px;letter-spacing:-0.038em;line-height:1;color:var(--i-500);margin-left:14px}
+
+  /* ============= USAGE MATRIX ============= */
+  .matrix{background:var(--ink-2);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:24px}
+  .matrix-row{display:grid;grid-template-columns:1.5fr 1fr 2fr;gap:24px;padding:18px 28px;border-bottom:1px solid var(--line);align-items:center}
+  .matrix-row.head{background:var(--ink-3);border-bottom:1px solid var(--line-2)}
+  .matrix-row.head > div{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--paper);letter-spacing:0.22em;text-transform:uppercase;font-weight:500}
+  .matrix-row:last-child{border-bottom:none}
+  .matrix-row .surface{font-family:'Manrope',sans-serif;font-weight:600;font-size:14px;color:var(--paper)}
+  .matrix-row .lockup{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--i-300);letter-spacing:0.12em;text-transform:uppercase}
+  .matrix-row .note{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--paper-dim);letter-spacing:0.04em}
+
+  /* ============= MOTION ============= */
+  .motion{background:var(--ink-2);border:1px solid var(--line);border-radius:22px;padding:36px 40px}
+  .motion-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:24px}
+  .frame{aspect-ratio:1/1;background:var(--i-ink);border-radius:14px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+  .frame .fnum{position:absolute;top:12px;left:14px;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);letter-spacing:0.18em}
+  .frame .ftime{position:absolute;bottom:12px;right:14px;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--i-300);letter-spacing:0.18em}
+
+  /* ============= APPLICATIONS ============= */
+  .apps-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
+  .app{background:var(--ink-2);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+  .app .head{padding:16px 22px;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.22em;text-transform:uppercase;display:flex;justify-content:space-between}
+  .app .head b{color:var(--paper);font-weight:500}
+
+  .app-icons{grid-column:span 4}
+  .app-icons .stg{padding:36px 28px;display:flex;flex-direction:column;align-items:center;gap:24px}
+  .icon-row{display:flex;gap:16px;align-items:center}
+  .icon-tile{border-radius:24%;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 32px -16px rgba(0,0,0,0.6)}
+  .icon-tile.lg{width:120px;height:120px;border-radius:28px}
+  .icon-tile.md{width:60px;height:60px;border-radius:14px}
+  .icon-tile.sm{width:36px;height:36px;border-radius:8px}
+  .icon-tile.xs{width:24px;height:24px;border-radius:6px}
+
+  .biz{grid-column:span 5}
+  .biz .stg{padding:32px;display:flex;align-items:center;justify-content:center;gap:18px;background:linear-gradient(120deg,#14172a 0%,#0a0b10 100%);min-height:240px}
+  .biz-card{width:300px;height:180px;border-radius:14px;padding:20px;display:grid;grid-template-rows:1fr auto;box-shadow:0 18px 40px -20px rgba(0,0,0,0.8)}
+  .biz-card.front{background:var(--i-500);color:var(--paper)}
+  .biz-card.back{background:var(--paper);color:var(--ink)}
+  .biz-card .top{display:flex;justify-content:space-between;align-items:flex-start}
+  .biz-card .bot{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.18em;line-height:1.7;text-transform:uppercase}
+  .biz-card.front .bot b{font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;letter-spacing:-0.02em;display:block;text-transform:none;margin-bottom:2px}
+  .biz-card.front .bot b span{color:var(--i-100)}
+  .biz-card.back .name{font-family:'Manrope',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.025em}
+  .biz-card.back .role{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.18em;text-transform:uppercase;margin-top:3px}
+  .biz-card.back .contact{font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.7;color:#555}
+
+  .social{grid-column:span 3}
+  .social .stg{padding:24px;background:var(--ink);min-height:240px;display:flex;align-items:center;justify-content:center}
+  .og-card{width:100%;aspect-ratio:1.91/1;background:linear-gradient(150deg,var(--i-700) 0%,var(--i-ink) 100%);border-radius:8px;padding:18px 20px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+  .og-card::after{content:'';position:absolute;top:-30px;right:-20px;width:140px;height:140px;background:radial-gradient(circle,rgba(245,242,234,0.10),transparent 70%)}
+  .og-card .og-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
+  .og-card .og-bot{position:relative;z-index:1}
+  .og-card .og-ttl{font-family:'Manrope',sans-serif;font-weight:800;font-size:16px;letter-spacing:-0.025em;color:var(--paper);text-transform:lowercase;line-height:1;margin-bottom:6px}
+  .og-card .og-ttl em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-200)}
+  .og-card .og-meta{font-family:'JetBrains Mono',monospace;font-size:7.5px;color:var(--i-200);letter-spacing:0.18em;text-transform:uppercase}
+
+  .email{grid-column:span 6}
+  .email .stg{padding:36px;background:var(--paper)}
+  .email-sig{font-family:'Manrope',sans-serif;color:var(--ink);font-size:14px;line-height:1.6}
+  .email-sig .name{font-weight:800;font-size:15px;letter-spacing:-0.02em;color:var(--ink);margin-bottom:1px}
+  .email-sig .role{color:#666;font-size:13px;margin-bottom:10px}
+  .email-sig .brand{display:flex;align-items:center;gap:10px;padding-top:10px;border-top:1px solid #D5D2CA}
+  .email-sig .brand-name{font-weight:800;font-size:14px;letter-spacing:-0.018em;color:var(--ink)}
+  .email-sig .brand-name span{color:var(--i-500)}
+  .email-sig .links{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#666;letter-spacing:0.04em;margin-top:4px}
+
+  .poster-row{grid-column:span 6}
+  .poster-row-stack{display:grid;grid-template-rows:1fr 1fr;gap:24px;height:100%}
+  .poster-mini{aspect-ratio:16/9;border-radius:12px;overflow:hidden;position:relative;padding:20px;display:flex;flex-direction:column;justify-content:space-between}
+  .poster-mini.a{background:linear-gradient(160deg,var(--i-700) 0%,var(--i-ink) 100%);color:var(--paper)}
+  .poster-mini.b{background:var(--paper);color:var(--ink)}
+  .poster-mini .pk{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase}
+  .poster-mini.a .pk{color:var(--i-200)}
+  .poster-mini.b .pk{color:var(--i-700)}
+  .poster-mini h3{font-family:'Manrope',sans-serif;font-weight:900;font-size:26px;letter-spacing:-0.035em;line-height:0.95;margin:0;text-transform:lowercase}
+  .poster-mini h3 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400}
+  .poster-mini.a h3 em{color:var(--i-200)}
+  .poster-mini.b h3 em{color:var(--i-500)}
+  .poster-mini .pbot{display:flex;justify-content:space-between;align-items:flex-end;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase}
+
+  /* ============= MISUSE ============= */
+  .misuse{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .miss{background:var(--ink-2);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center}
+  .miss .stg{aspect-ratio:1;background:var(--ink);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;position:relative;overflow:hidden}
+  .miss .stg::after{content:'';position:absolute;top:50%;left:6px;right:6px;height:1.5px;background:var(--warn);transform:rotate(-12deg);opacity:0.8}
+  .miss .why{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--warn);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px;font-weight:500}
+  .miss .what{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--paper-dim);letter-spacing:0.04em;line-height:1.5}
+
+  /* ============= VOICE ============= */
+  .voice-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .voice{background:var(--ink-2);border:1px solid var(--line);border-radius:18px;padding:32px 36px}
+  .voice h4{font-family:'Manrope',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.025em;margin:0 0 18px;text-transform:lowercase;color:var(--paper)}
+  .voice h4 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300)}
+  .voice ul{margin:0;padding:0;list-style:none;font-family:'Instrument Serif',serif;font-size:18px;line-height:1.55;color:var(--paper-dim)}
+  .voice ul li{padding:12px 0;border-bottom:1px dashed var(--line);display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:baseline}
+  .voice ul li:last-child{border-bottom:none}
+  .voice ul.do li::before{content:'·';color:var(--i-300);font-family:'Manrope';font-weight:900;font-size:24px}
+  .voice ul.dont li::before{content:'\00D7';color:var(--warn);font-family:'Manrope';font-weight:700;font-size:18px}
+  .voice ul b{color:var(--paper);font-weight:400;font-style:italic}
+
+  /* ============= CO-BRAND ============= */
+  .cobrand{background:var(--ink-2);border:1px solid var(--line);border-radius:22px;padding:48px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .cobrand-stage{background:var(--paper);border-radius:14px;padding:48px;display:flex;align-items:center;justify-content:center;gap:32px;min-height:200px}
+  .cobrand-divider{width:1px;height:48px;background:#C9C5BA}
+  .cobrand-tomatrix{font-family:'Manrope',sans-serif;font-weight:600;font-size:18px;letter-spacing:-0.02em;color:var(--ink);display:flex;align-items:center;gap:10px}
+  .cobrand-tomatrix .tm-dot{width:12px;height:12px;background:var(--ink);border-radius:50%}
+  .cobrand-text h3{font-family:'Manrope',sans-serif;font-weight:800;font-size:28px;letter-spacing:-0.03em;margin:0 0 16px;color:var(--paper);text-transform:lowercase}
+  .cobrand-text h3 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300)}
+  .cobrand-text p{font-family:'Instrument Serif',serif;font-size:18px;line-height:1.5;color:var(--paper-dim);margin:0 0 14px;max-width:48ch}
+  .cobrand-rules{margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--paper-dim);line-height:1.8;letter-spacing:0.04em}
+  .cobrand-rules b{color:var(--i-300);font-weight:500;display:block;text-transform:uppercase;letter-spacing:0.18em;font-size:10px;margin-bottom:6px}
+
+  /* ============= APPENDIX ============= */
+  .appendix{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px}
+  .appx{background:var(--ink-2);border:1px solid var(--line);border-radius:18px;padding:28px 32px}
+  .appx h4{font-family:'Manrope',sans-serif;font-weight:800;font-size:16px;letter-spacing:-0.02em;color:var(--paper);text-transform:lowercase;margin:0 0 16px;display:flex;align-items:center;gap:8px}
+  .appx h4::before{content:'';width:6px;height:6px;background:var(--i-500);border-radius:50%}
+  .appx ul{margin:0;padding:0;list-style:none}
+  .appx ul li{padding:8px 0;border-bottom:1px dashed var(--line);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--paper-dim);letter-spacing:0.04em;line-height:1.5;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:baseline}
+  .appx ul li:last-child{border-bottom:none}
+  .appx ul li b{color:var(--paper);font-weight:500;text-transform:uppercase;letter-spacing:0.16em;font-size:10px;white-space:nowrap}
+
+  /* ============= FOOTER ============= */
+  .footer{margin-top:80px;padding:32px 0 0;border-top:1px solid var(--line);display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.06em}
+  .footer .logo{display:flex;align-items:center;gap:10px;color:var(--paper)}
+  .footer .logo b{font-family:'Manrope',sans-serif;font-weight:800;letter-spacing:-0.02em;font-size:14px;color:var(--paper)}
+  .footer .logo b span{color:var(--i-500)}
+  .footer .center{text-align:center;color:var(--muted)}
+  .footer .right{text-align:right;color:var(--i-300)}
+
+  @media (max-width:1000px){
+    .page{padding:32px 20px 64px}
+    .glance,.mark-hero,.build-grid,.cobrand{grid-template-columns:1fr}
+    .manifesto-grid,.apps-grid,.misuse,.appendix{grid-template-columns:1fr 1fr}
+    .locks,.motion-strip{grid-template-columns:1fr 1fr}
+    .ramp{grid-template-columns:repeat(4,1fr)}
+    .palette-foot{grid-template-columns:1fr}
+    .voice-grid,.type-row{grid-template-columns:1fr}
+    .manifesto{padding:40px 32px}
+    .app-icons,.biz,.social,.email,.poster-row{grid-column:span 12}
+    .header,.section-head{grid-template-columns:1fr;gap:16px}
+    .meta{text-align:left}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============= REUSABLE SVG SYMBOLS ============= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- THE MARK · 7 vertices, single closed path, no curves.
+         viewBox 180×180 · body 13–167 (154u square)
+         Notch on right edge, bottom-weighted.
+         Spans y=82 to y=143 (61u tall, 24u from bottom)
+         Apex at x=120, y=112.5 (47u inset = 30% of body width) -->
+    <symbol id="mark" viewBox="0 0 180 180">
+      <path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z"/>
+    </symbol>
+
+    <symbol id="mark-build" viewBox="0 0 180 180">
+      <rect x="13" y="13" width="154" height="154" fill="none" stroke="rgba(91,91,240,0.30)" stroke-width="0.7" stroke-dasharray="4 4"/>
+      <line x1="167" y1="82" x2="120" y2="112.5" stroke="rgba(91,91,240,0.45)" stroke-width="0.8" stroke-dasharray="3 3"/>
+      <line x1="120" y1="112.5" x2="167" y2="143" stroke="rgba(91,91,240,0.45)" stroke-width="0.8" stroke-dasharray="3 3"/>
+      <path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#F5F2EA"/>
+      <circle cx="13" cy="13" r="2.2" fill="#5B5BF0"/>
+      <circle cx="167" cy="13" r="2.2" fill="#5B5BF0"/>
+      <circle cx="167" cy="82" r="2.2" fill="#5B5BF0"/>
+      <circle cx="120" cy="112.5" r="2.5" fill="#5B5BF0"/>
+      <circle cx="167" cy="143" r="2.2" fill="#5B5BF0"/>
+      <circle cx="167" cy="167" r="2.2" fill="#5B5BF0"/>
+      <circle cx="13" cy="167" r="2.2" fill="#5B5BF0"/>
+      <text x="120" y="105" font-family="JetBrains Mono" font-size="5.5" fill="#8B97FF" letter-spacing="0.2">apex</text>
+      <text x="170" y="115" font-family="JetBrains Mono" font-size="5" fill="#8B97FF" letter-spacing="0.2">47u</text>
+    </symbol>
+
+    <symbol id="mark-grid" viewBox="0 0 180 180">
+      <g stroke="rgba(91,91,240,0.16)" stroke-width="0.4">
+        <line x1="18" y1="0" x2="18" y2="180"/><line x1="36" y1="0" x2="36" y2="180"/>
+        <line x1="54" y1="0" x2="54" y2="180"/><line x1="72" y1="0" x2="72" y2="180"/>
+        <line x1="90" y1="0" x2="90" y2="180"/><line x1="108" y1="0" x2="108" y2="180"/>
+        <line x1="126" y1="0" x2="126" y2="180"/><line x1="144" y1="0" x2="144" y2="180"/>
+        <line x1="162" y1="0" x2="162" y2="180"/>
+        <line x1="0" y1="18" x2="180" y2="18"/><line x1="0" y1="36" x2="180" y2="36"/>
+        <line x1="0" y1="54" x2="180" y2="54"/><line x1="0" y1="72" x2="180" y2="72"/>
+        <line x1="0" y1="90" x2="180" y2="90"/><line x1="0" y1="108" x2="180" y2="108"/>
+        <line x1="0" y1="126" x2="180" y2="126"/><line x1="0" y1="144" x2="180" y2="144"/>
+        <line x1="0" y1="162" x2="180" y2="162"/>
+      </g>
+      <path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="rgba(91,91,240,0.85)"/>
+    </symbol>
+
+    <symbol id="mark-outline" viewBox="0 0 180 180">
+      <path d="M 15 15 L 165 15 L 165 82 L 122 112.5 L 165 143 L 165 165 L 15 165 Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<main class="page">
+
+  <!-- ========================================================
+       HEADER
+       ======================================================== -->
+  <header class="header">
+    <div>
+      <p class="eyebrow">brand kit · v2.0 · finalised · 2026</p>
+      <h1 class="h1">eduflick AI · <em>brand kit.</em></h1>
+    </div>
+    <div class="meta">
+      <span class="v">BK / v2.0</span><br>
+      <b>mark</b> &nbsp; one shape, one notch.<br>
+      <b>parent</b> &nbsp; a tomatrix technologies venture<br>
+      <b>scope</b> &nbsp; mark · type · colour · motion · applications · voice<br>
+      <b>status</b> &nbsp; committed
+    </div>
+  </header>
+
+  <!-- ========================================================
+       00 · AT A GLANCE
+       ======================================================== -->
+  <section class="section" style="margin-top:0">
+    <div class="section-head">
+      <h2>00 · at a <em>glance.</em></h2>
+      <div class="rule"></div>
+      <div class="id">the brand on one card</div>
+    </div>
+
+    <div class="glance">
+      <div class="glance-main">
+        <div class="kicker">positioning · promise · product</div>
+        <h2>a feed for <em>thinking.</em></h2>
+        <p>Eduflick AI cuts any source — lecture, paper, video — into one-minute lessons tuned to what you need next. The doom-scroll antidote: short-form learning, anchored by AI.</p>
+      </div>
+      <div class="glance-side">
+        <div class="glance-card">
+          <div class="lbl">primary mark</div>
+          <div style="display:flex;align-items:center;gap:16px;margin-top:6px">
+            <svg width="56" height="56" viewBox="0 0 180 180"><use href="#mark" fill="#5B5BF0"/></svg>
+            <div>
+              <div class="val">one shape. <em>one notch.</em></div>
+              <div class="sub">a feed · cut by a play</div>
+            </div>
+          </div>
+        </div>
+        <div class="glance-card">
+          <div class="lbl">primary colour · primary typeface</div>
+          <div style="display:flex;align-items:center;gap:16px;margin-top:6px">
+            <div style="width:56px;height:56px;background:#5B5BF0;border-radius:12px;flex-shrink:0"></div>
+            <div>
+              <div class="val">indigo &nbsp; <em style="font-size:18px">+</em> &nbsp; manrope</div>
+              <div class="sub">#5B5BF0 · 900 / 800 / 500</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       01 · MANIFESTO
+       ======================================================== -->
+  <section class="section">
+    <div class="section-head">
+      <h2>01 · <em>manifesto.</em></h2>
+      <div class="rule"></div>
+      <div class="id">what we are · in declarative sentences</div>
+    </div>
+
+    <div class="manifesto">
+      <p class="manifesto-lead">we make the lesson <em>the unit.</em><br>not the platform. <em>not the feed.</em><br>not the AI.</p>
+
+      <div class="manifesto-grid">
+        <div class="principle">
+          <div class="n">i.</div>
+          <div class="t">brevity is respect.</div>
+          <div class="d">A minute that lands beats an hour that doesn't. Sixty seconds, then we leave.</div>
+        </div>
+        <div class="principle">
+          <div class="n">ii.</div>
+          <div class="t">the lesson is the hero.</div>
+          <div class="d">Not the algorithm, not the avatar, not the AI. The thing being learned comes first.</div>
+        </div>
+        <div class="principle">
+          <div class="n">iii.</div>
+          <div class="t">curated, then personal.</div>
+          <div class="d">Experts choose what to teach. AI chooses the order. The learner does the work.</div>
+        </div>
+        <div class="principle">
+          <div class="n">iv.</div>
+          <div class="t">earn the verb.</div>
+          <div class="d">No "unlock," no "supercharge," no "revolutionise." Say what is. Show what works.</div>
+        </div>
+        <div class="principle">
+          <div class="n">v.</div>
+          <div class="t">forward is a value.</div>
+          <div class="d">The notch points right. The feed moves down. Always: a next thing worth knowing.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       02 · THE MARK
+       ======================================================== -->
+  <section class="section">
+    <div class="section-head">
+      <h2>02 · the <em>mark.</em></h2>
+      <div class="rule"></div>
+      <div class="id">geometry · single shape · single notch</div>
+    </div>
+
+    <div class="mark-hero">
+      <div class="mark-stage">
+        <svg width="340" height="340" viewBox="0 0 180 180">
+          <use href="#mark" fill="#F5F2EA"/>
+        </svg>
+      </div>
+      <div class="mark-copy">
+        <div>
+          <div class="kicker">the eduflick mark</div>
+          <h3>a feed.<br><em>cut by a play.</em></h3>
+        </div>
+        <p>One shape. One notch. The square is the <b>feed card</b> — the unit of every short-form learning moment. The triangular bite on its right edge is the <b>play</b> — the moment a lesson begins. Bottom-weighted so it reads as forward motion anchored to the baseline. No spark. No flourish. The mark is its own punctuation.</p>
+        <div class="mark-specs">
+          <div><b>format</b>single closed path · 7 vertices · viewBox 180×180</div>
+          <div><b>weight</b>~280 bytes · all straight edges · zero Béziers</div>
+          <div><b>scales</b>1024 → 16px without modification</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       03 · CONSTRUCTION
+       ======================================================== -->
+  <section class="section">
+    <div class="section-head">
+      <h2>03 · con<em>struction.</em></h2>
+      <div class="rule"></div>
+      <div class="id">grid · proportion · clear space</div>
+    </div>
+
+    <div class="build-grid">
+      <div class="build-left">
+        <div class="lbl" style="margin-bottom:14px">18u grid · 154u × 154u body · notch on right edge · 13u margin</div>
+        <div class="blue-stage">
+          <svg width="420" height="420" viewBox="0 0 180 180">
+            <use href="#mark-grid"/>
+          </svg>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.06em">
+          <div><b style="color:var(--paper);display:block;letter-spacing:0.18em;text-transform:uppercase;font-size:10px;margin-bottom:4px">body</b>154u × 154u</div>
+          <div><b style="color:var(--paper);display:block;letter-spacing:0.18em;text-transform:uppercase;font-size:10px;margin-bottom:4px">notch</b>61u tall · 47u deep</div>
+          <div><b style="color:var(--paper);display:block;letter-spacing:0.18em;text-transform:uppercase;font-size:10px;margin-bottom:4px">apex</b>x=120, y=112.5</div>
+          <div><b style="color:var(--paper);display:block;letter-spacing:0.18em;text-transform:uppercase;font-size:10px;margin-bottom:4px">margin</b>≥ 13u</div>
+        </div>
+      </div>
+      <div class="build-right">
+        <div class="build-detail">
+          <div class="blue-stage" style="aspect-ratio:2/1">
+            <svg width="240" height="240" viewBox="0 0 180 180">
+              <use href="#mark-build"/>
+            </svg>
+          </div>
+          <div class="text">The notch sits <b>bottom-weighted on the right edge</b> — y=82 to y=143. The apex at x=120 is 47u inset, never crossing the optical centre. The mark always reads forward.</div>
+        </div>
+        <div class="build-detail">
+          <div class="blue-stage" style="aspect-ratio:2/1">
+            <svg width="320" height="180" viewBox="0 0 200 130">
+              <rect x="13" y="13" width="174" height="104" fill="none" stroke="rgba(91,91,240,0.4)" stroke-width="0.7" stroke-dasharray="2 2"/>
+              <g transform="translate(23 14) scale(0.87)">
+                <use href="#mark" fill="#F5F2EA"/>
+              </g>
+              <text x="100" y="8" font-family="JetBrains Mono" font-size="6" fill="#8B97FF" text-anchor="middle">13u</text>
+              <text x="100" y="126" font-family="JetBrains Mono" font-size="6" fill="#8B97FF" text-anchor="middle">13u</text>
+            </svg>
+          </div>
+          <div class="text"><b>Clear space</b> equals the mark's own margin: 13u on every side. Never trespass. Never overlap.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       04 · COLOUR
+       ======================================================== -->
+  <section class="section">
+    <div class="section-head">
+      <h2>04 · <em>colour.</em></h2>
+      <div class="rule"></div>
+      <div class="id">indigo is primary · neutral supports · nothing else</div>
+    </div>
+
+    <div style="display:grid;gap:24px">
+      <div class="palette">
+        <div class="palette-head">
+          <div>
+            <h4>indigo <em>· primary.</em></h4>
+            <div class="tag">signal · intellect · twilight</div>
+          </div>
+          <span class="badge">always</span>
+        </div>
+        <div class="ramp">
+          <div class="swatch i-1"><span class="num">indigo · 50</span><span class="hex">#EEF0FF</span></div>
+          <div class="swatch i-2"><span class="num">indigo · 100</span><span class="hex">#DCE0FF</span></div>
+          <div class="swatch i-3"><span class="num">indigo · 200</span><span class="hex">#B7C0FF</span></div>
+          <div class="swatch i-4"><span class="num">indigo · 500</span><span class="hex">#5B5BF0</span></div>
+          <div class="swatch i-5"><span class="num">indigo · 700</span><span class="hex">#3A2BB8</span></div>
+          <div class="swatch i-6"><span class="num">indigo · 800</span><span class="hex">#261A82</span></div>
+          <div class="swatch i-7"><span class="num">indigo · ink</span><span class="hex">#0B0822</span></div>
+        </div>
+        <div class="palette-foot">
+          <div><b>500 · primary</b>The single brand surface. Buttons, mark backgrounds, the "AI" in the wordmark. The colour the brand owns.</div>
+          <div><b>700–ink</b>Hero canvases, deep backgrounds, gradient stops. Where indigo earns its depth.</div>
+          <div><b>50–200</b>Hovers, washes, soft fills on paper. The pastel side, used sparingly.</div>
+        </div>
+      </div>
+
+      <div class="palette">
+        <div class="palette-head">
+          <div>
+            <h4>neutral <em>· supporting.</em></h4>
+            <div class="tag">paper + ink · the always-allowed pair</div>
+          </div>
+          <span class="badge">supports</span>
+        </div>
+        <div class="ramp">
+          <div class="swatch n-1"><span class="num">paper · 50</span><span class="hex">#F5F2EA</span></div>
+          <div class="swatch n-2"><span class="num">paper · 100</span><span class="hex">#ECE7DA</span></div>
+          <div class="swatch n-3"><span class="num">paper · 300</span><span class="hex">#C9C5BA</span></div>
+          <div class="swatch n-4"><span class="num">slate · 500</span><span class="hex">#7A7F90</span></div>
+          <div class="swatch n-5"><span class="num">slate · 800</span><span class="hex">#2A2D38</span></div>
+          <div class="swatch n-6"><span class="num">ink · 800</span><span class="hex">#11131C</span></div>
+          <div class="swatch n-7"><span class="num">ink</span><span class="hex">#0A0B10</span></div>
+        </div>
+        <div class="palette-foot">
+          <div><b>paper · 50</b>The default light background. Warmer than white. Documents, decks, business cards, packaging.</div>
+          <div><b>ink</b>The default dark background. Cooler than indigo-ink. App canvas, dark UI.</div>
+          <div><b>rule</b>Indigo + neutral mix freely. Never introduce a third hue. Mono is allowed alone — for editorial, print, embossing.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       05 · TYPE
+       ======================================================== -->
+  <section class="section">
+    <div class="section-head">
+      <h2>05 · <em>type.</em></h2>
+      <div class="rule"></div>
+      <div class="id">manrope · instrument serif · jetbrains mono</div>
+    </div>
+
+    <div class="type">
+      <div class="type-row">
+        <div class="lbl"><b>display</b>manrope 900<br>tracking −0.05em<br>line-height 0.9<br>lowercase always</div>
+        <div class="t-display">learn anything <em>in sixty seconds.</em></div>
+      </div>
+      <div class="type-row">
+        <div class="lbl"><b>heading</b>manrope 800<br>tracking −0.03em<br>line-height 1.05</div>
+        <div class="t-heading">The flick is the unit. The card is the lesson.</div>
+      </div>
+      <div class="type-row">
+        <div class="lbl"><b>editorial</b>instrument serif italic<br>tracking −0.01em<br>line-height 1.25</div>
+        <div class="t-editorial"><em>"the moment a concept lands is the moment the next lesson begins."</em></div>
+      </div>
+      <div class="type-row">
+        <div class="lbl"><b>body</b>manrope 500<br>16–18 px<br>line-height 1.55</div>
+        <div class="t-body">Eduflick AI builds personalised, short-form learning sequences from any source — a lecture, a paper, a video. The platform turns long-form material into a feed of one-minute flicks tuned to what you actually need next.</div>
+      </div>
+      <div class="type-row">
+        <div class="lbl"><b>mono · meta</b>jetbrains mono 500<br>tracking 0.06em<br>uppercase for labels</div>
+        <div class="t-mono">EDUFLICK / AI &nbsp; · &nbsp; LESSON 047 &nbsp; · &nbsp; <b>60 SECONDS</b> &nbsp; · &nbsp; QUEUED NEXT → MITOSIS · 8 FLICKS</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       06 · LOCKUPS
+       ======================================================== -->
+  <section class="section">
+    <div class="section-head">
+      <h2>06 · lock<em>ups.</em></h2>
+      <div class="rule"></div>
+      <div class="id">six committed forms · one wordmark treatment</div>
+    </div>
+
+    <!-- WORDMARK ANATOMY -->
+    <div style="background:var(--ink-2);border:1px solid var(--line);border-radius:22px;padding:48px 56px;margin-bottom:24px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:24px">wordmark · anatomy</div>
+      <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:48px;align-items:center">
+        <div style="display:flex;align-items:baseline;justify-content:center;padding:32px 0">
+          <span style="font-family:'Manrope',sans-serif;font-weight:800;font-size:88px;letter-spacing:-0.045em;line-height:1;color:var(--paper)">eduflick</span>
+          <span style="display:inline-block;width:14px"></span>
+          <span style="font-family:'Manrope',sans-serif;font-weight:800;font-size:88px;letter-spacing:-0.045em;line-height:1;color:var(--i-500)">AI</span>
+        </div>
+        <div>
+          <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.025em;color:var(--paper);text-transform:lowercase;margin-bottom:14px">the wordmark <em style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300)">· one rule.</em></div>
+          <p style="font-family:'Instrument Serif',serif;font-size:17px;line-height:1.5;color:var(--paper-dim);margin:0 0 20px;max-width:42ch"><b style="color:var(--paper);font-style:italic;font-weight:400">"eduflick AI"</b> — set as equal partners. Same typeface. Same weight. Same size. The only difference: <b style="color:var(--paper);font-style:italic;font-weight:400">"AI" is the brand colour.</b></p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--paper-dim);letter-spacing:0.04em;line-height:1.6">
+            <div><b style="color:var(--paper);display:block;letter-spacing:0.18em;text-transform:uppercase;font-size:9.5px;margin-bottom:4px;font-weight:500">typeface</b>Manrope 800</div>
+            <div><b style="color:var(--paper);display:block;letter-spacing:0.18em;text-transform:uppercase;font-size:9.5px;margin-bottom:4px;font-weight:500">tracking</b>−0.045em</div>
+            <div><b style="color:var(--paper);display:block;letter-spacing:0.18em;text-transform:uppercase;font-size:9.5px;margin-bottom:4px;font-weight:500">gap</b>0.16 cap-height</div>
+            <div><b style="color:var(--paper);display:block;letter-spacing:0.18em;text-transform:uppercase;font-size:9.5px;margin-bottom:4px;font-weight:500">case</b>lowercase + UPPERCASE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="locks">
+      <div class="lock">
+        <div class="ttl"><span class="id">L.01 primary</span><span class="when">default</span></div>
+        <div class="stg indigo-ink">
+          <div class="wm">
+            <svg width="36" height="36" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+            <div style="display:flex;align-items:baseline">
+              <span class="nm" style="color:var(--paper)">eduflick</span><span class="ai" style="color:var(--i-400)">AI</span>
+            </div>
+          </div>
+        </div>
+        <div class="desc">on indigo-ink · the canonical lockup · web, app, splash</div>
+      </div>
+
+      <div class="lock">
+        <div class="ttl"><span class="id">L.02 paper</span><span class="when">light</span></div>
+        <div class="stg paper">
+          <div class="wm">
+            <svg width="36" height="36" viewBox="0 0 180 180"><use href="#mark" fill="#0B0822"/></svg>
+            <div style="display:flex;align-items:baseline">
+              <span class="nm" style="color:var(--ink)">eduflick</span><span class="ai" style="color:var(--i-500)">AI</span>
+            </div>
+          </div>
+        </div>
+        <div class="desc">on paper · documents, decks, business cards, packaging</div>
+      </div>
+
+      <div class="lock">
+        <div class="ttl"><span class="id">L.03 indigo</span><span class="when">brand</span></div>
+        <div class="stg indigo">
+          <div class="wm">
+            <svg width="36" height="36" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+            <div style="display:flex;align-items:baseline">
+              <span class="nm" style="color:var(--paper)">eduflick</span><span class="ai" style="color:var(--paper)">AI</span>
+            </div>
+          </div>
+        </div>
+        <div class="desc">on indigo · merch, hero spreads, brand stunts</div>
+      </div>
+
+      <div class="lock">
+        <div class="ttl"><span class="id">L.04 mono</span><span class="when">editorial</span></div>
+        <div class="stg dark">
+          <div class="wm">
+            <svg width="36" height="36" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+            <div style="display:flex;align-items:baseline">
+              <span class="nm" style="color:var(--paper)">eduflick</span><span class="ai" style="color:var(--paper);opacity:0.5">AI</span>
+            </div>
+          </div>
+        </div>
+        <div class="desc">when colour competes · editorial, partner co-brand, print</div>
+      </div>
+
+      <div class="lock">
+        <div class="ttl"><span class="id">L.05 stacked</span><span class="when">square</span></div>
+        <div class="stg dark" style="flex-direction:column;gap:14px">
+          <svg width="54" height="54" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+          <div style="display:flex;align-items:baseline">
+            <span class="nm" style="font-size:28px;color:var(--paper);letter-spacing:-0.04em;line-height:1">eduflick</span><span style="display:inline-block;width:10px"></span><span class="ai" style="font-size:28px;color:var(--i-400);margin-left:0">AI</span>
+          </div>
+        </div>
+        <div class="desc">avatars, square crops, tall sidebars, mobile splash</div>
+      </div>
+
+      <div class="lock">
+        <div class="ttl"><span class="id">L.06 mark</span><span class="when">≤ 40px</span></div>
+        <div class="stg outline" style="gap:22px">
+          <svg width="48" height="48" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+          <svg width="32" height="32" viewBox="0 0 180 180"><use href="#mark" fill="#5B5BF0"/></svg>
+          <svg width="22" height="22" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+          <svg width="16" height="16" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+        </div>
+        <div class="desc">favicons, app tiles, profile chips · below 40px width</div>
+      </div>
+    </div>
+
+    <!-- USAGE MATRIX -->
+    <div class="matrix">
+      <div class="matrix-row head">
+        <div>surface</div>
+        <div>lockup</div>
+        <div>note</div>
+      </div>
+      <div class="matrix-row">
+        <div class="surface">Website hero · app splash</div>
+        <div class="lockup">L.01 primary</div>
+        <div class="note">Indigo-ink canvas. "eduflick" in paper, "AI" in indigo-400.</div>
+      </div>
+      <div class="matrix-row">
+        <div class="surface">Documents · decks · proposals</div>
+        <div class="lockup">L.02 paper</div>
+        <div class="note">"eduflick" in ink, "AI" in indigo-500. Same size, equal weight.</div>
+      </div>
+      <div class="matrix-row">
+        <div class="surface">Merch · packaging · stunts</div>
+        <div class="lockup">L.03 indigo</div>
+        <div class="note">Saturated indigo background. Both words in paper. Use sparingly.</div>
+      </div>
+      <div class="matrix-row">
+        <div class="surface">Editorial · partner co-brand</div>
+        <div class="lockup">L.04 mono</div>
+        <div class="note">When colour competes. "AI" stays paper, dimmed to 50%.</div>
+      </div>
+      <div class="matrix-row">
+        <div class="surface">Avatars · square crops · sidebars</div>
+        <div class="lockup">L.05 stacked</div>
+        <div class="note">Vertical lockup. Same wordmark treatment, smaller scale.</div>
+      </div>
+      <div class="matrix-row">
+        <div class="surface">Favicons · profile chips · &lt;40px</div>
+        <div class="lockup">L.06 mark only</div>
+        <div class="note">Wordmark drops. Mark alone carries.</div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- ========================================================
+       07 · MOTION
+       ======================================================== -->
+  <section class="section">
+    <div class="section-head">
+      <h2>07 · <em>motion.</em></h2>
+      <div class="rule"></div>
+      <div class="id">6 frames · 600ms · cubic-bezier(0.7,0,0.2,1)</div>
+    </div>
+
+    <div class="motion">
+      <div class="t-body" style="max-width:64ch">The canonical loop: a <b style="color:var(--paper);font-style:normal;font-weight:600">play wedge</b> is born inside the card, slides right, fits the bottom-right notch, and the card resumes its rest state. Read it as: <b style="color:var(--paper);font-style:normal;font-weight:600">a lesson plays, then it is filed.</b> 600ms total. Repeats every 4 seconds on splash; on hover everywhere else.</div>
+      <div class="motion-strip">
+        <div class="frame">
+          <span class="fnum">F1 · 000ms</span>
+          <svg width="120" height="120" viewBox="0 0 180 180"><rect x="13" y="13" width="154" height="154" fill="#5B5BF0"/></svg>
+          <span class="ftime">closed</span>
+        </div>
+        <div class="frame">
+          <span class="fnum">F2 · 120ms</span>
+          <svg width="120" height="120" viewBox="0 0 180 180"><rect x="13" y="13" width="154" height="154" fill="#5B5BF0"/><polygon points="108,100 108,128 124,114" fill="#F5F2EA"/></svg>
+          <span class="ftime">spawn</span>
+        </div>
+        <div class="frame">
+          <span class="fnum">F3 · 260ms</span>
+          <svg width="120" height="120" viewBox="0 0 180 180"><rect x="13" y="13" width="154" height="154" fill="#5B5BF0"/><polygon points="113,96 113,130 130,113" fill="#F5F2EA"/></svg>
+          <span class="ftime">travel</span>
+        </div>
+        <div class="frame">
+          <span class="fnum">F4 · 400ms</span>
+          <svg width="120" height="120" viewBox="0 0 180 180"><rect x="13" y="13" width="154" height="154" fill="#5B5BF0"/><polygon points="118,89 118,136 135,112.5" fill="#F5F2EA"/></svg>
+          <span class="ftime">approach</span>
+        </div>
+        <div class="frame">
+          <span class="fnum">F5 · 520ms</span>
+          <svg width="120" height="120" viewBox="0 0 180 180"><path d="M 13 13 L 167 13 L 167 82 L 132 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#5B5BF0"/><polygon points="132,82 132,143 167,112.5" fill="#F5F2EA"/></svg>
+          <span class="ftime">contact</span>
+        </div>
+        <div class="frame">
+          <span class="fnum">F6 · 600ms</span>
+          <svg width="120" height="120" viewBox="0 0 180 180"><use href="#mark" fill="#5B5BF0"/></svg>
+          <span class="ftime">rest</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       08 · APPLICATIONS
+       ======================================================== -->
+  <section class="section">
+    <div class="section-head">
+      <h2>08 · app<em>lications.</em></h2>
+      <div class="rule"></div>
+      <div class="id">favicon · app · social · email · stationery · posters</div>
+    </div>
+
+    <div class="apps-grid">
+      <div class="app app-icons">
+        <div class="head"><span>app icons</span><b>1024 → 24</b></div>
+        <div class="stg">
+          <div class="icon-tile lg" style="background:var(--i-500)">
+            <svg width="80" height="80" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+          </div>
+          <div class="icon-row">
+            <div class="icon-tile md" style="background:var(--i-500)">
+              <svg width="40" height="40" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+            </div>
+            <div class="icon-tile sm" style="background:var(--i-500)">
+              <svg width="22" height="22" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+            </div>
+            <div class="icon-tile xs" style="background:var(--i-500)">
+              <svg width="14" height="14" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app biz">
+        <div class="head"><span>business card · 88 × 55 mm</span><b>front / back</b></div>
+        <div class="stg">
+          <div class="biz-card front">
+            <div class="top">
+              <svg width="36" height="36" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+              <div class="bot" style="text-align:right">
+                <b>eduflick <span>AI</span></b>
+                A FEED FOR THINKING
+              </div>
+            </div>
+            <div class="bot" style="opacity:0.78">EDUFLICK.AI &nbsp;·&nbsp; A TOMATRIX TECHNOLOGIES VENTURE</div>
+          </div>
+          <div class="biz-card back">
+            <div>
+              <div class="name">N. Tomatrix</div>
+              <div class="role">Founder · CEO</div>
+            </div>
+            <div class="contact">n@eduflick.ai &nbsp;·&nbsp; +91 &nbsp;·&nbsp; eduflick.ai</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app social">
+        <div class="head"><span>social · OG</span><b>1.91:1</b></div>
+        <div class="stg">
+          <div class="og-card">
+            <div class="og-top">
+              <svg width="22" height="22" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+              <span class="og-meta">v · 2026</span>
+            </div>
+            <div class="og-bot">
+              <div class="og-ttl">a feed for <em>thinking.</em></div>
+              <div class="og-meta">EDUFLICK / AI</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app email">
+        <div class="head"><span>email signature</span><b>standard issue</b></div>
+        <div class="stg">
+          <div class="email-sig">
+            <div class="name">N. Tomatrix</div>
+            <div class="role">Founder · CEO</div>
+            <div class="brand">
+              <svg width="22" height="22" viewBox="0 0 180 180"><use href="#mark" fill="#5B5BF0"/></svg>
+              <div>
+                <div class="brand-name">eduflick <span>AI</span></div>
+                <div class="links">eduflick.ai &nbsp;·&nbsp; a tomatrix technologies venture</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="app poster-row">
+        <div class="head"><span>posters · key visuals</span><b>3 surfaces</b></div>
+        <div class="stg" style="padding:24px">
+          <div class="poster-row-stack">
+            <div class="poster-mini a">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                <div class="pk">a feed for thinking</div>
+                <svg width="22" height="22" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+              </div>
+              <h3>learn anything<br><em>in sixty seconds.</em></h3>
+              <div class="pbot"><span>eduflick.ai</span><span>v2.0</span></div>
+            </div>
+            <div class="poster-mini b">
+              <div class="pk">one card · one flick</div>
+              <h3>cut the textbook<br><em>into flicks.</em></h3>
+              <div class="pbot" style="color:#666"><span>EDUFLICK / AI</span><svg width="18" height="18" viewBox="0 0 180 180"><use href="#mark" fill="#5B5BF0"/></svg></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       09 · CO-BRAND
+       ======================================================== -->
+  <section class="section">
+    <div class="section-head">
+      <h2>09 · co-<em>brand.</em></h2>
+      <div class="rule"></div>
+      <div class="id">eduflick × tomatrix technologies</div>
+    </div>
+
+    <div class="cobrand">
+      <div class="cobrand-stage">
+        <div style="display:flex;align-items:center;gap:10px">
+          <svg width="40" height="40" viewBox="0 0 180 180"><use href="#mark" fill="#0B0822"/></svg>
+          <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.025em;color:var(--ink)">eduflick <span style="color:var(--i-500)">AI</span></div>
+        </div>
+        <div class="cobrand-divider"></div>
+        <div class="cobrand-tomatrix">
+          <span class="tm-dot"></span>
+          tomatrix
+        </div>
+      </div>
+      <div class="cobrand-text">
+        <h3>the parent <em>· acknowledged, never centred.</em></h3>
+        <p>Eduflick AI is a Tomatrix Technologies venture. In product surfaces, the Eduflick mark stands alone. In corporate communications — pitch decks, investor materials, regulatory filings, the email signature — the parent is named once, in JetBrains Mono caps, at the bottom of the surface.</p>
+        <div class="cobrand-rules">
+          <b>rules</b>
+          · Eduflick mark always leads. <br>
+          · 1u vertical divider between marks, equal to mark-cap-height. <br>
+          · Tomatrix never appears in indigo. Slate-500 or ink only. <br>
+          · Never lock the two marks visually beyond the divider pattern. <br>
+          · "a tomatrix technologies venture" — set in mono, lowercase, in footer copy.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       10 · MISUSE
+       ======================================================== -->
+  <section class="section">
+    <div class="section-head">
+      <h2>10 · <em>misuse.</em></h2>
+      <div class="rule"></div>
+      <div class="id">how to break the mark · so we never do</div>
+    </div>
+
+    <div class="misuse">
+      <div class="miss">
+        <div class="stg">
+          <svg width="80" height="50" viewBox="0 0 180 180" preserveAspectRatio="none"><use href="#mark" fill="#5B5BF0"/></svg>
+        </div>
+        <div class="why">× stretch</div>
+        <div class="what">never distort proportion</div>
+      </div>
+      <div class="miss">
+        <div class="stg">
+          <svg width="80" height="80" viewBox="0 0 180 180" style="transform:rotate(-22deg)"><use href="#mark" fill="#5B5BF0"/></svg>
+        </div>
+        <div class="why">× rotate</div>
+        <div class="what">notch always points right</div>
+      </div>
+      <div class="miss">
+        <div class="stg">
+          <svg width="80" height="80" viewBox="0 0 180 180" style="filter:drop-shadow(0 4px 8px rgba(91,91,240,0.8))"><use href="#mark" fill="#5B5BF0"/></svg>
+        </div>
+        <div class="why">× shadow</div>
+        <div class="what">no glow · no bevel · flat</div>
+      </div>
+      <div class="miss">
+        <div class="stg" style="background:linear-gradient(135deg,#FF6E5A,#5B5BF0)">
+          <svg width="80" height="80" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+        </div>
+        <div class="why">× third hue</div>
+        <div class="what">indigo + neutral only</div>
+      </div>
+      <div class="miss">
+        <div class="stg">
+          <svg width="80" height="80" viewBox="0 0 180 180"><defs><linearGradient id="bad-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5B5BF0"/><stop offset="1" stop-color="#B7C0FF"/></linearGradient></defs><use href="#mark" fill="url(#bad-g)"/></svg>
+        </div>
+        <div class="why">× gradient</div>
+        <div class="what">one colour. ever.</div>
+      </div>
+      <div class="miss">
+        <div class="stg" style="background:#7A7F90;background-image:url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;40&quot; height=&quot;40&quot;><circle cx=&quot;20&quot; cy=&quot;20&quot; r=&quot;8&quot; fill=&quot;%23999&quot;/></svg>')">
+          <svg width="80" height="80" viewBox="0 0 180 180"><use href="#mark" fill="#F5F2EA"/></svg>
+        </div>
+        <div class="why">× busy bg</div>
+        <div class="what">low-contrast surface</div>
+      </div>
+      <div class="miss">
+        <div class="stg">
+          <svg width="80" height="80" viewBox="0 0 180 180"><use href="#mark" fill="#5B5BF0"/></svg>
+          <span style="position:absolute;bottom:14px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--paper);background:rgba(255,255,255,0.15);padding:2px 6px;border-radius:3px">AI</span>
+        </div>
+        <div class="why">× stamp</div>
+        <div class="what">no "AI" badge on mark</div>
+      </div>
+      <div class="miss">
+        <div class="stg">
+          <svg width="60" height="60" viewBox="0 0 180 180" style="opacity:0.18"><use href="#mark" fill="#F5F2EA"/></svg>
+        </div>
+        <div class="why">× faded</div>
+        <div class="what">opacity ≥ 100% always</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       11 · VOICE
+       ======================================================== -->
+  <section class="section">
+    <div class="section-head">
+      <h2>11 · <em>voice.</em></h2>
+      <div class="rule"></div>
+      <div class="id">how the brand speaks · and refuses to</div>
+    </div>
+
+    <div class="voice-grid">
+      <div class="voice">
+        <h4>do <em>·</em> always.</h4>
+        <ul class="do">
+          <li><span></span><span>Write <b>declarative sentences.</b> "Mitosis in 60 seconds." Not "Want to learn mitosis fast?"</span></li>
+          <li><span></span><span>Treat the <b>lesson as the hero,</b> not the platform.</span></li>
+          <li><span></span><span>Use <b>lowercase</b> for the brand, headings, and most UI. Title-case only for proper nouns.</span></li>
+          <li><span></span><span>Lead with <b>numbers, durations, counts</b> — 60s, 8 flicks, lesson 047.</span></li>
+          <li><span></span><span>Acknowledge the parent as: <b>"a tomatrix technologies venture."</b></span></li>
+          <li><span></span><span>Set the <b>italic</b> only where a clause needs to breathe — once per surface.</span></li>
+        </ul>
+      </div>
+      <div class="voice">
+        <h4>don't <em>·</em> ever.</h4>
+        <ul class="dont">
+          <li><span></span><span>No gradients on the mark. No glow. No bevel. <b>One colour, one notch.</b></span></li>
+          <li><span></span><span>No third hue. Indigo + paper + ink — or mono. Never both colour systems at once.</span></li>
+          <li><span></span><span>No emoji in the mark. No sparkles. <b>No "AI" stamped onto everything.</b></span></li>
+          <li><span></span><span>No rotation. The notch always points <b>right.</b> Forward is a value.</span></li>
+          <li><span></span><span>No "revolutionary," "unlock," "supercharge," "next-gen." <b>Earn the verb.</b></span></li>
+          <li><span></span><span>No exclamation marks. <b>The full stop is the brand's punctuation.</b></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       12 · APPENDIX
+       ======================================================== -->
+  <section class="section">
+    <div class="section-head">
+      <h2>12 · ap<em>pendix.</em></h2>
+      <div class="rule"></div>
+      <div class="id">file naming · export · type stack</div>
+    </div>
+
+    <div class="appendix">
+      <div class="appx">
+        <h4>file naming</h4>
+        <ul>
+          <li><b>mark</b>eduflick-mark.svg</li>
+          <li><b>lockup</b>eduflick-lockup-L01-primary.svg</li>
+          <li><b>stacked</b>eduflick-lockup-L05-stacked.svg</li>
+          <li><b>icon</b>eduflick-icon-1024.png</li>
+          <li><b>favicon</b>eduflick-favicon-32.svg</li>
+          <li><b>OG</b>eduflick-og-1200x630.png</li>
+        </ul>
+      </div>
+      <div class="appx">
+        <h4>svg export</h4>
+        <ul>
+          <li><b>viewBox</b>0 0 180 180 (mark)</li>
+          <li><b>precision</b>1 decimal · integer where possible</li>
+          <li><b>fill</b>currentColor (themable)</li>
+          <li><b>title</b>always include &lt;title&gt;</li>
+          <li><b>optimise</b>SVGO removeViewBox: false</li>
+          <li><b>target</b>≤ 300 bytes for mark</li>
+        </ul>
+      </div>
+      <div class="appx">
+        <h4>type stack</h4>
+        <ul>
+          <li><b>display</b>Manrope 900</li>
+          <li><b>heading</b>Manrope 800</li>
+          <li><b>body</b>Manrope 500</li>
+          <li><b>editorial</b>Instrument Serif Italic</li>
+          <li><b>mono</b>JetBrains Mono 500</li>
+          <li><b>fallback</b>system-ui, sans-serif</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       FOOTER
+       ======================================================== -->
+  <footer class="footer">
+    <div class="logo">
+      <svg width="20" height="20" viewBox="0 0 180 180"><use href="#mark" fill="#5B5BF0"/></svg>
+      <b>eduflick <span>AI</span></b>
+    </div>
+    <div class="center">BRAND KIT · v2.0 · FINALISED · 2026.05</div>
+    <div class="right">A TOMATRIX TECHNOLOGIES VENTURE</div>
+  </footer>
+
+</main>
+</body>
+</html>

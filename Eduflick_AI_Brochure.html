@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Eduflick AI · Product Brochure · 2026 · Edition 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   EDUFLICK AI · PRODUCT BROCHURE · v2 · BRAND-ALIGNED
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --i-50:#EEF0FF; --i-100:#DCE0FF; --i-200:#B7C0FF; --i-300:#8B97FF;
+  --i-400:#6E78F5; --i-500:#5B5BF0; --i-600:#4B3FE0; --i-700:#3A2BB8;
+  --i-800:#261A82; --i-900:#150D52; --i-ink:#0B0822;
+  --paper:#F5F2EA; --paper-2:#ECE7DA; --paper-dim:#C9C5BA;
+  --ink:#0A0B10; --ink-2:#11131C; --ink-3:#181B28;
+  --muted:#7A7F90;
+  --line:rgba(10,11,16,0.08);
+  --line-2:rgba(10,11,16,0.14);
+}
+
+body{
+  font-family:'Manrope',sans-serif;
+  background:var(--paper-dim);
+  color:var(--ink);
+  font-size:13px;line-height:1.55;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ─── A4 SHEET ─── */
+.sheet{
+  width:794px;height:1123px;overflow:hidden;
+  background:var(--paper);
+  margin:24px auto;
+  box-shadow:0 2px 32px rgba(0,0,0,.28);
+  page-break-after:always;
+  display:flex;flex-direction:column;position:relative;
+}
+
+/* ─── Indigo separator bar ─── */
+.i-bar{
+  height:3px;flex-shrink:0;
+  background:linear-gradient(90deg,var(--i-500) 0%,var(--i-300) 50%,var(--i-500) 100%);
+}
+
+.bd{flex:1;padding:48px;overflow:hidden}
+
+/* ─── Section eyebrow ─── */
+.slabel{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.slabel span{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:500;letter-spacing:0.24em;text-transform:uppercase;color:var(--i-500)}
+.slabel::after{content:'';flex:0 0 60px;height:1px;background:var(--line-2)}
+.slabel.light span{color:var(--i-200)}
+.slabel.light::after{background:rgba(245,242,234,0.18)}
+
+/* ─── Headings ─── */
+h2{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:26px;
+  letter-spacing:-0.03em;color:var(--ink);text-transform:lowercase;
+  line-height:1.1;margin-bottom:10px;
+}
+h2 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-500)}
+h2.light{color:var(--paper)}
+h2.light em{color:var(--i-200)}
+p.deck{font-size:13px;color:var(--muted);line-height:1.7;font-weight:500;max-width:54ch}
+
+/* ─── Inner header ─── */
+.page-hd{
+  background:var(--i-ink);
+  padding:14px 48px;
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+  position:relative;overflow:hidden;
+}
+.page-hd::after{
+  content:'';position:absolute;top:-60px;right:-30px;
+  width:160px;height:160px;
+  background:radial-gradient(circle,rgba(91,91,240,0.12),transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.page-hd .ph-mark{flex-shrink:0;position:relative;z-index:1}
+.page-hd .ph-name{font-weight:800;font-size:13px;letter-spacing:-0.02em;color:var(--paper);text-transform:lowercase;position:relative;z-index:1}
+.page-hd .ph-name em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300)}
+.page-hd .ph-sub{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(245,242,234,0.4);letter-spacing:0.18em;text-transform:uppercase;margin-left:auto;position:relative;z-index:1}
+
+/* ─── Footer ─── */
+.page-ft{
+  background:var(--paper-2);
+  border-top:1px solid var(--line);
+  padding:14px 48px;
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.page-ft .pf-l{display:flex;align-items:center;gap:8px}
+.page-ft .pf-l span{font-size:10px;font-weight:600;color:var(--ink);letter-spacing:-0.01em}
+.page-ft .pf-l span em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--i-500);font-weight:400}
+.page-ft .pf-pn{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--i-500);letter-spacing:0.18em}
+
+/* ═══════════════════════════════════════════
+   PAGE 1 · COVER · ASYMMETRIC + 60S MOTIF
+   ═══════════════════════════════════════════ */
+.cover-sheet{
+  background:radial-gradient(140% 100% at 0% 100%, var(--i-500) 0%, var(--i-700) 38%, var(--i-ink) 100%);
+  position:relative;overflow:hidden;color:var(--paper);
+}
+.cover-sheet::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(245,242,234,0.08) 1px,transparent 1px);
+  background-size:22px 22px;
+  pointer-events:none;z-index:1;
+}
+.cover-sheet::after{
+  content:'';position:absolute;top:-220px;right:-180px;
+  width:680px;height:680px;
+  background:radial-gradient(circle,rgba(91,91,240,0.36),transparent 65%);
+  border-radius:50%;pointer-events:none;z-index:0;
+}
+
+.cover-content{
+  flex:1;display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;z-index:2;
+  padding:72px 64px 56px;
+}
+.cover-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+.cover-mark-row{display:flex;align-items:center;gap:18px}
+.cover-mark-row svg{
+  flex-shrink:0;
+  filter:drop-shadow(0 8px 48px rgba(91,91,240,0.55));
+  animation:cover-breathe 4.5s ease-in-out infinite;
+}
+@keyframes cover-breathe{
+  0%,100%{transform:scale(1);filter:drop-shadow(0 8px 48px rgba(91,91,240,0.55))}
+  50%{transform:scale(1.025);filter:drop-shadow(0 14px 64px rgba(91,91,240,0.75))}
+}
+.cover-mark-meta{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:rgba(245,242,234,0.5);letter-spacing:0.2em;
+  text-transform:uppercase;line-height:1.8;
+}
+.cover-mark-meta b{color:var(--paper);font-weight:500}
+.cover-edition{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:rgba(245,242,234,0.5);letter-spacing:0.24em;
+  text-transform:uppercase;line-height:1.8;text-align:right;
+}
+.cover-edition b{color:var(--paper);font-weight:500}
+
+.cover-headline{max-width:600px}
+.cover-wordmark{
+  font-family:'Manrope',sans-serif;font-weight:900;
+  font-size:78px;letter-spacing:-0.055em;
+  color:var(--paper);text-transform:lowercase;
+  line-height:0.9;margin-bottom:22px;
+}
+.cover-wordmark em{
+  font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;
+  color:var(--i-200);letter-spacing:-0.025em;
+}
+.cover-tagline{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:28px;line-height:1.25;
+  color:rgba(245,242,234,0.78);max-width:16ch;
+}
+.cover-tagline em{color:var(--i-200);font-style:italic}
+
+.cover-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+
+/* Feed preview - 3 stacked flick cards peeking in */
+.cover-feed-preview{display:flex;flex-direction:column;gap:8px}
+.fp-card{
+  width:248px;
+  background:rgba(245,242,234,0.06);
+  border:1px solid rgba(245,242,234,0.14);
+  border-radius:10px;
+  padding:14px 16px;
+}
+.fp-card .fp-t{
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:12.5px;
+  color:var(--paper);letter-spacing:-0.01em;margin-bottom:3px;
+}
+.fp-card .fp-t em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-200)}
+.fp-card .fp-m{
+  font-family:'JetBrains Mono',monospace;font-size:7.5px;
+  color:rgba(245,242,234,0.55);letter-spacing:0.14em;text-transform:uppercase;
+}
+.fp-card.dim{opacity:0.55}
+.fp-card.dimmer{opacity:0.3}
+
+/* 60s motif - rotating ring with center label */
+.cover-60s{position:relative;width:128px;height:128px;flex-shrink:0}
+.cover-60s svg{width:100%;height:100%;animation:sixty-rotate 60s linear infinite}
+@keyframes sixty-rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.cover-60s-label{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  text-align:center;pointer-events:none;
+}
+.cover-60s-label .n{font-family:'Manrope',sans-serif;font-weight:900;font-size:38px;color:var(--paper);letter-spacing:-0.04em;line-height:1}
+.cover-60s-label .n em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-200);font-size:22px}
+.cover-60s-label .u{font-family:'JetBrains Mono',monospace;font-size:7px;color:rgba(245,242,234,0.55);letter-spacing:0.22em;text-transform:uppercase;margin-top:4px}
+
+/* ═══════════════════════════════════════════
+   PAGE 2 · HERO + STATS + FEATURES + QUOTE
+   ═══════════════════════════════════════════ */
+.p2-hero h1{
+  font-family:'Manrope',sans-serif;font-weight:900;
+  font-size:46px;letter-spacing:-0.045em;line-height:0.98;
+  color:var(--ink);text-transform:lowercase;
+  margin-bottom:16px;max-width:14ch;
+}
+.p2-hero h1 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-500)}
+.p2-hero .editorial-deck{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:19px;line-height:1.4;color:var(--muted);
+  max-width:48ch;
+}
+.p2-hero .editorial-deck b{color:var(--ink);font-weight:400;font-style:italic}
+
+.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:28px}
+.stat-card{
+  background:var(--i-ink);border-radius:14px;
+  padding:22px 16px;position:relative;overflow:hidden;
+}
+.stat-card::after{
+  content:'';position:absolute;bottom:-30px;right:-20px;
+  width:90px;height:90px;
+  background:radial-gradient(circle,rgba(91,91,240,0.22),transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.stat-card .num{
+  font-family:'Manrope',sans-serif;font-weight:900;font-size:34px;
+  letter-spacing:-0.04em;color:var(--paper);line-height:1;
+  margin-bottom:6px;position:relative;z-index:1;
+}
+.stat-card .num em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300);font-size:22px}
+.stat-card .lbl{
+  font-family:'JetBrains Mono',monospace;font-size:8px;
+  color:var(--i-200);letter-spacing:0.18em;text-transform:uppercase;
+  position:relative;z-index:1;
+}
+
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.feat-card{
+  background:var(--paper-2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:24px 20px;position:relative;
+}
+.feat-card .fc-mark{
+  width:40px;height:40px;margin-bottom:14px;
+  color:var(--i-500);
+}
+.feat-card .fc-mark svg{display:block;width:100%;height:100%}
+.feat-card .fc-title{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:14.5px;
+  letter-spacing:-0.02em;color:var(--ink);text-transform:lowercase;
+  margin-bottom:6px;line-height:1.2;
+}
+.feat-card .fc-title em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-500)}
+.feat-card .fc-desc{font-size:11px;color:var(--muted);line-height:1.65}
+
+.pull-quote{
+  background:linear-gradient(140deg,var(--i-ink),var(--i-700));
+  border-radius:14px;
+  padding:28px 32px 24px;
+  margin-top:28px;
+  position:relative;overflow:hidden;
+}
+.pull-quote::before{
+  content:'\201C';
+  position:absolute;top:8px;left:24px;
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:96px;color:rgba(245,242,234,0.06);
+  line-height:1;pointer-events:none;z-index:0;
+}
+.pull-quote::after{
+  content:'';position:absolute;bottom:-30px;right:-15px;
+  width:140px;height:140px;
+  background:radial-gradient(circle,rgba(91,91,240,0.2),transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.pull-quote blockquote{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:21px;color:var(--paper);line-height:1.35;
+  margin:0 0 8px;position:relative;z-index:1;
+}
+.pull-quote blockquote b{color:var(--i-200);font-weight:400}
+.pull-quote .attr{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--i-200);letter-spacing:0.16em;
+  position:relative;z-index:1;text-transform:uppercase;
+}
+
+/* ═══════════════════════════════════════════
+   PAGE 3 · STEPS + PERSONAS + SPECS
+   ═══════════════════════════════════════════ */
+.dark-band{
+  margin:24px -48px;
+  background:linear-gradient(150deg,var(--i-ink),var(--i-700));
+  padding:42px 48px 44px;
+  position:relative;overflow:hidden;
+}
+.dark-band::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(245,242,234,0.06) 1.2px,transparent 1.2px);
+  background-size:18px 18px;pointer-events:none;z-index:0;
+}
+.dark-band > *{position:relative;z-index:1}
+
+.steps-flow{display:flex;align-items:flex-start;gap:0;margin-top:8px}
+.step-node{flex:1;text-align:center;padding:0 8px;position:relative}
+.step-node:not(:last-child)::after{
+  content:'';position:absolute;top:30px;right:-14px;
+  width:28px;height:1.5px;
+  background:linear-gradient(90deg,rgba(245,242,234,0.32),rgba(245,242,234,0.06));
+}
+.step-node .sn-mark{
+  width:60px;height:60px;
+  display:inline-flex;align-items:center;justify-content:center;
+  margin-bottom:14px;position:relative;
+  color:var(--i-300);
+}
+.step-node .sn-mark svg{width:100%;height:100%}
+.step-node .sn-mark .sn-n{
+  position:absolute;top:50%;left:42%;
+  transform:translate(-50%,-50%);
+  font-family:'Manrope',sans-serif;font-weight:900;font-size:20px;
+  color:var(--paper);letter-spacing:-0.02em;line-height:1;
+}
+.step-node .sn-title{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:13px;
+  letter-spacing:-0.015em;color:var(--paper);text-transform:lowercase;
+  margin-bottom:5px;
+}
+.step-node .sn-desc{font-size:10.5px;color:rgba(245,242,234,0.5);line-height:1.55}
+
+.uses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px;margin-bottom:26px}
+.use-card{
+  background:var(--paper-2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:24px 18px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;
+}
+.use-card .use-mono{
+  font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;
+  font-size:48px;color:var(--i-500);line-height:1;
+  margin-bottom:4px;
+}
+.use-card .use-name{
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:13.5px;
+  letter-spacing:-0.01em;color:var(--ink);text-transform:lowercase;
+}
+.use-card .use-name em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-500)}
+.use-card .use-desc{font-size:11px;color:var(--muted);line-height:1.55;max-width:24ch}
+
+.spec-table{
+  width:100%;border-collapse:collapse;
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  letter-spacing:0.04em;margin-top:8px;
+}
+.spec-table th{
+  text-align:left;padding:10px 14px;
+  color:var(--muted);font-weight:500;
+  font-size:8px;letter-spacing:0.2em;text-transform:uppercase;
+  border-bottom:2px solid var(--line-2);
+}
+.spec-table td{
+  padding:10px 14px;color:var(--ink);
+  border-bottom:1px solid var(--line);
+}
+.spec-table tr:nth-child(even) td{background:var(--paper-2)}
+.spec-table td:first-child{font-weight:500;color:var(--i-500);text-transform:lowercase;letter-spacing:0.06em}
+
+/* ═══════════════════════════════════════════
+   PAGE 4 · PRICING + CTA + BACK COVER
+   ═══════════════════════════════════════════ */
+.pricing-band{
+  margin:24px -48px 0;
+  background:linear-gradient(150deg,var(--i-ink),var(--i-700));
+  padding:42px 48px 36px;
+  position:relative;overflow:hidden;
+}
+.pricing-band::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(245,242,234,0.06) 1.2px,transparent 1.2px);
+  background-size:18px 18px;pointer-events:none;z-index:0;
+}
+.pricing-band > *{position:relative;z-index:1}
+
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.price-card{
+  background:rgba(245,242,234,0.04);
+  border:1px solid rgba(245,242,234,0.1);
+  border-radius:14px;
+  padding:32px 20px 26px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.price-card.featured{
+  background:linear-gradient(165deg,rgba(91,91,240,0.18),rgba(91,91,240,0.06));
+  border-color:rgba(145,155,255,0.36);
+  box-shadow:0 4px 32px rgba(0,0,0,0.32);
+}
+.price-card.featured::before{
+  content:'most popular';
+  position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace;font-size:7px;
+  letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--i-200);
+  background:rgba(91,91,240,0.22);
+  border:1px solid rgba(91,91,240,0.4);
+  padding:4px 12px;border-radius:20px;
+}
+.price-card .pc-name{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:16px;
+  letter-spacing:-0.02em;color:var(--paper);text-transform:lowercase;
+  margin:14px 0 8px;
+}
+.price-card.featured .pc-name{margin-top:30px}
+.price-card .pc-price{
+  font-family:'Manrope',sans-serif;font-weight:900;font-size:38px;
+  letter-spacing:-0.045em;color:var(--paper);line-height:1;margin-bottom:4px;
+}
+.price-card .pc-price em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-200);font-size:26px}
+.price-card .pc-price.free{color:var(--i-200)}
+.price-card .pc-period{
+  font-family:'JetBrains Mono',monospace;font-size:8px;
+  color:rgba(245,242,234,0.4);letter-spacing:0.18em;
+  text-transform:uppercase;margin-bottom:22px;
+}
+.price-card .pc-feat{
+  font-size:11px;color:rgba(245,242,234,0.55);line-height:2;
+  text-align:left;display:inline-block;
+}
+.price-card .pc-feat b{color:rgba(245,242,234,0.88);font-weight:500}
+
+.inline-cta{
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  margin-top:30px;padding-top:24px;
+  border-top:1px solid rgba(245,242,234,0.1);
+}
+.inline-cta h3{
+  font-family:'Manrope',sans-serif;font-weight:900;font-size:24px;
+  letter-spacing:-0.04em;color:var(--paper);text-transform:lowercase;
+  margin-bottom:4px;line-height:1;
+}
+.inline-cta h3 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300)}
+.inline-cta p{font-size:11.5px;color:rgba(245,242,234,0.5);line-height:1.6;max-width:340px;margin:0}
+.cta-btn{
+  background:var(--i-500);color:var(--paper);
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:13px;
+  letter-spacing:-0.01em;text-transform:lowercase;
+  padding:16px 30px;border-radius:12px;text-decoration:none;
+  white-space:nowrap;flex-shrink:0;display:inline-flex;align-items:center;gap:8px;
+  box-shadow:0 4px 24px rgba(91,91,240,0.4);
+}
+
+.back-cover{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:48px;position:relative;
+  background:var(--paper);
+}
+.back-cover::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(10,11,16,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(10,11,16,0.03) 1px,transparent 1px);
+  background-size:24px 24px;pointer-events:none;
+}
+.back-cover > *{position:relative;z-index:1}
+.back-cover .bc-mark{margin-bottom:24px;filter:drop-shadow(0 4px 16px rgba(91,91,240,0.2))}
+.back-cover .bc-name{
+  font-family:'Manrope',sans-serif;font-weight:900;font-size:34px;
+  letter-spacing:-0.045em;color:var(--ink);text-transform:lowercase;
+  margin-bottom:14px;line-height:1;
+}
+.back-cover .bc-name em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-500)}
+.back-cover .bc-tagline{
+  font-family:'Instrument Serif',serif;font-style:italic;font-size:17px;
+  color:var(--muted);margin-bottom:36px;
+}
+.back-cover .bc-contact{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--muted);letter-spacing:0.1em;line-height:2.2;
+  text-align:center;
+}
+.back-cover .bc-contact b{color:var(--ink);font-weight:500}
+
+/* ─── PDF DOWNLOAD ─── */
+.pdf-download-btn{
+  position:fixed;top:24px;right:24px;z-index:9999;
+  padding:12px 22px;border:none;border-radius:12px;cursor:pointer;
+  background:var(--i-500);color:var(--paper);
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;
+  letter-spacing:-0.01em;
+  box-shadow:0 4px 24px rgba(91,91,240,0.4);
+  display:flex;align-items:center;gap:8px;
+}
+.pdf-download-btn:hover{background:var(--i-400)}
+.pdf-download-btn:disabled{opacity:0.6;cursor:wait}
+
+@media print{
+  body{background:#fff}
+  .sheet{box-shadow:none;margin:0;height:297mm;width:210mm}
+  .pdf-download-btn{display:none!important}
+  *{animation:none!important}
+  @page{margin:0;size:A4}
+}
+</style>
+</head>
+<body>
+
+<button class="pdf-download-btn" id="downloadPdfBtn" type="button">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+  Download PDF
+</button>
+
+<!-- ============= REUSABLE SVG SYMBOLS ============= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="b-mark" viewBox="0 0 180 180">
+      <title>Eduflick mark</title>
+      <path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z"/>
+    </symbol>
+    <symbol id="b-sixty-ring" viewBox="0 0 128 128">
+      <circle cx="64" cy="64" r="60" fill="none" stroke="rgba(245,242,234,0.18)" stroke-width="2"/>
+      <path d="M64 4 A 60 60 0 1 1 4 64" fill="none" stroke="#B7C0FF" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="64" cy="4" r="3" fill="#B7C0FF"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ════════════════════════════════════════════
+     PAGE 1 · COVER
+     ════════════════════════════════════════════ -->
+<div class="sheet cover-sheet">
+  <div class="i-bar"></div>
+  <div class="cover-content">
+    <div class="cover-top">
+      <div class="cover-mark-row">
+        <svg width="60" height="60" viewBox="0 0 180 180" role="img" aria-label="Eduflick mark"><use href="#b-mark" fill="#F5F2EA"/></svg>
+        <div class="cover-mark-meta">
+          <b>EDUFLICK / AI</b><br>
+          ONE SHAPE · ONE NOTCH
+        </div>
+      </div>
+      <div class="cover-edition">
+        <b>BROCHURE 2026</b><br>
+        EDITION 02 · 2026.05<br>
+        4 PAGES · A4
+      </div>
+    </div>
+
+    <div class="cover-headline">
+      <div class="cover-wordmark">eduflick <em>AI.</em></div>
+      <div class="cover-tagline">learn anything <em>in sixty seconds.</em></div>
+    </div>
+
+    <div class="cover-bottom">
+      <div class="cover-feed-preview">
+        <div class="fp-card dimmer">
+          <div class="fp-t">photons · <em>60s</em></div>
+          <div class="fp-m">LESSON 049 · 5 FLICKS</div>
+        </div>
+        <div class="fp-card dim">
+          <div class="fp-t">supply &amp; demand · <em>60s</em></div>
+          <div class="fp-m">LESSON 048 · 6 FLICKS</div>
+        </div>
+        <div class="fp-card">
+          <div class="fp-t">mitosis · <em>60s</em></div>
+          <div class="fp-m">LESSON 047 · 8 FLICKS · READY</div>
+        </div>
+      </div>
+      <div class="cover-60s">
+        <svg viewBox="0 0 128 128" role="img" aria-label="Sixty second motif"><use href="#b-sixty-ring"/></svg>
+        <div class="cover-60s-label">
+          <div class="n">60<em>s</em></div>
+          <div class="u">per flick</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="i-bar"></div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 2 · HERO + STATS + FEATURES + QUOTE
+     ════════════════════════════════════════════ -->
+<div class="sheet">
+  <div class="page-hd">
+    <svg class="ph-mark" width="22" height="22" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#F5F2EA"/></svg>
+    <div class="ph-name">eduflick <em>AI</em></div>
+    <div class="ph-sub">The Micro-Learning Platform</div>
+  </div>
+  <div class="i-bar"></div>
+
+  <div class="bd">
+    <div class="slabel"><span>The Product</span></div>
+    <div class="p2-hero">
+      <h1>a feed for <em>thinking</em><br>—&nbsp;one minute at a time.</h1>
+      <p class="editorial-deck"><b>Eduflick AI cuts any source — lecture, paper, video — into eight one-minute flicks tuned to what you need next.</b> The doom-scroll antidote: short-form learning, anchored by AI.</p>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat-card"><div class="num">2,847<em>+</em></div><div class="lbl">Active Learners</div></div>
+      <div class="stat-card"><div class="num">12.4<em>k</em></div><div class="lbl">Flicks per Day</div></div>
+      <div class="stat-card"><div class="num">78<em>%</em></div><div class="lbl">Retention Rate</div></div>
+      <div class="stat-card"><div class="num">72</div><div class="lbl">NPS Score</div></div>
+    </div>
+
+    <div class="slabel" style="margin-top:32px"><span>What's Inside</span></div>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="var(--i-500)"/></svg></div>
+        <div class="fc-title">sixty-second flicks</div>
+        <div class="fc-desc">One concept. One minute. Then move. Attention is the scarcest resource — we treat it with reverence.</div>
+      </div>
+      <div class="feat-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark"/></svg></div>
+        <div class="fc-title">curated <em>by AI</em></div>
+        <div class="fc-desc">The model builds eight flicks — the core concepts, sequenced for retention. The AI doesn't replace the teacher. It curates the path.</div>
+      </div>
+      <div class="feat-card">
+        <div class="fc-mark"><svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="var(--i-500)"/></svg></div>
+        <div class="fc-title">swipe, flick, retain</div>
+        <div class="fc-desc">Built for how we consume today. Swipe-based feed. 4.2 minute average session. 78% concept retention.</div>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <blockquote>brevity is <b>respect.</b> we cut the textbook into flicks — and the learners stayed.</blockquote>
+      <div class="attr">N. TOMATRIX · FOUNDER &amp; CEO · EDUFLICK AI</div>
+    </div>
+  </div>
+
+  <div class="i-bar"></div>
+  <div class="page-ft">
+    <div class="pf-l">
+      <svg width="14" height="14" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#5B5BF0"/></svg>
+      <span>eduflick <em>AI</em> · A Tomatrix Technologies Venture</span>
+    </div>
+    <div class="pf-pn">02 / 04</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 3 · STEPS + PERSONAS + SPECS
+     ════════════════════════════════════════════ -->
+<div class="sheet">
+  <div class="page-hd">
+    <svg class="ph-mark" width="22" height="22" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#F5F2EA"/></svg>
+    <div class="ph-name">eduflick <em>AI</em></div>
+    <div class="ph-sub">How It Works &amp; Who It's For</div>
+  </div>
+  <div class="i-bar"></div>
+
+  <div class="bd">
+    <div class="slabel"><span>How It Works</span></div>
+    <h2>four steps to <em>smarter learning.</em></h2>
+  </div>
+
+  <div class="dark-band">
+    <div class="steps-flow">
+      <div class="step-node">
+        <div class="sn-mark">
+          <svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="var(--i-200)"/></svg>
+          <span class="sn-n">1</span>
+        </div>
+        <div class="sn-title">pick a topic</div>
+        <div class="sn-desc">Choose from thousands of subjects — or request a new one, curated just for you.</div>
+      </div>
+      <div class="step-node">
+        <div class="sn-mark">
+          <svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="var(--i-200)"/></svg>
+          <span class="sn-n">2</span>
+        </div>
+        <div class="sn-title">AI curates</div>
+        <div class="sn-desc">The model builds eight flicks — the core concepts, sequenced for retention.</div>
+      </div>
+      <div class="step-node">
+        <div class="sn-mark">
+          <svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="var(--i-200)"/></svg>
+          <span class="sn-n">3</span>
+        </div>
+        <div class="sn-title">flick through</div>
+        <div class="sn-desc">Swipe right. Sixty seconds per flick. Learn at your pace, on any device.</div>
+      </div>
+      <div class="step-node">
+        <div class="sn-mark">
+          <svg viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="var(--i-200)"/></svg>
+          <span class="sn-n">4</span>
+        </div>
+        <div class="sn-title">retain more</div>
+        <div class="sn-desc">78% retention. 4.2 minute average session. Proven learning outcomes.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bd" style="padding-top:24px">
+    <div class="slabel"><span>Built For</span></div>
+    <h2>who <em>learns</em> with eduflick.</h2>
+    <div class="uses-grid">
+      <div class="use-card">
+        <div class="use-mono">R</div>
+        <div class="use-name">riya · <em>learner.</em></div>
+        <div class="use-desc">Exam prep in bite-sized chunks. Biology, history, physics — all in 60-second flicks.</div>
+      </div>
+      <div class="use-card">
+        <div class="use-mono">M</div>
+        <div class="use-name">mehta · <em>educator.</em></div>
+        <div class="use-desc">Reach beyond the lecture hall. Turn course content into flicks students engage with.</div>
+      </div>
+      <div class="use-card">
+        <div class="use-mono">I</div>
+        <div class="use-name">institution · <em>partner.</em></div>
+        <div class="use-desc">A feed-based layer on top of your existing library. White-label, SSO, analytics.</div>
+      </div>
+    </div>
+
+    <div class="slabel" style="margin-top:8px"><span>Technical Specs</span></div>
+    <h2>platform <em>details.</em></h2>
+    <table class="spec-table">
+      <tr><th>Specification</th><th>Detail</th></tr>
+      <tr><td>Lesson format</td><td>8 flicks per topic · 60 seconds each · AI-sequenced</td></tr>
+      <tr><td>Content engine</td><td>Curated from verified sources · human-reviewed · bias-checked</td></tr>
+      <tr><td>Platforms</td><td>iOS · Android · Web · PWA · Offline mode</td></tr>
+      <tr><td>Interface</td><td>Swipe-based feed · Dark theme default · Light theme available</td></tr>
+      <tr><td>Accessibility</td><td>WCAG 2.1 AA · Screen reader support · Reduced motion mode</td></tr>
+    </table>
+  </div>
+
+  <div class="i-bar"></div>
+  <div class="page-ft">
+    <div class="pf-l">
+      <svg width="14" height="14" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#5B5BF0"/></svg>
+      <span>eduflick <em>AI</em> · A Tomatrix Technologies Venture</span>
+    </div>
+    <div class="pf-pn">03 / 04</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE 4 · PRICING + CTA + BACK COVER
+     ════════════════════════════════════════════ -->
+<div class="sheet">
+  <div class="page-hd">
+    <svg class="ph-mark" width="22" height="22" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#F5F2EA"/></svg>
+    <div class="ph-name">eduflick <em>AI</em></div>
+    <div class="ph-sub">Pricing &amp; Next Steps</div>
+  </div>
+  <div class="i-bar"></div>
+
+  <div class="bd">
+    <div class="slabel"><span>Pricing</span></div>
+    <h2>choose your <em>plan.</em></h2>
+  </div>
+
+  <div class="pricing-band">
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="pc-name">free</div>
+        <div class="pc-price free">₹0</div>
+        <div class="pc-period">forever free</div>
+        <div class="pc-feat">
+          3 topics per day<br>
+          8 flicks per topic<br>
+          Web &amp; mobile<br>
+          Basic curation
+        </div>
+      </div>
+      <div class="price-card featured">
+        <div class="pc-name">pro</div>
+        <div class="pc-price">₹299</div>
+        <div class="pc-period">per month</div>
+        <div class="pc-feat">
+          <b>Unlimited</b> topics<br>
+          Priority AI curation<br>
+          Offline downloads<br>
+          Ad-free experience<br>
+          Progress analytics
+        </div>
+      </div>
+      <div class="price-card">
+        <div class="pc-name">institutional</div>
+        <div class="pc-price"><em>custom</em></div>
+        <div class="pc-period">bulk licensing</div>
+        <div class="pc-feat">
+          Everything in Pro<br>
+          Admin dashboard<br>
+          SSO &amp; LMS integration<br>
+          Custom topic libraries<br>
+          Dedicated support
+        </div>
+      </div>
+    </div>
+
+    <div class="inline-cta">
+      <div>
+        <h3>ready to <em>flick?</em></h3>
+        <p>Join 2,847+ learners. Free to start. No credit card required.</p>
+      </div>
+      <a href="https://eduflick.ai" class="cta-btn">try free<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <div class="i-bar"></div>
+
+  <div class="back-cover">
+    <svg class="bc-mark" width="64" height="64" viewBox="0 0 180 180" role="img" aria-label="Eduflick mark"><use href="#b-mark" fill="#5B5BF0"/></svg>
+    <div class="bc-name">eduflick <em>AI</em></div>
+    <div class="bc-tagline">learn anything in sixty seconds.</div>
+    <div class="bc-contact">
+      <b>eduflick.ai</b> · hello@eduflick.ai<br>
+      12th Floor, Bangalore · India<br>
+      A Tomatrix Technologies Venture<br>
+      &copy; 2026 Eduflick AI · All rights reserved.
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+/* ─── Resolve CSS var() references ─── */
+function resolveVar(value, root) {
+  if (typeof value !== 'string' || !value.startsWith('var(')) return value;
+  const inner = value.slice(4, -1).trim();
+  const resolved = getComputedStyle(root).getPropertyValue(inner).trim();
+  return resolved || '#000';
+}
+
+/* ─── Replace <use> with inline SVG cloned from the symbol def ─── */
+function resolveUseElements(container) {
+  const root = document.documentElement;
+  container.querySelectorAll('use').forEach(function(use) {
+    var href = use.getAttribute('href') || use.getAttribute('xlink:href');
+    if (!href || href.charAt(0) !== '#') return;
+    var symbol = document.getElementById(href.slice(1));
+    if (!symbol) return;
+
+    var svgNS = 'http://www.w3.org/2000/svg';
+    var group = document.createElementNS(svgNS, 'g');
+
+    var useFill = use.getAttribute('fill');
+    var fillColor;
+    if (useFill) {
+      fillColor = resolveVar(useFill, root);
+    } else {
+      fillColor = getComputedStyle(use).color;
+    }
+    if (!fillColor || fillColor === 'rgb(0, 0, 0)') {
+      fillColor = getComputedStyle(use.parentElement).color;
+    }
+
+    var keepAttrs = ['x','y','width','height','transform','opacity','role','aria-label'];
+    for (var a = 0; a < use.attributes.length; a++) {
+      var attr = use.attributes[a];
+      if (attr.name === 'href' || attr.name === 'xlink:href' || attr.name === 'fill') continue;
+      if (keepAttrs.indexOf(attr.name) !== -1) {
+        group.setAttribute(attr.name, attr.value);
+      }
+    }
+
+    var children = Array.prototype.slice.call(symbol.children);
+    for (var c = 0; c < children.length; c++) {
+      var clone = children[c].cloneNode(true);
+      if (fillColor) {
+        if (clone.getAttribute('fill') === 'currentColor') {
+          clone.setAttribute('fill', fillColor);
+        }
+        var curColorEls = clone.querySelectorAll ? clone.querySelectorAll('[fill="currentColor"]') : [];
+        for (var cc = 0; cc < curColorEls.length; cc++) {
+          curColorEls[cc].setAttribute('fill', fillColor);
+        }
+      }
+      group.appendChild(clone);
+    }
+
+    use.parentNode.replaceChild(group, use);
+  });
+
+  container.querySelectorAll('svg').forEach(function(svg) {
+    svg.style.setProperty('filter', 'none', 'important');
+  });
+}
+
+/* ─── PDF Download ─── */
+document.getElementById('downloadPdfBtn').addEventListener('click', async function(){
+  const btn = this;
+  if (typeof html2canvas === 'undefined' || !window.jspdf) {
+    alert('PDF libraries still loading. Please wait a moment and try again.');
+    return;
+  }
+  btn.disabled = true;
+  const originalHTML = btn.innerHTML;
+  btn.textContent = 'Generating…';
+  try {
+    const sheets = document.querySelectorAll('.sheet');
+    const { jsPDF } = window.jspdf;
+    let pdf = null;
+    const hiddenContainer = document.createElement('div');
+    hiddenContainer.style.cssText = 'position:absolute;left:-9999px;top:0;width:794px;';
+    document.body.appendChild(hiddenContainer);
+
+    for (let i = 0; i < sheets.length; i++) {
+      btn.textContent = 'Page ' + (i + 1) + ' of ' + sheets.length + '…';
+
+      const clone = sheets[i].cloneNode(true);
+      hiddenContainer.innerHTML = '';
+      hiddenContainer.appendChild(clone);
+
+      clone.style.margin = '0';
+      clone.style.boxShadow = 'none';
+
+      resolveUseElements(clone);
+
+      let canvas;
+      try {
+        canvas = await html2canvas(clone, { scale: 2, useCORS: true, backgroundColor: '#F5F2EA', logging: false, allowTaint: true, width: 794, height: 1123 });
+      } catch (e) {
+        console.warn('Retrying page ' + (i + 1) + ' at lower scale...', e);
+        canvas = await html2canvas(clone, { scale: 1, useCORS: true, backgroundColor: '#F5F2EA', logging: false, allowTaint: true, width: 794, height: 1123 });
+      }
+      const imgWidth = 210;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      if (i === 0) { pdf = new jsPDF({ unit: 'mm', format: [imgWidth, imgHeight], orientation: 'portrait' }); }
+      else { pdf.addPage([imgWidth, imgHeight]); }
+      const imgData = canvas.toDataURL('image/jpeg', 0.92);
+      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+    }
+
+    document.body.removeChild(hiddenContainer);
+    pdf.save('Eduflick_AI_Brochure_v2.pdf');
+  } catch (err) {
+    console.error('PDF generation failed:', err);
+    alert('PDF generation failed: ' + err.message);
+  }
+  btn.disabled = false;
+  btn.innerHTML = originalHTML;
+});
+</script>
+</body>
+</html>

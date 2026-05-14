@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Eduflick AI · Brand Kit v2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0A0B10;
+    --ink-2: #11131C;
+    --ink-3: #181B28;
+    --line: rgba(245,242,234,0.10);
+    --line-2: rgba(245,242,234,0.18);
+    --paper: #F5F2EA;
+    --paper-2: #ECE7DA;
+    --paper-dim: #C9C5BA;
+    --muted: #7A7F90;
+
+    --i-50:  #EEF0FF;
+    --i-100: #DCE0FF;
+    --i-200: #B7C0FF;
+    --i-300: #8B97FF;
+    --i-400: #6E78F5;
+    --i-500: #5B5BF0;
+    --i-600: #4B3FE0;
+    --i-700: #3A2BB8;
+    --i-800: #261A82;
+    --i-900: #150D52;
+    --i-ink: #0B0822;
+
+    --accent: var(--i-500);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--ink); color: var(--paper); font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
+  body {
+    background:
+      radial-gradient(1200px 700px at 100% 0%, rgba(91,91,240,0.10), transparent 60%),
+      radial-gradient(900px 600px at 0% 100%, rgba(91,91,240,0.05), transparent 60%),
+      var(--ink);
+    min-height: 100vh;
+  }
+  .page { max-width: 1380px; margin: 0 auto; padding: 56px 48px 96px; }
+
+  .header { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: flex-end; margin-bottom: 44px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+  .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent); margin: 0 0 18px; display: flex; gap: 12px; align-items: center; }
+  .eyebrow::before { content:''; width: 28px; height: 2px; background: var(--accent); }
+  .h1 { font-family: 'Manrope', sans-serif; font-weight: 900; font-size: clamp(56px, 6.6vw, 96px); line-height: 0.9; letter-spacing: -0.05em; margin: 0; color: var(--paper); text-transform: lowercase; }
+  .h1 em { font-family: 'Instrument Serif', serif; font-weight: 400; font-style: italic; color: var(--i-300); letter-spacing: -0.02em; }
+  .meta { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.7; color: var(--muted); letter-spacing: 0.04em; max-width: 320px; }
+  .meta b { color: var(--paper); font-weight: 500; }
+  .meta .v { display: inline-block; padding: 3px 8px; border: 1px solid var(--accent); color: var(--accent); border-radius: 3px; font-size: 10px; letter-spacing: 0.22em; }
+
+  .section { margin-top: 64px; }
+  .section-head { display: grid; grid-template-columns: auto 1fr auto; gap: 20px; align-items: baseline; margin-bottom: 26px; }
+  .section-head h2 { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 32px; letter-spacing: -0.03em; margin: 0; text-transform: lowercase; }
+  .section-head h2 em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--i-300); }
+  .section-head .rule { height: 1px; background: var(--line); }
+  .section-head .id { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--muted); letter-spacing: 0.22em; text-transform: uppercase; }
+
+  .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 22px; }
+  .card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 18px; padding: 24px; }
+  .card .lbl { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 12px; }
+
+  .hero { grid-column: span 12; background: var(--ink-2); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; display: grid; grid-template-columns: 1.1fr 1fr; min-height: 460px; }
+  .hero .stage { background: radial-gradient(440px 360px at 50% 50%, rgba(91,91,240,0.18), transparent 70%), linear-gradient(140deg, var(--i-ink) 0%, var(--ink) 100%); display: flex; align-items: center; justify-content: center; border-right: 1px solid var(--line); position: relative; }
+  .hero .stage .grid-lines { position: absolute; inset: 0; background-image: linear-gradient(rgba(245,242,234,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(245,242,234,0.04) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+  .hero .stage svg { position: relative; z-index: 1; }
+  .hero .copy { padding: 44px 44px 36px; display: flex; flex-direction: column; justify-content: center; gap: 22px; }
+  .hero .copy .kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.22em; text-transform: uppercase; }
+  .hero .copy h3 { font-family: 'Manrope', sans-serif; font-weight: 900; font-size: 52px; line-height: 0.95; letter-spacing: -0.045em; margin: 0; text-transform: lowercase; }
+  .hero .copy h3 em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--i-300); }
+  .hero .copy p { font-family: 'Instrument Serif', serif; font-size: 21px; line-height: 1.45; color: var(--paper-dim); margin: 0; max-width: 40ch; }
+  .hero .copy p b { color: var(--paper); font-style: italic; font-weight: 400; }
+  .hero .specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding-top: 22px; border-top: 1px dashed var(--line); }
+  .hero .specs > div { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; line-height: 1.6; color: var(--muted); letter-spacing: 0.06em; }
+  .hero .specs b { display: block; color: var(--paper); font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; font-size: 10px; margin-bottom: 4px; }
+
+  .build-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 22px; }
+  .build-left { background: var(--ink-2); border: 1px solid var(--line); border-radius: 18px; padding: 28px; }
+  .build-right { display: grid; grid-template-rows: 1fr 1fr; gap: 22px; }
+  .build-detail { background: var(--ink-2); border: 1px solid var(--line); border-radius: 18px; padding: 24px; display: grid; grid-template-rows: auto 1fr; gap: 16px; }
+  .build-detail .text { font-family: 'Instrument Serif', serif; font-size: 18px; line-height: 1.4; color: var(--paper-dim); }
+  .build-detail .text b { color: var(--paper); font-style: italic; font-weight: 400; }
+  .blue-grid-stage { background: linear-gradient(rgba(91,91,240,0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(91,91,240,0.10) 1px, transparent 1px), var(--ink); background-size: 20px 20px; border-radius: 12px; border: 1px solid var(--line); padding: 22px; display: flex; align-items: center; justify-content: center; }
+
+  .palettes { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .palette { background: var(--ink-2); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+  .palette .head { padding: 22px 24px 18px; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--line); }
+  .palette .head h4 { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.025em; margin: 0 0 4px; text-transform: lowercase; }
+  .palette .head .tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.22em; text-transform: uppercase; }
+  .palette .head .reco { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 3px 8px; border-radius: 3px; letter-spacing: 0.22em; }
+  .palette .head .reco.yes { background: rgba(91,91,240,0.16); color: var(--i-300); border: 1px solid rgba(91,91,240,0.4); }
+  .palette .head .reco.alt { color: var(--muted); border: 1px solid var(--line); }
+  .ramp { display: grid; grid-template-columns: repeat(5, 1fr); }
+  .ramp .swatch { aspect-ratio: 1/1.1; padding: 14px 12px 12px; display: flex; flex-direction: column; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 10px; line-height: 1.3; }
+  .ramp .swatch .num { font-weight: 500; letter-spacing: 0.16em; }
+  .ramp .swatch .hex { letter-spacing: 0.04em; }
+  .palette .usage { padding: 18px 24px; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.7; color: var(--paper-dim); letter-spacing: 0.04em; border-top: 1px solid var(--line); }
+  .palette .usage b { color: var(--paper); font-weight: 500; }
+
+  .mono-1 { background: #F5F2EA; color: #0A0B10; }
+  .mono-2 { background: #C9C5BA; color: #0A0B10; }
+  .mono-3 { background: #7A7F90; color: #F5F2EA; }
+  .mono-4 { background: #2A2D38; color: #F5F2EA; }
+  .mono-5 { background: #0A0B10; color: #F5F2EA; border-left: 1px solid var(--line); }
+  .i-1 { background: #EEF0FF; color: #0B0822; }
+  .i-2 { background: #B7C0FF; color: #0B0822; }
+  .i-3 { background: #5B5BF0; color: #FFFFFF; }
+  .i-4 { background: #261A82; color: #F5F2EA; }
+  .i-5 { background: #0B0822; color: #F5F2EA; }
+
+  .type { background: var(--ink-2); border: 1px solid var(--line); border-radius: 22px; padding: 36px 40px; }
+  .type-row { display: grid; grid-template-columns: 220px 1fr; gap: 28px; align-items: center; padding: 24px 0; border-bottom: 1px dashed var(--line); }
+  .type-row:last-child { border-bottom: none; }
+  .type-row .lbl { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.16em; line-height: 1.6; }
+  .type-row .lbl b { display: block; color: var(--paper); letter-spacing: 0.22em; text-transform: uppercase; font-size: 10px; margin-bottom: 6px; }
+  .t-display { font-family: 'Manrope', sans-serif; font-weight: 900; font-size: 84px; letter-spacing: -0.05em; line-height: 0.9; color: var(--paper); text-transform: lowercase; }
+  .t-display em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--i-300); }
+  .t-heading { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 40px; letter-spacing: -0.03em; line-height: 1.05; color: var(--paper); }
+  .t-editorial { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 32px; line-height: 1.25; color: var(--paper); }
+  .t-body { font-family: 'Manrope', sans-serif; font-weight: 500; font-size: 17px; line-height: 1.55; color: var(--paper-dim); max-width: 56ch; }
+  .t-mono { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.65; color: var(--paper-dim); letter-spacing: 0.06em; }
+  .t-mono b { color: var(--accent); }
+
+  .locks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .lock-card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 18px; padding: 24px 24px 22px; display: grid; gap: 16px; }
+  .lock-card .stg { height: 160px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+  .lock-card .stg.dark { background: var(--ink); }
+  .lock-card .stg.paper { background: var(--paper); }
+  .lock-card .stg.indigo { background: var(--i-500); }
+  .lock-card .stg.indigo-deep { background: var(--i-ink); }
+  .lock-card .stg.outline { background: transparent; border: 1px dashed var(--line); }
+
+  .wm { display: flex; align-items: center; gap: 14px; }
+  .wm .nm { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 32px; letter-spacing: -0.038em; line-height: 1; }
+  .wm .ai { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 32px; letter-spacing: -0.038em; color: var(--accent); }
+
+  .motion { background: var(--ink-2); border: 1px solid var(--line); border-radius: 22px; padding: 32px 36px; }
+  .motion-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-top: 22px; }
+  .frame { aspect-ratio: 1/1; background: var(--i-ink); border-radius: 14px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .frame .fnum { position: absolute; top: 10px; left: 12px; font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--muted); letter-spacing: 0.18em; }
+  .frame .ftime { position: absolute; bottom: 10px; right: 12px; font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--accent); letter-spacing: 0.18em; }
+
+  .apps { display: grid; grid-template-columns: repeat(12, 1fr); gap: 22px; }
+  .app { background: var(--ink-2); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+  .app .head { padding: 14px 18px; border-bottom: 1px solid var(--line); font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.22em; text-transform: uppercase; display: flex; justify-content: space-between; }
+  .app .head b { color: var(--paper); font-weight: 500; }
+  .app-icon { grid-column: span 3; }
+  .app-icon .stg { padding: 36px 30px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .icon-tile { width: 132px; height: 132px; border-radius: 30px; display: flex; align-items: center; justify-content: center; box-shadow: 0 18px 40px -20px rgba(0,0,0,0.6); }
+  .biz { grid-column: span 5; }
+  .biz .stg { padding: 28px; display: flex; align-items: center; justify-content: center; gap: 18px; background: linear-gradient(120deg, #14172a 0%, #0a0b10 100%); }
+  .biz-card { width: 280px; height: 168px; border-radius: 12px; padding: 18px; display: grid; grid-template-rows: 1fr auto; box-shadow: 0 18px 40px -20px rgba(0,0,0,0.8); }
+  .biz-card.front { background: var(--i-500); color: var(--paper); }
+  .biz-card.back { background: var(--paper); color: var(--ink); }
+  .biz-card .top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .biz-card.front .top { color: var(--paper); }
+  .biz-card .bot { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.16em; line-height: 1.6; }
+  .biz-card.front .bot b { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 14px; letter-spacing: -0.02em; display: block; text-transform: none; }
+  .biz-card.back .name { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 18px; letter-spacing: -0.02em; }
+  .biz-card.back .role { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; margin-top: 2px; }
+  .biz-card.back .contact { font-family: 'JetBrains Mono', monospace; font-size: 10px; line-height: 1.7; color: #555; }
+  .tee { grid-column: span 4; }
+  .tee .stg { background: var(--ink); padding: 24px; display: flex; align-items: center; justify-content: center; min-height: 240px; }
+  .tee-shape { width: 220px; height: 220px; background: var(--paper); clip-path: polygon(20% 0, 80% 0, 100% 14%, 90% 22%, 90% 100%, 10% 100%, 10% 22%, 0 14%); display: flex; align-items: flex-start; justify-content: center; padding-top: 56px; }
+  .poster-row { grid-column: span 12; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .poster { aspect-ratio: 3/4; border-radius: 18px; overflow: hidden; position: relative; padding: 28px; display: flex; flex-direction: column; justify-content: space-between; }
+  .poster.p1 { background: linear-gradient(160deg, var(--i-700) 0%, var(--i-ink) 100%); color: var(--paper); }
+  .poster.p2 { background: var(--paper); color: var(--ink); }
+  .poster.p3 { background: var(--ink); color: var(--paper); border: 1px solid var(--line); }
+  .poster .pkicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; }
+  .poster.p2 .pkicker { color: var(--i-700); }
+  .poster.p3 .pkicker { color: var(--i-300); }
+  .poster h3 { font-family: 'Manrope', sans-serif; font-weight: 900; font-size: 44px; letter-spacing: -0.04em; line-height: 0.95; margin: 0; text-transform: lowercase; }
+  .poster h3 em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; }
+  .poster.p1 h3 em { color: var(--i-200); }
+  .poster.p2 h3 em { color: var(--i-500); }
+  .poster.p3 h3 em { color: var(--i-300); }
+  .poster .pbot { display: flex; justify-content: space-between; align-items: flex-end; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; }
+
+  .voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .voice { background: var(--ink-2); border: 1px solid var(--line); border-radius: 18px; padding: 28px 30px; }
+  .voice h4 { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 18px; letter-spacing: -0.02em; margin: 0 0 14px; text-transform: lowercase; }
+  .voice h4 em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--i-300); }
+  .voice ul { margin: 0; padding: 0; list-style: none; font-family: 'Instrument Serif', serif; font-size: 19px; line-height: 1.55; color: var(--paper-dim); }
+  .voice ul li { padding: 8px 0; border-bottom: 1px dashed var(--line); display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: baseline; }
+  .voice ul li:last-child { border-bottom: none; }
+  .voice ul li::before { content: '·'; color: var(--accent); font-family: 'Manrope'; font-weight: 900; font-size: 22px; }
+  .voice ul.dont li::before { content: '\00D7'; color: #FF6E5A; font-family: 'Manrope'; font-weight: 700; font-size: 17px; }
+  .voice ul b { color: var(--paper); font-weight: 400; font-style: italic; }
+
+  .reco-banner { background: linear-gradient(140deg, var(--i-700), var(--i-500)); border-radius: 22px; padding: 44px 48px; display: grid; grid-template-columns: 1fr 280px; gap: 40px; align-items: center; position: relative; overflow: hidden; }
+  .reco-banner::before { content: ''; position: absolute; top: -120px; right: -100px; width: 460px; height: 460px; background: radial-gradient(circle, rgba(245,242,234,0.16), transparent 70%); }
+  .reco-banner .lhs { position: relative; z-index: 1; }
+  .reco-banner .kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--i-100); letter-spacing: 0.24em; text-transform: uppercase; margin-bottom: 16px; }
+  .reco-banner h3 { font-family: 'Manrope', sans-serif; font-weight: 900; font-size: clamp(40px, 4.5vw, 60px); line-height: 0.96; letter-spacing: -0.04em; margin: 0 0 14px; color: var(--paper); text-transform: lowercase; }
+  .reco-banner h3 em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--i-100); }
+  .reco-banner p { font-family: 'Instrument Serif', serif; font-size: 20px; line-height: 1.4; color: rgba(245,242,234,0.85); margin: 0; max-width: 50ch; }
+  .reco-banner .rhs { position: relative; z-index: 1; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.7; color: var(--paper); letter-spacing: 0.04em; border-left: 1px solid rgba(245,242,234,0.3); padding-left: 24px; }
+  .reco-banner .rhs b { display:block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.18em; font-size: 10px; font-weight: 600; }
+  .footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
+  .footer b { color: var(--paper); }
+  svg { display: block; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- The Mark — one shape, one notch.
+         Square (13,13)→(167,167) = 154×154. Notch on the RIGHT EDGE, bottom portion.
+         Along the right edge: notch spans y=82 to y=143 (85u and 24u from bottom).
+         Apex at x=120, y=112.5 (47u inset). 7 vertices. -->
+    <symbol id="eduflick-mark" viewBox="0 0 180 180">
+      <path d="
+        M 13 13
+        L 167 13
+        L 167 82
+        L 120 112.5
+        L 167 143
+        L 167 167
+        L 13 167
+        Z
+      "/>
+    </symbol>
+
+    <symbol id="eduflick-mark-build" viewBox="0 0 180 180">
+      <rect x="13" y="13" width="154" height="154" fill="none" stroke="rgba(91,91,240,0.30)" stroke-width="0.7" stroke-dasharray="4 4"/>
+      <line x1="13" y1="13" x2="167" y2="167" stroke="rgba(91,91,240,0.20)" stroke-width="0.5" stroke-dasharray="2 4"/>
+      <line x1="167" y1="13" x2="13" y2="167" stroke="rgba(91,91,240,0.20)" stroke-width="0.5" stroke-dasharray="2 4"/>
+      <line x1="90" y1="13" x2="90" y2="167" stroke="rgba(91,91,240,0.20)" stroke-width="0.5" stroke-dasharray="2 4"/>
+      <line x1="13" y1="90" x2="167" y2="90" stroke="rgba(91,91,240,0.20)" stroke-width="0.5" stroke-dasharray="2 4"/>
+      <path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#F5F2EA"/>
+      <circle cx="167" cy="82" r="2.1" fill="#5B5BF0"/>
+      <circle cx="120" cy="112.5" r="2.1" fill="#5B5BF0"/>
+      <circle cx="167" cy="143" r="2.1" fill="#5B5BF0"/>
+      <text x="157" y="76" font-family="JetBrains Mono" font-size="5.5" fill="#8B97FF" letter-spacing="0.2">85u</text>
+      <text x="120" y="112" font-family="JetBrains Mono" font-size="5.5" fill="#8B97FF" letter-spacing="0.2">apex</text>
+      <text x="157" y="150" font-family="JetBrains Mono" font-size="5.5" fill="#8B97FF" letter-spacing="0.2">24u</text>
+      <text x="135" y="128" font-family="JetBrains Mono" font-size="5.5" fill="#8B97FF" letter-spacing="0.2">47u</text>
+    </symbol>
+
+    <symbol id="eduflick-mark-grid" viewBox="0 0 180 180">
+      <g stroke="rgba(91,91,240,0.18)" stroke-width="0.4">
+        <line x1="18" y1="0" x2="18" y2="180"/><line x1="36" y1="0" x2="36" y2="180"/>
+        <line x1="54" y1="0" x2="54" y2="180"/><line x1="72" y1="0" x2="72" y2="180"/>
+        <line x1="90" y1="0" x2="90" y2="180"/><line x1="108" y1="0" x2="108" y2="180"/>
+        <line x1="126" y1="0" x2="126" y2="180"/><line x1="144" y1="0" x2="144" y2="180"/>
+        <line x1="162" y1="0" x2="162" y2="180"/>
+        <line x1="0" y1="18" x2="180" y2="18"/><line x1="0" y1="36" x2="180" y2="36"/>
+        <line x1="0" y1="54" x2="180" y2="54"/><line x1="0" y1="72" x2="180" y2="72"/>
+        <line x1="0" y1="90" x2="180" y2="90"/><line x1="0" y1="108" x2="180" y2="108"/>
+        <line x1="0" y1="126" x2="180" y2="126"/><line x1="0" y1="144" x2="180" y2="144"/>
+        <line x1="0" y1="162" x2="180" y2="162"/>
+      </g>
+      <path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="rgba(91,91,240,0.85)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<main class="page">
+
+  <header class="header">
+    <div>
+      <p class="eyebrow">brand kit · v2.0 · 2026.05</p>
+      <h1 class="h1">eduflick AI · <em>brand kit.</em></h1>
+    </div>
+    <div class="meta">
+      <span class="v">BK / v2.0</span><br/>
+      <b>mark</b> &nbsp; one shape, one notch — a feed cut by a play.<br/>
+      <b>parent</b> &nbsp; a tomatrix technologies venture<br/>
+      <b>scope</b> &nbsp; mark · type · colour · motion · applications · voice
+    </div>
+  </header>
+
+  <section class="reco-banner">
+    <div class="lhs">
+      <div class="kicker">recommendation · colour direction</div>
+      <h3>go <em>indigo.</em> keep mono as the off-switch.</h3>
+      <p>Indigo carries the AI lineage (signal · intellect · twilight) without slipping into the over-used SaaS blue. Monochrome stays available for editorial, print, and any surface where colour competes — it is the brand's quiet voice, not a second brand.</p>
+    </div>
+    <div class="rhs">
+      <b>system</b>
+      · indigo #5B5BF0 — primary, ownable.<br/>
+      · indigo-ink #0B0822 — depth canvas.<br/>
+      · paper #F5F2EA — type, the mark.<br/>
+      · mono ramp — fallback &amp; print.<br/>
+      · no third colour. ever.
+    </div>
+  </section>
+
+  <!-- 1 · THE MARK -->
+  <section class="section">
+    <div class="section-head">
+      <h2>01 · the <em>mark.</em></h2>
+      <div class="rule"></div>
+      <div class="id">geometry · sgl-shape · sgl-notch</div>
+    </div>
+    <div class="grid">
+      <div class="hero">
+        <div class="stage">
+          <div class="grid-lines"></div>
+          <svg width="320" height="320" viewBox="0 0 180 180">
+            <use href="#eduflick-mark" fill="#F5F2EA"/>
+          </svg>
+        </div>
+        <div class="copy">
+          <div>
+            <div class="kicker">the eduflick mark</div>
+            <h3>a feed.<br/><em>cut by a play.</em></h3>
+            <p>One shape. One notch. The square is the <b>feed card</b> — the unit of every short-form learning moment. The triangular bite on its right edge is the <b>play</b> — the moment the lesson begins. Positioned low on the right, it reads as forward motion anchored to the baseline. There is no second element, no spark, no flourish. The mark is its own punctuation.</p>
+          </div>
+          <div class="specs">
+            <div><b>format</b>single closed path · 7 vertices · viewBox 180×180</div>
+            <div><b>weight</b>~280 bytes · all straight edges · no Béziers</div>
+            <div><b>scales</b>1024 → 16px without modification</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · CONSTRUCTION -->
+  <section class="section">
+    <div class="section-head">
+      <h2>02 · con<em>struction.</em></h2>
+      <div class="rule"></div>
+      <div class="id">grid · proportion · clear-space</div>
+    </div>
+    <div class="build-grid">
+      <div class="build-left">
+        <div class="lbl">18-unit grid · 154u × 154u body · notch on right edge · 13u clear-space</div>
+        <div class="blue-grid-stage" style="margin-top: 14px;">
+          <svg width="420" height="420" viewBox="0 0 180 180">
+            <use href="#eduflick-mark-grid"/>
+          </svg>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 18px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.06em;">
+          <div><b style="color:var(--paper); display:block; letter-spacing:0.18em; text-transform:uppercase; font-size:10px;">body</b>154u × 154u</div>
+          <div><b style="color:var(--paper); display:block; letter-spacing:0.18em; text-transform:uppercase; font-size:10px;">notch</b>61u tall × 47u deep</div>
+          <div><b style="color:var(--paper); display:block; letter-spacing:0.18em; text-transform:uppercase; font-size:10px;">apex</b>at x=120, y=112.5</div>
+          <div><b style="color:var(--paper); display:block; letter-spacing:0.18em; text-transform:uppercase; font-size:10px;">margin</b>≥ 13u all sides</div>
+        </div>
+      </div>
+      <div class="build-right">
+        <div class="build-detail">
+          <div class="blue-grid-stage" style="aspect-ratio: 2/1;">
+            <svg width="220" height="220" viewBox="0 0 180 180">
+              <use href="#eduflick-mark-build"/>
+            </svg>
+          </div>
+          <div class="text">The notch sits on the <b>right edge, bottom-weighted</b> — spanning y=82 to y=143 (measured 85u and 24u from the bottom). The apex at x=120 (47u inset) never crosses the optical centre.</div>
+        </div>
+        <div class="build-detail">
+          <div class="blue-grid-stage" style="aspect-ratio: 2/1;">
+            <svg width="280" height="180" viewBox="0 0 200 130">
+              <rect x="13" y="13" width="174" height="104" fill="none" stroke="rgba(91,91,240,0.4)" stroke-width="0.7" stroke-dasharray="2 2"/>
+              <g transform="translate(23 14) scale(0.87)">
+                <use href="#eduflick-mark" fill="#F5F2EA"/>
+              </g>
+              <text x="100" y="8" font-family="JetBrains Mono" font-size="6" fill="#8B97FF" text-anchor="middle">13u</text>
+              <text x="100" y="126" font-family="JetBrains Mono" font-size="6" fill="#8B97FF" text-anchor="middle">13u</text>
+            </svg>
+          </div>
+          <div class="text"><b>Clear space</b> equals the margin — 13 units on every side. Never trespass.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · COLOUR -->
+  <section class="section">
+    <div class="section-head">
+      <h2>03 · <em>colour.</em></h2>
+      <div class="rule"></div>
+      <div class="id">two systems · one recommendation</div>
+    </div>
+    <div class="palettes">
+      <div class="palette">
+        <div class="head">
+          <div>
+            <h4>candidate a · indigo.</h4>
+            <div class="tag">primary system · signal · intellect</div>
+          </div>
+          <span class="reco yes">recommended</span>
+        </div>
+        <div class="ramp">
+          <div class="swatch i-1"><span class="num">indigo · 100</span><span class="hex">#EEF0FF</span></div>
+          <div class="swatch i-2"><span class="num">indigo · 300</span><span class="hex">#B7C0FF</span></div>
+          <div class="swatch i-3"><span class="num">indigo · 500</span><span class="hex">#5B5BF0</span></div>
+          <div class="swatch i-4"><span class="num">indigo · 800</span><span class="hex">#261A82</span></div>
+          <div class="swatch i-5"><span class="num">indigo-ink</span><span class="hex">#0B0822</span></div>
+        </div>
+        <div class="usage">
+          <b>500</b> primary surface, buttons, mark on dark.<br/>
+          <b>800 · ink</b> backgrounds, gradients, hero canvases.<br/>
+          <b>300</b> editorial accents, italic copy, links.<br/>
+          <b>100</b> hover wash, soft fills, paper-on-light.
+        </div>
+      </div>
+      <div class="palette">
+        <div class="head">
+          <div>
+            <h4>candidate b · monochrome.</h4>
+            <div class="tag">editorial system · quiet · print-safe</div>
+          </div>
+          <span class="reco alt">supporting</span>
+        </div>
+        <div class="ramp">
+          <div class="swatch mono-1"><span class="num">paper · 100</span><span class="hex">#F5F2EA</span></div>
+          <div class="swatch mono-2"><span class="num">paper · 300</span><span class="hex">#C9C5BA</span></div>
+          <div class="swatch mono-3"><span class="num">slate · 500</span><span class="hex">#7A7F90</span></div>
+          <div class="swatch mono-4"><span class="num">slate · 800</span><span class="hex">#2A2D38</span></div>
+          <div class="swatch mono-5"><span class="num">ink</span><span class="hex">#0A0B10</span></div>
+        </div>
+        <div class="usage">
+          <b>ink + paper</b> the always-allowed pair · invoices, packaging.<br/>
+          <b>slate · 500</b> body text on dark, captions, metadata.<br/>
+          <b>paper · 300</b> dividers, dim copy, secondary states.<br/>
+          <b>rule</b> mono mode forbids any third hue.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · TYPE -->
+  <section class="section">
+    <div class="section-head">
+      <h2>04 · <em>type.</em></h2>
+      <div class="rule"></div>
+      <div class="id">manrope · instrument serif · jetbrains mono</div>
+    </div>
+    <div class="type">
+      <div class="type-row">
+        <div class="lbl"><b>display</b>manrope 900<br/>tracking −0.05em<br/>line-height 0.9<br/>lowercase</div>
+        <div class="t-display">learn anything <em>in sixty seconds.</em></div>
+      </div>
+      <div class="type-row">
+        <div class="lbl"><b>heading</b>manrope 800<br/>tracking −0.03em<br/>line-height 1.05</div>
+        <div class="t-heading">The flick is the unit. The card is the lesson.</div>
+      </div>
+      <div class="type-row">
+        <div class="lbl"><b>editorial</b>instrument serif italic<br/>tracking −0.01em<br/>line-height 1.25</div>
+        <div class="t-editorial"><em>"the moment a concept lands is the moment the next lesson begins."</em></div>
+      </div>
+      <div class="type-row">
+        <div class="lbl"><b>body</b>manrope 500<br/>16–18 px<br/>line-height 1.55</div>
+        <div class="t-body">Eduflick AI builds personalised, short-form learning sequences from any source — a lecture, a paper, a video, a hunch. The platform turns long-form material into a feed of one-minute flicks tuned to what you actually need next.</div>
+      </div>
+      <div class="type-row">
+        <div class="lbl"><b>mono · meta</b>jetbrains mono 500<br/>tracking 0.06em<br/>uppercase for labels</div>
+        <div class="t-mono">EDUFLICK / AI &nbsp; · &nbsp; LESSON 047 &nbsp; · &nbsp; <b>60 SECONDS</b> &nbsp; · &nbsp; QUEUED NEXT → MITOSIS · 8 FLICKS</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · LOCKUPS -->
+  <section class="section">
+    <div class="section-head">
+      <h2>05 · lock<em>ups.</em></h2>
+      <div class="rule"></div>
+      <div class="id">primary · paper · indigo-ink · monochrome · stacked · mark-only · text-only</div>
+    </div>
+    <div class="locks">
+      <div class="lock-card">
+        <div class="lbl">L.01 · primary on indigo</div>
+        <div class="stg indigo">
+          <div class="wm">
+            <svg width="46" height="46" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#F5F2EA"/></svg>
+            <div style="display:flex; align-items:baseline; gap: 8px;">
+              <span class="nm" style="color:var(--paper);">eduflick</span>
+              <span class="ai" style="color:var(--paper);">AI</span>
+            </div>
+          </div>
+        </div>
+        <div class="lbl" style="color: var(--paper-dim);">primary use · web, app, mark on saturated indigo</div>
+      </div>
+      <div class="lock-card">
+        <div class="lbl">L.02 · paper</div>
+        <div class="stg paper">
+          <div class="wm">
+            <svg width="46" height="46" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#0B0822"/></svg>
+            <div style="display:flex; align-items:baseline; gap: 8px;">
+              <span class="nm" style="color:var(--ink);">eduflick</span>
+              <span class="ai">AI</span>
+            </div>
+          </div>
+        </div>
+        <div class="lbl" style="color: var(--paper-dim);">documents, slide decks, print, light surfaces</div>
+      </div>
+      <div class="lock-card">
+        <div class="lbl">L.03 · indigo-ink</div>
+        <div class="stg indigo-deep">
+          <div class="wm">
+            <svg width="46" height="46" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#5B5BF0"/></svg>
+            <div style="display:flex; align-items:baseline; gap: 8px;">
+              <span class="nm" style="color:var(--paper);">eduflick</span>
+              <span class="ai">AI</span>
+            </div>
+          </div>
+        </div>
+        <div class="lbl" style="color: var(--paper-dim);">hero canvases, splash, dark UI</div>
+      </div>
+      <div class="lock-card">
+        <div class="lbl">L.04 · monochrome</div>
+        <div class="stg dark">
+          <div class="wm">
+            <svg width="46" height="46" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#F5F2EA"/></svg>
+            <div style="display:flex; align-items:baseline; gap: 8px;">
+              <span class="nm" style="color:var(--paper);">eduflick</span>
+              <span class="ai" style="color:var(--paper); opacity:0.65;">AI</span>
+            </div>
+          </div>
+        </div>
+        <div class="lbl" style="color: var(--paper-dim);">editorial, partner co-brand, achromatic surfaces</div>
+      </div>
+      <div class="lock-card">
+        <div class="lbl">L.05 · stacked</div>
+        <div class="stg dark" style="flex-direction: column; gap: 12px;">
+          <svg width="50" height="50" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#5B5BF0"/></svg>
+          <div style="display:flex; align-items:baseline; gap: 8px;">
+            <span class="nm" style="font-size: 28px;">eduflick</span>
+            <span class="ai" style="font-size: 28px;">AI</span>
+          </div>
+        </div>
+        <div class="lbl" style="color: var(--paper-dim);">avatars, square crops, tall sidebars</div>
+      </div>
+      <div class="lock-card">
+        <div class="lbl">L.06 · mark only</div>
+        <div class="stg outline" style="gap: 18px;">
+          <svg width="44" height="44" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#F5F2EA"/></svg>
+          <svg width="32" height="32" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#5B5BF0"/></svg>
+          <svg width="22" height="22" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#F5F2EA"/></svg>
+          <svg width="16" height="16" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#F5F2EA"/></svg>
+        </div>
+        <div class="lbl" style="color: var(--paper-dim);">favicons, app icons, profile chips &middot; below 40px width, mark-only</div>
+      </div>
+      <div class="lock-card">
+        <div class="lbl">L.07 · text-only</div>
+        <div class="stg dark">
+          <div class="wm" style="gap: 0;">
+            <span class="nm" style="font-size: 36px;">eduflick</span>
+            <span class="ai" style="font-size: 36px;">AI</span>
+          </div>
+        </div>
+        <div class="lbl" style="color: var(--paper-dim);">browser tabs, partner listings, email signatures, narrow columns</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · MOTION -->
+  <section class="section">
+    <div class="section-head">
+      <h2>06 · <em>motion.</em></h2>
+      <div class="rule"></div>
+      <div class="id">play wedge slides right · 6 frames · 600ms · cubic-bezier(0.7,0,0.2,1)</div>
+    </div>
+    <div class="motion">
+      <div class="t-body" style="max-width: 64ch;">The canonical loop: a small <b style="color:var(--paper);font-style:normal;font-weight:600;">play wedge</b> is born inside the card, slides right, fits the bottom-right notch, and the card resumes its rest state. Read it as: <b style="color:var(--paper);font-style:normal;font-weight:600;">a lesson plays, then it is filed.</b> 600ms total. Repeats every 4 seconds on splash; on hover everywhere else.</div>
+      <div class="motion-strip">
+        <div class="frame">
+          <span class="fnum">F1 · 000ms</span>
+          <svg width="120" height="120" viewBox="0 0 180 180">
+            <rect x="13" y="13" width="154" height="154" fill="#5B5BF0"/>
+          </svg>
+          <span class="ftime">closed</span>
+        </div>
+        <div class="frame">
+          <span class="fnum">F2 · 120ms</span>
+          <svg width="120" height="120" viewBox="0 0 180 180">
+            <rect x="13" y="13" width="154" height="154" fill="#5B5BF0"/>
+            <polygon points="110,100 110,128 126,114" fill="#F5F2EA"/>
+          </svg>
+          <span class="ftime">spawn</span>
+        </div>
+        <div class="frame">
+          <span class="fnum">F3 · 260ms</span>
+          <svg width="120" height="120" viewBox="0 0 180 180">
+            <rect x="13" y="13" width="154" height="154" fill="#5B5BF0"/>
+            <polygon points="113,96 113,130 129,113" fill="#F5F2EA"/>
+          </svg>
+          <span class="ftime">travel</span>
+        </div>
+        <div class="frame">
+          <span class="fnum">F4 · 400ms</span>
+          <svg width="120" height="120" viewBox="0 0 180 180">
+            <rect x="13" y="13" width="154" height="154" fill="#5B5BF0"/>
+            <polygon points="117,90 117,135 133,112.5" fill="#F5F2EA"/>
+          </svg>
+          <span class="ftime">approach</span>
+        </div>
+        <div class="frame">
+          <span class="fnum">F5 · 520ms</span>
+          <svg width="120" height="120" viewBox="0 0 180 180">
+            <path d="M 13 13 L 167 13 L 167 82 L 132 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#5B5BF0"/>
+            <polygon points="132,82 132,143 167,112.5" fill="#F5F2EA"/>
+          </svg>
+          <span class="ftime">contact</span>
+        </div>
+        <div class="frame">
+          <span class="fnum">F6 · 600ms</span>
+          <svg width="120" height="120" viewBox="0 0 180 180">
+            <use href="#eduflick-mark" fill="#5B5BF0"/>
+          </svg>
+          <span class="ftime">rest</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · APPLICATIONS -->
+  <section class="section">
+    <div class="section-head">
+      <h2>07 · app<em>lications.</em></h2>
+      <div class="rule"></div>
+      <div class="id">icon · card · poster · merch</div>
+    </div>
+    <div class="apps">
+      <div class="app app-icon">
+        <div class="head"><span>app icon</span><b>1024 · 180 · 60</b></div>
+        <div class="stg">
+          <div class="icon-tile" style="background: var(--i-500);">
+            <svg width="76" height="76" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#F5F2EA"/></svg>
+          </div>
+          <div style="display:flex; gap: 10px; align-items:center;">
+            <div style="width:36px; height:36px; border-radius:8px; background:var(--i-500); display:flex; align-items:center; justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#F5F2EA"/></svg>
+            </div>
+            <div style="width:24px; height:24px; border-radius:6px; background:var(--i-500); display:flex; align-items:center; justify-content:center;">
+              <svg width="14" height="14" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#F5F2EA"/></svg>
+            </div>
+            <div style="width:18px; height:18px; border-radius:4px; background:var(--i-500); display:flex; align-items:center; justify-content:center;">
+              <svg width="10" height="10" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#F5F2EA"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="app biz">
+        <div class="head"><span>business card · 88 × 55 mm</span><b>front / back</b></div>
+        <div class="stg">
+          <div class="biz-card front">
+            <div class="top">
+              <svg width="34" height="34" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#F5F2EA"/></svg>
+              <div class="bot" style="text-align:right;"><b>eduflick</b>AI</div>
+            </div>
+            <div class="bot" style="opacity:0.75;">EDUFLICK.AI &nbsp;·&nbsp; A TOMATRIX TECHNOLOGIES VENTURE</div>
+          </div>
+          <div class="biz-card back">
+            <div>
+              <div class="name">N. Tomatrix</div>
+              <div class="role">Founder · CEO</div>
+            </div>
+            <div class="contact">n@eduflick.ai &nbsp;·&nbsp; +91 &nbsp;·&nbsp; eduflick.ai</div>
+          </div>
+        </div>
+      </div>
+      <div class="app tee">
+        <div class="head"><span>merch · tee · centre-chest</span><b>120mm mark</b></div>
+        <div class="stg">
+          <div class="tee-shape">
+            <svg width="50" height="50" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#5B5BF0"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="poster-row">
+        <div class="poster p1">
+          <div>
+            <div class="pkicker">a feed for thinking</div>
+            <svg width="42" height="42" viewBox="0 0 180 180" style="margin-top:14px;"><use href="#eduflick-mark" fill="#F5F2EA"/></svg>
+          </div>
+          <h3>learn<br/>anything<br/><em>in sixty seconds.</em></h3>
+          <div class="pbot"><span>eduflick.ai</span><span>v2.0 — 2026</span></div>
+        </div>
+        <div class="poster p2">
+          <div><div class="pkicker">the lesson is the unit</div></div>
+          <svg width="180" height="180" viewBox="0 0 180 180" style="margin: -10px auto;"><use href="#eduflick-mark" fill="#0B0822"/></svg>
+          <div>
+            <h3>one card.<br/><em>one flick.</em><br/>that's it.</h3>
+            <div class="pbot" style="color: var(--muted);"><span>EDUFLICK / AI</span><span>print-safe</span></div>
+          </div>
+        </div>
+        <div class="poster p3">
+          <div><div class="pkicker">no chapter is too long</div></div>
+          <h3>cut the<br/>textbook<br/><em>into flicks.</em></h3>
+          <div>
+            <div style="display:flex; gap:8px; align-items:center; margin-bottom:14px;">
+              <svg width="28" height="28" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#5B5BF0"/></svg>
+              <svg width="24" height="24" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#5B5BF0" opacity="0.7"/></svg>
+              <svg width="20" height="20" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#5B5BF0" opacity="0.5"/></svg>
+              <svg width="16" height="16" viewBox="0 0 180 180"><use href="#eduflick-mark" fill="#5B5BF0" opacity="0.35"/></svg>
+            </div>
+            <div class="pbot"><span>EDUFLICK / AI</span><span>2026</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · VOICE -->
+  <section class="section">
+    <div class="section-head">
+      <h2>08 · <em>voice.</em></h2>
+      <div class="rule"></div>
+      <div class="id">how the brand speaks · and refuses to</div>
+    </div>
+    <div class="voice-grid">
+      <div class="voice">
+        <h4>do <em>·</em> always.</h4>
+        <ul class="do">
+          <li><span></span><span>Write <b>declarative sentences.</b> "Mitosis in 60 seconds." Not "Want to learn mitosis fast?"</span></li>
+          <li><span></span><span>Treat the <b>lesson as the hero,</b> not the platform.</span></li>
+          <li><span></span><span>Use <b>lowercase</b> for the brand, headings, and most UI. Title-case only for proper nouns.</span></li>
+          <li><span></span><span>Lead with <b>numbers, durations, counts</b> — 60s, 8 flicks, lesson 047.</span></li>
+          <li><span></span><span>Acknowledge the <b>parent</b> as: <i>a Tomatrix Technologies venture</i>.</span></li>
+        </ul>
+      </div>
+      <div class="voice">
+        <h4>don't <em>·</em> ever.</h4>
+        <ul class="dont">
+          <li><span></span><span>No gradients on the mark. No glow. No bevel. <b>One colour, one notch.</b></span></li>
+          <li><span></span><span>No third hue. Indigo + paper + ink — or mono. Never both colour systems at once.</span></li>
+          <li><span></span><span>No emoji in the mark. No sparkles. No "AI" stamped onto everything.</span></li>
+          <li><span></span><span>No rotation. The notch always points <b>right.</b> Forward is a value.</span></li>
+          <li><span></span><span>No "revolutionary," "unlock," "supercharge," "next-gen." <b>Earn the verb.</b></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span><b>EDUFLICK AI</b> · BRAND KIT v2.0 · MAY 2026</span>
+    <span style="color: var(--i-300);">A TOMATRIX TECHNOLOGIES VENTURE</span>
+  </footer>
+
+</main>
+</body>
+</html>

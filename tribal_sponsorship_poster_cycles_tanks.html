@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sponsor a Cycle or Water Tank – Dr. M.S. Sunil Foundation</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Open Sans',Arial,sans-serif;
+  background:#d0ccc4;
+  color:#222;
+  font-size:13px;
+  line-height:1.55;
+  -webkit-print-color-adjust:exact;
+  print-color-adjust:exact;
+}
+
+/* ─── A4 SHEET ─── */
+.sheet{
+  width:794px;
+  background:#fff;
+  margin:24px auto;
+  box-shadow:0 2px 24px rgba(0,0,0,.22);
+  page-break-after:always;
+}
+
+/* ─── SHARED HEADER STRIPE ─── */
+.sheet-head{
+  background:#174a2e;
+  padding:0;
+  display:flex;
+  align-items:stretch;
+}
+.sh-left{
+  background:#0f3020;
+  padding:14px 20px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-shrink:0;
+}
+.sh-left .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:#c8921a;flex-shrink:0;
+}
+.sh-left span{
+  font-size:9px;font-weight:700;letter-spacing:3px;
+  text-transform:uppercase;color:rgba(255,255,255,.55);
+  white-space:nowrap;
+}
+.sh-right{
+  flex:1;padding:14px 20px;
+  display:flex;align-items:center;justify-content:flex-end;
+}
+.sh-right span{
+  font-size:9px;font-weight:600;letter-spacing:2px;
+  text-transform:uppercase;color:#c8921a;
+}
+.gold-bar{height:4px;background:linear-gradient(90deg,#174a2e,#c8921a,#a0531a,#c8921a,#174a2e);}
+
+/* ─── PAGE BODY ─── */
+.body{padding:36px 44px;}
+
+/* ─── SECTION LABEL ─── */
+.slabel{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:6px;
+}
+.slabel span{
+  font-size:8.5px;font-weight:700;letter-spacing:3.5px;
+  text-transform:uppercase;color:#c8921a;
+}
+.slabel::after{content:'';width:32px;height:1px;background:#c8921a;opacity:.5;}
+
+/* ─── HEADINGS ─── */
+h2{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:22px;font-weight:700;color:#0f3020;
+  line-height:1.2;margin-bottom:10px;
+}
+h2 em{font-style:italic;color:#c8921a;}
+p{color:#444;margin-bottom:10px;line-height:1.7;}
+p strong{color:#174a2e;font-weight:700;}
+
+.intro-text{
+  font-size:12.5px;color:#666;
+  max-width:660px;margin-bottom:24px;line-height:1.75;
+}
+
+hr.div{border:none;border-top:1px solid #e0ddd6;margin:28px 0;}
+
+/* ─── TWO COLUMN ─── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;}
+
+/* ─── TIER CARDS ─── */
+.tier{border:1px solid #ddd;overflow:hidden;}
+.tier-hd{padding:20px 18px 16px;text-align:center;}
+.tier-hd.g{background:#0f3020;}
+.tier-hd.n{background:#1b3a6e;}
+.tier-tag{
+  font-size:7.5px;font-weight:700;letter-spacing:3px;
+  text-transform:uppercase;color:rgba(200,145,26,.8);
+  margin-bottom:8px;
+}
+.tier-ico{font-size:28px;margin-bottom:6px;}
+.tier-name{
+  font-family:'Playfair Display',serif;
+  font-size:14px;font-weight:700;color:#fff;
+  margin-bottom:4px;
+}
+.tier-amt{
+  font-size:24px;font-weight:800;color:#c8921a;
+  display:block;line-height:1;margin:6px 0 2px;
+}
+.tier-per{
+  font-size:8px;font-weight:600;letter-spacing:2px;
+  text-transform:uppercase;color:rgba(255,255,255,.3);
+}
+.tier-bd{padding:16px 18px;background:#fff;}
+.tf{
+  display:flex;align-items:flex-start;gap:7px;
+  padding:6px 0;border-bottom:1px solid #f0ede6;
+  font-size:11px;color:#555;line-height:1.45;
+}
+.tf:last-child{border-bottom:none;}
+.tf::before{content:'✓';color:#2d7a46;font-weight:700;font-size:10px;flex-shrink:0;margin-top:1px;}
+
+/* ─── NOTE BOX ─── */
+.note-box{
+  background:#f8f6f0;border:1px solid #e0ddd6;
+  border-left:4px solid #c8921a;
+  padding:12px 16px;margin-top:14px;
+  font-size:11.5px;color:#555;line-height:1.65;
+}
+.note-box strong{color:#0f3020;}
+
+/* ─── DONATE GRID ─── */
+.donate-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px;}
+.dcard{border:1px solid #ddd;overflow:hidden;}
+.dcard-hd{padding:12px 16px;display:flex;align-items:center;gap:8px;}
+.dcard-hd.g{background:#0f3020;}
+.dcard-hd.a{background:#2a1c06;}
+.dcard-hd span{font-size:11px;font-weight:700;color:#fff;letter-spacing:.5px;}
+.dcard-bd{padding:16px;background:#fff;}
+.drow{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 0;border-bottom:1px solid #f0ede6;gap:8px;
+}
+.drow:last-child{border-bottom:none;}
+.dlbl{font-size:8.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#999;flex-shrink:0;}
+.dval{font-size:12px;font-weight:700;color:#222;text-align:right;}
+.dval.mono{font-family:monospace;letter-spacing:1px;font-size:11px;}
+
+/* ─── CTA BAND ─── */
+.cta-band{
+  background:#0f3020;
+  margin:28px -44px 0;padding:28px 44px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.cta-band h3{
+  font-family:'Playfair Display',serif;
+  font-size:17px;font-weight:700;color:#fff;margin-bottom:5px;
+}
+.cta-band p{font-size:11px;font-weight:300;color:rgba(255,255,255,.5);line-height:1.6;max-width:400px;margin:0;}
+.cta-btn{
+  background:#c8921a;color:#0f3020;
+  font-size:9px;font-weight:800;letter-spacing:3px;
+  text-transform:uppercase;padding:14px 28px;
+  text-decoration:none;white-space:nowrap;flex-shrink:0;
+  display:inline-block;
+}
+
+/* ─── FOOTER ─── */
+.sheet-foot{
+  background:#091a0f;
+  padding:16px 44px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sf-brand{font-size:11px;color:rgba(255,255,255,.5);font-style:italic;}
+.sf-contact{font-size:9px;color:rgba(255,255,255,.3);text-align:right;line-height:1.8;}
+
+/* PDF DOWNLOAD BUTTON */
+.pdf-download-btn{
+  position:fixed;top:24px;right:24px;z-index:9999;
+  padding:12px 24px;border:none;border-radius:8px;cursor:pointer;
+  background:#c8921a;color:#152d1e;font-weight:700;font-size:15px;
+  box-shadow:0 4px 16px rgba(0,0,0,.25);transition:all .2s;
+  font-family:'Segoe UI',system-ui,sans-serif;
+}
+.pdf-download-btn:hover{background:#e8b84b;transform:translateY(-1px);}
+.pdf-download-btn:disabled{opacity:.6;cursor:wait;transform:none;}
+
+/* PRINT */
+@media print{
+  body{background:#fff;}
+  .sheet{box-shadow:none;margin:0;}
+  .pdf-download-btn{display:none!important;}
+}
+</style>
+</head>
+<body>
+<button class="pdf-download-btn" id="downloadPdfBtn">⬇ Download PDF</button>
+
+<!-- ════════ SINGLE A4 POSTER ════════ -->
+<div class="sheet">
+<div class="gold-bar"></div>
+<div class="sheet-head">
+  <div class="sh-left">
+    <div class="dot"></div>
+    <span>Dr. M.S. Sunil Foundation</span>
+  </div>
+  <div class="sh-right">
+    <span>Tribal Habitat Restoration Initiative</span>
+  </div>
+</div>
+<div class="gold-bar"></div>
+
+<div class="body">
+
+  <!-- Section Heading -->
+  <div class="slabel"><span>New Sponsorship Items</span></div>
+  <h2>Sponsor a <em>Cycle</em> or a <em>Water Tank</em></h2>
+  <p class="intro-text">Empower tribal families with everyday essentials — a cycle for mobility or a water tank for safe, year-round water storage.</p>
+
+  <!-- Tier Cards -->
+  <div class="two-col">
+
+    <!-- Cycle Card -->
+    <div class="tier">
+      <div class="tier-hd g">
+        <div class="tier-tag">Mobility Sponsor</div>
+        <div class="tier-ico">🚲</div>
+        <div class="tier-name">Gift a Cycle</div>
+        <span class="tier-amt">₹4,500</span>
+        <div class="tier-per">Per Cycle</div>
+      </div>
+      <div class="tier-bd">
+        <div class="tf">Enables daily commute to markets &amp; schools</div>
+        <div class="tf">Durable cycle for forest terrain</div>
+        <div class="tf">Frees hours lost to walking</div>
+        <div class="tf">Direct delivery to tribal family</div>
+        <div class="tf">Certificate of gratitude</div>
+        <div class="tf">80G Tax Exemption Certificate</div>
+      </div>
+    </div>
+
+    <!-- Water Tank Card -->
+    <div class="tier">
+      <div class="tier-hd n">
+        <div class="tier-tag">Water Sponsor</div>
+        <div class="tier-ico">💧</div>
+        <div class="tier-name">Gift a Water Tank</div>
+        <span class="tier-amt">₹4,650</span>
+        <div class="tier-per">Per Tank</div>
+      </div>
+      <div class="tier-bd">
+        <div class="tf">3-layered, 1000-litre capacity</div>
+        <div class="tf">One tank per house</div>
+        <div class="tf">Safe water storage year-round</div>
+        <div class="tf">Eliminates contamination risk</div>
+        <div class="tf">Direct delivery &amp; installation</div>
+        <div class="tf">Certificate of gratitude</div>
+        <div class="tf">80G Tax Exemption Certificate</div>
+      </div>
+    </div>
+
+  </div><!-- /two-col -->
+
+  <!-- 80G Note -->
+  <div class="note-box">
+    <strong>80G Tax Benefit:</strong> All donations to Dr. M.S. Sunil Foundation (Reg. No. 173/2016) are eligible for <strong>tax exemption under Section 80G</strong> of the Income Tax Act. You will receive your 80G certificate within 48 hours of confirmed transfer.
+  </div>
+
+  <hr class="div">
+
+  <!-- Bank & Contact -->
+  <div class="donate-grid">
+    <div class="dcard">
+      <div class="dcard-hd g"><span>🏦 &nbsp;Account Information</span></div>
+      <div class="dcard-bd">
+        <div class="drow"><span class="dlbl">Account Name</span><span class="dval">Dr. M.S. Sunil Foundation</span></div>
+        <div class="drow"><span class="dlbl">Account No.</span><span class="dval mono">0316073000000757</span></div>
+        <div class="drow"><span class="dlbl">Bank</span><span class="dval">South Indian Bank</span></div>
+        <div class="drow"><span class="dlbl">Branch</span><span class="dval">Pathanamthitta, Kerala</span></div>
+        <div class="drow"><span class="dlbl">IFSC</span><span class="dval mono">SIBL0000316</span></div>
+        <div class="drow"><span class="dlbl">Account Type</span><span class="dval">Current Account</span></div>
+      </div>
+    </div>
+    <div class="dcard">
+      <div class="dcard-hd a"><span>📞 &nbsp;Contact &amp; Confirmation</span></div>
+      <div class="dcard-bd">
+        <div class="drow"><span class="dlbl">Phone</span><span class="dval">9496795968</span></div>
+        <div class="drow"><span class="dlbl">Email</span><span class="dval" style="font-size:11px">drmssunil2008@gmail.com</span></div>
+        <div class="drow"><span class="dlbl">Website</span><span class="dval">drmssunil.com</span></div>
+        <div class="drow"><span class="dlbl">Instagram</span><span class="dval">@dr_mssunil</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- After-transfer note -->
+  <div class="note-box" style="margin-top:14px">
+    <strong>After transferring:</strong> Email your name, amount, and purpose — <em>"Tribal Habitat – Cycle / Water Tank"</em> — to <strong>drmssunil2008@gmail.com</strong> to receive your acknowledgement and <strong>80G Tax Exemption Certificate</strong> within 48 hours.
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-band">
+    <div>
+      <h3>A Small Gift, a Big Difference</h3>
+      <p>A cycle gives a tribal family freedom to reach markets and schools. A water tank ensures safe drinking water all year. Sponsor one today.</p>
+    </div>
+    <a href="https://drmssunil.com" class="cta-btn">Sponsor Now</a>
+  </div>
+
+</div><!-- /body -->
+<div class="gold-bar"></div>
+<div class="sheet-foot">
+  <span class="sf-brand">Dr. M.S. Sunil Foundation · Reg. No. 173/2016 · 80G Certified · 366+ Homes Built Since 2005</span>
+  <span class="sf-contact">drmssunil.com · drmssunil2008@gmail.com · 9496795968</span>
+</div>
+</div><!-- /sheet -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+document.getElementById('downloadPdfBtn').addEventListener('click', async function() {
+  const btn = this;
+
+  if (typeof html2canvas === 'undefined' || !window.jspdf) {
+    alert('PDF libraries still loading. Please wait a moment and try again.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Generating...';
+
+  try {
+    const sheets = document.querySelectorAll('.sheet');
+    const { jsPDF } = window.jspdf;
+    let pdf = null;
+
+    for (let i = 0; i < sheets.length; i++) {
+      btn.textContent = '⏳ Page ' + (i + 1) + ' of ' + sheets.length + '...';
+
+      let canvas;
+      try {
+        canvas = await html2canvas(sheets[i], {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          logging: false
+        });
+      } catch (e) {
+        console.warn('Retrying page ' + (i + 1) + ' at lower scale...', e);
+        canvas = await html2canvas(sheets[i], {
+          scale: 1,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          logging: false
+        });
+      }
+
+      const imgWidth = 210;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      if (i === 0) {
+        pdf = new jsPDF({ unit: 'mm', format: [imgWidth, imgHeight] });
+      } else {
+        pdf.addPage([imgWidth, imgHeight]);
+      }
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.92);
+      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+    }
+
+    pdf.save('Sponsorship_Poster_Cycles_Tanks.pdf');
+  } catch (err) {
+    console.error('PDF generation failed:', err);
+    alert('PDF generation failed: ' + err.message);
+  }
+
+  btn.disabled = false;
+  btn.textContent = '⬇ Download PDF';
+});
+</script>
+</body>
+</html>
