@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Eduflick AI · Brand Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --i-ink:#0B0822;--i-500:#5B5BF0;--i-200:#B7C0FF;
+  --paper:#F5F2EA;--paper-2:#ECE7DA;--muted:#7A7F90;
+}
+body{
+  font-family:'Manrope',sans-serif;
+  background:radial-gradient(140% 100% at 0% 100%, var(--i-500) 0%, #3A2BB8 38%, var(--i-ink) 100%);
+  color:var(--paper);min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 24px;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:radial-gradient(circle,rgba(245,242,234,0.06) 1px,transparent 1px);
+  background-size:22px 22px;pointer-events:none;z-index:0;
+}
+main{position:relative;z-index:1;max-width:640px;text-align:center}
+svg.mark{filter:drop-shadow(0 8px 48px rgba(91,91,240,0.55))}
+h1{
+  font-family:'Manrope',sans-serif;font-weight:900;font-size:48px;
+  letter-spacing:-0.05em;text-transform:lowercase;line-height:1;margin:24px 0 8px;
+}
+h1 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-200)}
+p.sub{font-family:'Instrument Serif',serif;font-style:italic;font-size:18px;color:rgba(245,242,234,0.7);margin-bottom:40px}
+.links{display:flex;flex-direction:column;gap:10px;align-items:center}
+.links a{
+  display:block;width:100%;max-width:420px;
+  padding:18px 28px;border-radius:12px;text-decoration:none;
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;
+  letter-spacing:-0.01em;text-align:left;
+  transition:transform .15s,box-shadow .15s;
+}
+.links a:hover{transform:translateY(-2px)}
+.links a.primary{
+  background:var(--paper);color:var(--i-ink);
+  box-shadow:0 4px 24px rgba(0,0,0,0.32);
+}
+.links a.secondary{
+  background:rgba(245,242,234,0.08);
+  border:1px solid rgba(245,242,234,0.15);
+  color:var(--paper);
+}
+.links a .lbl{font-size:15px;display:block;margin-bottom:2px}
+.links a .lbl em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--i-200);font-weight:400}
+.links a .meta{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(245,242,234,0.45);letter-spacing:0.14em;text-transform:uppercase}
+footer{
+  margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:rgba(245,242,234,0.35);letter-spacing:0.16em;text-transform:uppercase;
+}
+</style>
+</head>
+<body>
+<main>
+<svg class="mark" width="64" height="64" viewBox="0 0 180 180" aria-hidden="true"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+<h1>eduflick <em>AI</em> · brand kit</h1>
+<p class="sub">Complete design system, product brochures, and program prospectus.</p>
+<div class="links">
+  <a href="Eduflick_Brand_Book_v4.html" class="primary">
+    <span class="lbl">brand book <em>v4.0</em></span>
+    <span class="meta">Design system · tokens · lockups · 225 KB</span>
+  </a>
+  <a href="Eduflick_AI_Brochure.html" class="secondary">
+    <span class="lbl">product brochure <em>· 2026</em></span>
+    <span class="meta">4-page A4 · cinematic edition</span>
+  </a>
+  <a href="Eduflick_AI_Leadership_Program_Brochure.html" class="secondary">
+    <span class="lbl">leadership program <em>· cohort 02</em></span>
+    <span class="meta">12-page A4 prospectus</span>
+  </a>
+  <a href="tribal_sponsorship_poster_cycles_tanks.html" class="secondary">
+    <span class="lbl">tribal sponsorship <em>· cycles &amp; tanks</em></span>
+    <span class="meta">Dr. M.S. Sunil Foundation</span>
+  </a>
+</div>
+</main>
+<footer>&copy; 2026 · Tomatrix Technologies Pvt Ltd · All rights reserved</footer>
+</body>
+</html>
