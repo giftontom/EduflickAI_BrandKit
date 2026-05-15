@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Eduflick AI · Leadership Program · Poster · Cohort 02 · 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   EDUFLICK AI · LEADERSHIP PROGRAM · 1-PAGE POSTER · A4
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --i-50:#EEF0FF; --i-100:#DCE0FF; --i-200:#B7C0FF; --i-300:#8B97FF;
+  --i-400:#6E78F5; --i-500:#5B5BF0; --i-600:#4B3FE0; --i-700:#3A2BB8;
+  --i-800:#261A82; --i-900:#150D52; --i-ink:#0B0822;
+  --paper:#F5F2EA; --paper-2:#ECE7DA; --paper-dim:#C9C5BA;
+  --ink:#0A0B10; --ink-2:#11131C; --ink-3:#181B28;
+  --muted:#7A7F90;
+  --line:rgba(10,11,16,0.08);
+  --line-2:rgba(10,11,16,0.14);
+}
+
+body{
+  font-family:'Manrope',sans-serif;
+  background:var(--paper-dim);
+  color:var(--ink);
+  font-size:13px;line-height:1.55;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ─── POSTER SHEET ─── */
+.poster{
+  width:794px;height:1123px;overflow:hidden;
+  margin:24px auto;
+  box-shadow:0 2px 32px rgba(0,0,0,.28);
+  display:flex;flex-direction:column;position:relative;
+  background:radial-gradient(140% 100% at 0% 100%, var(--i-500) 0%, var(--i-700) 38%, var(--i-ink) 100%);
+  color:var(--paper);
+}
+.poster::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(245,242,234,0.06) 1px,transparent 1px);
+  background-size:22px 22px;pointer-events:none;z-index:1;
+}
+.poster::after{
+  content:'';position:absolute;top:-260px;right:-200px;
+  width:720px;height:720px;
+  background:radial-gradient(circle,rgba(91,91,240,0.28),transparent 65%);
+  border-radius:50%;pointer-events:none;z-index:0;
+}
+
+/* ─── i-bar ─── */
+.i-bar{
+  height:3px;flex-shrink:0;position:relative;z-index:2;
+  background:linear-gradient(90deg,var(--i-500) 0%,var(--i-300) 50%,var(--i-500) 100%);
+}
+
+/* ─── Poster content ─── */
+.poster-content{
+  flex:1;display:flex;flex-direction:column;
+  position:relative;z-index:2;
+  padding:60px 60px 0;
+}
+
+/* ─── Top strip ─── */
+.poster-top{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:48px;
+}
+.poster-mark-row{
+  display:flex;align-items:center;gap:16px;
+}
+.poster-mark-row svg{
+  flex-shrink:0;
+  filter:drop-shadow(0 8px 48px rgba(91,91,240,0.55));
+  animation:mark-breathe 4.5s ease-in-out infinite;
+}
+@keyframes mark-breathe{
+  0%,100%{transform:scale(1);filter:drop-shadow(0 8px 48px rgba(91,91,240,0.55))}
+  50%{transform:scale(1.025);filter:drop-shadow(0 14px 64px rgba(91,91,240,0.75))}
+}
+.poster-mark-meta{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:rgba(245,242,234,0.5);letter-spacing:0.2em;
+  text-transform:uppercase;line-height:1.8;
+}
+.poster-mark-meta b{color:var(--paper);font-weight:500}
+.poster-edition{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:rgba(245,242,234,0.5);letter-spacing:0.24em;
+  text-transform:uppercase;line-height:1.8;text-align:right;
+}
+.poster-edition b{color:var(--paper);font-weight:500}
+
+/* ─── Hero ─── */
+.poster-hero{margin-bottom:44px}
+.poster-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--i-200);letter-spacing:0.32em;text-transform:uppercase;
+  margin-bottom:18px;display:flex;align-items:center;gap:14px;
+}
+.poster-eyebrow::before{content:'';width:32px;height:1.5px;background:var(--i-200)}
+.poster-wordmark{
+  font-family:'Manrope',sans-serif;font-weight:900;
+  font-size:82px;letter-spacing:-0.055em;
+  color:var(--paper);text-transform:lowercase;
+  line-height:0.86;margin-bottom:14px;
+}
+.poster-wordmark em{
+  font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;
+  color:var(--i-200);letter-spacing:-0.025em;
+}
+.poster-subline{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:22px;line-height:1.35;
+  color:rgba(245,242,234,0.72);max-width:34ch;
+}
+
+/* ─── Key highlights row ─── */
+.poster-highlights{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:14px;margin-bottom:40px;
+}
+.hl-card{
+  background:rgba(245,242,234,0.05);
+  border:1px solid rgba(245,242,234,0.12);
+  border-radius:14px;
+  padding:22px 18px 18px;position:relative;overflow:hidden;
+}
+.hl-card::after{
+  content:'';position:absolute;bottom:-28px;right:-18px;
+  width:80px;height:80px;
+  background:radial-gradient(circle,rgba(91,91,240,0.18),transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.hl-card .hl-lbl{
+  font-family:'JetBrains Mono',monospace;font-size:7.5px;
+  color:rgba(183,192,255,0.6);letter-spacing:0.2em;text-transform:uppercase;
+  margin-bottom:8px;position:relative;z-index:1;
+}
+.hl-card .hl-val{
+  font-family:'Manrope',sans-serif;font-weight:900;font-size:22px;
+  letter-spacing:-0.035em;color:var(--paper);line-height:1.08;
+  text-transform:lowercase;position:relative;z-index:1;
+}
+.hl-card .hl-val em{
+  font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;
+  color:var(--i-300);font-size:16px;
+}
+.hl-card .hl-sub{
+  font-family:'JetBrains Mono',monospace;font-size:8px;
+  color:rgba(245,242,234,0.35);letter-spacing:0.08em;
+  margin-top:6px;position:relative;z-index:1;
+}
+
+/* ─── Master section ─── */
+.poster-master-label{
+  font-family:'JetBrains Mono',monospace;font-size:8.5px;
+  color:rgba(183,192,255,0.65);letter-spacing:0.22em;text-transform:uppercase;
+  margin-bottom:14px;display:flex;align-items:center;gap:10px;
+}
+.poster-master-label::after{content:'';flex:0 0 48px;height:1px;background:rgba(245,242,234,0.14)}
+.poster-master-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+  margin-bottom:14px;
+}
+.master-card{
+  background:rgba(245,242,234,0.04);
+  border:1px solid rgba(245,242,234,0.1);
+  border-radius:12px;
+  padding:18px 16px 16px;
+}
+.master-card .mc-num{
+  font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;
+  font-size:32px;color:var(--i-200);line-height:1;
+  margin-bottom:10px;
+}
+.master-card .mc-title{
+  font-family:'Manrope',sans-serif;font-weight:800;font-size:13px;
+  letter-spacing:-0.02em;color:var(--paper);text-transform:lowercase;
+  margin-bottom:6px;line-height:1.2;
+}
+.master-card .mc-title em{
+  font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300)
+}
+.master-card .mc-desc{
+  font-size:10.5px;color:rgba(245,242,234,0.5);line-height:1.55;font-weight:500;
+}
+
+/* ─── Bottom section ─── */
+.poster-bottom{
+  margin-top:auto;
+  padding-bottom:48px;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  gap:24px;
+}
+
+/* ─── CTA ─── */
+.poster-cta{
+  display:flex;flex-direction:column;gap:10px;
+}
+.poster-cta-label{
+  font-family:'JetBrains Mono',monospace;font-size:8.5px;
+  color:rgba(245,242,234,0.4);letter-spacing:0.18em;text-transform:uppercase;
+}
+.poster-cta-line{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:20px;color:rgba(245,242,234,0.78);line-height:1.35;
+}
+.poster-cta-line em{color:var(--i-200);font-style:italic}
+.poster-cta-detail{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:rgba(245,242,234,0.45);letter-spacing:0.12em;
+}
+
+/* ─── Ring mark ─── */
+.poster-ring{
+  position:relative;width:120px;height:120px;flex-shrink:0;
+}
+.poster-ring svg{width:100%;height:100%;animation:ring-spin 24s linear infinite}
+@keyframes ring-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.poster-ring-label{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  text-align:center;pointer-events:none;
+}
+.poster-ring-label .n{
+  font-family:'Manrope',sans-serif;font-weight:900;font-size:38px;
+  color:var(--paper);letter-spacing:-0.04em;line-height:1;
+}
+.poster-ring-label .n em{
+  font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;
+  color:var(--i-200);font-size:22px;
+}
+.poster-ring-label .u{
+  font-family:'JetBrains Mono',monospace;font-size:7px;
+  color:rgba(245,242,234,0.45);letter-spacing:0.2em;text-transform:uppercase;
+  margin-top:4px;
+}
+
+/* ─── Footer ─── */
+.poster-ft{
+  background:rgba(11,8,34,0.6);
+  border-top:1px solid rgba(245,242,234,0.08);
+  padding:16px 60px;display:flex;align-items:center;
+  justify-content:space-between;flex-shrink:0;position:relative;z-index:2;
+}
+.poster-ft .pf-l{display:flex;align-items:center;gap:8px}
+.poster-ft .pf-l span{
+  font-size:10px;font-weight:600;color:var(--paper);letter-spacing:-0.01em;
+}
+.poster-ft .pf-l span em{
+  font-family:'Instrument Serif',serif;font-style:italic;color:var(--i-300);font-weight:400
+}
+.poster-ft .pf-r{
+  font-family:'JetBrains Mono',monospace;font-size:8.5px;
+  color:rgba(245,242,234,0.35);letter-spacing:0.18em;
+}
+
+/* ─── Decorative accent lines ─── */
+.accent-ring-1{
+  position:absolute;top:280px;right:-140px;
+  width:360px;height:360px;
+  border:1px solid rgba(245,242,234,0.04);
+  border-radius:50%;pointer-events:none;z-index:0;
+}
+.accent-ring-2{
+  position:absolute;bottom:60px;left:-100px;
+  width:280px;height:280px;
+  border:1px solid rgba(245,242,234,0.03);
+  border-radius:50%;pointer-events:none;z-index:0;
+}
+
+/* ─── PDF DOWNLOAD BUTTON ─── */
+.pdf-download-btn{
+  position:fixed;top:24px;right:24px;z-index:9999;
+  padding:12px 22px;border:none;border-radius:12px;cursor:pointer;
+  background:var(--i-500);color:var(--paper);
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;
+  letter-spacing:-0.01em;
+  box-shadow:0 4px 24px rgba(91,91,240,0.4);
+  display:flex;align-items:center;gap:8px;
+}
+.pdf-download-btn:hover{background:var(--i-400)}
+.pdf-download-btn:disabled{opacity:0.6;cursor:wait}
+
+@media print{
+  body{background:#fff}
+  .poster{box-shadow:none;margin:0;height:297mm;width:210mm}
+  .pdf-download-btn{display:none!important}
+  *{animation:none!important}
+  @page{margin:0;size:A4}
+}
+</style>
+</head>
+<body>
+
+<button class="pdf-download-btn" id="downloadPdfBtn" type="button">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+  Download PDF
+</button>
+
+<!-- ============= REUSABLE SVG SYMBOLS ============= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="b-mark" viewBox="0 0 180 180">
+      <path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="b-sixty-ring" viewBox="0 0 128 128">
+      <circle cx="64" cy="64" r="60" fill="none" stroke="rgba(245,242,234,0.14)" stroke-width="1.5"/>
+      <path d="M64 4 A 60 60 0 1 1 4 64" fill="none" stroke="#B7C0FF" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="64" cy="4" r="3" fill="#B7C0FF"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ════════════════════════════════════════════
+     POSTER
+     ════════════════════════════════════════════ -->
+<div class="poster">
+  <div class="i-bar"></div>
+
+  <div class="poster-content">
+    <!-- decorative rings -->
+    <div class="accent-ring-1"></div>
+    <div class="accent-ring-2"></div>
+
+    <!-- Top strip -->
+    <div class="poster-top">
+      <div class="poster-mark-row">
+        <svg width="54" height="54" viewBox="0 0 180 180" role="img" aria-label="Eduflick mark"><use href="#b-mark" fill="#F5F2EA"/></svg>
+        <div class="poster-mark-meta">
+          <b>EDUFLICK / AI</b><br>
+          ONE SHAPE · ONE NOTCH
+        </div>
+      </div>
+      <div class="poster-edition">
+        <b>POSTER</b><br>
+        COHORT 02 · 2026<br>
+        THIRUVANANTHAPURAM
+      </div>
+    </div>
+
+    <!-- Hero -->
+    <div class="poster-hero">
+      <div class="poster-eyebrow">the eduflick AI leadership program</div>
+      <div class="poster-wordmark">master the future.<br><em>lead with AI.</em></div>
+      <div class="poster-subline">
+        a 4-month offline certification at UXP innovation hub — built for ambitious implementers who want to <em>architect AI</em>, not just use it
+      </div>
+    </div>
+
+    <!-- Key highlights -->
+    <div class="poster-highlights">
+      <div class="hl-card">
+        <div class="hl-lbl">duration</div>
+        <div class="hl-val">4 <em>months</em></div>
+        <div class="hl-sub">16 weeks · daily sessions</div>
+      </div>
+      <div class="hl-card">
+        <div class="hl-lbl">mode</div>
+        <div class="hl-val"><em>strictly</em> offline</div>
+        <div class="hl-sub">in-person · mon–sat</div>
+      </div>
+      <div class="hl-card">
+        <div class="hl-lbl">investment</div>
+        <div class="hl-val">₹30,<em>000</em></div>
+        <div class="hl-sub">all-inclusive · cohort 02</div>
+      </div>
+      <div class="hl-card">
+        <div class="hl-lbl">location</div>
+        <div class="hl-val">tvm, <em>kerala</em></div>
+        <div class="hl-sub">UXP innovation hub</div>
+      </div>
+    </div>
+
+    <!-- What you'll master -->
+    <div class="poster-master-label">what you&rsquo;ll master</div>
+    <div class="poster-master-grid">
+      <div class="master-card">
+        <div class="mc-num">01</div>
+        <div class="mc-title">AI <em>engineering</em></div>
+        <div class="mc-desc">Prompt architecture, agentic systems, and reasoning workflows with Claude, ChatGPT &amp; Google AI Studio.</div>
+      </div>
+      <div class="master-card">
+        <div class="mc-num">02</div>
+        <div class="mc-title">content <em>&amp; design</em></div>
+        <div class="mc-desc">AI-driven visual storytelling, video generation, and multi-channel campaign design.</div>
+      </div>
+      <div class="master-card">
+        <div class="mc-num">03</div>
+        <div class="mc-title">software <em>&amp; automation</em></div>
+        <div class="mc-desc">AI-assisted development, workflow automation, and deploying functional apps — no prior coding needed.</div>
+      </div>
+      <div class="master-card">
+        <div class="mc-num">04</div>
+        <div class="mc-title">business <em>operations</em></div>
+        <div class="mc-desc">AI reporting, process optimisation, and decision-support systems for real-world enterprises.</div>
+      </div>
+    </div>
+
+    <!-- Bottom section: CTA + ring -->
+    <div class="poster-bottom">
+      <div class="poster-cta">
+        <div class="poster-cta-label">apply now</div>
+        <div class="poster-cta-line">seats are <em>limited by facility</em> —<br>first applied, first reviewed</div>
+        <div class="poster-cta-detail">contact: eduflickai@gmail.com · UXP Innovation Hub, TVM</div>
+      </div>
+      <div class="poster-ring">
+        <svg viewBox="0 0 128 128" role="img" aria-label="Four month duration"><use href="#b-sixty-ring"/></svg>
+        <div class="poster-ring-label">
+          <div class="n">4<em>m</em></div>
+          <div class="u">program</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="i-bar"></div>
+
+  <!-- Footer -->
+  <div class="poster-ft">
+    <div class="pf-l">
+      <span>eduflick <em>AI</em> · a tomatrix technologies venture</span>
+    </div>
+    <div class="pf-r">cohort 02 · 2026 · 1 page</div>
+  </div>
+</div>
+
+<!-- ============= PDF EXPORT ============= -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+function resolveVar(value, root) {
+  if (typeof value !== 'string' || !value.startsWith('var(')) return value;
+  var inner = value.slice(4, -1).trim();
+  var resolved = getComputedStyle(root).getPropertyValue(inner).trim();
+  return resolved || '#000';
+}
+
+function resolveUseElements(container) {
+  var root = document.documentElement;
+  container.querySelectorAll('use').forEach(function(use) {
+    var href = use.getAttribute('href') || use.getAttribute('xlink:href');
+    if (!href || href.charAt(0) !== '#') return;
+    var symbol = document.getElementById(href.slice(1));
+    if (!symbol) return;
+
+    var svgNS = 'http://www.w3.org/2000/svg';
+    var group = document.createElementNS(svgNS, 'g');
+
+    var useFill = use.getAttribute('fill');
+    var fillColor;
+    if (useFill) {
+      fillColor = resolveVar(useFill, root);
+    } else {
+      fillColor = getComputedStyle(use).color;
+    }
+    if (!fillColor || fillColor === 'rgb(0, 0, 0)') {
+      fillColor = getComputedStyle(use.parentElement).color;
+    }
+
+    var keepAttrs = ['x','y','width','height','transform','opacity','role','aria-label'];
+    for (var a = 0; a < use.attributes.length; a++) {
+      var attr = use.attributes[a];
+      if (attr.name === 'href' || attr.name === 'xlink:href' || attr.name === 'fill') continue;
+      if (keepAttrs.indexOf(attr.name) !== -1) {
+        group.setAttribute(attr.name, attr.value);
+      }
+    }
+
+    var children = Array.prototype.slice.call(symbol.children);
+    for (var c = 0; c < children.length; c++) {
+      var clone = children[c].cloneNode(true);
+      if (fillColor) {
+        if (clone.getAttribute('fill') === 'currentColor') {
+          clone.setAttribute('fill', fillColor);
+        }
+        var curColorEls = clone.querySelectorAll ? clone.querySelectorAll('[fill="currentColor"]') : [];
+        for (var cc = 0; cc < curColorEls.length; cc++) {
+          curColorEls[cc].setAttribute('fill', fillColor);
+        }
+      }
+      group.appendChild(clone);
+    }
+
+    use.parentNode.replaceChild(group, use);
+  });
+
+  container.querySelectorAll('svg').forEach(function(svg) {
+    svg.style.setProperty('filter', 'none', 'important');
+  });
+}
+
+document.getElementById('downloadPdfBtn').addEventListener('click', async function(){
+  var btn = this;
+  if (typeof html2canvas === 'undefined' || !window.jspdf) {
+    alert('PDF libraries still loading. Please wait a moment and try again.');
+    return;
+  }
+  btn.disabled = true;
+  var originalHTML = btn.innerHTML;
+  btn.textContent = 'Generating…';
+  try {
+    var poster = document.querySelector('.poster');
+    var jsPDF = window.jspdf.jsPDF;
+    var hiddenContainer = document.createElement('div');
+    hiddenContainer.style.cssText = 'position:absolute;left:-9999px;top:0;width:794px;';
+    document.body.appendChild(hiddenContainer);
+
+    var clone = poster.cloneNode(true);
+    hiddenContainer.appendChild(clone);
+    clone.style.margin = '0';
+    clone.style.boxShadow = 'none';
+    resolveUseElements(clone);
+
+    var canvas;
+    try {
+      canvas = await html2canvas(clone, {
+        scale: 2, useCORS: true, backgroundColor: '#0B0822', logging: false,
+        allowTaint: true, width: 794, height: 1123
+      });
+    } catch (e) {
+      console.warn('Retrying at lower scale...', e);
+      canvas = await html2canvas(clone, {
+        scale: 1, useCORS: true, backgroundColor: '#0B0822', logging: false,
+        allowTaint: true, width: 794, height: 1123
+      });
+    }
+
+    document.body.removeChild(hiddenContainer);
+
+    var imgWidth = 210;
+    var imgHeight = (canvas.height * imgWidth) / canvas.width;
+    var pdf = new jsPDF({ unit: 'mm', format: [imgWidth, imgHeight], orientation: 'portrait' });
+    var imgData = canvas.toDataURL('image/jpeg', 0.92);
+    pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+    pdf.save('Eduflick_AI_Leadership_Program_Poster.pdf');
+  } catch (err) {
+    console.error('PDF generation failed:', err);
+    alert('PDF generation failed: ' + err.message);
+  }
+  btn.disabled = false;
+  btn.innerHTML = originalHTML;
+});
+</script>
+</body>
+</html>
