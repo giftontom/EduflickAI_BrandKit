@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_slide.css">
+<title>Eduflick · Quote slide</title></head>
+<body><div class="stage">
+  <div class="glow-tr" style="background:radial-gradient(680px 460px at 50% 0%, rgba(91,91,240,0.16), transparent 64%)"></div>
+  <div style="position:absolute;left:50%;top:90px;transform:translateX(-50%)">
+    <svg viewBox="0 0 180 180" width="44" height="44"><path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#5B5BF0"/></svg>
+  </div>
+  <div style="position:absolute;left:120px;right:120px;top:50%;transform:translateY(-50%);text-align:center">
+    <p style="font-family:var(--font-serif);font-style:italic;font-size:58px;line-height:1.18;color:var(--paper)">
+      "the moment a concept lands<br>is the moment <span style="color:var(--i-300)">the next lesson begins.</span>"</p>
+    <div style="font-family:var(--font-mono);font-size:13px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);margin-top:40px">eduflick · brand principle 03</div>
+  </div>
+  <div class="foot"><span class="wm" style="font-size:14px;color:var(--paper)">eduflick<i style="color:#8B97FF">AI</i></span><span>brevity is respect</span></div>
+</div>
+<script>
+function fit(){var s=document.querySelector('.stage');var k=Math.min(window.innerWidth/1280,window.innerHeight/720);s.style.transform='scale('+k+')';}
+window.addEventListener('resize',fit);window.addEventListener('load',fit);document.addEventListener('DOMContentLoaded',fit);[60,200,500,1000].forEach(function(t){setTimeout(fit,t)});fit();
+</script>
+</body></html>

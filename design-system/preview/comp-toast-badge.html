@@ -1,0 +1,26 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .lab{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+  .blk{margin-bottom:18px}
+  .blk:last-child{margin-bottom:0}
+  .toast{display:inline-flex;align-items:center;gap:11px;background:var(--ink-2);border:1px solid var(--line-2);border-radius:var(--radius-md);padding:12px 17px;font-family:var(--font-display);font-weight:600;font-size:13px;color:var(--paper)}
+  .toast .dot{width:9px;height:9px;border-radius:50%;background:var(--success);box-shadow:0 0 10px rgba(74,222,128,0.6)}
+  .toast .mark{width:18px;height:18px;color:var(--i-300)}
+  .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .badge{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:5px 10px;border-radius:4px;font-weight:500}
+  .b-new{background:rgba(91,91,240,0.16);color:var(--i-300);border:1px solid rgba(91,91,240,0.4)}
+  .b-warn{background:rgba(255,110,90,0.1);color:var(--warn);border:1px solid rgba(255,110,90,0.35)}
+  .b-ok{background:rgba(74,222,128,0.1);color:var(--success);border:1px solid rgba(74,222,128,0.3)}
+  .b-mono{background:var(--ink-3);color:var(--paper-dim);border:1px solid var(--line-2)}
+</style></head>
+<body><div class="card-pad">
+  <div class="blk"><div class="lab">toast</div>
+    <div class="toast"><span class="dot"></span>flick completed · +1 streak</div>
+  </div>
+  <div class="blk"><div class="lab">badges</div>
+    <div class="row"><span class="badge b-new">new</span><span class="badge b-ok">free tier</span><span class="badge b-warn">7 seats left</span><span class="badge b-mono">60s</span></div>
+  </div>
+</div></body></html>

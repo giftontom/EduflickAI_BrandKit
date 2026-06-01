@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .ramp{display:grid;grid-template-columns:repeat(7,1fr);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--line)}
+  .sw{aspect-ratio:1/1.25;padding:11px 10px;display:flex;flex-direction:column;justify-content:space-between;font-family:var(--font-mono);font-size:9px;line-height:1.35;letter-spacing:0.02em}
+  .sw .n{font-weight:500}
+  .sw .h{opacity:0.72;font-size:8.5px}
+  .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+  .head .t{font-family:var(--font-display);font-weight:800;font-size:20px;letter-spacing:-0.025em;text-transform:lowercase}
+  .head .t em{font-family:var(--font-serif);font-style:italic;font-weight:400;color:var(--i-300)}
+  .note{margin-top:13px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.04em;color:var(--paper-dim);line-height:1.6}
+  .note b{color:var(--paper);font-weight:500}
+</style></head>
+<body><div class="card-pad">
+  <div class="head"><div class="t">neutral <em>· supporting</em></div><div class="k">paper + ink · the always-allowed pair</div></div>
+  <div class="ramp">
+    <div class="sw" style="background:#F5F2EA;color:#0A0B10"><span class="n">paper</span><span class="h">#F5F2EA</span></div>
+    <div class="sw" style="background:#ECE7DA;color:#0A0B10"><span class="n">paper-2</span><span class="h">#ECE7DA</span></div>
+    <div class="sw" style="background:#C9C5BA;color:#0A0B10"><span class="n">paper-dim</span><span class="h">#C9C5BA</span></div>
+    <div class="sw" style="background:#7A7F90;color:#F5F2EA"><span class="n">slate 500</span><span class="h">#7A7F90</span></div>
+    <div class="sw" style="background:#2A2D38;color:#F5F2EA"><span class="n">slate 800</span><span class="h">#2A2D38</span></div>
+    <div class="sw" style="background:#11131C;color:#F5F2EA"><span class="n">ink-2</span><span class="h">#11131C</span></div>
+    <div class="sw" style="background:#0A0B10;color:#F5F2EA;border-left:1px solid var(--line)"><span class="n">ink</span><span class="h">#0A0B10</span></div>
+  </div>
+  <div class="note"><b>paper</b> is the default light background — warmer than white. <b>ink</b> is the default dark canvas — cooler than indigo-ink. <b>Rule:</b> indigo + neutral mix freely; never introduce a third hue.</div>
+</div></body></html>

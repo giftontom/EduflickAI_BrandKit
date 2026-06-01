@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .lab{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+  .blk{margin-bottom:18px}
+  .blk:last-child{margin-bottom:0}
+  .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .tag{font-family:var(--font-mono);font-size:10px;letter-spacing:0.1em;text-transform:lowercase;padding:6px 13px;border-radius:999px;border:1px solid var(--line-2);color:var(--paper-dim);background:var(--ink-2)}
+  .tag.active{background:rgba(91,91,240,0.14);border-color:rgba(91,91,240,0.45);color:var(--i-200)}
+  .tag.warn{background:rgba(255,110,90,0.08);border-color:rgba(255,110,90,0.35);color:var(--warn)}
+  .tog{width:46px;height:26px;border-radius:999px;background:var(--ink-3);border:1px solid var(--line-2);position:relative;transition:all var(--dur-base) var(--ease-out)}
+  .tog::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--paper-dim);transition:all var(--dur-base) var(--ease-out)}
+  .tog.on{background:var(--i-500);border-color:var(--i-500)}
+  .tog.on::after{left:23px;background:var(--paper)}
+  .mini{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)}
+</style></head>
+<body><div class="card-pad">
+  <div class="blk"><div class="lab">tags / chips</div><div class="row"><span class="tag">biology</span><span class="tag active">learning</span><span class="tag">physics</span><span class="tag warn">deprecated</span></div></div>
+  <div class="blk"><div class="lab">toggle</div><div class="row" style="gap:18px"><div class="tog on"></div><div class="tog"></div><span class="mini">indigo when on</span></div></div>
+</div></body></html>

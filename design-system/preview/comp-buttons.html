@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .lab{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+  .row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  .row:last-child{margin-bottom:0}
+  .btn{font-family:var(--font-display);font-weight:700;font-size:14px;letter-spacing:-0.01em;padding:12px 22px;border-radius:var(--radius-md);border:1px solid transparent;cursor:pointer;transition:all var(--dur-base) var(--ease-out);display:inline-flex;align-items:center;gap:8px}
+  .primary{background:var(--i-500);color:var(--paper)}
+  .primary:hover{background:var(--i-400);transform:translateY(-2px);box-shadow:var(--shadow-brand)}
+  .secondary{background:rgba(245,242,234,0.06);color:var(--paper);border-color:var(--line-2)}
+  .secondary:hover{background:rgba(245,242,234,0.1);border-color:var(--i-400)}
+  .ghost{background:transparent;color:var(--i-300)}
+  .ghost:hover{background:rgba(91,91,240,0.1)}
+  .sm{padding:8px 14px;font-size:12px}
+  .pill{border-radius:999px}
+  .hint{font-family:var(--font-mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted)}
+  svg{width:16px;height:16px}
+</style><script src="_sprite.js"></script>
+</head>
+<body><div class="card-pad">
+  <div class="lab">buttons · hover lifts + indigo glow</div>
+  <div class="row">
+    <button class="btn primary">start learning <svg><use href="#ic-arrow-right"/></svg></button>
+    <button class="btn secondary">save</button>
+    <button class="btn ghost">skip</button>
+  </div>
+  <div class="row">
+    <button class="btn primary pill">try free</button>
+    <button class="btn primary sm">sm</button>
+    <button class="btn secondary sm">sm</button>
+    <span class="hint">manrope 700 · radius 10 · pill 999</span>
+  </div>
+</div></body></html>

@@ -1,0 +1,21 @@
+/* Shared framing for Design System preview cards.
+   Each card imports ../colors_and_type.css first, then this. */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  font-family:var(--font-display);
+  background:var(--ink);
+  color:var(--fg1);
+  -webkit-font-smoothing:antialiased;
+}
+.card-pad{padding:26px 28px;}
+.card-pad-lg{padding:30px 32px;}
+/* paper-surfaced cards */
+body.paper{background:var(--paper);color:var(--ink);}
+/* tiny mono label used to title sub-groups inside a card */
+.k{
+  font-family:var(--font-mono);font-weight:500;font-size:10px;
+  letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);
+}
+.row{display:flex;align-items:center;gap:14px;}
+.col{display:flex;flex-direction:column;}
+svg{display:block;}

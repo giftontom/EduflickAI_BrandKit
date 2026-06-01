@@ -1,0 +1,26 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .lab{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+  .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  .stage{aspect-ratio:1;border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;border:1px solid var(--line)}
+  .stage svg{width:46%;height:46%}
+  .s-ink{background:var(--ink)}
+  .s-indigoink{background:var(--i-ink)}
+  .s-indigo{background:var(--i-500)}
+  .s-paper{background:var(--paper)}
+  .s-outline{background:transparent;border:1px dashed var(--line-2)}
+  .cap{font-family:var(--font-mono);font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:9px}
+</style></head>
+<body><div class="card-pad">
+  <div class="lab">the mark · one shape, one notch · the flick</div>
+  <div class="grid">
+    <div><div class="stage s-indigoink"><svg viewBox="0 0 180 180"><path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#F5F2EA"/></svg></div><div class="cap">paper</div></div>
+    <div><div class="stage s-ink"><svg viewBox="0 0 180 180"><path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#5B5BF0"/></svg></div><div class="cap">indigo</div></div>
+    <div><div class="stage s-indigo"><svg viewBox="0 0 180 180"><path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#F5F2EA"/></svg></div><div class="cap">on brand</div></div>
+    <div><div class="stage s-paper"><svg viewBox="0 0 180 180"><path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#0B0822"/></svg></div><div class="cap">ink</div></div>
+    <div><div class="stage s-outline"><svg viewBox="0 0 180 180"><path d="M 15 15 L 165 15 L 165 82 L 122 112.5 L 165 143 L 165 165 L 15 165 Z" fill="none" stroke="#8B97FF" stroke-width="6" stroke-linejoin="round"/></svg></div><div class="cap">outline</div></div>
+  </div>
+</div></body></html>

@@ -1,0 +1,258 @@
+/* ============================================================
+   EDUFLICK AI · DESIGN SYSTEM · FOUNDATIONS
+   colors_and_type.css
+   Source of truth: Eduflick_Brand_Book_v4.html (Tomatrix Technologies)
+   Fonts: Manrope · Instrument Serif · JetBrains Mono (all Google Fonts)
+   Load fonts with:
+   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+   ============================================================ */
+
+:root{
+  /* ---- INDIGO · PRIMARY (the only brand hue) ---- */
+  --i-50:#EEF0FF;
+  --i-100:#DCE0FF;
+  --i-200:#B7C0FF;
+  --i-300:#8B97FF;   /* the "AI" accent */
+  --i-400:#6E78F5;
+  --i-500:#5B5BF0;   /* PRIMARY — buttons, mark, signal */
+  --i-600:#4B3FE0;
+  --i-700:#3A2BB8;
+  --i-800:#261A82;
+  --i-900:#150D52;
+  --i-ink:#0B0822;   /* indigo-ink — hero canvases, deep gradient stop */
+
+  /* ---- NEUTRAL · paper (warm light) + ink (cool dark) ---- */
+  --paper:#F5F2EA;     /* default light bg — warmer than white */
+  --paper-2:#ECE7DA;
+  --paper-dim:#C9C5BA;
+  --slate-500:#7A7F90; /* muted */
+  --slate-800:#2A2D38;
+  --ink:#0A0B10;       /* default dark bg — cooler than indigo-ink */
+  --ink-2:#11131C;     /* card surface on dark */
+  --ink-3:#181B28;     /* raised surface on dark */
+  --muted:#7A7F90;
+
+  /* ---- LINES / HAIRLINES (on dark) ---- */
+  --line:rgba(245,242,234,0.08);
+  --line-2:rgba(245,242,234,0.16);
+  /* ---- LINES on paper ---- */
+  --line-ink:rgba(10,11,16,0.08);
+  --line-ink-2:rgba(10,11,16,0.14);
+
+  /* ---- SEMANTIC ---- */
+  --warn:#FF6E5A;      /* coral — CTAs, scarcity flags, errors. USE SPARINGLY. */
+  --success:#4ADE80;
+
+  /* ---- SEMANTIC SURFACE / FG ROLES (dark theme default) ---- */
+  --bg:var(--ink);
+  --bg-card:var(--ink-2);
+  --bg-raised:var(--ink-3);
+  --fg1:var(--paper);          /* primary text */
+  --fg2:var(--paper-dim);      /* body / secondary text */
+  --fg3:var(--muted);          /* meta / tertiary text */
+  --accent:var(--i-500);
+  --accent-soft:var(--i-300);
+  --hairline:var(--line);
+  --hairline-strong:var(--line-2);
+
+  /* ---- TYPE FAMILIES ---- */
+  --font-display:'Manrope',sans-serif;   /* display + headings + UI + body */
+  --font-serif:'Instrument Serif',serif; /* editorial italic accents only */
+  --font-mono:'JetBrains Mono',monospace;/* labels, meta, code, numbers */
+
+  /* ---- TYPE SCALE (px) ---- */
+  --t-display:88px;
+  --t-h1:64px;
+  --t-h2:40px;
+  --t-h3:28px;
+  --t-h4:22px;
+  --t-lead:21px;   /* serif editorial lead */
+  --t-body:16px;
+  --t-body-lg:18px;
+  --t-small:14px;
+  --t-meta:11px;   /* mono labels */
+  --t-micro:10px;
+
+  /* ---- WEIGHTS ---- */
+  --w-display:900;
+  --w-heading:800;
+  --w-semibold:600;
+  --w-body:500;
+  --w-regular:400;
+
+  /* ---- TRACKING ---- */
+  --track-display:-0.05em;
+  --track-heading:-0.03em;
+  --track-body:-0.005em;
+  --track-mono:0.06em;
+  --track-mono-up:0.22em;  /* uppercase mono labels */
+
+  /* ---- SPACING SCALE ---- */
+  --space-1:4px;  --space-2:8px;  --space-3:12px; --space-4:16px;
+  --space-5:20px; --space-6:24px; --space-8:32px; --space-10:40px;
+  --space-12:48px; --space-16:64px; --space-20:80px; --space-24:96px;
+
+  /* ---- RADIUS ---- */
+  --radius-sm:6px; --radius-md:10px; --radius-lg:14px; --radius-xl:18px;
+  --radius-2xl:22px; --radius-3xl:28px; --radius-pill:999px;
+
+  /* ---- SHADOWS (tuned for dark surfaces) ---- */
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg:0 8px 32px rgba(0,0,0,0.5);
+  --shadow-xl:0 16px 48px rgba(0,0,0,0.6);
+  --shadow-brand:0 8px 32px -8px rgba(91,91,240,0.35); /* indigo glow lift */
+
+  /* ---- MOTION ---- */
+  --ease-out:cubic-bezier(0.16,1,0.3,1);
+  --ease-in-out:cubic-bezier(0.7,0,0.2,1);
+  --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
+  --dur-fast:150ms; --dur-base:300ms; --dur-slow:600ms;
+}
+
+/* ============================================================
+   LIGHT THEME — paper canvas. Add class="theme-light" on a wrapper.
+   ============================================================ */
+.theme-light{
+  --bg:var(--paper);
+  --bg-card:#FFFFFF;
+  --bg-raised:var(--paper-2);
+  --fg1:var(--ink);
+  --fg2:#3A3D47;
+  --fg3:var(--slate-500);
+  --hairline:var(--line-ink);
+  --hairline-strong:var(--line-ink-2);
+  --accent-soft:var(--i-500);
+  color:var(--fg1);
+  background:var(--bg);
+}
+
+/* ============================================================
+   SEMANTIC TEXT STYLES
+   Lowercase display headings are a brand signature; serif italic
+   accent words are wrapped in <em>.
+   ============================================================ */
+.display{
+  font-family:var(--font-display);
+  font-weight:var(--w-display);
+  font-size:var(--t-display);
+  letter-spacing:var(--track-display);
+  line-height:0.9;
+  text-transform:lowercase;
+  color:var(--fg1);
+}
+.display em,
+h1 em,h2 em,h3 em,h4 em,.editorial-accent{
+  font-family:var(--font-serif);
+  font-weight:400;
+  font-style:italic;
+  letter-spacing:-0.02em;
+  color:var(--accent-soft);
+}
+
+h1,.h1{
+  font-family:var(--font-display);
+  font-weight:var(--w-display);
+  font-size:var(--t-h1);
+  letter-spacing:-0.055em;
+  line-height:0.9;
+  text-transform:lowercase;
+  color:var(--fg1);
+  margin:0;
+}
+h2,.h2{
+  font-family:var(--font-display);
+  font-weight:var(--w-heading);
+  font-size:var(--t-h2);
+  letter-spacing:var(--track-heading);
+  line-height:1.05;
+  text-transform:lowercase;
+  color:var(--fg1);
+  margin:0;
+}
+h3,.h3{
+  font-family:var(--font-display);
+  font-weight:var(--w-heading);
+  font-size:var(--t-h3);
+  letter-spacing:-0.025em;
+  line-height:1.1;
+  color:var(--fg1);
+  margin:0;
+}
+h4,.h4{
+  font-family:var(--font-display);
+  font-weight:var(--w-heading);
+  font-size:var(--t-h4);
+  letter-spacing:-0.02em;
+  line-height:1.2;
+  color:var(--fg1);
+  margin:0;
+}
+
+/* Editorial — serif italic, for pull-quotes and leads */
+.editorial,.lead{
+  font-family:var(--font-serif);
+  font-style:italic;
+  font-weight:400;
+  font-size:var(--t-lead);
+  line-height:1.35;
+  color:var(--fg1);
+}
+
+/* Body */
+p,.body{
+  font-family:var(--font-display);
+  font-weight:var(--w-body);
+  font-size:var(--t-body);
+  line-height:1.6;
+  color:var(--fg2);
+  max-width:62ch;
+}
+.body-lg{font-size:var(--t-body-lg);line-height:1.55;}
+.small{font-size:var(--t-small);line-height:1.5;}
+
+/* Mono — labels, meta, code, numbers */
+.mono{
+  font-family:var(--font-mono);
+  font-weight:500;
+  font-size:var(--t-meta);
+  letter-spacing:var(--track-mono);
+  line-height:1.7;
+  color:var(--fg2);
+}
+.mono-up,.eyebrow,.label{
+  font-family:var(--font-mono);
+  font-weight:500;
+  font-size:var(--t-meta);
+  letter-spacing:var(--track-mono-up);
+  text-transform:uppercase;
+  color:var(--fg3);
+}
+.eyebrow{color:var(--accent-soft);}
+code,.code{
+  font-family:var(--font-mono);
+  font-weight:400;
+  font-size:13px;
+  letter-spacing:0.02em;
+  color:var(--accent-soft);
+}
+
+/* ============================================================
+   UTILITY — brand wordmark built in HTML (reliable across renderers)
+   <span class="wordmark">eduflick<i>AI</i></span>
+   ============================================================ */
+.wordmark{
+  font-family:var(--font-display);
+  font-weight:var(--w-heading);
+  letter-spacing:-0.045em;
+  line-height:1;
+  color:var(--fg1);
+  font-style:normal;
+  display:inline-flex;
+  align-items:baseline;
+}
+.wordmark i{
+  font-style:normal;
+  color:var(--accent-soft);
+  margin-left:0.16em;
+}

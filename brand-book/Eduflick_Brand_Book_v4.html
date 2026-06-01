@@ -333,80 +333,37 @@ section{margin-top:88px}
   pointer-events:none;
 }
 /* ============================================================
-   CINEMATIC HERO · 4.5s · 7-beat narrative
-   card → wedge → cut → ripple → wordmark → settle → fade
+   CINEMATIC HERO · "the notch arrives" · 4s · 3-beat narrative
+   square in · notch carves · wordmark in · hold · fade
    ============================================================ */
 .hero-anim-stage{
   position:relative;z-index:1;
   width:240px;height:240px;
   margin:auto;
 }
+
+/* Beat 1+2 · square fades in, holds, then the notch carves */
 .hero-card-master{
   position:absolute;
   top:24px;left:48px;
   width:144px;height:144px;
   background:#5B5BF0;
   border-radius:3px;
-  animation:hero-card-cycle 4500ms cubic-bezier(0.7,0,0.2,1) infinite;
+  opacity:0;
+  transform:scale(0.92);
   clip-path:polygon(0% 0%,100% 0%,100% 100%,0% 100%);
+  animation:hero-card-in 4000ms cubic-bezier(0.7,0,0.2,1) infinite;
 }
-@keyframes hero-card-cycle{
-  0%{opacity:0;transform:scale(0.85);clip-path:polygon(0% 0%,100% 0%,100% 100%,0% 100%);}
-  10%{opacity:1;transform:scale(1);}
-  52%{opacity:1;transform:scale(1);clip-path:polygon(0% 0%,100% 0%,100% 100%,0% 100%);}
-  56%{transform:scale(1.05);clip-path:polygon(0% 0%,100% 0%,100% 45%,67% 62.5%,100% 79%,100% 100%,0% 100%);}
-  62%{transform:scale(1);}
-  94%{opacity:1;transform:scale(1);clip-path:polygon(0% 0%,100% 0%,100% 45%,67% 62.5%,100% 79%,100% 100%,0% 100%);}
-  100%{opacity:0;transform:scale(0.85);}
+@keyframes hero-card-in{
+  0%{opacity:0;transform:scale(0.92);clip-path:polygon(0% 0%,100% 0%,100% 100%,0% 100%);}
+  12%{opacity:1;transform:scale(1);clip-path:polygon(0% 0%,100% 0%,100% 100%,0% 100%);}
+  22%{opacity:1;transform:scale(1);clip-path:polygon(0% 0%,100% 0%,100% 100%,0% 100%);}
+  38%{opacity:1;transform:scale(1);clip-path:polygon(0% 0%,100% 0%,100% 45%,67% 62.5%,100% 79%,100% 100%,0% 100%);}
+  85%{opacity:1;transform:scale(1);clip-path:polygon(0% 0%,100% 0%,100% 45%,67% 62.5%,100% 79%,100% 100%,0% 100%);}
+  100%{opacity:0;transform:scale(1);clip-path:polygon(0% 0%,100% 0%,100% 45%,67% 62.5%,100% 79%,100% 100%,0% 100%);}
 }
-.hero-wedge-master{
-  position:absolute;
-  width:36px;height:42px;
-  background:#F5F2EA;
-  clip-path:polygon(0% 0%,100% 50%,0% 100%);
-  top:75px;
-  left:-50px;
-  animation:hero-wedge-cycle 4500ms cubic-bezier(0.7,0,0.2,1) infinite;
-}
-@keyframes hero-wedge-cycle{
-  0%,18%{left:-50px;opacity:0;transform:scale(0.7);}
-  24%{left:-50px;opacity:1;transform:scale(1);}
-  36%{left:46px;opacity:1;transform:scale(1);}
-  52%{left:174px;opacity:1;transform:scale(1.1);}
-  56%{left:186px;opacity:0.4;transform:scale(0.4);}
-  60%,100%{left:186px;opacity:0;transform:scale(0);}
-}
-.hero-trace{
-  position:absolute;
-  left:0;right:0;
-  top:96px;height:1.5px;
-  background:linear-gradient(90deg,transparent 0%,rgba(245,242,234,0.16) 30%,rgba(245,242,234,0.4) 50%,rgba(245,242,234,0.16) 70%,transparent 100%);
-  animation:hero-trace 4500ms cubic-bezier(0.7,0,0.2,1) infinite;
-  opacity:0;
-}
-@keyframes hero-trace{
-  0%,30%{opacity:0;transform:scaleX(0);}
-  42%{opacity:0.85;transform:scaleX(1);}
-  54%{opacity:0;transform:scaleX(1);}
-  100%{opacity:0;}
-}
-.hero-ripple{
-  position:absolute;
-  top:24px;left:48px;
-  width:144px;height:144px;
-  border:1.5px solid #B7C0FF;
-  border-radius:6px;
-  opacity:0;
-  transform:scale(0.96);
-  animation:hero-ripple 4500ms cubic-bezier(0.16,1,0.3,1) infinite;
-  pointer-events:none;
-}
-@keyframes hero-ripple{
-  0%,54%{opacity:0;transform:scale(0.96);}
-  56%{opacity:0.85;transform:scale(1);}
-  68%{opacity:0;transform:scale(1.34);}
-  100%{opacity:0;}
-}
+
+/* Beat 3 · wordmark fades in beneath */
 .hero-wordmark{
   position:absolute;
   bottom:14px;left:0;right:0;
@@ -416,29 +373,16 @@ section{margin-top:88px}
   font-size:24px;
   letter-spacing:-0.04em;
   pointer-events:none;
+  opacity:0;
+  animation:hero-wordmark-in 4000ms cubic-bezier(0.7,0,0.2,1) infinite;
 }
-.hero-wordmark .wm-edu{
-  color:#F5F2EA;
-  text-transform:lowercase;
-  clip-path:inset(0 100% 0 0);
-  animation:hero-wm-edu 4500ms cubic-bezier(0.7,0,0.2,1) infinite;
-}
-.hero-wordmark .wm-ai{
-  color:#B7C0FF;
-  clip-path:inset(0 100% 0 0);
-  animation:hero-wm-ai 4500ms cubic-bezier(0.7,0,0.2,1) infinite;
-}
-@keyframes hero-wm-edu{
-  0%,66%{clip-path:inset(0 100% 0 0);opacity:1}
-  76%{clip-path:inset(0 0 0 0);opacity:1}
-  94%{clip-path:inset(0 0 0 0);opacity:1}
-  100%{clip-path:inset(0 0 0 0);opacity:0}
-}
-@keyframes hero-wm-ai{
-  0%,74%{clip-path:inset(0 100% 0 0);opacity:1}
-  82%{clip-path:inset(0 0 0 0);opacity:1}
-  94%{clip-path:inset(0 0 0 0);opacity:1}
-  100%{clip-path:inset(0 0 0 0);opacity:0}
+.hero-wordmark .wm-edu{color:#F5F2EA;text-transform:lowercase}
+.hero-wordmark .wm-ai{color:#B7C0FF}
+@keyframes hero-wordmark-in{
+  0%,38%{opacity:0}
+  52%{opacity:1}
+  85%{opacity:1}
+  100%{opacity:0}
 }
 
 .hero-anim-meta{position:relative;z-index:1}
@@ -1106,7 +1050,10 @@ section{margin-top:88px}
    ============================================================ */
 .mark-companions{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:24px}
 .mc{background:var(--ink-2);padding:30px 18px 22px;display:flex;flex-direction:column;align-items:center;gap:14px}
-.mc .mc-stage{width:92px;height:92px;display:flex;align-items:center;justify-content:center;color:var(--i-300);background:var(--ink);border-radius:10px;border:1px solid var(--line)}
+.mc .mc-stage{width:92px;height:92px;display:flex;align-items:center;justify-content:center;color:var(--i-300);background:var(--ink);border-radius:10px;border:1px solid var(--line);transition:transform 220ms cubic-bezier(0.7,0,0.2,1),box-shadow 220ms cubic-bezier(0.7,0,0.2,1),border-color 220ms cubic-bezier(0.7,0,0.2,1)}
+.mc .mc-stage svg{transition:filter 220ms cubic-bezier(0.7,0,0.2,1)}
+.mc:hover .mc-stage{transform:translateY(-2px) scale(1.04);box-shadow:0 8px 32px -8px rgba(91,91,240,0.55),0 0 0 1px rgba(139,151,255,0.22);border-color:rgba(139,151,255,0.32)}
+.mc:hover .mc-stage svg{filter:drop-shadow(0 0 10px rgba(139,151,255,0.55))}
 .mc .mc-name{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--paper);letter-spacing:0.22em;text-transform:uppercase;font-weight:500}
 .mc .mc-desc{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--paper-dim);letter-spacing:0.04em;line-height:1.5;text-align:center;max-width:18ch}
 @media (max-width:1100px){.mark-companions{grid-template-columns:repeat(2,1fr)}}
@@ -1224,57 +1171,115 @@ section{margin-top:88px}
       </g>
     </symbol>
 
-    <!-- ============= HIGH-DEFINITION MARK COMPANIONS · 96 viewBox · UI STATE VOCABULARY ============= -->
+    <!-- ============= HIGH-DEFINITION MARK COMPANIONS · 96 viewBox · UI STATE VOCABULARY =============
+         each icon is built from the mark's own DNA — no foreign shapes pasted on top.
+         the mark itself transforms to express the state. -->
+
+    <!-- 01 · solid · the mark as light source -->
     <symbol id="ic-mark-solid" viewBox="0 0 96 96">
       <title>Eduflick mark · solid</title>
-      <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor"/>
+      <defs>
+        <radialGradient id="gs-body" cx="0.72" cy="0.5" r="0.9">
+          <stop offset="0%" stop-color="#7C86FF"/>
+          <stop offset="50%" stop-color="#5B5BF0"/>
+          <stop offset="100%" stop-color="#3A2BB8"/>
+        </radialGradient>
+      </defs>
+      <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="url(#gs-body)"/>
+      <path d="M10 10.75 L86 10.75" stroke="#DCE0FF" stroke-width="1.5" stroke-opacity="0.7" stroke-linecap="round"/>
+      <path d="M10.75 10 L10.75 86" stroke="#DCE0FF" stroke-width="1.5" stroke-opacity="0.4" stroke-linecap="round"/>
+      <circle cx="63" cy="59" r="2.6" fill="#EEF0FF" opacity="0.9"/>
     </symbol>
+
+    <!-- 02 · outline · recursive mark, feeds of feeds -->
     <symbol id="ic-mark-outline" viewBox="0 0 96 96">
       <title>Eduflick mark · outline</title>
-      <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <g transform="translate(15.5 38) scale(0.42)">
+        <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor"/>
+      </g>
     </symbol>
+
+    <!-- 03 · done · the mark seals itself -->
     <symbol id="ic-mark-done" viewBox="0 0 96 96">
       <title>Eduflick mark · done</title>
-      <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor"/>
-      <path d="M22 50 L36 64 L60 36" fill="none" stroke="#F5F2EA" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs>
+        <linearGradient id="gd-body" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#5B5BF0"/>
+          <stop offset="100%" stop-color="#3A2BB8"/>
+        </linearGradient>
+        <radialGradient id="gd-glow" cx="0.42" cy="0.62" r="0.5">
+          <stop offset="0%" stop-color="#DCE0FF" stop-opacity="0.55"/>
+          <stop offset="100%" stop-color="#DCE0FF" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="url(#gd-body)"/>
+      <ellipse cx="40" cy="60" rx="32" ry="20" fill="url(#gd-glow)"/>
+      <path d="M20 54 L38 70 L72 32" fill="none" stroke="#F5F2EA" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
+
+    <!-- 04 · paused · time arrested inside the notch -->
     <symbol id="ic-mark-pause" viewBox="0 0 96 96">
       <title>Eduflick mark · paused</title>
       <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor"/>
-      <rect x="26" y="32" width="9" height="32" rx="1.5" fill="#F5F2EA"/>
-      <rect x="42" y="32" width="9" height="32" rx="1.5" fill="#F5F2EA"/>
+      <rect x="69" y="44" width="4.5" height="30" rx="1.2" fill="currentColor" opacity="0.55"/>
+      <rect x="78" y="44" width="4.5" height="30" rx="1.2" fill="currentColor" opacity="0.55"/>
     </symbol>
+
+    <!-- 05 · queue · infinite-feed depth, 5 marks receding -->
     <symbol id="ic-mark-queue" viewBox="0 0 96 96">
       <title>Eduflick mark · queued</title>
-      <g transform="matrix(0.82 0 0 0.82 16 -10)">
-        <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor" opacity="0.3"/>
+      <g opacity="0.16" transform="translate(27.84 -2.16) scale(0.42)">
+        <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor"/>
       </g>
-      <g transform="matrix(0.82 0 0 0.82 8 -2)">
-        <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor" opacity="0.55"/>
+      <g opacity="0.3" transform="translate(21.12 1.12) scale(0.56)">
+        <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor"/>
       </g>
-      <g transform="matrix(0.82 0 0 0.82 0 6)">
+      <g opacity="0.5" transform="translate(14.4 4.4) scale(0.7)">
+        <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor"/>
+      </g>
+      <g opacity="0.72" transform="translate(7.2 7.2) scale(0.85)">
+        <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor"/>
+      </g>
+      <g transform="translate(0 8)">
         <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor"/>
       </g>
     </symbol>
+
+    <!-- 06 · streak · a flame built from wedge geometry rising from the mark -->
     <symbol id="ic-mark-streak" viewBox="0 0 96 96">
       <title>Eduflick mark · streak</title>
-      <path d="M33 20 L48 0 L63 20 L52 17 L48 22 L44 17 Z" fill="currentColor"/>
-      <g transform="matrix(0.92 0 0 0.92 4 14)">
+      <path d="M30 36 L48 0 L66 36 L56 32 L48 36 L40 32 Z" fill="#5B5BF0"/>
+      <path d="M38 32 L48 8 L58 32 L52 28 L48 32 L44 28 Z" fill="#8B97FF"/>
+      <path d="M44 26 L48 14 L52 26 L50 24 L48 26 L46 24 Z" fill="#DCE0FF"/>
+      <g transform="translate(4 16) scale(0.88)">
         <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor"/>
       </g>
     </symbol>
+
+    <!-- 07 · share · the mark launches a fragment from its notch -->
     <symbol id="ic-mark-share" viewBox="0 0 96 96">
       <title>Eduflick mark · share</title>
-      <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor"/>
-      <line x1="63" y1="59" x2="92" y2="59" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-      <path d="M83 50 L93 59 L83 68" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <g transform="translate(-2 8) scale(0.82)">
+        <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor"/>
+      </g>
+      <circle cx="74" cy="44" r="1.8" fill="currentColor" opacity="0.35"/>
+      <circle cx="80" cy="32" r="2.2" fill="currentColor" opacity="0.55"/>
+      <circle cx="84" cy="22" r="2.5" fill="currentColor" opacity="0.78"/>
+      <path d="M76 4 L94 14 L76 22 Z" fill="currentColor"/>
     </symbol>
+
+    <!-- 08 · loading · orbital wedges assemble around the mark (SMIL rotation) -->
     <symbol id="ic-mark-loading" viewBox="0 0 96 96">
       <title>Eduflick mark · loading</title>
-      <circle cx="48" cy="48" r="45" fill="none" stroke="currentColor" stroke-width="2.5" stroke-opacity="0.22"/>
-      <path d="M48 3 A 45 45 0 0 1 93 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-      <g transform="matrix(0.72 0 0 0.72 13 13)">
+      <g transform="translate(13 13) scale(0.72)">
         <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="currentColor"/>
+      </g>
+      <g>
+        <path d="M48 4 L55 14 L41 14 Z" fill="#5B5BF0"/>
+        <path d="M86 67 L76 79 L82 82 Z" fill="#8B97FF"/>
+        <path d="M10 67 L20 79 L14 82 Z" fill="#B7C0FF"/>
+        <animateTransform attributeName="transform" type="rotate" from="0 48 48" to="360 48 48" dur="2.4s" repeatCount="indefinite"/>
       </g>
     </symbol>
   </defs>
@@ -1769,26 +1774,19 @@ section{margin-top:88px}
 <section class="section" id="ch04">
   <div class="section-head"><h2>04 · <em>motion.</em></h2><div class="rule"></div><div class="id">logo system · interaction · loading · principles</div></div>
 
-  <!-- HERO ANIMATION SHOWCASE -->
+  <!-- HERO ANIMATION SHOWCASE · "the notch arrives" · 3 beats · 4000ms loop -->
   <div class="hero-anim-shell">
     <div class="hero-anim-stage">
-      <!-- Beat 1: the card materialises -->
       <div class="hero-card-master"></div>
-      <!-- Beat 2-3: the trace + the travelling wedge -->
-      <div class="hero-trace"></div>
-      <div class="hero-wedge-master"></div>
-      <!-- Beat 4: ripple on impact, the moment the notch is carved -->
-      <div class="hero-ripple"></div>
-      <!-- Beat 5: wordmark types in beneath the mark -->
       <div class="hero-wordmark"><span class="wm-edu">eduflick</span><span class="wm-ai">AI</span></div>
     </div>
     <div class="hero-anim-meta">
       <div class="hero-tag">primary logo animation · v4</div>
-      <h3 class="hero-h">the play <em>cuts the card.</em></h3>
-      <p class="hero-p">A square appears. A play wedge enters from the left, crosses the card, and meets its right edge. The notch carves itself in real time. A ripple confirms the moment. <b>The wordmark types in beneath.</b></p>
+      <h3 class="hero-h">the notch <em>arrives.</em></h3>
+      <p class="hero-p">A solid square appears. It holds for a beat. The notch carves itself out of the right edge in one smooth motion. <b>The wordmark fades in beneath.</b></p>
       <div class="hero-specs">
-        <div><b>duration</b>4,500ms loop</div>
-        <div><b>beats</b>card · wedge · cut · ripple · wordmark</div>
+        <div><b>duration</b>4,000ms loop</div>
+        <div><b>beats</b>square · carve · wordmark</div>
         <div><b>use</b>splash · onboarding · brand films</div>
       </div>
     </div>

@@ -1,0 +1,20 @@
+/* Eduflick AI · slide scaffold — 1280×720 fixed canvas, scales to fit viewport */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#07080C;font-family:var(--font-display)}
+body{display:flex;align-items:center;justify-content:center;overflow:hidden}
+.stage{
+  width:1280px;height:720px;position:relative;overflow:hidden;flex-shrink:0;
+  transform-origin:center;background:var(--ink);color:var(--paper);
+}
+/* texture helpers */
+.grid-tex{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(245,242,234,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(245,242,234,0.04) 1px,transparent 1px);
+  background-size:48px 48px}
+.glow-tr{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(700px 460px at 82% 8%, rgba(91,91,240,0.22), transparent 62%)}
+.eyebrow{font-family:var(--font-mono);font-weight:500;font-size:15px;letter-spacing:0.28em;text-transform:uppercase;color:var(--i-300)}
+.serif{font-family:var(--font-serif);font-style:italic;font-weight:400;color:var(--i-300)}
+.foot{position:absolute;left:64px;right:64px;bottom:48px;display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--font-mono);font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted)}
+.wm{font-family:var(--font-display);font-weight:800;letter-spacing:-0.045em;display:inline-flex;align-items:baseline}
+.wm i{font-style:normal;margin-left:0.16em}

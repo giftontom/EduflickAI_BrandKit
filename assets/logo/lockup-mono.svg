@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 220" role="img" aria-label="Eduflick AI">
+  <title>Eduflick AI — mono editorial lockup (L.04)</title>
+  <desc>Editorial mono lockup. Use when colour competes with content — partner co-brand, print, editorial. AI accent at 50% opacity.</desc>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@800&amp;display=swap');
+      .nm{font-family:'Manrope',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:140px;letter-spacing:-5.32px}
+    </style>
+  </defs>
+  <rect width="1080" height="220" fill="#0A0B10"/>
+  <g transform="translate(40,30)">
+    <path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#F5F2EA"/>
+  </g>
+  <text x="252" y="207" class="nm" fill="#F5F2EA">eduflick<tspan dx="14" fill="#F5F2EA" opacity="0.5">AI</tspan></text>
+</svg>

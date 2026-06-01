@@ -4,81 +4,183 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Eduflick AI · Brand Kit</title>
+<link rel="icon" type="image/svg+xml" href="assets/logo/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --i-ink:#0B0822;--i-500:#5B5BF0;--i-200:#B7C0FF;
+  --i-ink:#0B0822;--i-700:#3A2BB8;--i-500:#5B5BF0;--i-300:#8B97FF;--i-200:#B7C0FF;
   --paper:#F5F2EA;--paper-2:#ECE7DA;--muted:#7A7F90;
+  --line:rgba(245,242,234,0.10);--line-2:rgba(245,242,234,0.18);
 }
+html{scroll-behavior:smooth}
 body{
   font-family:'Manrope',sans-serif;
-  background:radial-gradient(140% 100% at 0% 100%, var(--i-500) 0%, #3A2BB8 38%, var(--i-ink) 100%);
+  background:radial-gradient(140% 100% at 0% 0%, var(--i-500) 0%, var(--i-700) 36%, var(--i-ink) 100%);
+  background-attachment:fixed;
   color:var(--paper);min-height:100vh;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:40px 24px;
+  padding:64px 24px 80px;
+  -webkit-font-smoothing:antialiased;
 }
 body::before{
   content:'';position:fixed;inset:0;
   background-image:radial-gradient(circle,rgba(245,242,234,0.06) 1px,transparent 1px);
   background-size:22px 22px;pointer-events:none;z-index:0;
 }
-main{position:relative;z-index:1;max-width:640px;text-align:center}
+main{position:relative;z-index:1;max-width:880px;margin:0 auto}
+
+/* ─── header ─── */
+header{text-align:center;margin-bottom:56px}
 svg.mark{filter:drop-shadow(0 8px 48px rgba(91,91,240,0.55))}
 h1{
-  font-family:'Manrope',sans-serif;font-weight:900;font-size:48px;
-  letter-spacing:-0.05em;text-transform:lowercase;line-height:1;margin:24px 0 8px;
+  font-family:'Manrope',sans-serif;font-weight:900;font-size:clamp(38px,6vw,56px);
+  letter-spacing:-0.05em;text-transform:lowercase;line-height:0.95;margin:22px 0 10px;
 }
 h1 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-200)}
-p.sub{font-family:'Instrument Serif',serif;font-style:italic;font-size:18px;color:rgba(245,242,234,0.7);margin-bottom:40px}
-.links{display:flex;flex-direction:column;gap:10px;align-items:center}
-.links a{
-  display:block;width:100%;max-width:420px;
-  padding:18px 28px;border-radius:12px;text-decoration:none;
-  font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;
-  letter-spacing:-0.01em;text-align:left;
-  transition:transform .15s,box-shadow .15s;
+p.sub{font-family:'Instrument Serif',serif;font-style:italic;font-size:19px;color:rgba(245,242,234,0.72);max-width:46ch;margin:0 auto}
+
+/* ─── sections ─── */
+section{margin-top:44px}
+.sec-label{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;
+  letter-spacing:0.26em;text-transform:uppercase;color:var(--i-200);
+  display:flex;align-items:center;gap:12px;margin-bottom:16px;
 }
-.links a:hover{transform:translateY(-2px)}
-.links a.primary{
-  background:var(--paper);color:var(--i-ink);
-  box-shadow:0 4px 24px rgba(0,0,0,0.32);
+.sec-label::before{content:'';width:22px;height:1px;background:var(--i-300);flex-shrink:0}
+.sec-label .n{color:rgba(245,242,234,0.4)}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.grid.one{grid-template-columns:1fr}
+
+a.card{
+  display:block;padding:18px 22px;border-radius:14px;text-decoration:none;color:var(--paper);
+  background:rgba(245,242,234,0.06);border:1px solid var(--line);
+  transition:transform .15s ease,box-shadow .15s ease,background .15s ease,border-color .15s ease;
 }
-.links a.secondary{
-  background:rgba(245,242,234,0.08);
-  border:1px solid rgba(245,242,234,0.15);
-  color:var(--paper);
+a.card:hover{
+  transform:translateY(-2px);background:rgba(245,242,234,0.10);
+  border-color:var(--line-2);box-shadow:0 10px 32px -10px rgba(0,0,0,0.5);
 }
-.links a .lbl{font-size:15px;display:block;margin-bottom:2px}
-.links a .lbl em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--i-200);font-weight:400}
-.links a .meta{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(245,242,234,0.45);letter-spacing:0.14em;text-transform:uppercase}
+a.card.primary{
+  background:var(--paper);color:var(--i-ink);border-color:transparent;
+  box-shadow:0 4px 24px rgba(0,0,0,0.30);
+}
+a.card.primary:hover{box-shadow:0 12px 36px -8px rgba(0,0,0,0.45)}
+a.card .lbl{font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;letter-spacing:-0.02em;display:block;margin-bottom:4px;text-transform:lowercase}
+a.card .lbl em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-300);text-transform:none}
+a.card.primary .lbl em{color:var(--i-500)}
+a.card .meta{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(245,242,234,0.45);letter-spacing:0.12em;text-transform:uppercase}
+a.card.primary .meta{color:var(--muted)}
+
 footer{
-  margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:10px;
+  position:relative;z-index:1;text-align:center;margin-top:60px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;
   color:rgba(245,242,234,0.35);letter-spacing:0.16em;text-transform:uppercase;
 }
+
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <main>
-<svg class="mark" width="64" height="64" viewBox="0 0 180 180" aria-hidden="true"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
-<h1>eduflick <em>AI</em> · brand kit</h1>
-<p class="sub">Complete design system, product brochures, and program prospectus.</p>
-<div class="links">
-  <a href="Eduflick_Brand_Book_v4.html" class="primary">
-    <span class="lbl">brand book <em>v4.0</em></span>
-    <span class="meta">Design system · tokens · lockups · 225 KB</span>
-  </a>
-  <a href="Eduflick_AI_Brochure.html" class="secondary">
-    <span class="lbl">product brochure <em>· 2026</em></span>
-    <span class="meta">4-page A4 · cinematic edition</span>
-  </a>
-  <a href="Eduflick_AI_Leadership_Program_Brochure.html" class="secondary">
-    <span class="lbl">leadership program <em>· cohort 02</em></span>
-    <span class="meta">12-page A4 prospectus</span>
-  </a>
-</div>
+<header>
+  <svg class="mark" width="60" height="60" viewBox="0 0 180 180" aria-hidden="true"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+  <h1>eduflick <em>AI</em> · brand kit</h1>
+  <p class="sub">The complete design system, brand book, marketing collateral, and product UI kits — in one place.</p>
+</header>
+
+<!-- BRAND SYSTEM -->
+<section>
+  <div class="sec-label"><span class="n">01</span> brand system</div>
+  <div class="grid">
+    <a href="brand-book/Eduflick_Brand_Book_v4.html" class="card primary">
+      <span class="lbl">brand book <em>v4.0</em></span>
+      <span class="meta">Mark · color · type · motion · voice · governance</span>
+    </a>
+    <a href="design-system/README.md" class="card">
+      <span class="lbl">design system <em>· docs</em></span>
+      <span class="meta">Foundations · tokens · iconography · manifest</span>
+    </a>
+  </div>
+</section>
+
+<!-- BROCHURES & PROGRAM -->
+<section>
+  <div class="sec-label"><span class="n">02</span> brochures &amp; program</div>
+  <div class="grid">
+    <a href="brochures/Eduflick_Full_Stack_AI_Engineer_Brochure.html" class="card">
+      <span class="lbl">full-stack <em>AI engineer</em></span>
+      <span class="meta">10-page A4 · pioneer cohort 01</span>
+    </a>
+    <a href="brochures/Eduflick_AI_Brochure.html" class="card">
+      <span class="lbl">product brochure <em>· 2026</em></span>
+      <span class="meta">4-page A4 · cinematic edition</span>
+    </a>
+    <a href="brochures/Eduflick_AI_Leadership_Program_Brochure.html" class="card">
+      <span class="lbl">leadership program <em>· cohort 02</em></span>
+      <span class="meta">12-page A4 prospectus</span>
+    </a>
+    <a href="brochures/Eduflick_AI_Leadership_Program_Poster.html" class="card">
+      <span class="lbl">leadership program <em>· poster</em></span>
+      <span class="meta">Single-sheet program poster</span>
+    </a>
+    <a href="brochures/Eduflick_AI_Leadership_Program_Prospectus.pdf" class="card">
+      <span class="lbl">leadership prospectus <em>· pdf</em></span>
+      <span class="meta">Print-ready PDF · download</span>
+    </a>
+  </div>
+</section>
+
+<!-- COLLATERAL KITS -->
+<section>
+  <div class="sec-label"><span class="n">03</span> collateral kits</div>
+  <div class="grid">
+    <a href="design-system/collateral/Eduflick%20Brochure%20Kit.html" class="card">
+      <span class="lbl">brochure <em>kit</em></span>
+      <span class="meta">A4 templates · specs · tweaks panel</span>
+    </a>
+    <a href="design-system/collateral/Eduflick%20Instagram%20Kit.html" class="card">
+      <span class="lbl">instagram <em>kit</em></span>
+      <span class="meta">Feed · carousel · story · launch grid</span>
+    </a>
+    <a href="design-system/collateral/Eduflick%20Content%20Calendar.html" class="card">
+      <span class="lbl">content <em>calendar</em></span>
+      <span class="meta">6-week · 3-phase launch sprint</span>
+    </a>
+  </div>
+</section>
+
+<!-- UI KITS & SLIDES -->
+<section>
+  <div class="sec-label"><span class="n">04</span> ui kits &amp; slides</div>
+  <div class="grid">
+    <a href="design-system/ui_kits/app/index.html" class="card">
+      <span class="lbl">mobile app <em>kit</em></span>
+      <span class="meta">Consumer feed · flick player · sparks</span>
+    </a>
+    <a href="design-system/ui_kits/web/index.html" class="card">
+      <span class="lbl">web <em>kit</em></span>
+      <span class="meta">Educator dashboard + marketing site</span>
+    </a>
+    <a href="design-system/slides/index.html" class="card">
+      <span class="lbl">brand <em>slides</em></span>
+      <span class="meta">Title · section · content · quote · closing</span>
+    </a>
+  </div>
+</section>
+
+<!-- PLANNING -->
+<section>
+  <div class="sec-label"><span class="n">05</span> planning</div>
+  <div class="grid one">
+    <a href="planning/Eduflick_AI_Social_Media_Campaign_Plan.md" class="card">
+      <span class="lbl">social media <em>campaign plan</em></span>
+      <span class="meta">Voice · go-to-market · cadence &amp; targets</span>
+    </a>
+  </div>
+</section>
 </main>
 <footer>&copy; 2026 · Tomatrix Technologies Pvt Ltd · All rights reserved</footer>
 </body>

@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .lab{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+  .field{display:flex;flex-direction:column;gap:7px;margin-bottom:15px}
+  .field:last-child{margin-bottom:0}
+  .fl{font-family:var(--font-mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted)}
+  .inp{display:flex;align-items:center;gap:10px;background:var(--ink-2);border:1px solid var(--line-2);border-radius:var(--radius-md);padding:13px 15px;color:var(--paper);font-family:var(--font-display);font-weight:500;font-size:14px}
+  .inp svg{width:17px;height:17px;color:var(--muted);flex-shrink:0}
+  .inp.focus{border-color:var(--i-500);box-shadow:0 0 0 3px rgba(91,91,240,0.18)}
+  .inp.error{border-color:var(--warn)}
+  .inp input{all:unset;flex:1;color:var(--paper)}
+  .inp .ph{color:var(--muted)}
+  .err{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.04em;color:var(--warn)}
+</style><script src="_sprite.js"></script>
+</head>
+<body><div class="card-pad">
+  <div class="lab">inputs · 1px hairline · focus ring in indigo</div>
+  <div class="field"><span class="fl">search a topic</span><div class="inp focus"><svg><use href="#ic-search"/></svg><input value="mitosis" /></div></div>
+  <div class="field"><span class="fl">email</span><div class="inp error"><svg><use href="#ic-mail"/></svg><span class="ph" style="flex:1">not-an-email</span></div><span class="err">enter a valid email address.</span></div>
+</div></body></html>

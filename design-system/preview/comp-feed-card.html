@@ -1,0 +1,25 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .lab{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+  .feed{display:flex;flex-direction:column;gap:12px}
+  .fc{background:var(--ink-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:18px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;transition:all var(--dur-base) var(--ease-out)}
+  .fc:hover{background:var(--ink-3);border-color:var(--line-2);transform:translateX(3px)}
+  .fc .t{font-family:var(--font-display);font-weight:700;font-size:16px;letter-spacing:-0.02em;color:var(--paper)}
+  .fc .d{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+  .play{width:42px;height:42px;border-radius:var(--radius-md);background:rgba(91,91,240,0.14);display:flex;align-items:center;justify-content:center;color:var(--i-300)}
+  .play svg{width:16px;height:16px}
+  .fc.lead{background:linear-gradient(150deg,var(--i-700),var(--i-ink));border-color:rgba(139,151,255,0.25)}
+  .fc.lead .play{background:rgba(245,242,234,0.14);color:var(--paper)}
+</style><script src="_sprite.js"></script>
+</head>
+<body><div class="card-pad">
+  <div class="lab">feed card · the atomic unit · radius 14 · swipe to save / next</div>
+  <div class="feed">
+    <div class="fc lead"><div><div class="t">mitosis · 60s</div><div class="d">lesson 047 · 8 flicks</div></div><div class="play"><svg><use href="#ic-play"/></svg></div></div>
+    <div class="fc"><div><div class="t">supply &amp; demand · 60s</div><div class="d">lesson 048 · 6 flicks</div></div><div class="play"><svg><use href="#ic-play"/></svg></div></div>
+    <div class="fc"><div><div class="t">photons · 60s</div><div class="d">lesson 049 · 5 flicks</div></div><div class="play"><svg><use href="#ic-play"/></svg></div></div>
+  </div>
+</div></body></html>

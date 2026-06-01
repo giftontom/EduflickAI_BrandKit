@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-label="Eduflick AI">
+  <title>Eduflick AI — stacked lockup (L.05)</title>
+  <desc>Stacked square lockup. For avatars, square crops, tall sidebars, mobile splash. Per Eduflick Brand Book v4.</desc>
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@800&amp;display=swap');
+      .nm{font-family:'Manrope',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:120px;letter-spacing:-4.56px}
+    </style>
+  </defs>
+  <rect width="600" height="600" fill="#0A0B10"/>
+  <g transform="translate(180 140) scale(1.333)">
+    <path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#F5F2EA"/>
+  </g>
+  <text x="300" y="490" text-anchor="middle" class="nm" fill="#F5F2EA">Eduflick<tspan dx="12" fill="#8B97FF">AI</tspan></text>
+</svg>

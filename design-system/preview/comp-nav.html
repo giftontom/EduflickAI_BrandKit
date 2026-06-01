@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .lab{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+  .blk{margin-bottom:20px}
+  .blk:last-child{margin-bottom:0}
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line)}
+  .tab{font-family:var(--font-display);font-weight:600;font-size:14px;letter-spacing:-0.01em;color:var(--muted);padding:10px 16px;border-bottom:2px solid transparent;margin-bottom:-1px;text-transform:lowercase;cursor:pointer}
+  .tab.active{color:var(--paper);border-bottom-color:var(--i-500)}
+  .nav{display:flex;justify-content:space-around;background:var(--ink-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:11px 8px;max-width:320px}
+  .bn{display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--muted)}
+  .bn svg{width:20px;height:20px}
+  .bn span{font-family:var(--font-mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase}
+  .bn.on{color:var(--i-300)}
+</style><script src="_sprite.js"></script>
+</head>
+<body><div class="card-pad">
+  <div class="blk"><div class="lab">tabs · indigo underline</div>
+    <div class="tabs"><div class="tab active">for you</div><div class="tab">trending</div><div class="tab">saved</div></div>
+  </div>
+  <div class="blk"><div class="lab">bottom nav · 4 tabs max · feed always first</div>
+    <div class="nav">
+      <div class="bn on"><svg><use href="#ic-grid"/></svg><span>feed</span></div>
+      <div class="bn"><svg><use href="#ic-search"/></svg><span>search</span></div>
+      <div class="bn"><svg><use href="#ic-star"/></svg><span>saved</span></div>
+      <div class="bn"><svg><use href="#ic-user"/></svg><span>profile</span></div>
+    </div>
+  </div>
+</div></body></html>

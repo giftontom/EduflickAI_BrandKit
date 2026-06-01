@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px}
+  .head .t{font-family:var(--font-display);font-weight:800;font-size:20px;letter-spacing:-0.025em;text-transform:lowercase}
+  .head .t em{font-family:var(--font-serif);font-style:italic;font-weight:400;color:var(--i-300)}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .chip{border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden}
+  .chip .fill{height:62px}
+  .chip .meta{padding:11px 13px}
+  .chip .nm{font-family:var(--font-display);font-weight:700;font-size:13px;letter-spacing:-0.01em;color:var(--paper)}
+  .chip .hx{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.06em;color:var(--muted);margin-top:3px}
+  .chip .use{font-family:var(--font-mono);font-size:9px;letter-spacing:0.03em;color:var(--paper-dim);margin-top:7px;line-height:1.5}
+</style></head>
+<body><div class="card-pad">
+  <div class="head"><div class="t">semantic <em>· signal</em></div><div class="k">used sparingly · never decorative</div></div>
+  <div class="grid">
+    <div class="chip"><div class="fill" style="background:#8B97FF"></div><div class="meta"><div class="nm">AI accent</div><div class="hx">indigo-300 · #8B97FF</div><div class="use">the "AI" in the wordmark · soft highlights on dark</div></div></div>
+    <div class="chip"><div class="fill" style="background:#FF6E5A"></div><div class="meta"><div class="nm">warn · coral</div><div class="hx">#FF6E5A</div><div class="use">errors, CTAs, scarcity flags only — the one non-indigo accent</div></div></div>
+    <div class="chip"><div class="fill" style="background:#4ADE80"></div><div class="meta"><div class="nm">success</div><div class="hx">#4ADE80</div><div class="use">completion, streak gains, positive toasts</div></div></div>
+  </div>
+</div></body></html>

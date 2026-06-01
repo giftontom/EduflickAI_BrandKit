@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .lab{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden}
+  .ic{background:var(--ink-2);display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;padding:26px 16px 22px}
+  .ic svg{width:60px;height:60px}
+  .ic .n{font-family:var(--font-mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--i-300)}
+  .ic .m{font-family:var(--font-display);font-weight:500;font-size:12px;line-height:1.4;color:var(--paper-dim);max-width:15ch}
+  .meta{display:flex;flex-direction:column;gap:3px}
+  .note{margin-top:15px;font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.04em;color:var(--muted);line-height:1.7}
+  .note b{color:var(--paper-dim);font-weight:500}
+</style>
+</head>
+<body><div class="card-pad">
+  <div class="lab">mark companions · the mark expresses one lesson's lifecycle — never a foreign shape</div>
+  <div class="grid">
+
+    <!-- IDLE -->
+    <div class="ic">
+      <svg viewBox="0 0 96 96">
+        <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="#5B5BF0"></path>
+        <path d="M10 10.9 L86 10.9" stroke="#DCE0FF" stroke-width="1.6" stroke-opacity="0.55" stroke-linecap="round"></path>
+      </svg>
+      <div class="meta"><span class="n">idle</span><span class="m">the brand at rest</span></div>
+    </div>
+
+    <!-- LEARNING (fill meter) -->
+    <div class="ic">
+      <svg viewBox="0 0 96 96">
+        <defs><clipPath id="mclip"><path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z"></path></clipPath></defs>
+        <rect x="10" y="10" width="42" height="76" fill="#5B5BF0" clip-path="url(#mclip)"></rect>
+        <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="none" stroke="#8B97FF" stroke-width="3.2" stroke-linejoin="round"></path>
+      </svg>
+      <div class="meta"><span class="n">learning</span><span class="m">a lesson in progress</span></div>
+    </div>
+
+    <!-- DONE -->
+    <div class="ic">
+      <svg viewBox="0 0 96 96">
+        <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="#5B5BF0"></path>
+        <path d="M27 50 L41 65 L70 33" fill="none" stroke="#F5F2EA" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <div class="meta"><span class="n">done</span><span class="m">lesson complete</span></div>
+    </div>
+
+    <!-- UP NEXT (queue) -->
+    <div class="ic">
+      <svg viewBox="0 0 96 96">
+        <g transform="translate(26 -15) scale(0.6)"><path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="#8B97FF" opacity="0.22"></path></g>
+        <g transform="translate(14 -8) scale(0.78)"><path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="#8B97FF" opacity="0.45"></path></g>
+        <path d="M10 10 L86 10 L86 44 L63 59 L86 74 L86 86 L10 86 Z" fill="#5B5BF0"></path>
+      </svg>
+      <div class="meta"><span class="n">up next</span><span class="m">more queued ahead</span></div>
+    </div>
+
+  </div>
+  <div class="note">One mark, one lifecycle — <b>fill level, the notch and the stack</b> carry the meaning. No borrowed icons.</div>
+</div></body></html>
