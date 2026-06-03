@@ -105,7 +105,7 @@ Min sizes: app icon ≥40px · tab ≥24px · favicon ≥16px · never <10px.
 - Tokens: `colors_and_type.css` (import first). Logo: `assets/logo/mark*.svg`, `lockup-*.svg`,
   `favicon.svg`. Icons: `assets/icons/eduflick-icons.svg` (24 line icons, use `#ic-play` etc.) +
   `assets/icons/mark-companions.svg` (mark-as-state). Social PNGs: `assets/logo/social/`.
-- Ready containers: `collateral/` kits — **`Eduflick Launch Grid.html`** (12-tile cinematic IG
+- Ready containers: `collateral/` kits — **`launch-grid.html`** (12-tile cinematic IG
   launch mural + carousel viewer + deck slides), Instagram/Brochure/Calendar — plus `slides/` deck
   templates, `ui_kits/` product components. Copy-paste snippets: `recipes/snippets.md`.
 - **Co-brand:** parent logo `assets/partners/tomatrix-logo-light.png`. The Eduflick mark *leads*,

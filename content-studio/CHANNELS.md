@@ -17,12 +17,12 @@ sprint). The funnel: **Awareness → Free Masterclass (lead capture) → Seat bo
   one CTA, 3–6 hashtags. → `prompts/instagram-caption.md`.
 - **Carousel shape:** 5–8 slides; slide 1 = hook, last = CTA; one idea per slide. →
   `prompts/instagram-carousel.md`.
-- **Renders with:** `../design-system/collateral/Eduflick Instagram Kit.html` (feed/carousel/story
+- **Renders with:** `../design-system/collateral/instagram-kit.html` (feed/carousel/story
   canvases + the 9-up launch grid).
 - **Launch grid:** the complete 12-tile mural launch plan (architecture, posting waves, safe zones,
   and every post + carousel slide) is in `INSTAGRAM_LAUNCH_PLAN.md`; brand/pitch context in
   `EDUFLICK_AI_PLAYBOOK.md` §3; assembled preview in
-  `../design-system/collateral/Eduflick Launch Grid.html`.
+  `../design-system/collateral/launch-grid.html`.
 
 ## LinkedIn — primary (credibility + hiring narrative)
 - **Roles:** founder POV posts ("why we capped Cohort 1 at 20"), curriculum breakdowns, the
@@ -85,5 +85,5 @@ the free masterclass." Conversion → "book your seat — X of 20 left, closes [
 | WhatsApp nurture flow | `whatsapp-sequence.md` | send as text |
 | Meta/IG ad set | `ad-copy.md` | Instagram Kit (static) / video |
 | A week / repurpose a recording | `repurpose-batch.md` | Content Calendar + kits |
-| A brochure / poster / one-pager | (write copy with the cheat sheet) | `Eduflick Brochure Kit.html`, `../brochures/` |
+| A brochure / poster / one-pager | (write copy with the cheat sheet) | `brochure-kit.html`, `../brochures/` |
 | A deck | (write copy with the cheat sheet) | `../design-system/slides/` |

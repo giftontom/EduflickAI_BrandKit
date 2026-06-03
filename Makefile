@@ -35,7 +35,7 @@ format-check:
 
 # Open the launch grid in browser (macOS)
 open-grid:
-	open "http://localhost:8080/design-system/collateral/Eduflick%20Launch%20Grid.html?export=1"
+	open "http://localhost:8080/design-system/collateral/launch-grid.html?export=1"
 
 # Full pipeline: install → export → done
 all: install export

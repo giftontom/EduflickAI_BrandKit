@@ -18,14 +18,14 @@ import path from 'node:path';
 import fs from 'node:fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const HTML = path.resolve(__dirname, '../design-system/collateral/Eduflick Launch Grid.html');
+const HTML = path.resolve(__dirname, '../design-system/collateral/launch-grid.html');
 const OUT  = path.resolve(__dirname, '../exports');
 const SCALE = Number(process.env.SCALE || 2);                 // 2 = crisp (2160×2700) · 1 = exact 1080×1350
 
 // --- Validation ---
 if (!fs.existsSync(HTML)) {
   console.error(`✗ Launch grid not found: ${HTML}`);
-  console.error('  Make sure design-system/collateral/Eduflick Launch Grid.html exists.');
+  console.error('  Make sure design-system/collateral/launch-grid.html exists.');
   process.exit(1);
 }
 

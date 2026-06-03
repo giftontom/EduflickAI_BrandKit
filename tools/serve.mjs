@@ -32,7 +32,7 @@ http.createServer((req, res) => {
   });
   fs.createReadStream(file).pipe(res);
 }).listen(PORT, () => {
-  const grid = `http://localhost:${PORT}/design-system/collateral/${encodeURIComponent('Eduflick Launch Grid.html')}`;
+  const grid = `http://localhost:${PORT}/design-system/collateral/${encodeURIComponent('launch-grid.html')}`;
   console.log(`Serving ${ROOT}\n`);
   console.log(`Open the launch grid (in-browser ⬇ downloads work here):`);
   console.log(`  ${grid}`);

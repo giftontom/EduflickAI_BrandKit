@@ -61,9 +61,9 @@ a VA) has to churn out captions, carousels, reels, DMs and ads every day without
 - **Copy lives here.** Voice rules, channel strategy, prompt templates, QA.
 - **Pixels live in `../design-system/`.** Tokens (`colors_and_type.css`), logo (`assets/logo/`),
   icons, and the ready-made **collateral kits** that render this copy:
-  - `../design-system/collateral/Eduflick Instagram Kit.html` — feed / carousel / story canvases.
-  - `../design-system/collateral/Eduflick Brochure Kit.html` — A4 templates.
-  - `../design-system/collateral/Eduflick Content Calendar.html` — the 6-week sprint, visualized.
+  - `../design-system/collateral/instagram-kit.html` — feed / carousel / story canvases.
+  - `../design-system/collateral/brochure-kit.html` — A4 templates.
+  - `../design-system/collateral/content-calendar.html` — the 6-week sprint, visualized.
   - `../design-system/slides/` — deck slides.
 - **Source of truth** for everything is `../brand-book/Eduflick_Brand_Book_v4.html`.
 - **The campaign this content serves** is `../planning/Eduflick_AI_Social_Media_Campaign_Plan.md`.

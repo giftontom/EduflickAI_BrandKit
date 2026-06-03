@@ -3,7 +3,7 @@
 Load `00_SYSTEM_PROMPT.md` + `../DESIGN_CHEATSHEET.md` + `snippets.md` first. For print-ready
 program collateral — a cover, a curriculum spread, an outcomes/pricing page, a one-pager. Output
 ONE self-contained A4 HTML page (794×1123px @96dpi), print CSS included, rendered + QA'd, then
-exported to PDF or assembled in `../collateral/Eduflick Brochure Kit.html` / `../brochures/`.
+exported to PDF or assembled in `../collateral/brochure-kit.html` / `../brochures/`.
 
 ---
 

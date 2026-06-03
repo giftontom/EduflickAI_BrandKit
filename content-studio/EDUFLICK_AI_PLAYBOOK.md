@@ -106,9 +106,9 @@ ROW 4  BOTTOM │ BL │ BC │ BR │
 
 - Lowercase aesthetic across brand prose · exactly one *italic serif accent word* per hook · hooks
   ≤125 characters · 3–6 hashtags per post · zero emoji · zero forbidden filler words.
-- **Render with:** `../design-system/collateral/Eduflick Instagram Kit.html` (canvases + launch
+- **Render with:** `../design-system/collateral/instagram-kit.html` (canvases + launch
   grid), `../design-system/recipes/instagram-post.md` + `snippets.md`.
-- **Assembled mural preview:** `../design-system/collateral/Eduflick Launch Grid.html` — shows all
+- **Assembled mural preview:** `../design-system/collateral/launch-grid.html` — shows all
   12 tiles as the two continuous indigo murals, with a 1080² safe-zone toggle.
 
 ---

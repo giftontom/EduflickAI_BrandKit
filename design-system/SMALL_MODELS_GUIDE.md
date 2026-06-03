@@ -122,7 +122,7 @@ halo **behind** the focal element; the mark itself stays flat.
 
 **The launch grid (`recipes/launch-grid.md`).** A 12-tile Instagram mural — 4 continuous rows × 3
 columns, each row on one surface (indigo / paper / ink). For a small model: **edit the existing
-`collateral/Eduflick Launch Grid.html`**, one tile or slide at a time, reusing its surface classes
+`collateral/launch-grid.html`**, one tile or slide at a time, reusing its surface classes
 + deck-slide template + `motifHTML()`. Match the surface (paper → indigo mark + motifs; dark/indigo
 → paper-fill mark). Keep grain/grid **em-based** so the in-page viewer and the export match. Don't
 treat tiles as standalone — a row only reads as a mural when its three slices line up.

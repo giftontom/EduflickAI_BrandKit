@@ -41,6 +41,6 @@ Use these as the profile picture / app icon. Mark-only — wordmarks read poorly
 
 ## Regenerating
 
-Profile avatar (`.pf-av`): `cd tools && npm run export:avatar` (Playwright screenshot from `Eduflick Instagram Kit.html`).
+Profile avatar (`.pf-av`): `cd tools && npm run export:avatar` (Playwright screenshot from `instagram-kit.html`).
 
 Other social PNGs were generated with cairosvg / Chrome headless (lockup renders).

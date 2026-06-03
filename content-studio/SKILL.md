@@ -33,7 +33,7 @@ the design skill renders the carousel.
 4. **`INSTAGRAM_LAUNCH_PLAN.md`** + **`EDUFLICK_AI_PLAYBOOK.md`** — the launch is already written:
    the 12-tile grid architecture, posting waves, safe zones, and finished copy for every post +
    carousel slide. For launch tasks pull copy from here — don't reinvent it. (Rendered:
-   `../design-system/collateral/Eduflick Launch Grid.html`; exported via `../tools`.)
+   `../design-system/collateral/launch-grid.html`; exported via `../tools`.)
 5. **`prompts/`** — copy-paste, slot-filled, few-shot prompt templates, one per content type.
 6. **`QA_CHECKLIST.md`** — the gate every piece must pass before it ships.
 

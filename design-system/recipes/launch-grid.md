@@ -3,7 +3,7 @@
 Load `00_SYSTEM_PROMPT.md` + `../DESIGN_CHEATSHEET.md` + `snippets.md` first — and read
 `../../content-studio/INSTAGRAM_LAUNCH_PLAN.md` for the copy (the words are already written; do
 **not** reinvent them). The built artifact already exists:
-`../collateral/Eduflick Launch Grid.html`. This recipe is for **building or extending** it, then
+`../collateral/launch-grid.html`. This recipe is for **building or extending** it, then
 exporting pixel-perfect PNGs with `../../tools`.
 
 > A launch grid is not 12 independent posts — it's **4 continuous mural rows** read top-to-bottom,
@@ -40,7 +40,7 @@ INPUTS (per tile you're building/editing):
 - Eyebrow / headline (lowercase, ONE *asterisk* word) / proof / motif: [[ from the launch plan ]]
 
 BUILD RULES:
-1. Edit `../collateral/Eduflick Launch Grid.html` — reuse its surface classes, deck-slide template,
+1. Edit `../collateral/launch-grid.html` — reuse its surface classes, deck-slide template,
    and `motifHTML()`; assemble from snippets S15–S19. Do not invent new CSS, colors, or fonts.
 2. Match the row's surface: paper → indigo mark + indigo motifs; dark/indigo → paper-fill mark.
    The "AI" of the wordmark is white on indigo/ink, indigo on paper.

@@ -297,10 +297,10 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
 
 ## 9. Render assets
 
-- **Assembled mural preview:** `../design-system/collateral/Eduflick Launch Grid.html` — all 12
+- **Assembled mural preview:** `../design-system/collateral/launch-grid.html` — all 12
   tiles as the two murals, with a 1080² safe-zone toggle.
 - **Build tiles/slides with:** `../design-system/recipes/instagram-post.md` +
   `../design-system/recipes/snippets.md`; tokens in `../design-system/colors_and_type.css`.
-- **Canvas system + launch grid:** `../design-system/collateral/Eduflick Instagram Kit.html`.
+- **Canvas system + launch grid:** `../design-system/collateral/instagram-kit.html`.
 
 *Eduflick AI · a Tomatrix Technologies venture.*

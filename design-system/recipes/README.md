@@ -34,7 +34,7 @@ Read `../SMALL_MODELS_GUIDE.md` for why each step matters, and `../DESIGN_CHEATS
 | `slide-deck.md` | one slide (title/section/content/quote/closing) + contact sheet | 1920×1080 | `../slides/` |
 | `landing-section.md` | a web hero / marketing section | responsive | `../ui_kits/web/` |
 | `brochure-page.md` | an A4 brochure/one-pager page | A4 | Brochure Kit / `../brochures/` |
-| `launch-grid.md` | a 12-tile Instagram launch mural — posts (mural slices) + carousel slides | 1080×1350 grid | `../collateral/Eduflick Launch Grid.html` → `../../tools` |
+| `launch-grid.md` | a 12-tile Instagram launch mural — posts (mural slices) + carousel slides | 1080×1350 grid | `../collateral/launch-grid.html` → `../../tools` |
 
 **Don't loosen the constraints/snippets casually** — they're what keep a small model on-brand.
 Change the FACTS, the text, and the layout order; leave the palette, fonts, and the mark verbatim.

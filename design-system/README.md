@@ -205,7 +205,7 @@ Root files:
 | `AI_IMAGERY_GUIDE.md` | When/how to generate abstract indigo backdrops (Nano Banana 2) and layer them *behind* the type + mark — the master image-prompt kit + imagery QA. |
 | `QA_CHECKLIST.md` | Visual pass/fail gate + scorecard run on any rendered artifact before export. |
 | `recipes/` | Assemble-don't-invent build kit: `00_SYSTEM_PROMPT.md`, `snippets.md` (HTML parts bin — incl. cinematic `S15–S19`), and recipes for instagram-post · poster · slide-deck · landing-section · brochure-page · **launch-grid**. |
-| `collateral/` | Ready-to-fill kits: **`Eduflick Launch Grid.html`** (the 12-tile cinematic IG launch mural + in-page carousel viewer + deck slides), `Eduflick Instagram Kit.html`, `Eduflick Brochure Kit.html`, `Eduflick Content Calendar.html` |
+| `collateral/` | Ready-to-fill kits: **`launch-grid.html`** (the 12-tile cinematic IG launch mural + in-page carousel viewer + deck slides), `instagram-kit.html`, `brochure-kit.html`, `content-calendar.html` |
 | `assets/logo/` | Canonical marks (`mark*.svg`), lockups (`lockup-*.svg`), `favicon.svg`, `LOGO_README.md` |
 | `assets/logo/social/` | Avatars (indigo/ink/paper + the **gradient `avatar-pf-av-*`**, built by `../tools` `export:avatar`), LinkedIn/YouTube/Twitter banners, OG card |
 | `assets/partners/` | Partner/parent logos — `tomatrix-logo-light.png` (transparent) for the co-brand lockup |
@@ -223,7 +223,7 @@ with components from the relevant UI kit. Build wordmarks in HTML
 **uppercase AI** (white on dark/indigo, indigo `#5B5BF0` on paper).
 
 **To ship a social asset:** build the canvas in a `collateral/` kit — or open the
-**Launch Grid** (`collateral/Eduflick Launch Grid.html`) — then export pixel-perfect PNGs
+**Launch Grid** (`collateral/launch-grid.html`) — then export pixel-perfect PNGs
 with `../tools` (`cd tools && npm run export`; `SCALE=1` = exact 1080×1350).
 
 ---

@@ -56,10 +56,10 @@ jobs:
           for f in \
             index.html \
             brand-book/Eduflick_Brand_Book_v4.html \
-            design-system/collateral/Eduflick\ Launch\ Grid.html \
-            design-system/collateral/Eduflick\ Instagram\ Kit.html \
-            design-system/collateral/Eduflick\ Brochure\ Kit.html \
-            design-system/collateral/Eduflick\ Content\ Calendar.html \
+            design-system/collateral/launch-grid.html \
+            design-system/collateral/instagram-kit.html \
+            design-system/collateral/brochure-kit.html \
+            design-system/collateral/content-calendar.html \
             design-system/slides/index.html; do
             if [ ! -f "$f" ]; then
               echo "⚠ Missing (skipped): $f"

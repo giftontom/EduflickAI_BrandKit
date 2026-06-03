@@ -177,7 +177,7 @@ backdrop. (See the `claude-api` skill for caching; mirrors the two-model pattern
 
 **North-star reference set (suggested, optional):** once you have 3–6 images you trust, save them as
 the canonical references — e.g. `collateral/assets/image-refs/` — and pass them on every call. Build
-this set once; reuse it forever. Use the shipped **`collateral/Eduflick Launch Grid.html`** as the
+this set once; reuse it forever. Use the shipped **`collateral/launch-grid.html`** as the
 look to match: a good AI backdrop should be indistinguishable in palette and mood from those
 cinematic tiles when it sits beside them. *(The ref folder isn't created here — it's the first thing
 to make when you start generating.)*

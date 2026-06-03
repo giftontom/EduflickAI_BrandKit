@@ -2,7 +2,7 @@
 
 Load `00_SYSTEM_PROMPT.md` + `../DESIGN_CHEATSHEET.md` + `snippets.md` first. Then paste the box
 below. Output is ONE self-contained HTML file: a true-ratio canvas wrapped in the scale-to-fit
-preview (S13). Render it, QA it, then recreate/export in `../collateral/Eduflick Instagram Kit.html`.
+preview (S13). Render it, QA it, then recreate/export in `../collateral/instagram-kit.html`.
 
 ---
 

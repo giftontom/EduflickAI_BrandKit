@@ -1,6 +1,6 @@
 # Launch-grid image exporter
 
-Turns `../design-system/collateral/Eduflick Launch Grid.html` into ready-to-post PNGs —
+Turns `../design-system/collateral/launch-grid.html` into ready-to-post PNGs —
 every **post** (as its true mural slice) and every **carousel slide** at exact **1080×1350**.
 
 ## Two ways to export

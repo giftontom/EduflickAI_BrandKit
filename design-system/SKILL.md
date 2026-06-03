@@ -19,6 +19,26 @@ If the user invokes this skill without any other guidance, ask them what they wa
 or design, ask some questions, and act as an expert designer who outputs HTML artifacts _or_
 production code, depending on the need.
 
+## Universal engines (shared technique — don't duplicate it here)
+The *how* (browser→PDF, pixel-perfect PNG export, cinematic CSS effects, image+graphics
+compositing, the token pipeline) now lives once, brand-neutral, in `.claude/skills/`. This skill is
+the **Eduflick brand profile** for those engines — it owns the *what* (indigo, the mark, the voice),
+not the mechanism. When a task needs the mechanism, use the engine and pass Eduflick values:
+
+| Need | Universal engine | Eduflick value it takes |
+| --- | --- | --- |
+| Brochure / one-pager → downloadable PDF | `web-to-pdf` (`assets/pdf-export.js`) | `.sheet` pages, `#F5F2EA` paper bg, inline assets |
+| Pixel-perfect PNGs (posts, carousel, avatar) | `web-to-image` | the launch grid / canvas HTML + `[data-export]` nodes |
+| Cinematic surfaces (halo · grain · vignette · glass · glow) | `design-effects` (`effects.css`) | indigo = `--accent`; `S11/S15–S19` are these classes |
+| Image + graphics composite + AI backdrops | `image-composite` | the indigo-monochrome stance + negatives (was `AI_IMAGERY_GUIDE.md`) |
+| Tokens → CSS / snippets + drift guard | `design-tokens` | `tokens/tokens.json` **is** the Eduflick brand-profile instance |
+
+The Eduflick brochures keep their self-contained inline scripts (they must ship standalone), but the
+**canonical, maintained copy** of each technique is the engine skill — fix it there. See
+`.claude/skills/README.md` for the family and `design-studio` for the assemble→QA→export workflow
+(this skill's `recipes/`, `QA_CHECKLIST.md`, and `SMALL_MODELS_GUIDE.md` are the Eduflick-themed
+instances of that generic workflow).
+
 ## Building visuals with a small/cheap model? (Haiku, mini, local)
 Use the **assemble-don't-invent** track — engineered so a small model stays on-brand:
 - `DESIGN_CHEATSHEET.md` — the whole visual system in one paste-anywhere page (tokens, mark, rules).
@@ -43,7 +63,7 @@ HTML file → **render and look** → QA → **export pixel-perfect PNGs with `.
 5. Pull ready-made components from `ui_kits/app/` (consumer mobile) or `ui_kits/web/`
    (educator dashboard + marketing). Copy and adapt — they're cosmetic, not production logic.
 6. For decks, start from `slides/*.html` (title, section, content, quote, closing).
-7. For a full **Instagram launch**, open `collateral/Eduflick Launch Grid.html` — 12 mural-sliced
+7. For a full **Instagram launch**, open `collateral/launch-grid.html` — 12 mural-sliced
    tiles + an in-page carousel viewer + deck slides + motifs on cinematic surfaces (`S15–S19`).
 8. **To ship PNGs:** render, QA, then `cd tools && npm run export` for pixel-perfect 1080×1350
    files (every post + carousel slide); `npm run export:avatar` for the profile picture.

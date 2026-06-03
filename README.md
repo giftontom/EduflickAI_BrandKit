@@ -93,7 +93,7 @@ The backbone is **one source of truth per concern**: tokens in
 ```bash
 cd tools && npm install && npm run serve
 # Open http://localhost:8080 → the brand kit landing page
-# Open http://localhost:8080/design-system/collateral/Eduflick%20Launch%20Grid.html?export=1
+# Open http://localhost:8080/design-system/collateral/launch-grid.html?export=1
 #   → full-size export view
 ```
 
