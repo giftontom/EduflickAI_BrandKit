@@ -20,7 +20,11 @@ a VA) has to churn out captions, carousels, reels, DMs and ads every day without
 | --- | --- |
 | **`SKILL.md`** | Agent-skill entry point. Point any agent at it. |
 | **`BRAND_CHEATSHEET.md`** | ⭐ The whole brand in one page. The context block you paste into *any* model. Self-contained — no other file required. |
+| **`EDUFLICK_AI_PLAYBOOK.md`** | The definitive playbook: brand identity + pitch-deck architecture + the publish-ready 12-tile Instagram launch grid (two indigo murals) with finished per-post copy. |
+| **`INSTAGRAM_LAUNCH_PLAN.md`** | The complete launch-grid plan in one file: architecture, posting waves, safe-zone spec, brand rules, and full copy for all 12 posts (every carousel slide + caption). |
 | **`SMALL_MODELS_GUIDE.md`** | How to get reliable, on-brand output from small models: the generate→check→fix loop, the FACTS block, output constraints, batching, the two-model pattern. |
+| **`FACTS.md`** | ⚠️ Single source of truth for all live values — dates, prices, seat counts, links. Every prompt and visual pulls from here. Update this first. |
+| **`POSTING_SCHEDULE.md`** | Day-by-day 6-week content calendar with status checkboxes. Fill the dates, then execute. |
 | **`CHANNELS.md`** | Per-channel specs, cadence, formats, and which design kit renders each asset. |
 | **`QA_CHECKLIST.md`** | The pass/fail gate + 100-point scorecard every piece runs through before shipping. |
 | **`prompts/`** | Copy-paste, slot-filled, few-shot prompt templates — one per content type. |

@@ -19,6 +19,10 @@ sprint). The funnel: **Awareness → Free Masterclass (lead capture) → Seat bo
   `prompts/instagram-carousel.md`.
 - **Renders with:** `../design-system/collateral/Eduflick Instagram Kit.html` (feed/carousel/story
   canvases + the 9-up launch grid).
+- **Launch grid:** the complete 12-tile mural launch plan (architecture, posting waves, safe zones,
+  and every post + carousel slide) is in `INSTAGRAM_LAUNCH_PLAN.md`; brand/pitch context in
+  `EDUFLICK_AI_PLAYBOOK.md` §3; assembled preview in
+  `../design-system/collateral/Eduflick Launch Grid.html`.
 
 ## LinkedIn — primary (credibility + hiring narrative)
 - **Roles:** founder POV posts ("why we capped Cohort 1 at 20"), curriculum breakdowns, the

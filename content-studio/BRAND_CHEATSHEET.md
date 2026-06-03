@@ -61,8 +61,8 @@ Both share one visual + verbal system. **If a task doesn't say which, assume the
 - **Mono labels / eyebrows / meta: UPPERCASE, wide tracking.** `LESSON 047 · 60 SECONDS`,
   `PIONEER COHORT 01`, `FREE MASTERCLASS`.
 - **Body copy: normal sentence case.**
-- **The wordmark: `eduflick` lowercase + `AI` uppercase** → in text write `eduflickAI` or
-  `eduflick AI`. The "AI" is the indigo accent.
+- **The wordmark: "eduflick AI"** — `eduflick` lowercase + a space + **uppercase `AI`** (the
+  indigo accent; white on dark/indigo, indigo on paper). Prefer the spaced form in copy.
 
 ---
 
@@ -144,6 +144,9 @@ Their actual words (mirror these as hooks):
   grids over indigo; the brand glow `0 8px 32px -8px rgba(91,91,240,.35)`.
 - **The mark:** a square "feed card" with a triangular notch on its right edge (the "play"). One
   shape, one notch. Never distort, rotate, recolor, or add glows/bevels to it.
+- **Co-brand:** Eduflick AI is **a Tomatrix Technologies venture** — the legal name is always
+  proper-cased "Tomatrix Technologies Pvt Ltd." The Eduflick mark *leads*; Tomatrix supports and is
+  never recolored to indigo. Footer attribution: "a Tomatrix Technologies venture" (mono).
 - Render with `../design-system/colors_and_type.css` + the collateral kits; load the 3 Google fonts.
 
 ---

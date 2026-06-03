@@ -96,6 +96,10 @@ Never substitute a value from memory.
 > Stable facts (the stack, the 3 projects, the wedge, the venue name) live in
 > `BRAND_CHEATSHEET.md` and are safe to reference. **Volatile** facts (exact date, seats-left,
 > links) must come from this block. When unsure which a fact is, treat it as volatile.
+>
+> **For the Instagram launch:** the finished copy for all 12 posts + every carousel slide is already
+> written in `INSTAGRAM_LAUNCH_PLAN.md` (context in `EDUFLICK_AI_PLAYBOOK.md`). Reuse it and only
+> fill the FACTS placeholders — don't have a small model regenerate launch copy from scratch.
 
 ---
 
@@ -159,6 +163,8 @@ LinkedIn post," which is the highest-leverage move in the 6-week sprint.
 | Hype words (unlock/level up/supercharge) | "Forbidden words. Use 'earn a Spark' / a concrete proof instead." |
 | Generic hashtags | "Use 3–6 precise tags from the cheat-sheet pool. No grind tags." |
 | Doesn't match the funnel stage | "This is a [awareness/consideration/conversion] asset — adjust the CTA accordingly." |
+| Tomatrix mis-cased / lowercased | "Legal name is 'Tomatrix Technologies Pvt Ltd' (proper case); short form 'a Tomatrix Technologies venture'." |
+| Wordmark as 'eduflickai' / 'Eduflick Ai' | "Write it 'eduflick AI' — lowercase eduflick, uppercase AI." |
 
 ---
 

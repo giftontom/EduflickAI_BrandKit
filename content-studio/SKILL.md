@@ -30,8 +30,12 @@ the design skill renders the carousel.
 2. **`SMALL_MODELS_GUIDE.md`** — how to get reliable, on-brand output from small models: the
    generate→check→fix loop, the FACTS block (anti-hallucination), output constraints, batching.
 3. **`CHANNELS.md`** — per-channel specs, cadence, and which design kit renders each asset.
-4. **`prompts/`** — copy-paste, slot-filled, few-shot prompt templates, one per content type.
-5. **`QA_CHECKLIST.md`** — the gate every piece must pass before it ships.
+4. **`INSTAGRAM_LAUNCH_PLAN.md`** + **`EDUFLICK_AI_PLAYBOOK.md`** — the launch is already written:
+   the 12-tile grid architecture, posting waves, safe zones, and finished copy for every post +
+   carousel slide. For launch tasks pull copy from here — don't reinvent it. (Rendered:
+   `../design-system/collateral/Eduflick Launch Grid.html`; exported via `../tools`.)
+5. **`prompts/`** — copy-paste, slot-filled, few-shot prompt templates, one per content type.
+6. **`QA_CHECKLIST.md`** — the gate every piece must pass before it ships.
 
 ## The core workflow (works for you OR a small model)
 1. **Pick the task** → open the matching file in `prompts/`.
@@ -49,6 +53,8 @@ the design skill renders the carousel.
 - **Casing:** lowercase display headlines; UPPERCASE mono labels; one *serif-italic* accent word.
 - **One hue:** indigo `#5B5BF0` + neutral (paper/ink). Coral `#FF6E5A` only for CTAs/scarcity.
 - **Never invent facts.** Dates, prices, seat counts, names, links come only from the FACTS block.
+- **Co-brand:** Eduflick AI is **a Tomatrix Technologies venture**; the legal name **"Tomatrix
+  Technologies Pvt Ltd"** is always proper-cased. In copy the wordmark is **"eduflick AI"**.
 
 If invoked with no other guidance: ask what they're making and for which channel, then drive the
 workflow above — produce the copy, run the QA checklist, and offer to render the visual.
