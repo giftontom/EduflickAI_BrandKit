@@ -9,9 +9,11 @@ Use these as the profile picture / app icon. Mark-only — wordmarks read poorly
 | File | Use |
 | --- | --- |
 | `avatar-indigo-1024.png` | Default. Apple/iOS, App Store, high-res uploads |
-| `avatar-indigo-400.png` | Twitter/X, LinkedIn, Instagram, Discord |
-| `avatar-ink-1024.png` | Dark-mode alt where indigo competes with surrounding UI |
+| `avatar-indigo-400.png` | Twitter/X, LinkedIn, Discord |
+| `avatar-ink-1024.png` | Flat indigo-ink fill |
 | `avatar-ink-400.png` | Same, smaller |
+| `avatar-pf-av-1024.png` | **Instagram default** — exact `.pf-av` from Instagram Kit (`150deg` `i-700`→`i-ink` + glow) |
+| `avatar-pf-av-400.png` | Same, upload size |
 | `avatar-paper-1024.png` | Light-mode / printed contexts |
 | `avatar-paper-400.png` | Same, smaller |
 
@@ -39,4 +41,6 @@ Use these as the profile picture / app icon. Mark-only — wordmarks read poorly
 
 ## Regenerating
 
-The generator script is at `/tmp/gen_social.py` (not committed). It uses cairosvg for mark-only renders and Chrome headless for the lockup/tagline renders (so Manrope and Instrument Serif load from Google Fonts). Re-run with `python3 /tmp/gen_social.py`.
+Profile avatar (`.pf-av`): `cd tools && npm run export:avatar` (Playwright screenshot from `Eduflick Instagram Kit.html`).
+
+Other social PNGs were generated with cairosvg / Chrome headless (lockup renders).
