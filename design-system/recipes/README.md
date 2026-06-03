@@ -18,10 +18,17 @@ snippets** rather than inventing design.
 Read `../SMALL_MODELS_GUIDE.md` for why each step matters, and `../DESIGN_CHEATSHEET.md` for the rules.
 
 ## Files
+> **`snippets.md` is generated — do not hand-edit it.** Its inline brand values
+> (hex, the mark path, the fonts link) come from `design-system/tokens/tokens.json`.
+> Edit `snippets.src.md` (which uses `{{token}}` placeholders), then run
+> `cd tools && npm run snippets` to regenerate `snippets.md`. This keeps the
+> paste-alone blocks self-contained *and* drift-free.
+
 | File | Produces | Canvas | Export via |
 | --- | --- | --- | --- |
 | `00_SYSTEM_PROMPT.md` | (loads the design system into the model) | — | — |
-| `snippets.md` | the parts bin — copy-paste HTML/CSS blocks | — | — |
+| `snippets.src.md` | **source** for the parts bin (`{{token}}` placeholders) | — | — |
+| `snippets.md` | the parts bin — copy-paste HTML/CSS blocks (generated) | — | — |
 | `instagram-post.md` | feed/portrait/story canvas (single or carousel slide) | 1080² · 1080×1350 · 1080×1920 | Instagram Kit |
 | `poster.md` | event/scarcity/announcement poster | A4 or 4:5 | Brochure Kit / print |
 | `slide-deck.md` | one slide (title/section/content/quote/closing) + contact sheet | 1920×1080 | `../slides/` |
