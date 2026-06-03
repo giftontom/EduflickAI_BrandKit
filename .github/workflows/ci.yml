@@ -16,16 +16,9 @@ jobs:
       - name: Lint Markdown
         uses: DavidAnson/markdownlint-cli2-action@v16
         with:
+          # Rules come from the committed .markdownlint.json (auto-discovered),
+          # so local `make format` and CI share one config.
           globs: "**/*.md"
-          config: |
-            {
-              "default": true,
-              "line-length": false,
-              "no-inline-html": false,
-              "no-duplicate-heading": { "siblings_only": true },
-              "first-line-heading": false,
-              "no-emphasis-as-heading": false
-            }
 
       - name: Check internal links
         run: |
@@ -109,3 +102,32 @@ jobs:
 
       - name: Check export script syntax
         run: node --check tools/export-images.mjs && node --check tools/export-pf-avatar.mjs && node --check tools/serve.mjs && echo "✓ All tools parse"
+
+  generated:
+    name: Tokens & snippets drift
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install tool deps (no Chromium needed)
+        run: cd tools && npm ci --ignore-scripts
+
+      - name: Regenerate tokens + snippets from source
+        run: |
+          cd tools
+          npm run tokens
+          npm run snippets
+
+      - name: Fail if generated files are out of date
+        run: |
+          if ! git diff --quiet; then
+            echo "::error::Generated files drifted from source. Run 'cd tools && npm run tokens && npm run snippets' and commit."
+            git --no-pager diff --stat
+            exit 1
+          fi
+          echo "✓ tokens.css, tokens.flat.json, brand.tokens.mjs, snippets.md all in sync with source"
