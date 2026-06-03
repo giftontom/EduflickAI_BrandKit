@@ -101,6 +101,11 @@ signal hue, lots of mono metadata, tight lowercase display type.
   grids (`radial-gradient … 22px`) and 40px line grids at ~4–10% opacity over indigo
   canvases. **No photography** in the core brand — the system is graphic and typographic.
   Imagery, when present, is replaced by the mark, by data, or by editorial type.
+- **Cinematic depth (sanctioned — still one hue).** For hero/launch canvases, offset the
+  gradient hot-spot for *directional* light, add a soft **vignette**, and a faint **grayscale
+  film grain** (≤5% — texture, not a hue; it also kills gradient banding). Light a focal element
+  with a **halo *behind* it** — never a glow/filter *on the mark* (the mark always stays flat).
+  Snippets `S15–S19` in `recipes/snippets.md`; built reference: the **Launch Grid** (see manifest).
 - **The mark as motif.** UI states, gamification badges, loading spinners, and bullets are
   all derived from the mark's geometry (the notch carving, wedges, receding queues). Never
   paste foreign shapes on top of it.
@@ -132,6 +137,18 @@ signal hue, lots of mono metadata, tight lowercase display type.
 - **Layout.** Generous, grid-driven, lots of negative space. Mono "id" tags and section
   numbers (`00 · at a glance`) label everything like an editorial spec sheet. Three- and
   five-column token/pillar grids are a recurring rhythm.
+
+### Co-brand: Tomatrix Technologies Pvt Ltd
+
+Eduflick AI is a venture of **Tomatrix Technologies Pvt Ltd** — the parent is *acknowledged,
+never centred*. The governance:
+
+- **The Eduflick mark always leads.** Tomatrix sits in a supporting lockup with a **1u vertical
+  hairline divider** between the two marks — never larger than Eduflick, never first.
+- **Tomatrix is never recolored to indigo.** It keeps its own form. Use the supplied transparent
+  `../assets/partners/tomatrix-logo-light.png` on dark/indigo surfaces.
+- **The legal name is always proper-cased — "Tomatrix Technologies Pvt Ltd."** In footers and
+  attribution the short form **"a Tomatrix Technologies venture"** is set in mono.
 
 ---
 
@@ -183,18 +200,31 @@ Root files:
 | `README.md` | This document |
 | `colors_and_type.css` | All foundation tokens (color, type, spacing, radius, shadow, motion) + semantic text styles. Import this first. |
 | `SKILL.md` | Agent Skill entry point (cross-compatible with Claude Code) |
+| `DESIGN_CHEATSHEET.md` | The whole visual system compressed to one paste-anywhere page — for feeding a model (esp. small ones) as context. |
+| `SMALL_MODELS_GUIDE.md` | How to get on-brand HTML out of small/cheap models: the render→inspect→fix loop + failure modes. |
+| `AI_IMAGERY_GUIDE.md` | When/how to generate abstract indigo backdrops (Nano Banana 2) and layer them *behind* the type + mark — the master image-prompt kit + imagery QA. |
+| `QA_CHECKLIST.md` | Visual pass/fail gate + scorecard run on any rendered artifact before export. |
+| `recipes/` | Assemble-don't-invent build kit: `00_SYSTEM_PROMPT.md`, `snippets.md` (HTML parts bin — incl. cinematic `S15–S19`), and recipes for instagram-post · poster · slide-deck · landing-section · brochure-page · **launch-grid**. |
+| `collateral/` | Ready-to-fill kits: **`Eduflick Launch Grid.html`** (the 12-tile cinematic IG launch mural + in-page carousel viewer + deck slides), `Eduflick Instagram Kit.html`, `Eduflick Brochure Kit.html`, `Eduflick Content Calendar.html` |
 | `assets/logo/` | Canonical marks (`mark*.svg`), lockups (`lockup-*.svg`), `favicon.svg`, `LOGO_README.md` |
-| `assets/logo/social/` | Avatars (indigo/ink/paper), LinkedIn banner, OG card |
+| `assets/logo/social/` | Avatars (indigo/ink/paper + the **gradient `avatar-pf-av-*`**, built by `../tools` `export:avatar`), LinkedIn/YouTube/Twitter banners, OG card |
+| `assets/partners/` | Partner/parent logos — `tomatrix-logo-light.png` (transparent) for the co-brand lockup |
 | `assets/icons/` | `eduflick-icons.svg` (24 line icons) + `mark-companions.svg` (mark-state family) |
 | `preview/` | Design-system cards rendered in the Design System tab |
 | `ui_kits/app/` | Consumer mobile app UI kit (feed, flick player, search, profile, Sparks) |
 | `ui_kits/web/` | Educator/institution web UI kit (dashboard, library, analytics, marketing) |
 | `slides/` | Sample brand presentation slides (title, section, content, quote, closing) |
+| `../tools/` | **Pixel-perfect PNG exporter** (Playwright): `npm run export` (every post + carousel slide → 1080×1350), `export:avatar`, `serve`. See `../tools/README.md`. |
 
 **Start here:** import `colors_and_type.css`, load the three Google fonts, then compose
 with components from the relevant UI kit. Build wordmarks in HTML
 (`<span class="wordmark">eduflick<i>AI</i></span>`) for reliable rendering; use the
-`mark*.svg` files for the mark.
+`mark*.svg` files for the mark. The wordmark reads **"eduflick AI"** — a space then
+**uppercase AI** (white on dark/indigo, indigo `#5B5BF0` on paper).
+
+**To ship a social asset:** build the canvas in a `collateral/` kit — or open the
+**Launch Grid** (`collateral/Eduflick Launch Grid.html`) — then export pixel-perfect PNGs
+with `../tools` (`cd tools && npm run export`; `SCALE=1` = exact 1080×1350).
 
 ---
 

@@ -87,8 +87,10 @@
    ============================================================ */
 .profile{max-width:760px;margin:0 auto;}
 .pf-head{display:flex;align-items:center;gap:34px;padding:4px 8px 28px;}
-.pf-av{width:92px;height:92px;border-radius:50%;background:linear-gradient(150deg,var(--i-700),var(--i-ink));display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 8px 28px -10px rgba(91,91,240,0.6);}
-.pf-av svg{width:38px;height:38px;color:var(--paper);}
+.pf-av{width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;
+  background:linear-gradient(140deg, #4A3DD9 0%, #3A2BB8 28%, #261A82 56%, #150D52 80%, #0B0822 100%);
+  box-shadow:0 10px 34px -10px rgba(91,91,240,0.55), inset 0 0 0 1px rgba(245,242,234,0.05);}
+.pf-av svg{width:38px;height:38px;color:var(--paper);position:relative;z-index:2;}
 .pf-meta{flex:1;}
 .pf-name{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
 .pf-handle{font-family:var(--font-display);font-weight:700;font-size:19px;letter-spacing:-0.02em;color:var(--ink);}

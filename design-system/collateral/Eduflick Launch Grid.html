@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eduflick AI — 12-Tile Launch Grid (row murals · carousel viewer)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --i-500:#5B5BF0; --i-400:#6E78F5; --i-300:#8B97FF; --i-200:#B7C0FF; --i-100:#DCE0FF;
+    --i-600:#4B3FE0; --i-700:#3A2BB8; --i-800:#261A82; --i-900:#150D52; --i-ink:#0B0822;
+    --paper:#F5F2EA; --paper-dim:#C9C5BA; --ink:#0A0B10; --ink-2:#11131C; --ink-3:#181B28;
+    --muted:#7A7F90; --warn:#FF6E5A;
+    --font-d:'Manrope',sans-serif; --font-s:'Instrument Serif',serif; --font-m:'JetBrains Mono',monospace;
+    --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    --glow-brand:0 8px 32px -8px rgba(91,91,240,0.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-d);background:#07080C;color:var(--paper);-webkit-font-smoothing:antialiased;padding:48px 24px 96px}
+
+  /* ---------- page header ---------- */
+  .head{max-width:920px;margin:0 auto 36px}
+  .head .eyebrow{font-family:var(--font-m);font-size:12px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:var(--i-300);display:flex;align-items:center;gap:12px}
+  .head .eyebrow span{width:24px;height:1px;background:var(--i-300)}
+  .head h1{font-family:var(--font-d);font-weight:900;font-size:44px;letter-spacing:-0.04em;line-height:1.02;text-transform:lowercase;margin:16px 0 0}
+  .head h1 em{font-family:var(--font-s);font-style:italic;font-weight:400;color:var(--i-300)}
+  .head p{font-family:var(--font-d);font-weight:500;font-size:16px;line-height:1.6;color:var(--paper-dim);max-width:64ch;margin-top:14px}
+  .legend{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:22px;font-family:var(--font-m);font-size:12px;letter-spacing:0.04em;color:var(--paper-dim)}
+  .legend b{color:var(--paper);font-weight:500}
+  .toggle{display:inline-flex;align-items:center;gap:10px;margin-top:22px;font-family:var(--font-m);font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:var(--paper-dim);cursor:pointer;user-select:none}
+  .toggle input{accent-color:var(--warn);width:16px;height:16px;cursor:pointer}
+
+  /* ---------- scale-to-fit board ---------- */
+  .stage{display:flex;justify-content:center;overflow-x:auto}
+  .board{transform:scale(0.255);transform-origin:top center;display:flex;flex-direction:column;gap:30px}
+
+  /* ---------- row murals · ONE hue, THREE surfaces ---------- */
+  .mural{position:relative;display:grid;grid-template-columns:repeat(3,1080px);grid-template-rows:1350px;overflow:hidden}
+  /* texture: faint grayscale film-grain + dot grid (continuous across the row) */
+  .mural::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+    background-image:var(--grain),
+      radial-gradient(circle,rgba(245,242,234,0.06) 1px,transparent 1px),
+      linear-gradient(rgba(245,242,234,0.05) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(245,242,234,0.05) 1px,transparent 1px);
+    background-size:140px 140px,46px 46px,120px 120px,120px 120px}
+  /* cinematic vignette — darkens the row's outer edges (continuous, no per-tile seams) */
+  .mural::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(135% 125% at 50% 40%,transparent 46%,rgba(7,5,22,0.55) 100%)}
+  /* directional lighting — an offset hot-spot per row, falling off to indigo-ink */
+  .r-top{background:radial-gradient(125% 150% at 30% 16%,#8E96FF 0%,#5B5BF0 22%,#3A2BB8 52%,#1B1466 78%,#0B0822 100%)}
+  .r-mid{background:radial-gradient(130% 160% at 50% 30%,#6E78F5 0%,#4B3FE0 24%,#261A82 56%,#130C44 82%,#0B0822 100%)}
+  .t-ink{background:radial-gradient(120% 130% at 82% 10%,#241E52 0%,#15122F 32%,#0A0B10 64%)}
+  .t-paper{background:radial-gradient(120% 150% at 24% 12%,#EFEAFE 0%,#F2EEE5 44%,#ECE7DA 100%)}
+  .t-paper::before{background-image:var(--grain),radial-gradient(circle,rgba(10,11,16,0.06) 1px,transparent 1px),linear-gradient(rgba(10,11,16,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(10,11,16,0.045) 1px,transparent 1px);background-size:140px 140px,46px 46px,120px 120px,120px 120px}
+  .t-paper::after{background:radial-gradient(135% 125% at 50% 40%,transparent 54%,rgba(10,11,16,0.07) 100%)}
+
+  /* ---------- tile ---------- */
+  .cv{position:relative;width:1080px;height:1350px;overflow:hidden;z-index:2;
+    display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:34px;
+    padding:150px 96px;border:1px solid rgba(245,242,234,0.06)}
+  .cv.center{align-items:center;text-align:center}
+  .cv.tap{cursor:pointer;transition:filter .2s}
+  .cv.tap:hover{filter:brightness(1.08)}
+
+  .safe{position:absolute;left:0;right:0;top:135px;bottom:135px;z-index:6;pointer-events:none;
+    border-top:2px dashed rgba(255,110,90,0.7);border-bottom:2px dashed rgba(255,110,90,0.7);opacity:0}
+  body:has(#safe:checked) .safe{opacity:1}
+
+  /* ---------- type (dark-surface defaults) ---------- */
+  .eb{font-family:var(--font-m);font-size:23px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:var(--i-200);position:relative;z-index:3}
+  .hl{font-family:var(--font-d);font-weight:900;font-size:76px;letter-spacing:-0.05em;line-height:0.92;text-transform:lowercase;color:var(--paper);position:relative;z-index:3}
+  .hl.sm{font-size:58px}
+  .hl.lg{font-size:104px}
+  .hl em{font-family:var(--font-s);font-style:italic;font-weight:400;letter-spacing:-0.02em;color:var(--i-200)}
+  .sub{font-family:var(--font-d);font-weight:500;font-size:29px;line-height:1.45;color:var(--paper-dim);max-width:32ch;position:relative;z-index:3}
+  .sub em{font-family:var(--font-s);font-style:italic;color:var(--i-200)}
+  .cta{font-family:var(--font-m);font-size:24px;font-weight:500;letter-spacing:0.04em;color:var(--paper);position:relative;z-index:3}
+  .tmx{font-family:var(--font-m);font-size:18px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);position:relative;z-index:3}
+  .coral{display:inline-flex;align-items:center;gap:12px;font-family:var(--font-m);font-size:25px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;
+    padding:14px 26px;border-radius:999px;background:rgba(255,110,90,0.14);color:var(--warn);position:relative;z-index:3}
+  .coral::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--warn);box-shadow:0 0 12px var(--warn)}
+  .wm{font-family:var(--font-d);font-weight:800;letter-spacing:-0.045em;text-transform:lowercase;line-height:1;color:var(--paper);font-size:118px;display:inline-flex;align-items:baseline;position:relative;z-index:3}
+  .wm i{font-style:normal;color:var(--paper);margin-left:0.24em;text-transform:none}   /* AI — white, same as the wordmark */
+  .wm.sm{font-size:44px}
+
+  .pos{position:absolute;left:40px;top:40px;z-index:5;font-family:var(--font-m);font-size:17px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(245,242,234,0.32)}
+
+  /* carousel marker */
+  .car{position:absolute;top:150px;right:96px;z-index:5;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+  .carstack{position:relative;width:46px;height:46px}
+  .carstack i{position:absolute;width:34px;height:34px;border:2px solid rgba(245,242,234,0.7);border-radius:6px}
+  .carstack i:nth-child(1){top:0;right:0}
+  .carstack i:nth-child(2){top:9px;right:9px;background:rgba(7,8,12,0.5)}
+  .carlbl{font-family:var(--font-m);font-size:17px;letter-spacing:0.14em;text-transform:uppercase;color:var(--paper-dim)}
+
+  /* ---------- PAPER-surface overrides ---------- */
+  .t-paper .hl{color:var(--ink)} .t-paper .hl em{color:var(--i-500)}
+  .t-paper .eb{color:var(--i-500)} .t-paper .sub{color:#3A3D47} .t-paper .sub em{color:var(--i-500)}
+  .t-paper .cta{color:var(--ink)} .t-paper .tmx{color:#7A7F90}
+  .t-paper .cv{border-color:rgba(10,11,16,0.06)}
+  .t-paper .pos{color:rgba(10,11,16,0.34)}
+  .t-paper .carlbl{color:#3A3D47}
+  .t-paper .carstack i{border-color:rgba(10,11,16,0.55)}
+  .t-paper .carstack i:nth-child(2){background:rgba(245,242,234,0.7)}
+  .t-paper .bar{color:#0A0B10}
+  .t-paper .bar.low{background:rgba(10,11,16,0.14);color:#3A3D47}
+  .t-paper .bar.high{color:#F5F2EA}
+
+  /* ---------- brand motif components ---------- */
+  .glow{filter:none;position:relative;z-index:1}   /* the mark stays FLAT (QA) — light comes from a .halo behind it, never a filter on the mark */
+  .halo{position:absolute;pointer-events:none;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(139,151,255,0.5),rgba(110,120,245,0.18) 44%,transparent 72%);filter:blur(8px)}
+  .ghost{position:absolute;z-index:0;opacity:0.07;pointer-events:none}
+  /* consistent brand footer (added to bare tiles via JS; placed on the safe-bottom line) */
+  .foot{position:absolute;left:0;right:0;bottom:150px;z-index:4;display:flex;align-items:center;justify-content:center;gap:14px;pointer-events:none;color:rgba(245,242,234,0.46)}
+  .foot .fw{font-family:var(--font-d);font-weight:800;letter-spacing:-0.03em;text-transform:lowercase;font-size:30px;line-height:1}
+  .foot .fw i{font-style:normal;margin-left:0.22em;text-transform:none}
+  .t-paper .foot{color:rgba(10,11,16,0.42)}
+
+  .flick{display:flex;gap:20px;align-items:flex-start;background:rgba(20,18,52,0.45);backdrop-filter:blur(12px);border:1px solid rgba(245,242,234,0.16);
+    border-radius:20px;padding:24px 26px;width:600px;position:relative;z-index:3;box-shadow:0 20px 50px -18px rgba(0,0,0,0.6),inset 0 1px 0 rgba(245,242,234,0.16),var(--glow-brand)}
+  .subj{width:70px;height:70px;border-radius:4px;background:linear-gradient(150deg,#6E78F5,#4B3FE0);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 6px 18px -6px rgba(91,91,240,0.6)}
+  .subj span{font-family:var(--font-s);font-style:italic;font-size:42px;color:var(--paper)}
+  .flick .m{font-family:var(--font-m);font-size:16px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted)}
+  .flick h4{font-family:var(--font-d);font-weight:800;font-size:31px;letter-spacing:-0.02em;color:var(--paper);text-transform:lowercase;margin-top:8px;line-height:1.05}
+  .flick h4 em{font-family:var(--font-s);font-style:italic;font-weight:400;color:var(--i-300)}
+  .stack{position:relative;z-index:3;display:flex;flex-direction:column;gap:20px;width:640px}
+  .stack .flick:nth-child(2){opacity:0.72;transform:scale(0.965) translateX(26px)}
+  .stack .flick:nth-child(3){opacity:0.42;transform:scale(0.93) translateX(52px)}
+
+  .frame{width:150px;height:188px;border:2px solid rgba(245,242,234,0.3);border-radius:10px;background:rgba(20,18,52,0.4);backdrop-filter:blur(8px);flex-shrink:0;
+    clip-path:polygon(0 0,100% 0,100% 46%,68% 62%,100% 79%,100% 100%,0 100%)}
+  .frame.lit{border-color:var(--i-300);background:rgba(91,91,240,0.22);box-shadow:0 0 40px rgba(91,91,240,0.45)}
+  .strip{display:flex;gap:16px;align-items:center;position:relative;z-index:3}
+  .arrow{font-family:var(--font-d);font-weight:700;font-size:54px;color:var(--i-300)}
+  .source{width:200px;height:188px;border:2px solid rgba(245,242,234,0.3);border-radius:10px;background:rgba(20,18,52,0.4);backdrop-filter:blur(8px);
+    display:flex;flex-direction:column;justify-content:center;gap:18px;padding:0 22px;flex-shrink:0}
+  .source div{height:0;border-top:2px dashed rgba(245,242,234,0.4)}
+
+  .bars{display:flex;align-items:flex-end;gap:40px;height:300px;position:relative;z-index:3}
+  .bar{width:130px;border-radius:12px 12px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:14px;
+    font-family:var(--font-m);font-size:15px;letter-spacing:0.12em;text-transform:uppercase;color:var(--paper)}
+  .bar.low{height:24%;background:rgba(245,242,234,0.10);color:var(--paper-dim)}
+  .bar.high{height:100%;background:linear-gradient(180deg,#8E96FF,#4B3FE0);box-shadow:0 0 44px rgba(91,91,240,0.4)}
+
+  .ringwrap{position:relative;z-index:3;width:300px;height:300px}
+
+  .ticket{position:relative;z-index:3;width:540px;border:1.5px solid rgba(245,242,234,0.2);border-radius:18px;background:rgba(20,18,52,0.42);backdrop-filter:blur(12px);
+    padding:34px 38px;clip-path:polygon(0 0,100% 0,100% 38%,93% 50%,100% 62%,100% 100%,0 100%);box-shadow:0 20px 50px -18px rgba(0,0,0,0.55),inset 0 1px 0 rgba(245,242,234,0.14)}
+  .ticket .t-eb{font-family:var(--font-m);font-size:18px;letter-spacing:0.2em;text-transform:uppercase;color:var(--i-300)}
+  .ticket .t-h{font-family:var(--font-d);font-weight:900;font-size:60px;letter-spacing:-0.04em;color:var(--paper);text-transform:lowercase;margin-top:10px;line-height:0.95}
+  .ticket .t-h em{font-family:var(--font-s);font-style:italic;font-weight:400;color:var(--i-300)}
+  /* paper-surface ticket (e.g. UL) — solid indigo card that pops on cream, with light text */
+  .t-paper .ticket{background:linear-gradient(150deg,#6E78F5,#4B3FE0);border-color:rgba(245,242,234,0.22);box-shadow:0 22px 54px -18px rgba(91,91,240,0.55),inset 0 1px 0 rgba(245,242,234,0.22)}
+  .t-paper .ticket .t-eb{color:#DCE0FF} .t-paper .ticket .t-h{color:#F5F2EA} .t-paper .ticket .t-h em{color:#DCE0FF}
+
+  .ui{position:relative;z-index:3;width:560px;height:260px}
+  .uicard{position:absolute;width:330px;height:210px;border:1px solid rgba(245,242,234,0.18);border-radius:14px;background:rgba(20,18,52,0.5);backdrop-filter:blur(10px);padding:20px;box-shadow:0 18px 44px -16px rgba(0,0,0,0.6),inset 0 1px 0 rgba(245,242,234,0.12)}
+  .uicard .bar1{height:14px;width:60%;border-radius:4px;background:rgba(245,242,234,0.22)}
+  .uicard .bar2{height:10px;width:90%;border-radius:4px;background:rgba(245,242,234,0.12);margin-top:14px}
+  .uicard .bar3{height:10px;width:75%;border-radius:4px;background:rgba(245,242,234,0.12);margin-top:10px}
+  .uicard .chip{margin-top:18px;display:inline-block;font-family:var(--font-m);font-size:13px;letter-spacing:0.14em;text-transform:uppercase;color:var(--i-300);border:1px solid rgba(139,151,255,0.4);border-radius:999px;padding:6px 14px}
+  .uicard:nth-child(1){transform:translate(0,40px) rotate(-6deg)}
+  .uicard:nth-child(2){transform:translate(120px,16px) rotate(2deg);background:rgba(17,19,28,0.85)}
+  .uicard:nth-child(3){transform:translate(230px,-6px) rotate(8deg)}
+
+  /* typographic notch rule (one shape, one notch — no icon) */
+  .notchrule{width:360px;height:12px;background:var(--paper);position:relative;z-index:3;border-radius:3px;
+    clip-path:polygon(0 0,42% 0,50% 78%,58% 0,100% 0,100% 100%,0 100%)}
+
+  /* co-brand lockup · parent acknowledged, never centred · Eduflick mark leads · 1u divider */
+  .cobrand{display:flex;align-items:center;gap:34px;position:relative;z-index:3}
+  .cobrand .ck{display:flex;align-items:center;gap:16px}
+  .cobrand .ckw{font-family:var(--font-d);font-weight:800;letter-spacing:-0.045em;text-transform:lowercase;font-size:54px;color:#0A0B10;display:inline-flex;align-items:baseline}
+  .cobrand .ckw i{font-style:normal;color:#5B5BF0;margin-left:0.22em;text-transform:none}
+  .cobrand .cdiv{width:2px;height:96px;background:rgba(10,11,16,0.20)}
+  .cobrand .tlogo{height:108px;width:auto;display:block}
+
+  .footnote{max-width:920px;margin:44px auto 0;font-family:var(--font-m);font-size:12px;line-height:1.7;letter-spacing:0.03em;color:var(--muted)}
+  .footnote b{color:var(--paper-dim);font-weight:500}
+
+  /* ============ CAROUSEL VIEWER ============ */
+  .viewer{position:fixed;inset:0;z-index:1000;background:rgba(7,8,12,0.92);backdrop-filter:blur(10px);
+    display:none;align-items:center;justify-content:center;flex-direction:column;gap:22px}
+  .viewer.open{display:flex}
+  /* ----- ONE deck template at two scales (em-based) ----- */
+  .vslide{width:440px;height:550px;font-size:13.7px;border-radius:20px;overflow:hidden;position:relative;box-shadow:0 30px 90px -20px rgba(0,0,0,0.8);transform:scale(var(--vs,1));transform-origin:center;cursor:pointer}
+  .xslide{width:1080px;height:1350px;font-size:34px;overflow:hidden;position:relative}
+  .proper{text-transform:none !important}   /* legal/partner names keep their capitals */
+  /* carousel cover = the actual post tile (cloned), so the cover never changes between grid + viewer */
+  .vcover{position:absolute;inset:0;z-index:3;transform:scale(0.40741);transform-origin:top left}
+  .xcover{position:absolute;inset:0;z-index:3}
+  /* ----- viewer UX ----- */
+  .vslide.vfx{animation:vfx .24s ease-out}
+  @keyframes vfx{from{opacity:.35}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){.vslide.vfx{animation:none}}
+  .vbar{position:fixed;top:0;left:0;height:3px;width:0;z-index:1001;background:linear-gradient(90deg,#6E78F5,#8B97FF);box-shadow:0 0 12px rgba(91,91,240,0.6);transition:width .24s ease-out}
+  .vdl.all{left:130px}
+
+  /* slide surfaces (match the row murals) + grain + vignette */
+  /* slide surfaces — wider radii than the murals so one 1080 slide reads as calmly/evenly lit as a mural slice (not a tight spotlight) */
+  .vs-ink{background:radial-gradient(210% 230% at 82% 10%,#241E52,#15122F 34%,#0A0B10 66%)}
+  .vs-indigo{background:radial-gradient(245% 300% at 50% 22%,#6E78F5,#4B3FE0 26%,#261A82 60%,#130C44 84%,#0B0822 100%)}
+  .vs-top{background:radial-gradient(235% 280% at 40% 16%,#8E96FF,#5B5BF0 24%,#3A2BB8 56%,#1B1466 80%,#0B0822 100%)}
+  .vs-paper{background:radial-gradient(120% 150% at 24% 12%,#EFEAFE,#F2EEE5 44%,#ECE7DA 100%)}
+  .vslide::before,.xslide::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background-image:var(--grain),radial-gradient(circle,rgba(245,242,234,0.06) 1px,transparent 1px),linear-gradient(rgba(245,242,234,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(245,242,234,0.05) 1px,transparent 1px);background-size:4.12em 4.12em,1.353em 1.353em,3.529em 3.529em,3.529em 3.529em}
+  .vs-paper::before{background-image:var(--grain),radial-gradient(circle,rgba(10,11,16,0.06) 1px,transparent 1px),linear-gradient(rgba(10,11,16,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(10,11,16,0.045) 1px,transparent 1px) !important;background-size:4.12em 4.12em,1.353em 1.353em,3.529em 3.529em,3.529em 3.529em}
+  .vslide::after,.xslide::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(165% 150% at 50% 42%,transparent 60%,rgba(7,5,22,0.32) 100%)}
+  .vs-paper::after{background:radial-gradient(135% 125% at 50% 40%,transparent 56%,rgba(10,11,16,0.06) 100%)}
+
+  /* deck layout */
+  .sdeck{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:space-between;padding:4.4em 2.9em}
+  .srow{display:flex;align-items:center;justify-content:space-between;gap:1em}
+  .seb{font-family:var(--font-m);font-weight:500;font-size:0.72em;letter-spacing:0.22em;text-transform:uppercase;color:var(--i-200)}
+  .sidx{font-family:var(--font-m);font-weight:500;font-size:0.66em;letter-spacing:0.16em;color:rgba(245,242,234,0.5)}
+  .smid{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:0.66em}
+  .smotif{position:relative;display:flex;align-items:center;min-height:3.4em;margin-bottom:0.15em}
+  .shl{font-family:var(--font-d);font-weight:900;font-size:2.7em;letter-spacing:-0.045em;line-height:0.95;text-transform:lowercase;color:var(--paper)}
+  .shl em{font-family:var(--font-s);font-style:italic;font-weight:400;color:var(--i-200)}
+  .ssup{font-family:var(--font-d);font-weight:500;font-size:1.04em;line-height:1.45;color:var(--paper-dim);max-width:19em}
+  .sfoot{display:flex;align-items:center;gap:0.42em;font-family:var(--font-d);font-weight:800;letter-spacing:-0.03em;text-transform:lowercase;font-size:0.86em;color:rgba(245,242,234,0.55)}
+  .sfoot i{font-style:normal;margin-left:0.18em;text-transform:none}
+  .sfoot svg{width:1.05em;height:1.05em;opacity:0.85}
+  .scue{font-family:var(--font-m);font-size:0.64em;letter-spacing:0.18em;text-transform:uppercase;color:rgba(245,242,234,0.5)}
+  .scover .shl{font-size:3.05em}
+  .vs-paper .seb{color:var(--i-500)} .vs-paper .shl{color:var(--ink)} .vs-paper .shl em{color:var(--i-500)}
+  .vs-paper .ssup{color:#3A3D47} .vs-paper .sidx{color:rgba(10,11,16,0.45)} .vs-paper .sfoot{color:rgba(10,11,16,0.55)} .vs-paper .scue{color:rgba(10,11,16,0.45)}
+
+  /* ----- slide motifs (em-scaled, on-brand) ----- */
+  .mo{position:relative;display:flex;align-items:center;gap:0.55em}
+  .mo .mhalo{position:absolute;left:1.7em;top:50%;width:5.4em;height:5.4em;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(139,151,255,0.45),transparent 70%);filter:blur(5px)}
+  .mo svg.mk{width:3.4em;height:3.4em;display:block;position:relative}
+  .mchip{font-family:var(--font-m);font-weight:500;font-size:1.5em;letter-spacing:0.04em;color:var(--paper);border:1.5px solid rgba(139,151,255,0.6);border-radius:0.45em;padding:0.28em 0.5em;background:rgba(91,91,240,0.16)}
+  .vs-paper .mchip{color:var(--ink)}
+  .mstat{font-family:var(--font-d);font-weight:900;font-size:5em;letter-spacing:-0.05em;line-height:0.8;color:var(--paper);position:relative}
+  .vs-paper .mstat{color:var(--ink)}
+  .mbars{display:flex;align-items:flex-end;gap:0.7em;height:3.2em}
+  .mbars i{width:1.7em;border-radius:0.3em 0.3em 0 0;display:block}
+  .mbars i.lo{height:30%;background:rgba(245,242,234,0.16)}
+  .mbars i.hi{height:100%;background:linear-gradient(180deg,#8E96FF,#4B3FE0);box-shadow:0 0 1.2em rgba(91,91,240,0.5)}
+  .vs-paper .mbars i.lo{background:rgba(10,11,16,0.18)}
+  /* motif visibility on the PAPER surface — flip light fills to indigo/ink so they read on cream */
+  .vs-paper .mo svg.mk path{fill:#5B5BF0}
+  .vs-paper .mo .mhalo{background:radial-gradient(closest-side,rgba(91,91,240,0.22),transparent 70%)}
+  .vs-paper .mspark svg path{fill:#5B5BF0}
+  .vs-paper .mspark svg{filter:drop-shadow(0 0 0.5em rgba(91,91,240,0.4))}
+  .vs-paper .mnodes b.o{border-color:rgba(91,91,240,0.6)}
+  .vs-paper .mnodes s{background:rgba(91,91,240,0.5)}
+  .mnodes{display:flex;align-items:center;gap:0.18em}
+  .mnodes b{width:1.5em;height:1.5em;border-radius:50%;background:linear-gradient(150deg,#8E96FF,#4B3FE0);display:block;box-shadow:0 0 0.8em rgba(91,91,240,0.5)}
+  .mnodes b.o{background:transparent;border:1.5px solid rgba(139,151,255,0.6);box-shadow:none}
+  .mnodes s{width:1.1em;height:2px;background:rgba(139,151,255,0.6);display:block}
+  .mspark svg{width:3.2em;height:3.2em;display:block;filter:drop-shadow(0 0 0.6em rgba(139,151,255,0.6))}
+  .mcheck{display:flex;flex-direction:column;gap:0.5em;background:rgba(20,18,52,0.42);backdrop-filter:blur(8px);border:1px solid rgba(245,242,234,0.14);border-radius:0.6em;padding:0.78em 0.95em;box-shadow:0 0.5em 1.4em -0.5em rgba(0,0,0,0.5),inset 0 1px 0 rgba(245,242,234,0.12)}
+  .mcheck i{display:flex;align-items:center;gap:0.62em;font-family:var(--font-m);font-size:0.72em;letter-spacing:0.1em;text-transform:uppercase;color:var(--paper)}
+  .mcheck i::before{content:'✓';flex-shrink:0;width:1.4em;height:1.4em;border-radius:0.34em;background:linear-gradient(150deg,#6E78F5,#4B3FE0);color:#F5F2EA;display:inline-flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:700;box-shadow:0 0 0.7em rgba(91,91,240,0.55)}
+  .vs-paper .mcheck{background:rgba(255,255,255,0.6);border-color:rgba(10,11,16,0.1);box-shadow:0 0.5em 1.4em -0.5em rgba(0,0,0,0.15)}
+  .vs-paper .mcheck i{color:var(--ink)}
+  .mframe{width:2.4em;height:3em;border:2px solid rgba(245,242,234,0.35);border-radius:0.35em;background:rgba(20,18,52,0.4);clip-path:polygon(0 0,100% 0,100% 46%,68% 62%,100% 79%,100% 100%,0 100%)}
+  .mframe.lit{border-color:var(--i-300);background:rgba(91,91,240,0.25);box-shadow:0 0 1em rgba(91,91,240,0.5)}
+  .marr{font-family:var(--font-d);font-weight:700;font-size:2em;color:var(--i-300)}
+  .mco{display:flex;align-items:center;gap:0.5em}
+  .mco .cw{font-family:var(--font-d);font-weight:800;letter-spacing:-0.04em;text-transform:lowercase;font-size:1.5em;color:var(--ink);display:inline-flex;align-items:baseline}
+  .mco .cw i{font-style:normal;margin-left:0.16em;color:var(--i-500);text-transform:none}
+  .mco .cb{width:2px;height:2.7em;background:rgba(10,11,16,0.25)}
+  .mco .ct{font-family:var(--font-d);font-weight:600;font-size:1.3em;text-transform:lowercase;color:var(--ink);display:flex;align-items:center;gap:0.4em}
+  .mco .ct b{width:1.05em;height:1.05em;border-radius:50%;background:var(--ink);display:block}
+
+  /* viewer chrome */
+  .vnav{position:fixed;top:50%;transform:translateY(-50%);background:rgba(245,242,234,0.08);border:1px solid rgba(245,242,234,0.22);
+    color:#F5F2EA;width:58px;height:58px;border-radius:50%;font-size:30px;line-height:1;cursor:pointer;transition:background .15s}
+  .vnav:hover{background:rgba(245,242,234,0.18)}
+  .vprev{left:6%} .vnext{right:6%}
+  .vclose{position:fixed;top:26px;right:30px;background:none;border:0;color:var(--paper-dim);font-size:26px;cursor:pointer;font-family:var(--font-m)}
+  .vmeta{font-family:var(--font-m);font-size:13px;letter-spacing:0.14em;text-transform:uppercase;color:var(--paper-dim)}
+  .vmeta b{color:var(--paper);font-weight:500}
+  .vdots{display:flex;gap:8px}
+  .vdots i{width:8px;height:8px;border-radius:50%;background:rgba(245,242,234,0.3);transition:all .2s}
+  .vdots i.on{background:var(--i-300);width:24px;border-radius:4px}
+  .vhint{position:absolute;bottom:30px;left:0;right:0;text-align:center;font-family:var(--font-m);font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+
+  /* ============ EXPORT INFRASTRUCTURE ============ */
+  .exportbar{max-width:920px;margin:18px auto 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-family:var(--font-m);font-size:12px;letter-spacing:0.04em;color:var(--muted)}
+  .exportbar a{font-family:var(--font-m);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#F5F2EA;background:rgba(91,91,240,0.18);border:1px solid rgba(139,151,255,0.5);border-radius:999px;padding:9px 16px;cursor:pointer;text-decoration:none}
+  .exportbar a:hover{background:rgba(91,91,240,0.32)}
+  .exportbar b{color:var(--paper-dim);font-weight:500}
+  .vdl{position:fixed;top:26px;left:30px;background:rgba(91,91,240,0.2);border:1px solid rgba(139,151,255,0.55);color:#F5F2EA;font-family:var(--font-m);font-size:13px;letter-spacing:0.08em;text-transform:uppercase;padding:10px 16px;border-radius:999px;cursor:pointer}
+  .vdl:hover{background:rgba(91,91,240,0.36)}
+  #exportsheet{display:none}
+  body.export #exportsheet{display:flex;flex-wrap:wrap;gap:34px;justify-content:center;margin-top:54px;border-top:1px solid var(--line);padding-top:54px}
+  body.export{padding:0}
+  body.export .board{transform:none}
+  body.export .stage{overflow:visible;justify-content:flex-start}
+  body.export .pos,body.export .car,body.export .safe,body.export .toggle{display:none !important}
+  body.export .head h1,body.export .head p,body.export .legend{display:none}
+  /* (.xslide is defined with the deck system above — same template, full 1080×1350 scale) */
+  /* per-post in-browser download button (hover) — captured as the tile's mural slice */
+  .dlbtn{position:absolute;top:40px;right:40px;z-index:7;width:72px;height:72px;border-radius:50%;border:1px solid rgba(245,242,234,0.32);background:rgba(7,8,12,0.5);color:#F5F2EA;font-size:30px;line-height:1;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center}
+  .cv:hover .dlbtn{opacity:1}
+  .t-paper .dlbtn{border-color:rgba(10,11,16,0.25);background:rgba(245,242,234,0.65);color:#0A0B10}
+</style>
+</head>
+<body>
+
+  <header class="head">
+    <div class="eyebrow"><span></span>eduflick ai · launch grid · 12 tiles · 6 carousels · tap to view slides</div>
+    <h1>a brand <em>reveal</em> across indigo, paper &amp; ink — climbing into the course <em>launch</em></h1>
+    <p>Each row is one image split across 3 posts, rotating the brand's three surfaces (one hue, never a second). Carousel tiles are marked with the stacked icon — <b>tap any of them to flip through its slides.</b> The mid row is the identity band: one-shape-one-notch (carousel), the logo, and how-it-works (carousel).</p>
+    <div class="legend">
+      <span><b>Carousels:</b> BL · MR · ML · UC · TC · UR</span>
+      <span><b>Coral:</b> scarcity only (TR)</span>
+      <span><b>Web:</b> eduflickai.com</span>
+      <span><b>IG:</b> @eduflick.ai</span>
+    </div>
+    <label class="toggle"><input type="checkbox" id="safe"> show 1080² safe-zone guides</label>
+    <div class="exportbar">
+      <a href="?export=1">⬇ open export view (1:1)</a>
+      <a href="?">← back to grid</a>
+      <span>bulk, pixel-perfect: <b>cd tools &amp;&amp; npm i &amp;&amp; npm run export</b> · in-browser ⬇ needs http: <b>npm run serve</b></span>
+    </div>
+  </header>
+
+  <div class="stage">
+    <div class="board">
+
+      <!-- ===================== TOP ROW · COURSE LAUNCH · indigo (TL · TC · TR) ===================== -->
+      <section class="mural r-top">
+        <div class="cv center">
+          <div class="pos">TL · post 12</div>
+          <svg class="ghost" style="bottom:-120px;left:-120px" viewBox="0 0 180 180" width="640" height="640"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+          <div class="halo" style="width:600px;height:600px;left:50%;top:42%;transform:translate(-50%,-50%)"></div>
+          <svg class="glow" viewBox="0 0 180 180" width="180" height="180"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+          <div class="hl">the program is <em>live</em></div>
+          <div class="cta">register free → eduflickai.com</div>
+          <div class="safe"></div>
+        </div>
+        <div class="cv center tap" onclick="openViewer('tc')">
+          <div class="pos">TC · post 11 · carousel</div>
+          <div class="car"><div class="carstack"><i></i><i></i></div><div class="carlbl">carousel · 7 ›</div></div>
+          <div class="wm">eduflick<i>AI</i></div>
+          <div class="hl sm">ship <em>ai products</em>, not theory</div>
+          <div class="ui">
+            <div class="uicard"><div class="bar1"></div><div class="bar2"></div><div class="bar3"></div><span class="chip">saas dashboard</span></div>
+            <div class="uicard"><div class="bar1"></div><div class="bar2"></div><div class="bar3"></div><span class="chip">rag chatbot</span></div>
+            <div class="uicard"><div class="bar1"></div><div class="bar2"></div><div class="bar3"></div><span class="chip">agentic platform</span></div>
+          </div>
+          <div class="safe"></div>
+        </div>
+        <div class="cv">
+          <div class="pos">TR · post 10</div>
+          <div class="eb">pioneer cohort 01</div>
+          <div class="ticket">
+            <div class="t-eb">in person · uxp innovation hub</div>
+            <div class="t-h">20 <em>selective</em> seats</div>
+          </div>
+          <div class="coral">7 of 20 seats left</div>
+          <div class="sub">₹49,000 founding · ₹70,000 from cohort 2</div>
+          <div class="cta">apply → eduflickai.com/apply</div>
+          <div class="safe"></div>
+        </div>
+      </section>
+
+      <!-- ===================== UPPER ROW · WHY + PARENT · paper (UL · UC · UR) ===================== -->
+      <section class="mural t-paper">
+        <div class="cv">
+          <div class="pos">UL · post 9</div>
+          <div class="eb">next: the program</div>
+          <div class="ticket" style="width:560px">
+            <div class="t-eb">the academy</div>
+            <div class="t-h">we <em>ship</em> it</div>
+          </div>
+          <div class="hl sm">we don't just teach it</div>
+          <div class="safe"></div>
+        </div>
+        <div class="cv center tap" onclick="openViewer('uc')">
+          <div class="pos">UC · post 8 · carousel</div>
+          <div class="car"><div class="carstack"><i></i><i></i></div><div class="carlbl">carousel · 7 ›</div></div>
+          <div class="eb">vision · mission</div>
+          <div class="bars">
+            <div class="bar low">videos</div>
+            <div class="bar high">flicks</div>
+          </div>
+          <div class="hl sm">why we <em>built</em> eduflick</div>
+          <div class="safe"></div>
+        </div>
+        <!-- UR · Tomatrix co-brand → CAROUSEL (paper · real Tomatrix logo · governance rules) -->
+        <div class="cv center tap" onclick="openViewer('ur')">
+          <div class="pos">UR · post 7 · carousel</div>
+          <div class="car"><div class="carstack"><i></i><i></i></div><div class="carlbl">carousel · 4 ›</div></div>
+          <div class="eb">backed by</div>
+          <div class="cobrand">
+            <span class="ck"><svg viewBox="0 0 180 180" width="60" height="60"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#0B0822"/></svg><span class="ckw">eduflick<i>AI</i></span></span>
+            <span class="cdiv"></span>
+            <img class="tlogo" src="../../assets/partners/tomatrix-logo-light.png" alt="Tomatrix Technologies">
+          </div>
+          <div class="sub" style="text-align:center">eduflick ai is <span class='proper'>Tomatrix</span>'s flagship product.</div>
+          <div class="safe"></div>
+        </div>
+      </section>
+
+      <!-- ===================== MID ROW · IDENTITY BAND · indigo (ML · MC · MR) ===================== -->
+      <section class="mural r-mid">
+        <!-- ML · post 6 · "the flick is the unit" / how it works · CAROUSEL -->
+        <div class="cv center tap" onclick="openViewer('ml')">
+          <div class="pos">ML · post 6 · carousel</div>
+          <div class="car"><div class="carstack"><i></i><i></i></div><div class="carlbl">carousel · 6 ›</div></div>
+          <div class="eb">how it works</div>
+          <div class="strip">
+            <div class="source"><div></div><div></div><div></div></div>
+            <div class="arrow">→</div>
+            <div class="frame"></div><div class="frame lit"></div>
+          </div>
+          <div class="hl sm">the <em>flick</em> is the unit</div>
+          <div class="safe"></div>
+        </div>
+        <!-- MC · post 5 · the logo (enlarged) -->
+        <div class="cv center">
+          <div class="pos">MC · post 5</div>
+          <div style="position:relative;display:flex;align-items:center;justify-content:center;z-index:3">
+            <div class="halo" style="width:630px;height:630px;left:50%;top:50%;transform:translate(-50%,-50%)"></div>
+            <div style="position:absolute;width:470px;height:470px;border:1px solid rgba(245,242,234,0.10);border-radius:18px"></div>
+            <div style="position:absolute;width:392px;height:392px;border:1px solid rgba(245,242,234,0.14);border-radius:14px"></div>
+            <svg class="glow" viewBox="0 0 180 180" width="312" height="312"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+          </div>
+          <div class="wm" style="font-size:90px">eduflick<i>AI</i></div>
+          <div class="safe"></div>
+        </div>
+        <!-- MR · post 4 · "one shape, one notch" (type-only) · CAROUSEL -->
+        <div class="cv center tap" onclick="openViewer('mr')">
+          <div class="pos">MR · post 4 · carousel</div>
+          <div class="car"><div class="carstack"><i></i><i></i></div><div class="carlbl">carousel · 4 ›</div></div>
+          <div class="eb">the philosophy</div>
+          <div class="hl lg" style="text-align:center">one shape,<br>one <em>notch</em>.</div>
+          <div class="notchrule"></div>
+          <div class="safe"></div>
+        </div>
+      </section>
+
+      <!-- ===================== BOTTOM ROW · THE FEED · ink (BL · BC · BR) ===================== -->
+      <section class="mural t-ink">
+        <div class="cv tap" onclick="openViewer('bl')">
+          <div class="pos">BL · post 3 · carousel</div>
+          <div class="car"><div class="carstack"><i></i><i></i></div><div class="carlbl">carousel · 6 ›</div></div>
+          <div class="stack">
+            <div class="flick"><div class="subj"><span>B</span></div><div><div class="m">flick 047 · 60s</div><h4>how mitosis <em>splits</em> a cell</h4></div></div>
+            <div class="flick"><div class="subj"><span>π</span></div><div><div class="m">flick 048 · 60s</div><h4>why π shows up <em>everywhere</em></h4></div></div>
+            <div class="flick"><div class="subj"><span>λ</span></div><div><div class="m">flick 049 · 60s</div><h4>what a <em>vector</em> really is</h4></div></div>
+          </div>
+          <div class="hl sm">what is <em>eduflick ai</em>?</div>
+          <div class="safe"></div>
+        </div>
+        <div class="cv center">
+          <div class="pos">BC · post 2</div>
+          <div class="flick" style="width:640px">
+            <div class="subj"><span>a</span></div>
+            <div><div class="m">one flick · one concept</div><h4>any source → a <em>flick</em> you finish</h4></div>
+          </div>
+          <div class="hl">one concept per <em>flick</em></div>
+          <div class="safe"></div>
+        </div>
+        <div class="cv center">
+          <div class="pos">BR · post 1</div>
+          <svg class="ghost" style="bottom:-140px;right:-140px" viewBox="0 0 180 180" width="680" height="680"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+          <div class="eb">eduflick ai</div>
+          <div class="hl">a feed for <em>thinking</em></div>
+          <div class="wm sm">eduflick<i>AI</i></div>
+          <div class="safe"></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <p class="footnote">
+    <b>Surfaces (one hue, never a second):</b> top = bright indigo (course) · upper = paper (why + parent) · mid = indigo (identity: notch · logo · how-it-works) · bottom = ink (the feed).<br>
+    <b>Posting order:</b> one full row per session, right → center → left, rows bottom → top.
+    Wave 1 → BR·BC·BL | Wave 2 → MR·MC·ML | Wave 3 → UR·UC·UL | Wave 4 → TR·TC·TL.<br>
+    <b>Carousels (tap to view):</b> BL "what is eduflick ai" · MR "one shape, one notch" · ML "the flick is the unit (how it works)" · UC "why we built (vision/mission)" · TC "the course" · UR "Tomatrix Technologies Pvt Ltd (the parent)".
+    <b>Tomatrix</b> is acknowledged on the paper row (UR) — Eduflick mark leads, 1u divider, real logo (never recoloured to indigo), the legal name "Tomatrix Technologies Pvt Ltd" always in proper case.
+  </p>
+
+  <!-- export sheet: every slide rendered at true 1080×1350 (export mode only) -->
+  <div id="exportsheet"></div>
+
+  <!-- ============ CAROUSEL VIEWER MODAL ============ -->
+  <div id="viewer" class="viewer" onclick="if(event.target===this)closeViewer()">
+    <div class="vbar" id="vbar"></div>
+    <button class="vclose" onclick="closeViewer()">esc ✕</button>
+    <button class="vdl" onclick="downloadCurrentSlide()">⬇ png</button>
+    <button class="vdl all" onclick="downloadAll()">⬇ all</button>
+    <button class="vnav vprev" onclick="nav(-1)">‹</button>
+    <div class="vslide" id="vslide"></div>
+    <button class="vnav vnext" onclick="nav(1)">›</button>
+    <div class="vmeta"><b id="vtitle"></b> · <span id="vcount"></span></div>
+    <div class="vdots" id="vdots"></div>
+    <div class="vhint">swipe · tap sides · ← → · esc</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.js"></script>
+  <script>
+    const CARO = {
+      bl: { title: "what is eduflick ai", surf: "ink", slides: [
+        { eb:"WHAT IS EDUFLICK AI", motif:"mark", hl:"what is <em>eduflick ai</em>?", sup:"the end of empty scrolling. learning, rebuilt as a feed." },
+        { eb:"01 · THE PROBLEM", motif:"gapbars", hl:"you scroll for <em>hours</em>", sup:"short video is the most engaging format ever built. it just never taught you anything." },
+        { eb:"02 · THE IDEA", motif:"nodes", hl:"so we kept the <em>feed</em>", sup:"same pull-to-refresh, same one-thumb flow — pointed at things worth knowing." },
+        { eb:"03 · THE UNIT", motif:"chip:1 flick", hl:"1 flick = 1 <em>concept</em>", sup:"any lecture, paper, or video, cut into a sequence of bite-sized flicks." },
+        { eb:"04 · THE PAYOFF", motif:"spark", hl:"a feed that makes you <em>smarter</em>", sup:"curiosity compounds instead of evaporating. learning that survives the scroll." },
+        { eb:"EDUFLICK AI", motif:"mark", hl:"a feed for <em>thinking</em>", sup:"follow → @eduflick.ai" }
+      ]},
+      mr: { title: "one shape, one notch", surf: "indigo", slides: [
+        { eb:"THE PHILOSOPHY", motif:"notch", hl:"one shape,<br>one <em>notch</em>.", sup:"our whole identity in a single geometry." },
+        { eb:"01 · THE SHAPE", motif:"mark", hl:"a <em>square</em> — the feed card", sup:"flat, sharp, near-zero corners. it reads as a card, not a blob." },
+        { eb:"02 · THE NOTCH", motif:"notch", hl:"the notch is the <em>play</em>", sup:"a triangle bitten from the edge — the moment a lesson begins." },
+        { eb:"EDUFLICK AI", motif:"mark", hl:"one shape, one <em>notch</em>", sup:"follow → @eduflick.ai" }
+      ]},
+      ml: { title: "the flick is the unit", surf: "indigo", slides: [
+        { eb:"HOW IT WORKS", motif:"slicer", hl:"the <em>flick</em> is the unit", sup:"how expert-led modules become a feed you actually finish." },
+        { eb:"01 · EXPERT CURATION", motif:"nodes", hl:"explore <em>verified</em> modules", sup:"elite eduflick tutors design the foundation. no random content — just curated tracks built to transform your skills." },
+        { eb:"02 · AI SEQUENCE", motif:"slicer", hl:"engineered into <em>micro-lessons</em>", sup:"our tech slices each heavy track into bite-sized flicks. one clear concept at a time, ordered so each builds on the last." },
+        { eb:"03 · PRACTICAL TASKS", motif:"checklist", hl:"build as you <em>learn</em>", sup:"no passive streaming. every module forces action with real-world practicals and milestones to test your execution." },
+        { eb:"04 · 1:1 MENTORSHIP", motif:"nodes", hl:"real <em>experts</em> in your corner", sup:"real human guidance — clear blockers instantly with 1:1 mentorship to keep you moving forward." },
+        { eb:"EDUFLICK AI", motif:"mark", hl:"learn anything in <em>micro-steps</em>", sup:"the feed for thinking. follow → @eduflick.ai" }
+      ]},
+      uc: { title: "why we built eduflick", surf: "paper", slides: [
+        { eb:"THE VISION", motif:"mark", hl:"why we <em>built</em> eduflick", sup:"a tomatrix technologies venture. here's the gap we saw." },
+        { eb:"01 · THE GAP", motif:"gapbars", hl:"courses don't get <em>finished</em>", sup:"online completion rates are brutal. videos pile up; skills don't." },
+        { eb:"02 · THE SHIFT", motif:"nodes", hl:"attention moved to the <em>feed</em>", sup:"so learning has to live there too — bite-sized, sequenced, in the flow of a day." },
+        { eb:"03 · OUR MISSION", motif:"spark", hl:"learning, <em>un-chained</em>", sup:"we turn studying from a chore into a personalized daily habit you actually keep." },
+        { eb:"04 · OUR VISION", motif:"nodes", hl:"the <em>backbone</em> of how a generation learns", sup:"accessible, personalized, engaging — for everyone, in india and beyond." },
+        { eb:"05 · THE CORE", motif:"mark", hl:"ai is the <em>continuation</em>", sup:"ai is not the start. it's the continuation of human innovation." },
+        { eb:"EDUFLICK AI", motif:"mark", hl:"follow the <em>build</em>", sup:"follow → @eduflick.ai" }
+      ]},
+      tc: { title: "the course", surf: "top", slides: [
+        { eb:"FULL-STACK AI ENGINEER PROGRAM", motif:"checklist", hl:"ship <em>ai products</em>, not theory", sup:"12 weeks, in person, trivandrum. you build 3 real ones." },
+        { eb:"01 · THE GAP", motif:"gapbars", hl:"ai experience <em>required</em>", sup:"every job wants it. you know react but have never shipped with an llm. we close that." },
+        { eb:"02 · MONTH 1", motif:"chip:01", hl:"foundations + your first <em>ship</em>", sup:"the real stack — cursor, next.js, claude/openai. you deploy a saas dashboard." },
+        { eb:"03 · MONTH 2", motif:"chip:02", hl:"rag + <em>agents</em>", sup:"pinecone, langchain, n8n. you build a rag chatbot that answers from real docs. deployed." },
+        { eb:"04 · MONTH 3", motif:"chip:03", hl:"an agentic platform + <em>hiring</em>", sup:"capstone build, then mock interviews and industry recruiter networking." },
+        { eb:"05 · THE ROOM", motif:"stat:20", hl:"20 <em>selective</em> seats", sup:"in person at uxp innovation hub, trivandrum. ₹49,000 founding (₹70,000 from cohort 2)." },
+        { eb:"START FREE", motif:"spark", hl:"see it <em>live</em> first", sup:"free masterclass → register → eduflickai.com/masterclass" }
+      ]},
+      ur: { title: "tomatrix technologies pvt ltd", surf: "paper", slides: [
+        { eb:"BACKED BY", motif:"cobrand", hl:"a deep-tech <em>venture</em>", sup:"eduflick ai is the flagship product of <span class='proper'>Tomatrix Technologies Pvt Ltd</span> — the ai-first studio that builds it." },
+        { eb:"WHAT TOMATRIX DOES", motif:"nodes", hl:"scalable ai, <em>shipped</em>", sup:"ai products and enterprise solutions that transform education and business automation." },
+        { eb:"WHY EDUFLICK BELONGS", motif:"nodes", hl:"one shared <em>engine</em>", sup:"service revenue funds the r&d; eduflick ai runs on <span class='proper'>Tomatrix</span>'s generative pipelines, llm orchestration & rendering." },
+        { eb:"TOMATRIX × EDUFLICK AI", motif:"cobrand", hl:"this is just the <em>start</em>", sup:"a <span class='proper'>Tomatrix Technologies Pvt Ltd</span> venture, founded by Gifton Tom Biju.<br>follow → @eduflick.ai" }
+      ]}
+    };
+    let curC = null, curI = 0;
+    const viewer = document.getElementById('viewer');
+    function openViewer(id){ curC = id; curI = 0; viewer.classList.add('open'); fitViewer(); render(); }
+    function closeViewer(){ viewer.classList.remove('open'); }
+    function nav(d){ const n = CARO[curC].slides.length; curI = (curI + d + n) % n; render(); }
+    function render(){
+      const c = CARO[curC], s = c.slides[curI], n = c.slides.length;
+      const el = document.getElementById('vslide');
+      el.className = 'vslide ' + SURF[c.surf];
+      el.innerHTML = (curI === 0) ? '<div class="vcover">'+coverInner(curC)+'</div>' : deckHTML(s, curI, n);
+      void el.offsetWidth; el.classList.add('vfx');   // re-trigger fade
+      document.getElementById('vtitle').textContent = c.title;
+      document.getElementById('vcount').textContent = (curI+1) + ' / ' + n;
+      document.getElementById('vdots').innerHTML = c.slides.map((_,i)=>'<i class="'+(i===curI?'on':'')+'"></i>').join('');
+      document.getElementById('vbar').style.width = ((curI+1)/n*100) + '%';
+    }
+    document.addEventListener('keydown', e => {
+      if(!viewer.classList.contains('open')) return;
+      if(e.key === 'Escape') closeViewer();
+      if(e.key === 'ArrowRight') nav(1);
+      if(e.key === 'ArrowLeft') nav(-1);
+    });
+    // ----- viewer UX: responsive fit, swipe, tap-zones, download-all -----
+    function fitViewer(){ const el=document.getElementById('vslide'); const s=Math.min(1,(window.innerHeight*0.78)/550,(window.innerWidth*0.94)/440); el.style.setProperty('--vs', s.toFixed(3)); }
+    window.addEventListener('resize', () => { if(viewer.classList.contains('open')) fitViewer(); });
+    (function(){
+      const el = document.getElementById('vslide'); let sx = null, swiped = false;
+      el.addEventListener('pointerdown', e => { sx = e.clientX; swiped = false; });
+      el.addEventListener('pointerup', e => { if(sx === null) return; const dx = e.clientX - sx; sx = null; if(Math.abs(dx) > 40){ swiped = true; nav(dx < 0 ? 1 : -1); } });
+      el.addEventListener('click', e => { if(swiped){ swiped = false; return; } const r = el.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width; if(x < 0.34) nav(-1); else if(x > 0.66) nav(1); });
+    })();
+    async function downloadAll(){
+      if(!curC) return;
+      if(typeof htmlToImage === 'undefined'){ alert('quick download needs http — run "npm run serve" in /tools, or "npm run export" for pixel-perfect PNGs.'); return; }
+      const c = CARO[curC], saved = curI;
+      for(let i = 0; i < c.slides.length; i++){ curI = i; await downloadCurrentSlide(); await new Promise(r => setTimeout(r, 150)); }
+      curI = saved; render();
+    }
+
+    // ===== export infrastructure =====
+    const SURF = { ink:'vs-ink', indigo:'vs-indigo', paper:'vs-paper', top:'vs-top' };
+    function MK(fill){ return '<svg class="mk" viewBox="0 0 180 180"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="'+(fill||'#F5F2EA')+'"/></svg>'; }
+    function motifHTML(m){
+      if(!m) return '';
+      const p = String(m).split(':'), k = p[0], arg = p[1] || '';
+      switch(k){
+        case 'mark':    return '<div class="mo"><div class="mhalo"></div>'+MK()+'</div>';
+        case 'notch':   return '<div class="mo"><div class="mhalo"></div><svg class="mk" viewBox="0 0 180 180"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/><path d="M167 82 L120 112.5 L167 143 Z" fill="#8B97FF"/></svg></div>';
+        case 'spark':   return '<div class="mo mspark"><svg viewBox="0 0 120 120"><path d="M60 14 L70 50 L106 60 L70 70 L60 106 L50 70 L14 60 L50 50 Z" fill="#B7C0FF"/></svg></div>';
+        case 'gapbars': return '<div class="mo mbars"><i class="lo"></i><i class="hi"></i></div>';
+        case 'stat':    return '<div class="mo"><div class="mhalo" style="left:50%"></div><div class="mstat">'+(arg||'20')+'</div></div>';
+        case 'nodes':   return '<div class="mo mnodes"><b></b><s></s><b class="o"></b><s></s><b></b></div>';
+        case 'checklist':return '<div class="mo mcheck"><i>build</i><i>review</i><i>deploy</i></div>';
+        case 'slicer':  return '<div class="mo"><span class="mframe"></span><span class="marr">→</span><span class="mframe lit"></span></div>';
+        case 'chip':    return '<div class="mo"><span class="mchip">'+(arg||'01')+'</span></div>';
+        case 'cobrand': return '<div class="mo mco"><svg viewBox="0 0 180 180" style="width:1.5em;height:1.5em;flex-shrink:0"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#0B0822"/></svg><span class="cw">eduflick<i>AI</i></span><span class="cb"></span><img src="../../assets/partners/tomatrix-logo-light.png" alt="Tomatrix Technologies" style="height:3.1em;width:auto;display:block;flex-shrink:0"></div>';
+        default: return '';
+      }
+    }
+    function deckHTML(s, i, n){
+      const cover = i === 0, cta = i === n-1;
+      const idx = String(i+1).padStart(2,'0') + ' · ' + String(n).padStart(2,'0');
+      return '<div class="sdeck'+(cover?' scover':'')+'">'
+        + '<div class="srow"><span class="seb">'+(s.eb||'')+'</span></div>'
+        + '<div class="smid">'
+        +   (s.motif ? '<div class="smotif">'+motifHTML(s.motif)+'</div>' : '')
+        +   '<div class="shl">'+s.hl+'</div>'
+        +   (s.sup ? '<div class="ssup">'+s.sup+'</div>' : '')
+        + '</div>'
+        + '<div class="srow"><span class="sfoot">'+MK('currentColor')+'<span>eduflick<i>AI</i></span></span><span class="scue">'+(cta?'':'swipe →')+'</span></div>'
+        + '</div>';
+    }
+    // the carousel's first slide IS the post cover — clone the matching grid tile (chrome stripped)
+    function coverInner(id){
+      const tile = [...document.querySelectorAll('.board .cv')].find(cv => (cv.getAttribute('onclick')||'').indexOf("openViewer('"+id+"')") >= 0);
+      if(!tile) return '';
+      const clone = tile.cloneNode(true);
+      clone.querySelectorAll('.pos,.car,.safe,.dlbtn,.foot').forEach(n => n.remove());
+      clone.classList.remove('tap'); clone.removeAttribute('onclick'); clone.removeAttribute('data-export');
+      // the clone sits under .vs-* (not the .t-paper mural), so re-apply paper text/surface for paper carousels
+      if(CARO[id] && CARO[id].surf === 'paper') clone.classList.add('t-paper');
+      return clone.outerHTML;
+    }
+    function tagTiles(){
+      document.querySelectorAll('.board .cv').forEach(cv => {
+        const pos = (cv.querySelector('.pos') || {}).textContent || '';
+        const m = pos.match(/([A-Z]{2})\s*·\s*post\s*(\d+)/i);
+        if(m) cv.setAttribute('data-export', 'post-' + String(m[2]).padStart(2,'0') + '-' + m[1].toLowerCase());
+      });
+    }
+    function buildExportSheet(){
+      const sheet = document.getElementById('exportsheet');
+      if(!sheet || sheet.dataset.built) return;
+      let h = '';
+      for(const id in CARO){ const c = CARO[id];
+        c.slides.forEach((s,i) => {
+          const inner = (i === 0) ? '<div class="xcover">'+coverInner(id)+'</div>' : deckHTML(s, i, c.slides.length);
+          h += '<div class="xslide '+SURF[c.surf]+'" data-export="slide-'+id+'-'+String(i+1).padStart(2,'0')+'">' + inner + '</div>';
+        });
+      }
+      sheet.innerHTML = h; sheet.dataset.built = '1';
+    }
+    async function downloadCurrentSlide(){
+      if(!curC) return;
+      if(typeof htmlToImage === 'undefined'){ alert('quick export needs an internet connection (html-to-image). For pixel-perfect output, use /tools.'); return; }
+      const c = CARO[curC], s = c.slides[curI];
+      const holder = document.createElement('div');
+      holder.style.cssText = 'position:fixed;left:-99999px;top:0;z-index:-1';
+      holder.innerHTML = '<div class="xslide '+SURF[c.surf]+'">' + ((curI === 0) ? '<div class="xcover">'+coverInner(curC)+'</div>' : deckHTML(s, curI, c.slides.length)) + '</div>';
+      document.body.appendChild(holder);
+      try{
+        await document.fonts.ready;
+        const dataUrl = await htmlToImage.toPng(holder.firstChild, { width:1080, height:1350, pixelRatio:2, cacheBust:true });
+        const a = document.createElement('a');
+        a.download = 'eduflick-slide-'+curC+'-'+String(curI+1).padStart(2,'0')+'.png';
+        a.href = dataUrl; a.click();
+      } catch(err){ alert('quick export failed: ' + ((err && err.message) || err || 'resource blocked') + '\n\nIn-browser export needs http — run "npm run serve" in /tools and open the printed URL. For guaranteed pixel-perfect PNGs, run "npm run export".'); }
+      finally{ holder.remove(); }
+    }
+    function addDownloadButtons(){
+      document.querySelectorAll('.board .cv').forEach(cv => {
+        if(cv.querySelector('.dlbtn')) return;
+        const b = document.createElement('button');
+        b.className = 'dlbtn'; b.textContent = '⬇'; b.title = 'download this post (1080×1350)';
+        b.addEventListener('click', e => { e.stopPropagation(); downloadPost(cv); });
+        cv.appendChild(b);
+      });
+    }
+    // download a single post as its true mural slice: render the row mural, crop the tile's third
+    async function downloadPost(cv){
+      if(typeof htmlToImage === 'undefined'){ alert('quick export needs an internet connection (html-to-image). For pixel-perfect output, use /tools.'); return; }
+      const mural = cv.closest('.mural'); if(!mural) return;
+      const col = [...mural.querySelectorAll(':scope > .cv')].indexOf(cv);
+      const PR = 2, W = 1080*PR, H = 1350*PR;
+      const skip = n => n.classList && ['pos','car','safe','dlbtn'].some(c => n.classList.contains(c));
+      try{
+        await document.fonts.ready;
+        const full = await htmlToImage.toCanvas(mural, { pixelRatio: PR, filter: n => !skip(n) });
+        const out = document.createElement('canvas'); out.width = W; out.height = H;
+        out.getContext('2d').drawImage(full, col*W, 0, W, H, 0, 0, W, H);
+        out.toBlob(bl => { const a = document.createElement('a'); a.download = 'eduflick-' + (cv.getAttribute('data-export')||'post') + '.png'; a.href = URL.createObjectURL(bl); a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); });
+      } catch(err){ alert('quick export failed: ' + ((err && err.message) || err || 'resource blocked') + '\n\nIn-browser export needs http — run "npm run serve" in /tools and open the printed URL. For guaranteed pixel-perfect PNGs, run "npm run export".'); }
+    }
+    function addFooters(){
+      document.querySelectorAll('.board .cv').forEach(cv => {
+        if(cv.querySelector('.foot') || cv.querySelector('.wm') || cv.querySelector('.cobrand')) return;
+        const f = document.createElement('div'); f.className = 'foot';
+        f.innerHTML = '<svg viewBox="0 0 180 180" width="34" height="34"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="currentColor"/></svg><span class="fw">eduflick<i>AI</i></span>';
+        cv.appendChild(f);
+      });
+    }
+    tagTiles();
+    addDownloadButtons();
+    addFooters();
+    (function initExport(){
+      if(new URLSearchParams(location.search).get('export') === '1'){
+        document.body.classList.add('export'); buildExportSheet();
+      }
+    })();
+  </script>
+
+</body>
+</html>
