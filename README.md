@@ -74,6 +74,20 @@ Use them together: content-studio writes the carousel copy → design-system ren
 
 ---
 
+## Contributing & navigation
+
+- **[`CONTRIBUTING.md`](CONTRIBUTING.md)** — the rules, where things go, the single-source
+  workflow (`npm run tokens && npm run snippets` before committing).
+- **[`AGENTS.md`](AGENTS.md)** — entry point for AI agents and future standing instructions.
+- **[`docs/README.md`](docs/README.md)** — the doc index (one map to every guide).
+- **[`templates/`](templates/)** — copy-to-start templates for recipes, prompts, components, assets.
+
+The backbone is **one source of truth per concern**: tokens in
+[`design-system/tokens/tokens.json`](design-system/tokens/tokens.json), live values in
+[`content-studio/FACTS.md`](content-studio/FACTS.md), assets in `design-system/assets/`.
+
+---
+
 ## Live preview
 
 ```bash
