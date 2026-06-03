@@ -25,7 +25,7 @@ to the marketing page, and "try free" / "log in" there to return to the app.
 | `marketing.jsx` | `Marketing` landing page + `MiniFlick`. |
 | `app-web.jsx` | Shell: app ⇄ site toggle, sidebar section state, `SettingsScreen`. |
 | `../browser-window.jsx` | macOS browser chrome (starter component). |
-| `../_sprite.js` | Injects the icon + mark-companion sprites. |
+| `../../assets/icons/sprite.js` | Injects the icon + mark-companion sprites. |
 
 ## Conventions
 - Charts are pure CSS/SVG (no chart library) — bars, conic-gradient donut, progress fills.

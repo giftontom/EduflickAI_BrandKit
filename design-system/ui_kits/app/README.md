@@ -22,7 +22,7 @@ flick card to enter the player; use the bottom nav to move between screens.
 | `screens-more.jsx` | `SubjectTile`, `SearchScreen`, `SavedScreen`, `ProfileScreen`. |
 | `app.jsx` | Screen state + flick overlay. |
 | `../ios-frame.jsx` | Device bezel (starter component, used `dark`, no nav bar). |
-| `../_sprite.js` | Injects the icon + mark-companion sprites for `<use href="#ic-…">`. |
+| `../../assets/icons/sprite.js` | Injects the icon + mark-companion sprites for `<use href="#ic-…">`. |
 
 ## Conventions
 - Icons come from the injected house sprite: `<Icon name="play" />`.
