@@ -6,6 +6,37 @@ alongside it.
 
 ---
 
+## Unreleased — design-system unification
+
+**Design system version:** `1.0.0` (tracked in `design-system/tokens/tokens.json` →
+`brand.version`). The design system is now versioned independently of the brand book;
+bump it here under **Added / Changed / Deprecated** when tokens or components change.
+
+### Added
+- **Design token pipeline.** `design-system/tokens/tokens.json` is the single source
+  of truth for color/type/space/radius/shadow/motion + the brand mark path & fonts link.
+  `cd tools && npm run tokens` (Style Dictionary) generates `tokens/tokens.css`,
+  `tokens/tokens.flat.json`, and `tools/brand.tokens.mjs`.
+- **`design-system/components.css`** — reusable, token-based component classes (buttons,
+  cards, stat/flick cards, tags, spec rows, backgrounds, cinematic surfaces, glass, footer
+  lockup, mark) — the production twin of the snippet bin.
+- **`design-system/COMPONENTS.md`** — the single component inventory.
+- **Generated snippet bin.** `recipes/snippets.src.md` (with `{{token}}` placeholders) →
+  `npm run snippets` → fully-inline `recipes/snippets.md`; inline values can no longer drift.
+- **Collaboration scaffolding** — `.editorconfig`, `.prettierrc`, `.markdownlint.json`,
+  `.github/CODEOWNERS`, PR template, `LICENSE`.
+- **CI drift guard** — regenerates tokens + snippets and fails if they fall out of sync.
+
+### Changed
+- `colors_and_type.css` now `@import`s the generated tokens and holds only the semantic
+  role aliases + text styles; the collateral copy is a thin shim.
+- `tools/package-lock.json` is now committed (CI `npm ci` requires it).
+
+### Fixed
+- CI `npm ci` no longer silently fails (missing committed lockfile).
+
+---
+
 ## v4.0 — 2026-06-02
 
 ### Brand Book v4.0
