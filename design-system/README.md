@@ -198,18 +198,22 @@ Root files:
 | File | What |
 | --- | --- |
 | `README.md` | This document |
-| `colors_and_type.css` | All foundation tokens (color, type, spacing, radius, shadow, motion) + semantic text styles. Import this first. |
+| `tokens/tokens.json` | **Single source of truth** for design tokens (color/type/space/radius/shadow/motion + mark path & fonts link). Edit here, then `cd tools && npm run tokens` to regenerate. |
+| `tokens/tokens.css` | Generated `:root` custom properties (do not hand-edit). |
+| `colors_and_type.css` | `@import`s `tokens/tokens.css`, then layers semantic role aliases (`--bg`/`--fg1`/`--accent`…) + text styles. Import this first. |
+| `components.css` | Reusable token-based component classes (buttons, cards, tags, flick card, cinematic surfaces, glass, footer lockup, mark). |
+| `COMPONENTS.md` | The component inventory — class · snippet id · key tokens · do/don't. |
 | `SKILL.md` | Agent Skill entry point (cross-compatible with Claude Code) |
 | `DESIGN_CHEATSHEET.md` | The whole visual system compressed to one paste-anywhere page — for feeding a model (esp. small ones) as context. |
 | `SMALL_MODELS_GUIDE.md` | How to get on-brand HTML out of small/cheap models: the render→inspect→fix loop + failure modes. |
 | `AI_IMAGERY_GUIDE.md` | When/how to generate abstract indigo backdrops (Nano Banana 2) and layer them *behind* the type + mark — the master image-prompt kit + imagery QA. |
 | `QA_CHECKLIST.md` | Visual pass/fail gate + scorecard run on any rendered artifact before export. |
-| `recipes/` | Assemble-don't-invent build kit: `00_SYSTEM_PROMPT.md`, `snippets.md` (HTML parts bin — incl. cinematic `S15–S19`), and recipes for instagram-post · poster · slide-deck · landing-section · brochure-page · **launch-grid**. |
+| `recipes/` | Assemble-don't-invent build kit: `00_SYSTEM_PROMPT.md`, `snippets.md` (HTML parts bin — incl. cinematic `S15–S19`; **generated** from `snippets.src.md` via `npm run snippets`), and recipes for instagram-post · poster · slide-deck · landing-section · brochure-page · **launch-grid**. |
 | `collateral/` | Ready-to-fill kits: **`launch-grid.html`** (the 12-tile cinematic IG launch mural + in-page carousel viewer + deck slides), `instagram-kit.html`, `brochure-kit.html`, `content-calendar.html` |
 | `assets/logo/` | Canonical marks (`mark*.svg`), lockups (`lockup-*.svg`), `favicon.svg`, `LOGO_README.md` |
 | `assets/logo/social/` | Avatars (indigo/ink/paper + the **gradient `avatar-pf-av-*`**, built by `../tools` `export:avatar`), LinkedIn/YouTube/Twitter banners, OG card |
 | `assets/partners/` | Partner/parent logos — `tomatrix-logo-light.png` (transparent) for the co-brand lockup |
-| `assets/icons/` | `eduflick-icons.svg` (24 line icons) + `mark-companions.svg` (mark-state family) |
+| `assets/icons/` | `eduflick-icons.svg` (24 line icons) + `mark-companions.svg` (mark-state family) + `sprite.js` (injects the symbols; `<use href="#ic-name">`) |
 | `preview/` | Design-system cards rendered in the Design System tab |
 | `ui_kits/app/` | Consumer mobile app UI kit (feed, flick player, search, profile, Sparks) |
 | `ui_kits/web/` | Educator/institution web UI kit (dashboard, library, analytics, marketing) |

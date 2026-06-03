@@ -46,6 +46,8 @@ Use the **assemble-don't-invent** track — engineered so a small model stays on
 - `recipes/` — `00_SYSTEM_PROMPT.md`, `snippets.md` (copy-paste HTML parts bin, incl. cinematic
   `S15–S19`: halo · grain · vignette · footer lockup · glass + deck-slide), and per-artifact
   recipes (instagram-post · poster · slide-deck · landing-section · brochure-page · **launch-grid**).
+  `snippets.md` is **generated** from `snippets.src.md` (`cd tools && npm run snippets`) so its inline
+  values can't drift from `tokens.json` — edit the `.src.md`, not the output.
 - `QA_CHECKLIST.md` — the visual pass/fail gate before export.
 Flow: load system prompt + cheat sheet + snippets → fill a recipe's FACTS + text → generate one
 HTML file → **render and look** → QA → **export pixel-perfect PNGs with `../tools`**
@@ -53,15 +55,19 @@ HTML file → **render and look** → QA → **export pixel-perfect PNGs with `.
 
 ## Quick start
 1. Read `README.md` — brand context, content/voice, visual foundations, iconography, manifest.
-2. Import `colors_and_type.css` and load the three Google fonts (Manrope, Instrument Serif,
-   JetBrains Mono) — the link tag is in the README.
+2. Import `colors_and_type.css` (it `@import`s the generated `tokens/tokens.css` — the single
+   token source). **Never hardcode brand hex/fonts:** use `var(--token)`; to change a value edit
+   `tokens/tokens.json` and run `cd tools && npm run tokens`. Load the three Google fonts
+   (Manrope, Instrument Serif, JetBrains Mono) — the link tag is in the README.
 3. Use the mark from `assets/logo/mark*.svg`; build the wordmark in HTML
    (`<span class="wordmark">eduflick<i>AI</i></span>`).
-4. For icons, inject the sprite (`ui_kits/_sprite.js` / `preview/_sprite.js`) and reference
+4. For icons, inject the sprite (`assets/icons/sprite.js`) and reference
    `<use href="#ic-name">` (24-icon house set + mark-companion state icons). Fill gaps from
    Lucide — same 2px round style.
-5. Pull ready-made components from `ui_kits/app/` (consumer mobile) or `ui_kits/web/`
-   (educator dashboard + marketing). Copy and adapt — they're cosmetic, not production logic.
+5. Build from the reusable token-based classes in `components.css` (buttons, cards, tags, flick
+   card, cinematic surfaces, glass, footer lockup) — inventory + do/don't in `COMPONENTS.md`. For
+   product surfaces, pull from `ui_kits/app/` (consumer mobile) or `ui_kits/web/` (educator
+   dashboard + marketing). Copy and adapt — they're cosmetic, not production logic.
 6. For decks, start from `slides/*.html` (title, section, content, quote, closing).
 7. For a full **Instagram launch**, open `collateral/launch-grid.html` — 12 mural-sliced
    tiles + an in-page carousel viewer + deck slides + motifs on cinematic surfaces (`S15–S19`).
