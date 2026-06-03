@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint Markdown & Check Links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          globs: "**/*.md"
+          config: |
+            {
+              "default": true,
+              "line-length": false,
+              "no-inline-html": false,
+              "no-duplicate-heading": { "siblings_only": true },
+              "first-line-heading": false,
+              "no-emphasis-as-heading": false
+            }
+
+      - name: Check internal links
+        run: |
+          # Verify all Markdown-internal cross-references resolve
+          broken=0
+          for f in $(find . -name "*.md" -not -path "./.git/*" -not -path "./tools/node_modules/*" -not -path "./_archive/*"); do
+            # Extract relative links like [text](path.md) and [text](../path/file.md)
+            links=$(grep -oP '\[[^\]]*\]\(\.\.?/[^)]+\.md[^)]*\)' "$f" | grep -oP '(?<=\().*?(?=\))' || true)
+            for link in $links; do
+              # Remove anchors
+              target="${link%%#*}"
+              resolved=$(realpath --relative-to="$(pwd)" "$(dirname "$f")/$target" 2>/dev/null || echo "")
+              if [ -z "$resolved" ] || [ ! -f "$resolved" ]; then
+                echo "✗ Broken: $f → $link"
+                broken=1
+              fi
+            done
+          done
+          if [ $broken -eq 1 ]; then
+            echo "::error::Broken internal links found"
+            exit 1
+          fi
+          echo "✓ All internal links resolve"
+
+  html:
+    name: Validate HTML
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate HTML files
+        run: |
+          # Basic HTML structure validation for key files
+          broken=0
+          for f in \
+            index.html \
+            brand-book/Eduflick_Brand_Book_v4.html \
+            design-system/collateral/Eduflick\ Launch\ Grid.html \
+            design-system/collateral/Eduflick\ Instagram\ Kit.html \
+            design-system/collateral/Eduflick\ Brochure\ Kit.html \
+            design-system/collateral/Eduflick\ Content\ Calendar.html \
+            design-system/slides/index.html; do
+            if [ ! -f "$f" ]; then
+              echo "⚠ Missing (skipped): $f"
+              continue
+            fi
+            # Check for unclosed html/head/body tags
+            if grep -q '<html' "$f" && ! grep -q '</html>' "$f"; then
+              echo "✗ Unclosed <html> in: $f"
+              broken=1
+            fi
+            if grep -q '<body' "$f" && ! grep -q '</body>' "$f"; then
+              echo "✗ Unclosed <body> in: $f"
+              broken=1
+            fi
+            echo "  ✓ $f"
+          done
+          if [ $broken -eq 1 ]; then
+            echo "::error::HTML validation failed"
+            exit 1
+          fi
+          echo "✓ HTML validation passed"
+
+  tools:
+    name: Verify Tools
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: cd tools && npm ci
+        continue-on-error: true  # Playwright install may need system deps
+
+      - name: Check package.json syntax
+        run: node -e "JSON.parse(require('fs').readFileSync('tools/package.json','utf8')); console.log('✓ package.json valid')"
+
+      - name: Check export script syntax
+        run: node --check tools/export-images.mjs && node --check tools/export-pf-avatar.mjs && node --check tools/serve.mjs && echo "✓ All tools parse"

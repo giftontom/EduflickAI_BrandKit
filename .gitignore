@@ -1,3 +1,20 @@
+# Claude Code local settings
 .claude/
-*.pdf
+
+# macOS
 .DS_Store
+**/.DS_Store
+
+# Generated exports
+exports/
+
+# Dependencies
+tools/node_modules/
+# NOTE: tools/package-lock.json IS committed — CI uses `npm ci`, which requires it.
+
+# PDFs (large binaries)
+*.pdf
+
+# IDE (user-specific only — shared config is committed)
+.vscode/settings.local.json
+.idea/
