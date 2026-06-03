@@ -1,0 +1,26 @@
+# CODEOWNERS — auto-request reviews by area.
+#
+# ⚠️ ACTIVATE ME: replace the @handle placeholders below with real GitHub
+# usernames or @org/team slugs, then uncomment the lines. Unknown owners are
+# ignored by GitHub (and flagged in the UI), so this file ships inert until edited.
+#
+# Syntax: <path glob>   <owner> [<owner> ...]   (last matching rule wins)
+
+# Everything, unless a more specific rule matches:
+# *                          @brand-lead
+
+# Visual system — tokens, components, logo, kits, slides:
+# /design-system/            @design-owner
+# /assets/                   @design-owner
+
+# Words — copy, prompts, strategy, live facts:
+# /content-studio/           @content-owner
+# /planning/                 @content-owner
+
+# Build & automation:
+# /tools/                    @eng-owner
+# /.github/                  @eng-owner
+
+# Source of truth — require an extra reviewer:
+# /brand-book/               @brand-lead @design-owner
+# /content-studio/FACTS.md   @brand-lead @content-owner
