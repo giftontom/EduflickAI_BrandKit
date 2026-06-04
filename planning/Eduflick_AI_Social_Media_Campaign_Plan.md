@@ -3,7 +3,7 @@
 
 **Operating Entity:** Tomatrix Technologies Pvt Ltd
 **Campaign Owner:** Marketing & Sales
-**Venue:** UXP Enterprise Solutions, Thiruvananthapuram
+**Venue:** UXP Innovation Hub, Trivandrum
 **Prepared:** May 2026 · *Internal — Marketing*
 
 ---
@@ -15,10 +15,10 @@
 | **Primary KPI** | Fill **20 Pioneer Cohort seats** (sold-out launch) |
 | **Funnel goal** | Drive registrations to the **Free Technical Masterclass** (top of funnel → seat bookings) |
 | **Offer** | Pioneer Cohort price **₹49,000** (vs. ₹70,000 retail from Cohort 2) — frame as a one-time founding-batch discount |
-| **Geography** | Geo-targeted: **10 km radius of Technopark, Thiruvananthapuram** + Kerala-wide for organic |
+| **Geography** | Geo-targeted: **10 km radius of Trivandrum** + Kerala-wide for organic |
 | **Window** | 6-week paid + organic sprint, ending with seat closing |
 
-**The single message:** *Stop learning AI theory. Ship AI products. Get hired at Technopark in 12 weeks.*
+**The single message:** *Stop learning AI theory. Ship AI products. Get hired in Trivandrum in 12 weeks.*
 
 ---
 
@@ -36,8 +36,8 @@
 
 **Our wedge (why us, not Udemy/YouTube):**
 1. **Build, not watch** — 3 deployed projects (SaaS dashboard, RAG chatbot, agentic platform).
-2. **In-person, capped at 20** — real cohort, real mentors, at UXP Technopark.
-3. **Hire-ready** — Week 12 is mock interviews + recruiter networking with Technopark HR.
+2. **In-person, capped at 20** — real cohort, real mentors, at the UXP Innovation Hub.
+3. **Hire-ready** — Week 12 is mock interviews + recruiter networking with industry HR.
 4. **Real stack** — Cursor, Next.js, Claude/OpenAI, Pinecone, LangChain, n8n. Tools companies actually use.
 
 ---
@@ -47,7 +47,7 @@
 | Channel | Role | Content focus |
 |---|---|---|
 | **Instagram** | Primary — reach + brand | Reels (project demos, "day in the cohort"), carousels, Stories countdown |
-| **LinkedIn** | Primary — credibility + hiring narrative | Founder POV posts, curriculum breakdowns, Technopark placement angle |
+| **LinkedIn** | Primary — credibility + hiring narrative | Founder POV posts, curriculum breakdowns, industry placement angle |
 | **WhatsApp** | Conversion engine | Masterclass reminders, seat-booking nudges, 1:1 closing |
 | **YouTube (Shorts)** | Proof | Capstone walkthroughs, student build clips, "what is RAG in 60s" |
 | **Meta/IG Ads** | Paid acceleration | Geo-targeted Masterclass lead-gen + retargeting |
@@ -90,7 +90,7 @@
 
 - **Daily Stories** countdown to Masterclass with registration link sticker.
 - **Reels:** "What you'll build in Week 4 / Week 8 / Week 11" (one per milestone).
-- **LinkedIn:** Technopark hiring angle — "AI roles posted at Technopark this month" (screenshot real listings).
+- **LinkedIn:** industry hiring angle — "AI roles posted in Trivandrum this month" (screenshot real listings).
 - **Testimonial/credibility:** guest-faculty spotlight, UXP venue tour Reel.
 - **Run the Free Technical Masterclass** (mid-Phase 2). Record it → clip for Phase 3.
 - **Carousel:** "₹49,000 vs ₹70,000 — what Pioneer Cohort means."
@@ -110,7 +110,7 @@
 ## 6. Content Pillars (recurring themes)
 
 1. **🛠️ Build in Public** — projects, code, deployments (the differentiator).
-2. **💼 Get Hired** — Technopark jobs, placement, portfolio, mock interviews.
+2. **💼 Get Hired** — Trivandrum tech jobs, placement, portfolio, mock interviews.
 3. **🧠 Learn Fast** — bite-size AI concepts (RAG, agents, vector DBs) in 60s.
 4. **👥 The Cohort** — capped-at-20, in-person, UXP venue, community.
 5. **⏳ Pioneer Urgency** — founding batch, ₹49K offer, seats remaining.
@@ -122,7 +122,7 @@
 | | |
 |---|---|
 | **Campaign type** | Lead generation → Masterclass; Retargeting → Seat booking |
-| **Targeting** | 10 km radius of Technopark; age 21–28; interests: software dev, AI/ML, Next.js, coding, B.Tech, job-search |
+| **Targeting** | 10 km radius of central Trivandrum; age 21–28; interests: software dev, AI/ML, Next.js, coding, B.Tech, job-search |
 | **Lookalikes** | From Masterclass registrant list (Phase 2 onward) |
 | **Retargeting** | Video viewers (50%+), profile visitors, Masterclass no-shows |
 | **Creative** | 3–4 Reel-style video ads (pain hook) + 2 static (offer/scarcity) |
@@ -186,7 +186,7 @@ Pull all creative from the Eduflick Brand Book (`Eduflick_Brand_Book_v4.html`) a
 |---|---|
 | Masterclass tech setup + UXP venue B-roll | Product & Operations |
 | Live Masterclass demo content / curriculum accuracy | Technical Curriculum Team |
-| Technopark hiring proof / placement narrative | Career Services |
+| industry hiring proof / placement narrative | Career Services |
 | Ad spend, funnel, closing | **Marketing & Sales (this plan)** |
 
 ---

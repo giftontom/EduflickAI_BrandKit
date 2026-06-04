@@ -13,7 +13,7 @@ FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]])
 - Seats total / left:                              [[20 / __ ]]
 - Pioneer price / Retail:                          [[₹49,000 / ₹70,000]]
 - Booking structure:                               [[₹15,000 + ₹17,000 + ₹17,000]]
-- Venue:                                           [[UXP, Technopark, Trivandrum]]
+- Venue:                                           [[UXP Innovation Hub, Trivandrum]]
 
 TASK:
 - Carousel topic: [[e.g. "the 2026 AI engineer stack" | "₹49K vs ₹70K — what Pioneer means"

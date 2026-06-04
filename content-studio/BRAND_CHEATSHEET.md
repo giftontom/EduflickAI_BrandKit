@@ -18,7 +18,7 @@ decides) so the learner stays in flow.
 | Face | What it is | When you're writing for it |
 | --- | --- | --- |
 | **The product (vision)** | The consumer **learning-feed app** — flick cards, the 60-second player, the **Sparks** gamification system. | Product marketing, app store, the "a feed for thinking" story. |
-| **The program (active business)** | The **Full-Stack AI Engineer Program** — an in-person, capped-at-20 cohort run at Technopark, Trivandrum. This is what's being sold right now. | **Most marketing tasks.** The 6-week sprint to fill the Pioneer Cohort. |
+| **The program (active business)** | The **Full-Stack AI Engineer Program** — an in-person, capped-at-20 cohort run in Trivandrum. This is what's being sold right now. | **Most marketing tasks.** The 6-week sprint to fill the Pioneer Cohort. |
 
 Both share one visual + verbal system. **If a task doesn't say which, assume the program.**
 
@@ -73,8 +73,7 @@ Both share one visual + verbal system. **If a task doesn't say which, assume the
 > you fill per task — never state a live number from memory.**
 
 - **Product:** Eduflick Certified **Full-Stack AI Engineer Program**, **Pioneer Cohort 01**.
-- **Operator / venue:** Tomatrix Technologies Pvt Ltd · **UXP Enterprise Solutions, Technopark,
-  Thiruvananthapuram (Trivandrum)** · in-person.
+- **Operator / venue:** Tomatrix Technologies Pvt Ltd · **UXP Innovation Hub, Trivandrum** · in-person.
 - **Price:** **₹49,000** Pioneer (founding-batch) price vs **₹70,000** retail from Cohort 2.
   Payment structure: **₹15,000 seat-booking fee + ₹17,000 + ₹17,000**.
 - **Scarcity:** **capped at 20 seats** ("real cohort, real mentors").
@@ -84,8 +83,8 @@ Both share one visual + verbal system. **If a task doesn't say which, assume the
 - **What you build (the differentiator):** **3 deployed projects** — a SaaS dashboard, a RAG
   chatbot, and an agentic platform.
 - **The real stack taught:** Cursor, Next.js, Claude / OpenAI, Pinecone, LangChain, n8n.
-- **Hire-ready angle:** Week 12 = mock interviews + recruiter networking with Technopark HR.
-- **The single message:** *Stop learning AI theory. Ship AI products. Get hired at Technopark in
+- **Hire-ready angle:** Week 12 = mock interviews + recruiter networking with industry HR.
+- **The single message:** *Stop learning AI theory. Ship AI products. Get hired in Trivandrum in
   12 weeks.*
 
 ## 5. Audience & their pain (use their words)
@@ -101,14 +100,14 @@ Their actual words (mirror these as hooks):
 ## 6. The wedge (why us, not Udemy/YouTube)
 
 1. **Build, not watch** — 3 deployed projects, not a video library.
-2. **In-person, capped at 20** — real cohort, real mentors, at UXP Technopark.
-3. **Hire-ready** — Week 12 mock interviews + Technopark recruiter networking.
+2. **In-person, capped at 20** — real cohort, real mentors, at the UXP Innovation Hub.
+3. **Hire-ready** — Week 12 mock interviews + industry recruiter networking.
 4. **Real stack** — the tools companies actually use (see § 4).
 
 ## 7. Content pillars (every post should ladder to one)
 
 1. **Build in Public** — projects, code, deployments. *The differentiator.*
-2. **Get Hired** — Technopark jobs, placement, portfolio, mock interviews.
+2. **Get Hired** — Trivandrum tech jobs, placement, portfolio, mock interviews.
 3. **Learn Fast** — bite-size AI concepts (RAG, agents, vector DBs) in 60s.
 4. **The Cohort** — capped-at-20, in-person, UXP venue, community.
 5. **Pioneer Urgency** — founding batch, ₹49K offer, seats remaining.
@@ -118,7 +117,7 @@ Their actual words (mirror these as hooks):
 ## 8. Hashtags (when a channel needs them)
 
 3–6, precise, mixing geo + topic + intent. Pool to draw from:
-`#TechparkTrivandrum #Trivandrum #Kerala #AIEngineer #FullStackAI #LearnAI #RAG #LLM
+`#TrivandrumTech #Trivandrum #Kerala #AIEngineer #FullStackAI #LearnAI #RAG #LLM
 #NextJS #BuildInPublic #TechJobsKerala #CareerInAI`. No motivational/grind tags.
 
 ---
@@ -157,7 +156,7 @@ Their actual words (mirror these as hooks):
 | --- | --- |
 | "Something went wrong! Please try again later or contact support." | "Lost connection. Pull down to retry." |
 | "🧠✨ Did you know mitosis is CRUCIAL?! Learn EVERYTHING! 💯 #science #STEM" | "Mitosis cuts a cell in half. Then it does it again. In 60 seconds, you'll understand why." |
-| "Join our AMAZING world-class AI bootcamp and supercharge your career!! 🚀" | "stop learning AI theory. ship *AI products*. 12 weeks, in-person, Technopark. 20 seats." |
+| "Join our AMAZING world-class AI bootcamp and supercharge your career!! 🚀" | "stop learning AI theory. ship *AI products*. 12 weeks, in-person, Trivandrum. 20 seats." |
 | "Don't miss this limited-time offer, hurry!!!" | "pioneer cohort: ₹49K, not ₹70K. 7 of 20 seats left. closes [[DATE]]." |
 | "Level up and unlock your AI potential today!" | "build a RAG chatbot in week 8. deploy it. put it on your résumé." |
 

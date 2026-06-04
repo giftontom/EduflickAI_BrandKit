@@ -13,7 +13,7 @@ FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]])
 - Seats total / left:    [[20 / __ ]]
 - Pioneer price:         [[₹49,000]]   Retail: [[₹70,000]]
 - Cohort start:          [[ ]]   Duration: [[12 weeks]]
-- Venue:                 [[UXP, Technopark, Trivandrum]]
+- Venue:                 [[UXP Innovation Hub, Trivandrum]]
 - WhatsApp / link in bio: [[ ]]
 
 TASK:
@@ -28,7 +28,7 @@ CONSTRAINTS (in priority order):
 2. 2–4 short body lines after. Voice = engineer, not marketer. Numbers as proof.
 3. Exactly ONE CTA, matched to the funnel phase, using a real link/handle from FACTS (or [[NEEDS]]).
 4. Exactly one serif-accent word in the hook, marked with *asterisks*.
-5. 3–6 precise hashtags from: #TechparkTrivandrum #Trivandrum #Kerala #AIEngineer #FullStackAI
+5. 3–6 precise hashtags from: #TrivandrumTech #Trivandrum #Kerala #AIEngineer #FullStackAI
    #LearnAI #RAG #LLM #NextJS #BuildInPublic #TechJobsKerala #CareerInAI. No grind/motivation tags.
 6. No emoji. No forbidden words. Lowercase is fine for the hook; sentence case for body.
 
@@ -50,15 +50,15 @@ Hashtags:
 
 **✓ Good (Awareness · Get Hired):**
 > **Hook:** you know react. you've *never* shipped with an LLM.
-> **Body:** that gap is why "AI experience required" keeps closing doors. in 12 weeks, in-person at Technopark, you build 3 real ones — a SaaS dashboard, a RAG chatbot, an agentic platform. deployed. on your résumé.
+> **Body:** that gap is why "AI experience required" keeps closing doors. in 12 weeks, in-person in Trivandrum, you build 3 real ones — a SaaS dashboard, a RAG chatbot, an agentic platform. deployed. on your résumé.
 > **CTA:** free technical masterclass first. register → [[link]]
-> **Hashtags:** #AIEngineer #FullStackAI #TechparkTrivandrum #BuildInPublic #CareerInAI
+> **Hashtags:** #AIEngineer #FullStackAI #TrivandrumTech #BuildInPublic #CareerInAI
 
 **✓ Good (Conversion · Pioneer Urgency):**
 > **Hook:** pioneer cohort: ₹49K, not *₹70K*.
-> **Body:** founding-batch price for the first 20 seats. in-person, Technopark. 12 weeks to 3 deployed AI projects. [[__]] of 20 left.
+> **Body:** founding-batch price for the first 20 seats. in-person, Trivandrum. 12 weeks to 3 deployed AI projects. [[__]] of 20 left.
 > **CTA:** book your seat — closes [[date]]. dm "seat" → [[handle]]
-> **Hashtags:** #FullStackAI #TechparkTrivandrum #AIEngineer #TechJobsKerala
+> **Hashtags:** #FullStackAI #TrivandrumTech #AIEngineer #TechJobsKerala
 
 **✗ Bad (why):** "🚀 Ready to LEVEL UP your AI career?! Our world-class bootcamp will supercharge
 your skills! Don't miss out!! 🔥 #ai #coding #motivation #grind #success" — emoji, hype, forbidden

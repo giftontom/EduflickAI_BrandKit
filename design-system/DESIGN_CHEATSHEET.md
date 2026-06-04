@@ -142,7 +142,7 @@ Tomatrix logo to indigo · a glow/filter *on* the mark (light goes in a halo *be
 <body>
   <span class="eyebrow">PIONEER COHORT 01</span>
   <h1>stop learning ai theory. ship <em>ai products</em>.</h1>
-  <p>12 weeks, in-person at Technopark. 3 deployed projects. 20 seats.</p>
+  <p>12 weeks, in-person in Trivandrum. 3 deployed projects. 20 seats.</p>
 </body></html>
 ```
 

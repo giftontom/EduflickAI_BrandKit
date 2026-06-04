@@ -16,7 +16,7 @@ A piece ships at **≥ 85** with **zero hard-fails**.
 - [ ] **No forbidden words:** level up, unlock, boost, supercharge, gamechanger, claim reward,
       world-class, revolutionary, hurry, "limited time", "don't miss out".
 - [ ] **Sparks are earned**, never "unlocked/leveled/claimed."
-- [ ] **Factually correct** about the program: in-person · Technopark/UXP Trivandrum · capped at
+- [ ] **Factually correct** about the program: in-person · UXP Innovation Hub, Trivandrum · capped at
       20 · 12 weeks · Pioneer ₹49K vs ₹70K · free masterclass is the top-of-funnel.
 - [ ] **Right brand face** (program vs product) for the task.
 

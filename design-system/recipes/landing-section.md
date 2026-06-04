@@ -10,7 +10,7 @@ Output is ONE responsive, self-contained HTML section (not a fixed canvas). Mirr
 ```
 FACTS (only source of live numbers; missing → [[NEEDS: …]]):
 - Masterclass date / cohort start / seats left: [[ ]]
-- Price / retail / venue:                        [[₹49,000 / ₹70,000 / Technopark, Trivandrum]]
+- Price / retail / venue:                        [[₹49,000 / ₹70,000 / Trivandrum]]
 - Registration link:                             [[ ]]
 
 INPUTS:

@@ -84,7 +84,7 @@ FACTS (the ONLY source of live numbers — do not invent anything else):
 - Pioneer price:           [[₹49,000]]   Retail (Cohort 2): [[₹70,000]]
 - Booking fee:             [[₹15,000 to reserve; then ₹17,000 + ₹17,000]]
 - Cohort start date:       [[e.g. 6 Jul 2026]]   Duration: [[12 weeks]]
-- Venue:                   [[UXP Enterprise Solutions, Technopark, Trivandrum]]
+- Venue:                   [[UXP Innovation Hub, Trivandrum]]
 - Seat-close deadline:     [[e.g. 28 Jun 2026]]
 - WhatsApp / contact:      [[wa.me/… or phone]]
 

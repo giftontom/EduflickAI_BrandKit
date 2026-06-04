@@ -26,7 +26,7 @@ sprint). The funnel: **Awareness → Free Masterclass (lead capture) → Seat bo
 
 ## LinkedIn — primary (credibility + hiring narrative)
 - **Roles:** founder POV posts ("why we capped Cohort 1 at 20"), curriculum breakdowns, the
-  Technopark placement angle, real job-listing screenshots.
+  industry placement angle, real job-listing screenshots.
 - **Shape:** strong first 1–2 lines (LinkedIn truncates at "…see more"), short paragraphs / line
   breaks, a point of view, soft CTA. Longer + more narrative than IG; still no hype, no emoji.
 - **Tone tilt:** slightly more first-person founder voice; proof and POV over scarcity.
@@ -47,7 +47,7 @@ sprint). The funnel: **Awareness → Free Masterclass (lead capture) → Seat bo
 - **Renders with:** reuse Reel scripts. → `prompts/reel-script.md` (set platform = Shorts).
 
 ## Meta / Instagram Ads — paid acceleration
-- **Roles:** lead-gen → Masterclass; retargeting → seat booking. Geo: 10 km of Technopark, age
+- **Roles:** lead-gen → Masterclass; retargeting → seat booking. Geo: 10 km of central Trivandrum, age
   21–28, interests software dev / AI / Next.js / B.Tech / job-search.
 - **Shape:** primary text (pain hook → promise → proof → CTA), 3–5 short **headline** variants,
   1–2 **description** lines. Primary CTA: **"Register Free →"** (masterclass) early; shift to
@@ -62,7 +62,7 @@ sprint). The funnel: **Awareness → Free Masterclass (lead capture) → Seat bo
 | Phase | Weeks | Goal | Content emphasis |
 | --- | --- | --- | --- |
 | **1 · Awareness & list-building** | 1–2 | Build audience + collect masterclass regs | Reels + carousels on the pain/promise; **masterclass announcement** Fri; LinkedIn founder + curriculum posts. |
-| **2 · Consideration & masterclass push** | 3–4 | Max masterclass attendance; seed the offer | Daily Stories countdown; "what you build in week 4/8/11" reels; Technopark hiring angle; **run the masterclass, record it**; ₹49K vs ₹70K carousel. |
+| **2 · Consideration & masterclass push** | 3–4 | Max masterclass attendance; seed the offer | Daily Stories countdown; "what you build in week 4/8/11" reels; industry hiring angle; **run the masterclass, record it**; ₹49K vs ₹70K carousel. |
 | **3 · Conversion & scarcity close** | 5–6 | Convert attendees → bookings; sell out | Live "X of 20 seats left" graphics; masterclass highlight reels; objection-handler carousels; WhatsApp 1:1 close; final-48h urgency; sold-out + Cohort 2 waitlist. |
 
 **Weekly default mix** (Phase 1 template from the plan): Mon Reel · Tue LinkedIn founder · Wed

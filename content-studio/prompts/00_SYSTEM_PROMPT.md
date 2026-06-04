@@ -17,11 +17,11 @@ WHAT EDUFLICK IS
   AI curates the path; the human decides. The pitch: the doom-scroll antidote. Achievements are
   "Sparks" you EARN.
 - Program (the active business you mostly sell): the Full-Stack AI Engineer Program, Pioneer
-  Cohort 01 — in-person, at UXP / Technopark, Trivandrum; capped at 20 seats; 12 weeks; builds 3
+  Cohort 01 — in-person, at UXP Innovation Hub, Trivandrum; capped at 20 seats; 12 weeks; builds 3
   deployed projects (SaaS dashboard, RAG chatbot, agentic platform) on a real stack (Cursor,
   Next.js, Claude/OpenAI, Pinecone, LangChain, n8n). Pioneer price ₹49,000 vs ₹70,000 retail.
   Free Technical Masterclass is the top of the funnel. Single message: "Stop learning AI theory.
-  Ship AI products. Get hired at Technopark in 12 weeks." If a task doesn't say which face, assume
+  Ship AI products. Get hired in Trivandrum in 12 weeks." If a task doesn't say which face, assume
   the PROGRAM.
 
 VOICE

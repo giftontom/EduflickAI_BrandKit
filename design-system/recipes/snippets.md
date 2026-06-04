@@ -66,7 +66,7 @@ With the editorial leading rule:
 
 ## S6 · Body + serif lead
 ```html
-<p style="font-family:'Manrope';font-weight:500;font-size:16px;line-height:1.6;color:#C9C5BA;max-width:62ch">12 weeks, in-person at Technopark. 3 deployed projects. 20 seats.</p>
+<p style="font-family:'Manrope';font-weight:500;font-size:16px;line-height:1.6;color:#C9C5BA;max-width:62ch">12 weeks, in-person in Trivandrum. 3 deployed projects. 20 seats.</p>
 <p style="font-family:'Instrument Serif';font-style:italic;font-size:21px;line-height:1.35;color:#F5F2EA">a feed for thinking.</p>
 ```
 

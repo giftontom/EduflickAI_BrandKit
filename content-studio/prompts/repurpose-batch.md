@@ -13,7 +13,7 @@ FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]])
 - Today's date / current week of the 6-week sprint: [[ ]]   Funnel phase: [[1 Awareness | 2 Consideration | 3 Conversion]]
 - Masterclass date / cohort start / seats left:      [[ ]]
 - Registration link / WhatsApp:                       [[ ]]
-- Price / retail / venue:                              [[₹49,000 / ₹70,000 / Technopark, Trivandrum]]
+- Price / retail / venue:                              [[₹49,000 / ₹70,000 / Trivandrum]]
 
 TASK — pick ONE mode:
 - MODE A · REPURPOSE: source = [[e.g. "this masterclass recording" / paste notes / a demo]].

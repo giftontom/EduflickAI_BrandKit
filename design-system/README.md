@@ -26,7 +26,7 @@ out of its right edge (the "play," the moment a lesson begins). One shape, one n
 | --- | --- | --- |
 | **Eduflick App** (consumer) | Mobile learning feed — flick cards, bottom nav, FAB, search, profile, the **Sparks** gamification system | `ui_kits/app/` |
 | **Eduflick Web** (educator / institution) | Dark dashboard + light marketing site — top nav, sidebar, stat cards, content library, analytics | `ui_kits/web/` |
-| **Full-Stack AI Engineer Program** | An active in-person cohort program run by Tomatrix (₹49K Pioneer Cohort, Technopark Trivandrum). Marketing-led, uses the same brand. | covered in `web` marketing components |
+| **Full-Stack AI Engineer Program** | An active in-person cohort program run by Tomatrix (₹49K Pioneer Cohort, Trivandrum). Marketing-led, uses the same brand. | covered in `web` marketing components |
 
 There are **two faces** to the brand: the consumer learning-feed *vision* and the
 *active* AI-engineering cohort business. Both share one visual system.

@@ -206,7 +206,7 @@ ROW 4  BOTTOM │ BL │ BC │ BR │
 - **On-image:** eyebrow `PIONEER COHORT 01` · headline `20 *selective* seats` · coral `20 selective intake · ₹49,000` · sub `₹70,000 from cohort 2`
 - **Hook:** pioneer cohort 01: 20 *selective* seats. that's the whole room.
 - **Body:** the full-stack ai engineer program. 12 weeks, in person at uxp innovation hub, trivandrum. founding price ₹49,000 (₹70,000 from cohort 2). strictly capped at 20 seats to guarantee 1:1 code reviews.
-- **CTA:** apply now — closes June 15 → eduflickai.com/apply
+- **CTA:** apply now → eduflickai.com/apply
 - **Hashtags:** #FullStackAI #AIEngineer #TrivandrumTech #TechJobsKerala
 
 #### Post 11 · TC · carousel (major) · the-cohort/consideration→conversion

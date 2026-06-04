@@ -101,7 +101,6 @@ freshest thing a profile visitor sees.
 - Lead step: free technical masterclass (~90 min, live, builds a real AI app)
 - Web: **eduflickai.com** · Apply: **eduflickai.com/apply** · Masterclass:
   **eduflickai.com/masterclass** · Email: **info@eduflickai.com** · Handle: **@eduflick.ai**
-- Applications close: **June 15, 2026**
 
 **Fill before publishing:** exact masterclass date/time · cohort start date · live `[[seats left]]`
 count for the scarcity post.
@@ -247,7 +246,7 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
 - **Caption**
   - **Hook:** pioneer cohort 01: 20 *selective* seats. that's the whole room.
   - **Body:** the full-stack ai engineer program. 12 weeks, in person at uxp innovation hub, trivandrum. founding price ₹49,000 (₹70,000 from cohort 2). strictly capped at 20 seats to guarantee 1:1 code reviews.
-  - **CTA:** apply now — closes June 15 → eduflickai.com/apply
+  - **CTA:** apply now → eduflickai.com/apply
   - **Hashtags:** #FullStackAI #AIEngineer #TrivandrumTech #TechJobsKerala
 
 #### Post 11 — TC · Day 4 · Carousel (major) · The Cohort / Consideration→Conversion

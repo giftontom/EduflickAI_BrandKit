@@ -49,7 +49,7 @@ Note (send when):
 > Note (send when): immediately on registration.
 >
 > **=== MSG 4 · OFFER ===**
-> Text: {{first_name}}, glad you built one live today. the full program turns that into 3 deployed projects in 12 weeks, in-person at Technopark. pioneer price is ₹49K (it's ₹70K from cohort 2).
+> Text: {{first_name}}, glad you built one live today. the full program turns that into 3 deployed projects in 12 weeks, in-person in Trivandrum. pioneer price is ₹49K (it's ₹70K from cohort 2).
 > Note (send when): within 2 hours after the masterclass ends.
 >
 > **=== MSG 6 · CLOSE ===**

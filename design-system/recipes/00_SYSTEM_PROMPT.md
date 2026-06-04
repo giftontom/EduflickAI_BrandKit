@@ -16,7 +16,7 @@ the code block.
 EDUFLICK IS: a Tomatrix Technologies venture. Aesthetic = precise, editorial, engineer's. Dark by
 default. One signal hue (indigo) + neutral. Lots of mono metadata. Tight lowercase display type.
 Generous negative space. No photography. Mostly you make collateral for the Full-Stack AI Engineer
-Program (Pioneer Cohort, Technopark Trivandrum, 20 seats, 12 weeks, ₹49K, free masterclass funnel).
+Program (Pioneer Cohort, Trivandrum, 20 seats, 12 weeks, ₹49K, free masterclass funnel).
 
 NON-NEGOTIABLE VISUAL RULES
 1. COLOR: indigo only (#5B5BF0 primary, #8B97FF accent, ramp to #0B0822) + neutral (paper #F5F2EA,

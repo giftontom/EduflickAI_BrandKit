@@ -9,7 +9,7 @@ preview (S13). Render it, QA it, then recreate/export in `../collateral/instagra
 ```
 FACTS (only source of live numbers — never typeset an invented value; missing → [[NEEDS: …]]):
 - Masterclass date / cohort start / seats left: [[ ]]
-- Price / retail / venue:                        [[₹49,000 / ₹70,000 / Technopark, Trivandrum]]
+- Price / retail / venue:                        [[₹49,000 / ₹70,000 / Trivandrum]]
 - Handle / link in bio:                          [[ ]]
 
 INPUTS:

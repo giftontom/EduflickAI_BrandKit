@@ -1,7 +1,7 @@
 # Prompt — LinkedIn post
 
 Load `00_SYSTEM_PROMPT.md` first. LinkedIn carries credibility and the hiring narrative — founder
-POV, curriculum breakdowns, the Technopark placement angle. Longer and more first-person than IG,
+POV, curriculum breakdowns, the industry placement angle. Longer and more first-person than IG,
 but the same engineer voice: no hype, no emoji.
 
 ---
@@ -10,11 +10,11 @@ but the same engineer voice: no hype, no emoji.
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
 - Masterclass date / cohort start / seats left: [[ ]]
 - Registration link:                             [[ ]]
-- Price / retail / venue:                        [[₹49,000 / ₹70,000 / UXP, Technopark, Trivandrum]]
+- Price / retail / venue:                        [[₹49,000 / ₹70,000 / UXP Innovation Hub, Trivandrum]]
 - Any real proof to cite (job listings, count):  [[ ]]
 
 TASK:
-- Angle: [[e.g. "why we capped Cohort 1 at 20" | "the AI roles posted at Technopark this month"
+- Angle: [[e.g. "why we capped Cohort 1 at 20" | "the AI roles posted in Trivandrum this month"
   | "month 1/2/3 curriculum breakdown" | "what shipping 3 projects does that videos don't"]]
 - Voice: [[founder first-person | program account]]
 - Pillar: [[ ]]   Funnel phase: [[ ]]
@@ -47,7 +47,7 @@ HASHTAGS (3–5):
 > **BODY:**
 > An online course scales to 10,000 people because no one is accountable for whether you finish. We're building the opposite.
 >
-> 20 students. In-person, at UXP in Technopark. Mentors who review your actual code.
+> 20 students. In-person, at the UXP Innovation Hub. Mentors who review your actual code.
 >
 > In 12 weeks you ship three deployed projects — a SaaS dashboard, a RAG chatbot, and an agentic platform — on the stack companies hire for: Next.js, Claude/OpenAI, Pinecone, LangChain.
 >
@@ -57,7 +57,7 @@ HASHTAGS (3–5):
 >
 > **CTA:** We run a free technical masterclass before booking opens — you build a small AI app live. Register: [[link]]
 >
-> **HASHTAGS:** #AIEngineer #TechparkTrivandrum #CareerInAI #FullStackAI
+> **HASHTAGS:** #AIEngineer #TrivandrumTech #CareerInAI #FullStackAI
 
 **✗ Avoid:** "🚀 Exciting news!! We are THRILLED to announce our game-changing bootcamp…" — emoji,
 hype, no POV, no proof, forbidden word.

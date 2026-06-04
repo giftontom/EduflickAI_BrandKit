@@ -15,12 +15,12 @@
 | Program name | Full-Stack AI Engineer Program |
 | Cohort | Pioneer Cohort 01 |
 | Format | In-person, offline |
-| Venue | UXP Innovation Hub, Technopark, Thiruvananthapuram (Trivandrum) |
+| Venue | UXP Innovation Hub, Trivandrum |
 | Duration | 12 weeks (~3 months) |
 | Seat cap | 20 (selective intake) |
 | Projects built | 3 deployed — SaaS dashboard, RAG chatbot, agentic platform |
 | Tech stack | Cursor, Next.js, Claude/OpenAI, Pinecone, LangChain, n8n |
-| Week 12 | Mock interviews + industry recruiter networking (Technopark HR) |
+| Week 12 | Mock interviews + recruiter networking with industry HR |
 | Operator | Tomatrix Technologies Pvt Ltd |
 
 ## Pricing (stable for Pioneer Cohort)
@@ -52,7 +52,7 @@
 | Masterclass date/time | [[NOT SET — e.g. Sat 21 Jun 2026, 5:00 PM IST]] | |
 | Masterclass registration link | [[NEEDS LINK]] | |
 | Cohort start date | [[NOT SET — e.g. 6 Jul 2026]] | |
-| Applications close | [[June 15, 2026]] | |
+| Applications close | [[no close date]] | |
 | Seats remaining | [[20 of 20]] | |
 | Seats total | 20 | |
 
@@ -91,7 +91,7 @@
 
 3–6 per post, mix geo + topic + intent:
 
-`#TechparkTrivandrum #Trivandrum #Kerala #AIEngineer #FullStackAI #LearnAI #RAG #LLM #NextJS #BuildInPublic #TechJobsKerala #CareerInAI`
+`#TrivandrumTech #Trivandrum #Kerala #AIEngineer #FullStackAI #LearnAI #RAG #LLM #NextJS #BuildInPublic #TechJobsKerala #CareerInAI`
 
 ---
 

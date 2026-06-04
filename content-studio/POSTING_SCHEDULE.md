@@ -39,7 +39,7 @@
 | Day | Date | Channel | Asset | Hook / Angle | Status |
 | --- | --- | --- | --- | --- | --- |
 | Mon | [[ ]] | IG Reel | "What is RAG in 60s" | Learn Fast pillar, bite-size concept | ⬜ |
-| Tue | [[ ]] | LinkedIn | Technopark hiring post | Real job listings screenshot, "AI experience required" | ⬜ |
+| Tue | [[ ]] | LinkedIn | industry hiring post | Real job listings screenshot, "AI experience required" | ⬜ |
 | Wed | [[ ]] | IG Carousel | Objection handler: "Is AI engineering for me?" | "I know React but never built with LLMs" | ⬜ |
 | Thu | [[ ]] | IG Reel | Day-in-the-cohort preview | UXP venue B-roll, workspace, energy | ⬜ |
 | Fri | [[ ]] | IG + WhatsApp | Masterclass reminder #1 | "Seats filling — register free" | ⬜ |
@@ -94,7 +94,7 @@
 | Thu | [[ ]] | IG Reel | "What you'll build in Week 11" | Capstone agentic platform preview | ⬜ |
 | Fri | [[ ]] | All + WhatsApp | Scarcity update | "X of 20 seats left — closes [[DATE]]" | ⬜ |
 | Sat | [[ ]] | IG Stories | Seat tracker graphic | Live count update | ⬜ |
-| Sun | [[ ]] | LinkedIn | "The Technopark placement angle" | Week 12 mock interviews + recruiter networking | ⬜ |
+| Sun | [[ ]] | LinkedIn | "The industry placement angle" | Week 12 mock interviews + recruiter networking | ⬜ |
 
 ### Week 6
 

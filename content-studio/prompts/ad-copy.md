@@ -10,11 +10,11 @@ variants, descriptions, and the CTA button — ready to paste into Ads Manager.
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
 - Masterclass date / cohort start / seats left: [[ ]]
 - Landing / registration link:                   [[ ]]
-- Price / retail / venue:                         [[₹49,000 / ₹70,000 / Technopark, Trivandrum]]
+- Price / retail / venue:                         [[₹49,000 / ₹70,000 / Trivandrum]]
 
 TASK:
 - Objective: [[Lead-gen → free masterclass | Retargeting → seat booking]]
-- Audience: [[cold: 10km of Technopark, 21–28, software/AI/Next.js/B.Tech/job-search
+- Audience: [[cold: 10km of central Trivandrum, 21–28, software/AI/Next.js/B.Tech/job-search
   | warm: 50%+ video viewers / profile visitors / masterclass no-shows]]
 - Pain hook to lead with: [[e.g. "AI experience required — you have none"]]
 - Funnel phase: [[ ]]   Number of variants: [[3 primary texts, 4 headlines, 2 descriptions]]
@@ -47,18 +47,18 @@ C) (scarcity angle)
 ## Few-shot — lead-gen, cold audience, Awareness
 
 > **=== PRIMARY TEXT ===**
-> A) "AI experience required." you have none. that's the gap. in 12 weeks, in-person at Technopark, you ship 3 deployed AI projects — a SaaS dashboard, a RAG chatbot, an agentic platform. it starts with a free technical masterclass. build a small AI app, live. register free →
-> B) you know react. you've never shipped with an LLM. our cohort fixes that: 3 deployed projects, the real stack (next.js, claude, pinecone, langchain), capped at 20, in-person at Technopark. free masterclass first. register free →
-> C) 20 seats. in-person. Technopark. the pioneer cohort builds 3 real AI products in 12 weeks at ₹49K (₹70K from the next batch). see how it works in a free live masterclass. register free →
+> A) "AI experience required." you have none. that's the gap. in 12 weeks, in-person in Trivandrum, you ship 3 deployed AI projects — a SaaS dashboard, a RAG chatbot, an agentic platform. it starts with a free technical masterclass. build a small AI app, live. register free →
+> B) you know react. you've never shipped with an LLM. our cohort fixes that: 3 deployed projects, the real stack (next.js, claude, pinecone, langchain), capped at 20, in-person in Trivandrum. free masterclass first. register free →
+> C) 20 seats. in-person. Trivandrum. the pioneer cohort builds 3 real AI products in 12 weeks at ₹49K (₹70K from the next batch). see how it works in a free live masterclass. register free →
 >
 > **=== HEADLINES ===**
 > 1) ship AI products, not theory
 > 2) build 3 AI projects in 12 weeks
 > 3) the AI engineer stack, in-person
-> 4) free AI masterclass · Technopark
+> 4) free AI masterclass · Trivandrum
 >
 > **=== DESCRIPTIONS ===**
-> 1) capped at 20 · Technopark
+> 1) capped at 20 · Trivandrum
 > 2) pioneer cohort · ₹49K
 >
 > **=== CTA BUTTON ===** Sign Up
