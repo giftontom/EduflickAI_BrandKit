@@ -35,6 +35,9 @@ const RETIRED = [
   { bad: 'eduflick.com', use: 'eduflickai.com (correct domain)' },
 ];
 
+// http(s) URIs that are XML namespaces / schema refs, not real links — skip in --links.
+const LINK_SKIP = /(?:w3\.org|purl\.org|ns\.adobe\.com|sodipodi|inkscape\.org|schemas?\.|example\.(?:com|org))/;
+
 function walk(dir, files = []) {
   for (const name of readdirSync(dir)) {
     const full = join(dir, name);
@@ -70,6 +73,7 @@ function extractLinks(files) {
     lines.forEach((line, i) => {
       for (const m of line.matchAll(re)) {
         const url = m[0].replace(/[.,;:]+$/, '');
+        if (LINK_SKIP.test(url)) continue;
         if (!urls.has(url)) urls.set(url, `${relative(ROOT, file)}:${i + 1}`);
       }
     });
