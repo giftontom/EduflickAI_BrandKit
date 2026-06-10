@@ -32,11 +32,11 @@ Use these as the profile picture / app icon. Mark-only — wordmarks read poorly
 | `og-card-1200x630.png` | Link previews on Twitter/X, LinkedIn, Slack, Facebook, iMessage. Reference as `og:image` and `twitter:image`. |
 
 ```html
-<meta property="og:image" content="https://eduflick.ai/og-card-1200x630.png">
+<meta property="og:image" content="https://eduflickai.com/og-card-1200x630.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://eduflick.ai/og-card-1200x630.png">
+<meta name="twitter:image" content="https://eduflickai.com/og-card-1200x630.png">
 ```
 
 ## Regenerating
