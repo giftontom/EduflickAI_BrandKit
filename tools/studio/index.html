@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>brand studio · eduflick AI</title>
+<link rel="icon" href="/assets/logo/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/design-system/tokens/tokens.css">
+<link rel="stylesheet" href="/design-system/colors_and_type.css">
+<link rel="stylesheet" href="/design-system/components.css">
+<link rel="stylesheet" href="/.claude/skills/design-effects/effects.css">
+<link rel="stylesheet" href="/tools/studio/studio.css">
+<script src="./vendor/marked.min.js"></script>
+<script src="./vendor/purify.min.js"></script>
+</head>
+<body>
+<div id="fx" class="grain vignette" aria-hidden="true"></div>
+<nav id="nav" class="glass">
+  <a class="nav-brand" href="#/">
+    <svg viewBox="0 0 180 180" width="28" height="28" aria-hidden="true">
+      <path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#5B5BF0"/>
+    </svg>
+    <span class="nav-title">
+      <span class="wordmark">eduflick<i>AI</i></span>
+      <span class="mono-up nav-sub">brand studio</span>
+    </span>
+  </a>
+  <div class="nav-section">
+    <span class="mono-up nav-label">overview</span>
+    <a href="#/" data-route="/">dashboard</a>
+  </div>
+  <div class="nav-section">
+    <span class="mono-up nav-label">surfaces</span>
+    <a href="#/social/instagram" data-route="/social/instagram">instagram</a>
+    <a href="#/social/posters" data-route="/social/posters">posters</a>
+    <a href="#/social/stories" data-route="/social/stories">stories</a>
+    <a href="#/social/launch-grid" data-route="/social/launch-grid">launch grid</a>
+    <a href="#/deck" data-route="/deck">program deck</a>
+  </div>
+  <div class="nav-section">
+    <span class="mono-up nav-label">library</span>
+    <a href="#/brochures" data-route="/brochures">documents</a>
+    <a href="#/brand" data-route="/brand">brand</a>
+    <a href="#/docs" data-route="/docs">docs</a>
+  </div>
+  <div class="nav-section">
+    <span class="mono-up nav-label">ops</span>
+    <a href="#/facts" data-route="/facts">facts editor</a>
+    <a href="#/actions" data-route="/actions">actions</a>
+  </div>
+  <div class="nav-foot">
+    <button id="nav-refresh" class="btn-mini" type="button">refresh manifest</button>
+    <span class="mono nav-foot-meta">local · 127.0.0.1:8090</span>
+  </div>
+</nav>
+<main id="view"></main>
+<div id="lightbox" hidden></div>
+<div id="modal" hidden></div>
+<script type="module" src="./main.mjs"></script>
+</body>
+</html>
