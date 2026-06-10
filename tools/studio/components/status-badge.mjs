@@ -2,7 +2,7 @@
    Status enum mirrors the server contract. Persistence is optimistic:
    the caller's onSave(id, patch) updates local state first, then the API. */
 
-import { el, fmtDate } from '../dom.mjs';
+import { el, fmtDate, openModal } from '../dom.mjs';
 
 export const STATUSES = ['draft', 'approved', 'scheduled', 'posted', 'retired'];
 
@@ -53,14 +53,16 @@ export function statusControl({ id, entry = {}, onSave }) {
     }
   });
 
-  /* plan popover: scheduledFor + notes */
+  /* plan dialog: scheduledFor + notes. Rendered through openModal (body-level,
+     focus-trapped) — an inline popover would be clipped by the asset card's
+     content-visibility paint containment and become unreachable. */
   const dateIn = el('input', { type: 'date', class: 'pop-input' });
-  if (current.scheduledFor) dateIn.value = String(current.scheduledFor).slice(0, 10);
   const notesIn = el('textarea', { class: 'pop-input pop-notes', rows: 3, placeholder: 'notes' });
-  notesIn.value = current.notes || '';
-
   const popMsg = el('span', { class: 'mono pop-msg' }, '');
-  const pop = el('div', { class: 'status-pop glass', hidden: true },
+
+  let closePlan = null;
+  const planForm = el('div', { class: 'plan-form' },
+    el('span', { class: 'mono-up pop-title' }, `plan · ${id}`),
     el('span', { class: 'mono-up pop-label' }, 'scheduled for'),
     dateIn,
     el('span', { class: 'mono-up pop-label' }, 'notes'),
@@ -68,8 +70,8 @@ export function statusControl({ id, entry = {}, onSave }) {
     el('div', { class: 'pop-actions' },
       el('button', {
         class: 'btn-mini', type: 'button',
-        onclick: () => { pop.hidden = true; },
-      }, 'close'),
+        onclick: () => { if (closePlan) closePlan(); },
+      }, 'cancel'),
       el('button', {
         class: 'btn-mini btn-mini-solid', type: 'button',
         onclick: async () => {
@@ -81,7 +83,7 @@ export function statusControl({ id, entry = {}, onSave }) {
             current = (await onSave(id, patch)) || current;
             paint();
             popMsg.textContent = 'saved';
-            setTimeout(() => { popMsg.textContent = ''; pop.hidden = true; }, 700);
+            setTimeout(() => { if (closePlan) closePlan(); }, 700);
           } catch {
             popMsg.textContent = 'save failed';
             flashError();
@@ -90,12 +92,17 @@ export function statusControl({ id, entry = {}, onSave }) {
       }, 'save')),
     popMsg);
 
-  const planBtn = el('button', {
+  const planButton = el('button', {
     class: 'btn-mini', type: 'button', 'aria-label': `plan ${id}`,
-    onclick: () => { pop.hidden = !pop.hidden; },
+    onclick: () => {
+      dateIn.value = current.scheduledFor ? String(current.scheduledFor).slice(0, 10) : '';
+      notesIn.value = current.notes || '';
+      popMsg.textContent = '';
+      closePlan = openModal(planForm, { onClose: () => { closePlan = null; } });
+    },
   }, 'plan');
 
-  const root = el('div', { class: 'status-ctl' }, badgeHost, select, planBtn, meta, pop);
+  const root = el('div', { class: 'status-ctl' }, badgeHost, select, planButton, meta);
 
   function flashError() {
     root.classList.add('save-err');
