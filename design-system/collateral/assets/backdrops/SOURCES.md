@@ -10,8 +10,8 @@ source. Raw sources live in `tools/stock-sources/` (gitignored); the committed
 
 | Backdrop | Source | Author | License | Page |
 | --- | --- | --- | --- | --- |
-| `poster-program.png` | Wikimedia Commons | BalticServers.com | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:BalticServers_data_center.jpg |
-| `poster-masterclass.png` | Wikimedia Commons | Anas Alshanti otenteko | CC0 | https://commons.wikimedia.org/wiki/File:Keyboard_(Unsplash).jpg |
+| `poster-program.png` | Procedural (`tools/gen-backdrops-proc.mjs`) — no external source | — | — | — |
+| `poster-masterclass.png` | Wikimedia Commons | Anas Alshanti otenteko | CC0 | <https://commons.wikimedia.org/wiki/File:Keyboard_(Unsplash).jpg> |
 
 *Pexels and the CC licenses on Wikimedia Commons permit commercial use. CC-BY / CC-BY-SA
 sources require attribution — keep this file with the assets. Regenerate with
