@@ -6,6 +6,29 @@ alongside it.
 
 ---
 
+## Unreleased — brand studio (branch `brand-studio`)
+
+### Added
+
+- **Brand studio** — a local platform to view and manage every asset in the kit:
+  `cd tools && npm run studio` → `http://localhost:8090/tools/studio/`. Galleries for
+  instagram/posters/stories/deck exports (lazy grids, lightbox, stale ribbons,
+  cold-state run-export buttons), live brochure/deck/brand-book/kit previews,
+  brand foundations (token swatches, type specimens, logo wall), a rendered
+  markdown viewer for all repo docs (FACTS.md pinned as source of truth, raw
+  toggle, search), launch-pipeline status tracking per asset
+  (draft/approved/scheduled/posted/retired → committed `content-studio/status.json`),
+  a whitelisted action runner with live SSE logs (exports, backdrops, guards,
+  token/snippet rebuilds), the host side of the collateral-kit edit panel
+  (persists tweaks to the EDITMODE block on disk, guard-checked), and a FACTS.md
+  editor with live guard validation, line diff, and explicit override.
+  Server: `tools/studio-server.mjs` (localhost-only, zero new dependencies, writes
+  limited to status.json, FACTS.md, and EDITMODE blocks). Static serving extracted
+  to `tools/lib/static.mjs` with a hardened path-traversal guard (also fixes
+  `serve.mjs`). Markdown rendering via vendored `marked` + `DOMPurify`
+  (`tools/studio/vendor/`, licenses recorded). `check-facts.mjs` now exports its
+  retired-string scanner for in-process validation; CLI behavior unchanged.
+
 ## Unreleased — full-project review fixes (branch `review-fixes`)
 
 ### Added

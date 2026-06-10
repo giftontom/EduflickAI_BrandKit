@@ -100,7 +100,8 @@ jobs:
 
       - name: Check script syntax (all tools)
         run: |
-          for f in tools/*.mjs; do
+          # tools/*.mjs covers studio-server.mjs; tools/lib/*.mjs covers static.mjs
+          for f in tools/*.mjs tools/lib/*.mjs; do
             node --check "$f" || exit 1
           done
           echo "✓ All tools parse"

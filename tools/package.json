@@ -18,6 +18,7 @@
     "treat:stock": "node treat-stock.mjs",
     "export:avatar": "node export-pf-avatar.mjs",
     "serve": "node serve.mjs",
+    "studio": "node studio-server.mjs",
     "tokens": "node build-tokens.mjs",
     "snippets": "node build-snippets.mjs",
     "check:facts": "node check-facts.mjs",

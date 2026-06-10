@@ -3,23 +3,24 @@
 Everything that builds, checks, or exports the brand kit. One `npm install`
 (Playwright + Chromium + Style Dictionary), then:
 
-| Command | Does | Output |
-| --- | --- | --- |
-| `npm run tokens` | tokens.json → CSS custom props + flat JSON + JS module | `design-system/tokens/`, `tools/brand.tokens.mjs` |
-| `npm run snippets` | snippets.src.md + tokens → inline snippet bin | `design-system/recipes/snippets.md` |
-| `npm run check:facts` | facts-integrity guard — retired brand strings (add `-- --links` for link checks) | pass/fail |
-| `npm run export` | launch-grid posts + carousel slides | `exports/*.png` |
-| `npm run export:ig` | Instagram tiles (`collateral/instagram-posts.html`) | `exports/instagram/` |
-| `npm run export:posters` | posters (`collateral/posters.html`) | `exports/posters/` |
-| `npm run export:stories` | stories (`collateral/stories.html`) | `exports/stories/` |
-| `npm run export:slides` | the program deck slides (landscape) | `exports/full-stack-ai-engineer/` |
-| `npm run export:pdf` | brochure → print-quality PDF (Chromium) | `brochures/*.pdf` (gitignored) |
-| `npm run export:avatar` | the gradient profile avatar | `assets/logo/social/` |
-| `npm run gen:backdrops` / `:proc` | poster backdrops — Gemini AI / procedural fallback | `design-system/collateral/assets/backdrops/` |
-| `npm run gen:ig-backdrops` | IG tile backdrops | same |
-| `npm run fetch:stock` + `treat:stock` | photoreal indigo-duotone pipeline | same |
-| `npm run serve` | static preview server | `http://localhost:8080` |
-| `node codemod-hex.mjs` | migrate hardcoded hex → `var(--token)` (dry-run first) | — |
+| Command                               | Does                                                                             | Output                                            |
+| ------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `npm run tokens`                      | tokens.json → CSS custom props + flat JSON + JS module                           | `design-system/tokens/`, `tools/brand.tokens.mjs` |
+| `npm run snippets`                    | snippets.src.md + tokens → inline snippet bin                                    | `design-system/recipes/snippets.md`               |
+| `npm run check:facts`                 | facts-integrity guard — retired brand strings (add `-- --links` for link checks) | pass/fail                                         |
+| `npm run export`                      | launch-grid posts + carousel slides                                              | `exports/*.png`                                   |
+| `npm run export:ig`                   | Instagram tiles (`collateral/instagram-posts.html`)                              | `exports/instagram/`                              |
+| `npm run export:posters`              | posters (`collateral/posters.html`)                                              | `exports/posters/`                                |
+| `npm run export:stories`              | stories (`collateral/stories.html`)                                              | `exports/stories/`                                |
+| `npm run export:slides`               | the program deck slides (landscape)                                              | `exports/full-stack-ai-engineer/`                 |
+| `npm run export:pdf`                  | brochure → print-quality PDF (Chromium)                                          | `brochures/*.pdf` (gitignored)                    |
+| `npm run export:avatar`               | the gradient profile avatar                                                      | `assets/logo/social/`                             |
+| `npm run gen:backdrops` / `:proc`     | poster backdrops — Gemini AI / procedural fallback                               | `design-system/collateral/assets/backdrops/`      |
+| `npm run gen:ig-backdrops`            | IG tile backdrops                                                                | same                                              |
+| `npm run fetch:stock` + `treat:stock` | photoreal indigo-duotone pipeline                                                | same                                              |
+| `npm run serve`                       | static preview server                                                            | `http://localhost:8080`                           |
+| `npm run studio`                      | the brand studio (galleries, docs, status, guarded editing)                      | `http://localhost:8090/tools/studio/`             |
+| `node codemod-hex.mjs`                | migrate hardcoded hex → `var(--token)` (dry-run first)                           | —                                                 |
 
 Files starting with `_` (`_backdrop-art.mjs`, `_gen-grain.mjs`, `_inject-dark-bg.mjs`)
 are **internal helpers** imported by the scripts above — not run directly.
@@ -29,6 +30,22 @@ are **internal helpers** imported by the scripts above — not run directly.
 `post-*.png` / `slide-*.png` from the launch grid. Safe to delete; re-export anytime.
 
 ---
+
+## The brand studio
+
+```bash
+cd tools && npm run studio        # → http://localhost:8090/tools/studio/
+```
+
+`studio-server.mjs` serves the whole repo plus a JSON API (`/api/manifest`, `/api/status`,
+`/api/actions`, `/api/editmode`, `/api/facts/*`) behind `127.0.0.1`. The app at `tools/studio/`
+gives you galleries for every export surface (with stale/missing detection — empty grids on a
+fresh clone are normal, `exports/` is gitignored), an iframe browser for brochures/deck/kits, a
+markdown reader for all docs, launch-pipeline status tracking (`content-studio/status.json`),
+a guarded FACTS.md editor, and one-click pipeline runs with live logs. Its write surface is
+exactly three paths — see [`studio/README.md`](studio/README.md).
+
+`serve.mjs` and the studio share the static handler in `lib/static.mjs`.
 
 ## The launch-grid exporter
 
@@ -88,7 +105,7 @@ npm run gen:backdrops:proc                      # procedural fallback (no API) �
 npm run export:posters                          # composite posters → ../exports/posters/*.png
 ```
 
-Generates the **abstract indigo backdrops** layered *behind* the type in `collateral/posters.html`
+Generates the **abstract indigo backdrops** layered _behind_ the type in `collateral/posters.html`
 (see `../design-system/AI_IMAGERY_GUIDE.md`). The AI path needs a **billing-enabled** Gemini key —
 image models return HTTP 429 (`limit: 0`) on the free tier. `gen:backdrops:proc` writes the same
 filenames with SVG-rendered textures, so switching to real AI later is a drop-in re-run.
