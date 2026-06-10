@@ -29,6 +29,15 @@ if (!fs.existsSync(HTML)) {
   process.exit(1);
 }
 
+// Pre-export gate: never render unresolved [[placeholders]] into a deliverable.
+const phHits = fs.readFileSync(HTML, 'utf8').split('\n')
+  .flatMap((line, i) => (/\[\[/.test(line) ? [`  ${path.basename(HTML)}:${i + 1}  ${line.trim().slice(0, 140)}`] : []));
+if (phHits.length) {
+  console.error(`✗ Unresolved [[placeholders]] in ${HTML} — fix before exporting:`);
+  for (const h of phHits) console.error(h);
+  process.exit(1);
+}
+
 fs.mkdirSync(OUT, { recursive: true });
 
 const url = 'file://' + encodeURI(HTML) + '?export=1';

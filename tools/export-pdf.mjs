@@ -10,12 +10,22 @@
 //
 import { chromium } from 'playwright';
 import path from 'node:path';
+import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRCNAME = process.argv[2] || 'Eduflick_Full_Stack_AI_Engineer_Brochure.html';
 const SRC = path.join(ROOT, 'brochures', SRCNAME);
 const OUT = path.join(ROOT, 'brochures', SRCNAME.replace(/\.html$/, '.pdf'));
+
+// Pre-export gate: never render unresolved [[placeholders]] into a deliverable.
+const phHits = fs.readFileSync(SRC, 'utf8').split('\n')
+  .flatMap((line, i) => (/\[\[/.test(line) ? [`  ${path.basename(SRC)}:${i + 1}  ${line.trim().slice(0, 140)}`] : []));
+if (phHits.length) {
+  console.error(`✗ Unresolved [[placeholders]] in ${SRC} — fix before exporting:`);
+  for (const h of phHits) console.error(h);
+  process.exit(1);
+}
 
 const browser = await chromium.launch();
 const page = await browser.newPage();

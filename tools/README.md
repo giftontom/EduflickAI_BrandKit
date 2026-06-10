@@ -6,6 +6,7 @@ every **post** (as its true mural slice) and every **carousel slide** at exact *
 ## Two ways to export
 
 ### 1. Pixel-perfect, bulk (recommended)
+
 Uses Playwright + real Chromium, so clip-path notches, gradients, the glow, the Tomatrix
 logo and web fonts render **exactly** as the browser paints them.
 
@@ -17,13 +18,16 @@ SCALE=1 npm run export      # → exact 1080×1350
 ```
 
 Output lands in `../exports/`:
+
 - `post-01-br.png … post-12-tl.png` — the 12 grid posts (each carries its mural slice)
 - `slide-bl-01.png …`, `slide-uc-…`, `slide-tc-…`, `slide-ml-…`, `slide-mr-…`, `slide-ur-…`
   — every carousel slide
 
 ### 2. Quick, in-browser (no install)
+
 Needs an internet connection (it embeds the web fonts). Good for one-offs; for final,
 perfectly-accurate assets prefer method 1.
+
 - **Any post (incl. single-image tiles):** hover the tile and click the **⬇** that appears.
   It downloads that post as its true **mural slice** at 1080×1350. Best in the
   **`…?export=1`** view, where tiles are full-size and the button is easy to hit.
@@ -80,6 +84,7 @@ license recorded in `backdrops/SOURCES.md` (Pexels & Commons CC both permit comm
 attribution for CC-BY / CC-BY-SA).
 
 ## Notes
+
 - IG feed/portrait spec is 1080×1350 (4:5). `SCALE=1` matches it exactly; `SCALE=2`
   gives a crisper file that IG downscales cleanly.
 - Re-run after editing the HTML — the exporter always reflects the current design.

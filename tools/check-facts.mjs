@@ -27,16 +27,38 @@ const ROOT = join(dirname(SELF), '..'); // tools/ -> repo root
 const SKIP_DIRS = new Set(['.git', 'node_modules', '_archive', 'exports', 'brand-book', '.claude', '.vscode']);
 const TEXT_EXT = new Set(['.md', '.html', '.css', '.mjs', '.js', '.json', '.txt', '.yml', '.yaml']);
 
-// Retired strings (case-sensitive substring) -> what to use instead.
+// Retired strings -> what to use instead. `bad` is a case-sensitive substring,
+// or a RegExp (tested per line; use `label` for the report).
 const RETIRED = [
   { bad: 'Enterprise Solutions', use: 'UXP Innovation Hub, Trivandrum (venue finalized)' },
   { bad: 'Technopark', use: 'Trivandrum / industry (de-emphasized everywhere)' },
   { bad: '#TechparkTrivandrum', use: '#TrivandrumTech (hashtag finalized)' },
   { bad: 'eduflick.com', use: 'eduflickai.com (correct domain)' },
+  // Wrong domain as URL or email host. The IG handle @eduflick.ai (and
+  // instagram.com/eduflick.ai) is CORRECT and deliberately not matched here.
+  {
+    bad: /(https?:\/\/(?!instagram\.com)|[A-Za-z0-9._%+-]+@)eduflick\.ai/,
+    label: 'eduflick.ai (as URL/email domain)',
+    use: 'eduflickai.com (correct domain; @eduflick.ai IG handle is fine)',
+  },
+  { bad: 'careers.eduflick.ai', use: 'eduflickai.com (correct domain)' },
+  { bad: 'eduflick.ai/engineer', use: 'eduflickai.com/apply (correct domain)' },
+  { bad: 'eduflickai@gmail.com', use: 'info@eduflickai.com (official email)' },
 ];
 
+// ---- Active-HTML integrity checks (brochures/, design-system/, index.html) ----
+// Markdown is exempt from these: placeholders are policy in .md sources, but a
+// [[token]] reaching rendered HTML means an unfilled value shipped.
+const PLACEHOLDER = /\[\[/;
+// Canon (FACTS.md) is 3 deployed projects — flag any other count next to "deployed"/"live".
+const PROJECT_COUNT = /\b(?:[045-9]|four|five)\s+(?:deployed|live)\b/i;
+// FACTS.md: there is NO applications-close date — any dated "applications close …" is invented.
+const DEADLINE = /applications?\s+close[sd]?\s+(?:on\s+)?(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|january|february|march|april|june|july|august|september|october|november|december)\.?\s*\d{0,2}/i;
+
 // http(s) URIs that are XML namespaces / schema refs, not real links — skip in --links.
-const LINK_SKIP = /(?:w3\.org|purl\.org|ns\.adobe\.com|sodipodi|inkscape\.org|schemas?\.|example\.(?:com|org))/;
+// Also skipped: font preconnect roots (404 by design) and Wikimedia file URLs
+// (parens in filenames break naive URL extraction).
+const LINK_SKIP = /(?:w3\.org|purl\.org|ns\.adobe\.com|sodipodi|inkscape\.org|schemas?\.|example\.(?:com|org)|fonts\.googleapis\.com|fonts\.gstatic\.com|commons\.wikimedia\.org)/;
 
 function walk(dir, files = []) {
   for (const name of readdirSync(dir)) {
@@ -55,9 +77,10 @@ function scanRetired(files) {
   for (const file of files) {
     const lines = readFileSync(file, 'utf8').split('\n');
     lines.forEach((line, i) => {
-      for (const { bad, use } of RETIRED) {
-        if (line.includes(bad)) {
-          hits.push({ file: relative(ROOT, file), line: i + 1, bad, use });
+      for (const { bad, label, use } of RETIRED) {
+        const hit = bad instanceof RegExp ? bad.test(line) : line.includes(bad);
+        if (hit) {
+          hits.push({ file: relative(ROOT, file), line: i + 1, bad: label || bad, use });
         }
       }
     });
@@ -65,9 +88,31 @@ function scanRetired(files) {
   return hits;
 }
 
+// Active HTML = rendered surfaces where FACTS must hold (not .md sources).
+function activeHtml(files) {
+  return files.filter((f) => {
+    if (extname(f) !== '.html') return false;
+    const rel = relative(ROOT, f);
+    return rel === 'index.html' || rel.startsWith('brochures/') || rel.startsWith('design-system/');
+  });
+}
+
+function scanPattern(files, re) {
+  const hits = [];
+  for (const file of files) {
+    const lines = readFileSync(file, 'utf8').split('\n');
+    lines.forEach((line, i) => {
+      const m = line.match(re);
+      if (m) hits.push({ file: relative(ROOT, file), line: i + 1, match: m[0] });
+    });
+  }
+  return hits;
+}
+
 function extractLinks(files) {
   const urls = new Map(); // url -> first "file:line"
-  const re = /https?:\/\/[^\s)"'<>\]}]+/g;
+  // `$ { }` and backtick excluded so template-literal URLs don't produce junk.
+  const re = /https?:\/\/[^\s)"'<>\]{}$`]+/g;
   for (const file of files) {
     const lines = readFileSync(file, 'utf8').split('\n');
     lines.forEach((line, i) => {
@@ -108,6 +153,35 @@ if (hits.length) {
   for (const h of hits) console.error(`  ${h.file}:${h.line}  "${h.bad}"  -> use ${h.use}`);
 } else {
   console.log(`✓ No retired brand strings in ${files.length} scanned files.`);
+}
+
+const html = activeHtml(files);
+
+const placeholders = scanPattern(html, PLACEHOLDER);
+if (placeholders.length) {
+  failed = true;
+  console.error(`✗ Unresolved [[placeholders]] in active HTML (${placeholders.length}):`);
+  for (const h of placeholders) console.error(`  ${h.file}:${h.line}  "${h.match}"  -> fill the value (FACTS.md) before shipping`);
+} else {
+  console.log(`✓ No [[placeholder]] leakage in ${html.length} active HTML files.`);
+}
+
+const counts = scanPattern(html, PROJECT_COUNT);
+if (counts.length) {
+  failed = true;
+  console.error(`✗ Wrong project count in active HTML (${counts.length}) — canon is 3 deployed:`);
+  for (const h of counts) console.error(`  ${h.file}:${h.line}  "${h.match}"  -> use "3 deployed" (FACTS.md)`);
+} else {
+  console.log(`✓ No wrong project counts in ${html.length} active HTML files.`);
+}
+
+const deadlines = scanPattern(html, DEADLINE);
+if (deadlines.length) {
+  failed = true;
+  console.error(`✗ Invented application deadlines in active HTML (${deadlines.length}) — FACTS: no close date:`);
+  for (const h of deadlines) console.error(`  ${h.file}:${h.line}  "${h.match}"  -> remove the date (FACTS.md: no close date)`);
+} else {
+  console.log(`✓ No invented application deadlines in ${html.length} active HTML files.`);
 }
 
 if (process.argv.includes('--links')) {

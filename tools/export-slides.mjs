@@ -23,6 +23,16 @@ const OUT  = path.resolve(__dirname, '../exports/full-stack-ai-engineer');
 const SCALE = Number(process.env.SCALE || 2);                 // 2 = crisp (2560×1440) · 1 = exact 1280×720
 
 if (!fs.existsSync(HTML)) { console.error('Cannot find:', HTML); process.exit(1); }
+
+// Pre-export gate: never render unresolved [[placeholders]] into a deliverable.
+const phHits = fs.readFileSync(HTML, 'utf8').split('\n')
+  .flatMap((line, i) => (/\[\[/.test(line) ? [`  ${path.basename(HTML)}:${i + 1}  ${line.trim().slice(0, 140)}`] : []));
+if (phHits.length) {
+  console.error(`✗ Unresolved [[placeholders]] in ${HTML} — fix before exporting:`);
+  for (const h of phHits) console.error(h);
+  process.exit(1);
+}
+
 fs.mkdirSync(OUT, { recursive: true });
 
 const url = 'file://' + encodeURI(HTML);
