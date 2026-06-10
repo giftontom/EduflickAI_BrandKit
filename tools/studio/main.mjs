@@ -4,7 +4,7 @@
    logs, editors). 'action-exit' (from log-stream) triggers a state refetch. */
 
 import * as api from './api.mjs';
-import { el, clear } from './dom.mjs';
+import { el, clear, announce } from './dom.mjs';
 import * as dashboard from './views/dashboard.mjs';
 import * as social from './views/social.mjs';
 import * as deck from './views/deck.mjs';
@@ -13,6 +13,9 @@ import * as brand from './views/brand.mjs';
 import * as docs from './views/docs.mjs';
 import * as facts from './views/facts.mjs';
 import * as actions from './views/actions.mjs';
+import * as launch from './views/launch.mjs';
+import * as feedback from './views/feedback.mjs';
+import * as commandPalette from './components/command-palette.mjs';
 
 const state = { manifest: null, status: null, loadError: null, loaded: false };
 
@@ -70,6 +73,8 @@ const ROUTES = [
   { pattern: /^\/docs(?:\/(.+))?$/, view: docs, params: (m) => ({ path: m[1] ? m[1].split('/').map(decodeURIComponent).join('/') : null }) },
   { pattern: /^\/facts\/?$/, view: facts },
   { pattern: /^\/actions\/?$/, view: actions },
+  { pattern: /^\/launch\/?$/, view: launch },
+  { pattern: /^\/feedback\/?$/, view: feedback },
 ];
 
 let disposeView = null;
@@ -144,8 +149,14 @@ function boot() {
   try { storedTheme = localStorage.getItem(THEME_KEY); } catch { /* private mode */ }
   applyTheme(storedTheme === 'paper');
 
+  commandPalette.init(ctx);
+
   window.addEventListener('hashchange', renderRoute);
-  window.addEventListener('action-exit', () => { refreshState(); });
+  window.addEventListener('action-exit', (e) => {
+    const code = e.detail && e.detail.code;
+    announce(code === 0 ? 'action finished' : 'action exited with errors');
+    refreshState();
+  });
   window.addEventListener('studio-theme', (e) => applyTheme(Boolean(e.detail && e.detail.light)));
   window.addEventListener('studio-refresh', async () => {
     await refreshState({ silent: true });

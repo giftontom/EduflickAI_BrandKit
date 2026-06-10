@@ -23,6 +23,12 @@ export function assetCard({ surface, item, entry, onSaveStatus, onOpen, onRunExp
     if (onOpen) img.addEventListener('click', () => onOpen(item));
     thumb.append(img);
     if (item.stale) thumb.append(el('span', { class: 'ribbon mono-up' }, 'stale · re-export'));
+    if (item.openCount > 0) {
+      thumb.append(el('span', {
+        class: 'annot-count', title: `${item.openCount} open comment${item.openCount === 1 ? '' : 's'}`,
+        'aria-label': `${item.openCount} open comment${item.openCount === 1 ? '' : 's'}`,
+      }, String(item.openCount)));
+    }
   } else {
     thumb.append(el('div', { class: 'empty-state' },
       el('span', { class: 'mono-up empty-tag' }, 'not exported'),

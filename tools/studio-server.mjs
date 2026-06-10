@@ -14,10 +14,14 @@
 //   POST /api/editmode             {file, edits} → EDITMODE block rewrite
 //   POST /api/facts/check          {content} → {violations}
 //   POST /api/facts/save           {content, override?} → guarded FACTS.md write
+//   GET  /api/comments             content-studio/design-comments.json
+//   POST /api/comments             {comment, override?} → upserted <Comment> (id+seq)
+//   DELETE /api/comments/:id        delete a comment by UUID
 //
-// Write surface is exactly three paths: content-studio/status.json,
-// content-studio/FACTS.md, and EDITMODE blocks inside design-system/*.html.
-// Binds 127.0.0.1 only. Zero npm dependencies (node built-ins).
+// Write surface is exactly four paths: content-studio/status.json,
+// content-studio/FACTS.md, content-studio/design-comments.json (which also
+// regenerates content-studio/DESIGN_FEEDBACK.md), and EDITMODE blocks inside
+// design-system/*.html. Binds 127.0.0.1 only. Zero npm dependencies (built-ins).
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -26,6 +30,7 @@ import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { createStaticHandler } from './lib/static.mjs';
 import { scanTextRetired } from './check-facts.mjs';
+import { renderFeedbackDigest } from './lib/feedback.mjs';
 
 const TOOLS = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(TOOLS, '..');
@@ -35,8 +40,11 @@ const HOST = '127.0.0.1';
 const STATUS_FILE = path.join(ROOT, 'content-studio', 'status.json');
 const FACTS_FILE = path.join(ROOT, 'content-studio', 'FACTS.md');
 const CAPTIONS_FILE = path.join(ROOT, 'content-studio', 'drafts', 'instagram-posts-captions.md');
+const COMMENTS_FILE = path.join(ROOT, 'content-studio', 'design-comments.json');
+const FEEDBACK_FILE = path.join(ROOT, 'content-studio', 'DESIGN_FEEDBACK.md');
 
 const STATUSES = ['draft', 'approved', 'scheduled', 'posted', 'retired'];
+const COMMENT_STATUSES = ['open', 'resolved', 'wontfix'];
 
 // ---------------------------------------------------------------- utilities
 
@@ -133,6 +141,55 @@ function patchStatus(id, patch) {
     writeAtomic(STATUS_FILE, JSON.stringify(store, null, 2) + '\n');
     return entry;
   });
+}
+
+// ------------------------------------------------------------- comments store
+
+// The 4th write surface: design comments (numbered annotation pins). Persists to
+// content-studio/design-comments.json and regenerates DESIGN_FEEDBACK.md on
+// every write. Corruption-safe like loadStatus — a bad file never crashes the
+// manifest scan; it reads back as an empty store.
+function loadComments() {
+  const raw = readOrNull(COMMENTS_FILE);
+  if (raw == null) return { version: 1, comments: [] };
+  try {
+    const v = JSON.parse(raw);
+    if (v && typeof v === 'object' && Array.isArray(v.comments)) return v;
+  } catch {
+    /* corrupt file → fresh store (never crash the manifest) */
+  }
+  return { version: 1, comments: [] };
+}
+
+// Same promise-queue pattern as enqueueStatus — serializes the read-modify-write
+// cycle so concurrent upserts/deletes never interleave on the JSON file.
+let commentsQueue = Promise.resolve();
+function enqueueComments(task) {
+  const p = commentsQueue.then(task);
+  commentsQueue = p.then(
+    () => {},
+    () => {},
+  );
+  return p;
+}
+
+// Per-asset monotonic pin number (the "3" rendered on the pin). 1 + the highest
+// existing seq among comments sharing the same assetRef.assetId.
+function nextSeq(store, assetId) {
+  let max = 0;
+  for (const c of store.comments) {
+    if (c.assetRef && c.assetRef.assetId === assetId && Number.isFinite(c.seq) && c.seq > max) {
+      max = c.seq;
+    }
+  }
+  return max + 1;
+}
+
+// Both write paths (upsert + delete) end here: persist the store atomically,
+// THEN regenerate the digest atomically from the same in-memory store.
+function persistComments(store) {
+  writeAtomic(COMMENTS_FILE, JSON.stringify(store, null, 2) + '\n');
+  writeAtomic(FEEDBACK_FILE, renderFeedbackDigest(store));
 }
 
 // ---------------------------------------------------------------- manifest
@@ -241,7 +298,7 @@ function enumerateItems(surface, sourceContent) {
   }
 }
 
-function buildSurfaces(statusStore, captions) {
+function buildSurfaces(statusStore, captions, commentCounts) {
   return SURFACES.map((s) => {
     const sourceAbs = path.join(ROOT, s.source);
     const sourceStat = statOrNull(sourceAbs);
@@ -249,6 +306,7 @@ function buildSurfaces(statusStore, captions) {
     const items = enumerateItems(s, sourceContent).map((name) => {
       const png = `${s.exportDir}/${name}.png`;
       const st = statOrNull(path.join(ROOT, png));
+      const counts = commentCounts.get(`${s.id}/${name}`);
       const item = {
         name,
         png,
@@ -256,6 +314,8 @@ function buildSurfaces(statusStore, captions) {
         stale: !!(st && sourceStat && sourceStat.mtimeMs > st.mtimeMs),
         mtime: st ? st.mtimeMs : null,
         status: statusStore.assets[`${s.id}/${name}`]?.status || 'draft',
+        commentCount: counts ? counts.total : 0,
+        openCount: counts ? counts.open : 0,
       };
       if (s.id === 'instagram' && captions[name]) item.caption = captions[name];
       return item;
@@ -280,16 +340,19 @@ function labelFor(file) {
     .toLowerCase();
 }
 
-function buildDocuments() {
+function buildDocuments(commentCounts) {
   const docs = [];
   const push = (relPath, kind) => {
     const content = readOrNull(path.join(ROOT, relPath));
     if (content == null) return;
+    const counts = commentCounts.get(`doc:${relPath}`);
     docs.push({
       path: relPath,
       kind,
       label: labelFor(relPath),
       editable: content.includes('/*EDITMODE-BEGIN*/'),
+      commentCount: counts ? counts.total : 0,
+      openCount: counts ? counts.open : 0,
     });
   };
   let brochureFiles = [];
@@ -374,15 +437,37 @@ function buildBrand() {
   };
 }
 
+// Tally comments per assetRef.assetId (keys are `${surface.id}/${name}` or
+// `doc:${path}` or `launch-grid/${tile}`) plus a top-level rollup. Loaded once
+// per manifest GET — live-scanned, never cached.
+function tallyComments(commentStore) {
+  const byAsset = new Map(); // assetId -> { total, open }
+  const rollup = { total: 0, open: 0 };
+  for (const c of commentStore.comments) {
+    const assetId = c.assetRef && c.assetRef.assetId;
+    if (typeof assetId !== 'string' || !assetId) continue;
+    const isOpen = (c.status || 'open') === 'open';
+    const cur = byAsset.get(assetId) || { total: 0, open: 0 };
+    cur.total += 1;
+    if (isOpen) cur.open += 1;
+    byAsset.set(assetId, cur);
+    rollup.total += 1;
+    if (isOpen) rollup.open += 1;
+  }
+  return { byAsset, rollup };
+}
+
 function buildManifest() {
   const statusStore = loadStatus();
   const captions = parseCaptions();
+  const { byAsset, rollup } = tallyComments(loadComments());
   return {
     generatedAt: new Date().toISOString(),
-    surfaces: buildSurfaces(statusStore, captions),
-    documents: buildDocuments(),
+    surfaces: buildSurfaces(statusStore, captions, byAsset),
+    documents: buildDocuments(byAsset),
     docs: buildDocs(),
     brand: buildBrand(),
+    comments: rollup,
   };
 }
 
@@ -399,6 +484,7 @@ const ACTIONS = Object.freeze({
   'export:pdf': true,
   'gen:backdrops:proc': true,
   'check:facts': true,
+  'gen:feedback': true,
   tokens: true,
   snippets: true,
 });
@@ -597,6 +683,141 @@ function handleEditmode(body, res) {
   return sendJSON(res, 200, { ok: true, file: rel(abs), keys });
 }
 
+// ---------------------------------------------------------------- comments
+
+// Validate the assetRef sub-shape and the click anchor. Returns an error string
+// (→ 400) or null when valid. assetRef.source MUST resolve to a real file under
+// ROOT (no body-supplied path traversal — same posture as editmode).
+function validateAssetRef(assetRef) {
+  if (!assetRef || typeof assetRef !== 'object' || Array.isArray(assetRef)) {
+    return 'comment.assetRef must be an object';
+  }
+  if (typeof assetRef.assetId !== 'string' || !assetRef.assetId.length) {
+    return 'comment.assetRef.assetId must be a non-empty string';
+  }
+  if (typeof assetRef.source !== 'string' || !assetRef.source.length || assetRef.source.includes('\0')) {
+    return 'comment.assetRef.source must be a non-empty string path';
+  }
+  // Source must resolve to an existing FILE inside ROOT (validated, not trusted).
+  const abs = path.normalize(path.resolve(ROOT, assetRef.source));
+  if (abs !== ROOT && !abs.startsWith(ROOT + path.sep)) {
+    return 'comment.assetRef.source must be inside the repo';
+  }
+  const st = statOrNull(abs);
+  if (!st || !st.isFile()) {
+    return 'comment.assetRef.source does not resolve to an existing file';
+  }
+  const anchor = assetRef.anchor;
+  if (!anchor || typeof anchor !== 'object' || Array.isArray(anchor)) {
+    return 'comment.assetRef.anchor must be an object';
+  }
+  // Normalized coords (when present) must be finite and within [0,1].
+  for (const k of ['x', 'y']) {
+    if (k in anchor && anchor[k] != null) {
+      const v = anchor[k];
+      if (typeof v !== 'number' || !Number.isFinite(v) || v < 0 || v > 1) {
+        return `comment.assetRef.anchor.${k} must be a finite number in [0,1]`;
+      }
+    }
+  }
+  if (anchor.type === 'normalized') {
+    if (!(Number.isFinite(anchor.x) && Number.isFinite(anchor.y))) {
+      return 'normalized anchor requires finite x and y in [0,1]';
+    }
+  }
+  return null;
+}
+
+function handleCommentUpsert(body, res) {
+  const input = body && body.comment;
+  const override = !!(body && body.override);
+  if (!input || typeof input !== 'object' || Array.isArray(input)) {
+    return sendJSON(res, 400, { error: 'comment must be an object' });
+  }
+  const isUpdate = typeof input.id === 'string' && input.id.length > 0;
+
+  // Text is required on create; on update it is optional — a status-only edit
+  // (mark resolved / won't fix) sends just {id, status}. When text is present
+  // (create, or a text edit) it must be a non-empty string.
+  const hasText = 'text' in input && input.text != null;
+  if (!isUpdate || hasText) {
+    if (typeof input.text !== 'string' || !input.text.trim().length) {
+      return sendJSON(res, 400, { error: 'comment.text must be a non-empty string' });
+    }
+  }
+  if ('status' in input && !COMMENT_STATUSES.includes(input.status)) {
+    return sendJSON(res, 400, { error: `status must be one of: ${COMMENT_STATUSES.join(', ')}` });
+  }
+
+  // On create the client must supply a full assetRef; on update assetRef is
+  // optional (status/text-only edits) but if present it is re-validated.
+  if (!isUpdate || 'assetRef' in input) {
+    const refErr = validateAssetRef(input.assetRef);
+    if (refErr) return sendJSON(res, 400, { error: refErr });
+  }
+
+  // Guard the free-form text server-side — never trust the client's check.
+  const violations = hasText ? scanTextRetired(input.text) : [];
+  if (violations.length && !override) {
+    return sendJSON(res, 422, { error: 'guard violations', violations });
+  }
+
+  return enqueueComments(() => {
+    const store = loadComments();
+    const now = new Date().toISOString();
+
+    if (isUpdate) {
+      const idx = store.comments.findIndex((c) => c.id === input.id);
+      if (idx === -1) {
+        sendJSON(res, 404, { error: 'unknown comment id' });
+        return;
+      }
+      const existing = store.comments[idx];
+      const merged = {
+        ...existing,
+        ...input,
+        id: existing.id,
+        seq: existing.seq,
+        createdAt: existing.createdAt,
+        updatedAt: now,
+        overridden: violations.length ? true : !!existing.overridden,
+      };
+      store.comments[idx] = merged;
+      persistComments(store);
+      sendJSON(res, 200, merged);
+      return;
+    }
+
+    const comment = {
+      ...input,
+      id: randomUUID(),
+      seq: nextSeq(store, input.assetRef.assetId),
+      status: COMMENT_STATUSES.includes(input.status) ? input.status : 'open',
+      overridden: violations.length ? true : false,
+      author: typeof input.author === 'string' && input.author ? input.author : 'studio',
+      createdAt: now,
+      updatedAt: now,
+    };
+    store.comments.push(comment);
+    persistComments(store);
+    sendJSON(res, 200, comment);
+  });
+}
+
+function handleCommentDelete(id, res) {
+  return enqueueComments(() => {
+    const store = loadComments();
+    const idx = store.comments.findIndex((c) => c.id === id);
+    if (idx === -1) {
+      sendJSON(res, 404, { error: 'unknown comment id' });
+      return;
+    }
+    store.comments.splice(idx, 1);
+    persistComments(store);
+    sendJSON(res, 200, { ok: true, id });
+  });
+}
+
 // ------------------------------------------------------------------ server
 
 async function handleApi(req, res, pathname) {
@@ -670,6 +891,20 @@ async function handleApi(req, res, pathname) {
     writeAtomic(FACTS_FILE, body.content);
     const guard = await runGuard();
     return sendJSON(res, 200, { ok: true, guard });
+  }
+
+  if (pathname === '/api/comments') {
+    if (req.method === 'GET') return sendJSON(res, 200, loadComments());
+    if (req.method === 'POST') {
+      const body = await readJSONBody(req);
+      return handleCommentUpsert(body, res);
+    }
+    return sendJSON(res, 405, { error: 'method not allowed' });
+  }
+
+  const commentId = pathname.match(/^\/api\/comments\/([0-9a-f-]+)$/);
+  if (commentId && req.method === 'DELETE') {
+    return handleCommentDelete(commentId[1], res);
   }
 
   return sendJSON(res, 404, { error: 'not found' });

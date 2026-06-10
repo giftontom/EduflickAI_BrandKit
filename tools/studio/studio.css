@@ -942,6 +942,238 @@ body.theme-light {
 .theme-light .lightbox-fig img { border-color: var(--line-ink-2); }
 .theme-light ::selection { background: rgba(91, 91, 240, 0.3); color: var(--ink); }
 
+/* ---------------- accessibility utility ---------------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------------- annotation layer (shared) ---------------- */
+/* z-index stack (contract B3): nav 5, view 1, annot-pin 40, lightbox 50,
+   modal 60, annot-pop 65, command-palette 70. */
+
+.annot-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+.annot-layer.is-active {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+.annot-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--paper);
+  background: var(--accent);
+  color: var(--paper);            /* #F5F2EA on #5B5BF0 ≈ 4.7:1 — passes AA */
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--w-semibold);
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 0 0 4px var(--halo-2), var(--shadow-md, 0 6px 18px rgba(0, 0, 0, 0.4));
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast);
+}
+.annot-pin:hover { transform: translate(-50%, -50%) scale(1.12); }
+.annot-pin[data-status="resolved"] {
+  background: var(--success);
+  color: var(--accent-ink);       /* dark ink on green — green-on-paper fails AA */
+}
+.annot-pin[data-status="wontfix"] {
+  background: var(--muted);
+  color: var(--ink);              /* dark ink on muted grey for legibility */
+  opacity: 0.85;
+}
+
+/* a pin's thread popover — lives inside the layer, sits above the modal flow */
+.annot-pop {
+  position: absolute;
+  z-index: 65;
+  transform: translate(14px, -8px);
+  width: min(280px, 70vw);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 15px;
+  pointer-events: auto;
+  cursor: default;
+}
+.annot-pop-head { display: flex; align-items: baseline; gap: 10px; }
+.annot-pop-seq { font-size: 10px; color: var(--accent-soft); }
+.annot-pop-anchor { font-size: 9.5px; color: var(--fg3); overflow-wrap: anywhere; }
+.annot-pop-text { margin: 0; font-size: 13px; color: var(--fg1); line-height: 1.5; }
+.annot-pop-row { display: flex; align-items: center; gap: 10px; }
+.annot-status { flex: 1; }
+.annot-pop-msg { font-size: 10px; color: var(--fg3); }
+.annot-pop-msg.is-err { color: var(--warn); }
+
+/* compose form body inside the modal */
+.annot-compose { gap: 14px; }
+.annot-compose-ta {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--fg1);
+  background: var(--bg-raised);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-md);
+  padding: 11px 13px;
+}
+.annot-compose-ta:focus { border-color: var(--accent-soft); outline: none; }
+
+/* the per-surface "annotate" toggle (reuses btn-mini sizing) */
+.annot-toggle.is-on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+}
+
+/* count badge on cards/nav */
+.annot-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: var(--w-semibold);
+  line-height: 1;
+}
+
+/* ---------------- viewer chrome (brochure / deck / launch) ---------------- */
+
+.viewer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 9px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+}
+.viewer-toolbar .viewer-page { font-size: 11px; color: var(--fg2); }
+.viewer-toolbar .viewer-spacer { flex: 1; }
+.viewer-zoom { display: inline-flex; align-items: center; gap: 6px; }
+.viewer-zoom .btn-mini.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+}
+
+.thumb-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 2px;
+}
+.thumb {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-raised);
+  color: var(--fg3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: border-color var(--dur-fast), color var(--dur-fast);
+}
+.thumb:hover { border-color: var(--accent-soft); color: var(--fg1); }
+.thumb.active { border-color: var(--accent); color: var(--accent-soft); }
+
+/* ---------------- command palette ---------------- */
+
+#modal.cmd-modal { z-index: 70; }
+
+.cmd-palette {
+  width: min(560px, 92vw);
+  gap: 12px;
+}
+.cmd-input {
+  width: 100%;
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--fg1);
+  background: var(--bg-raised);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-md);
+  padding: 11px 14px;
+}
+.cmd-input:focus { border-color: var(--accent-soft); outline: none; }
+.cmd-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 46vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cmd-item {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--dur-fast);
+}
+.cmd-item.active { background: rgba(91, 91, 240, 0.16); }
+.cmd-item-label { font-size: 14px; color: var(--fg1); text-transform: lowercase; }
+.cmd-item-hint { margin-left: auto; font-size: 9.5px; color: var(--fg3); }
+.cmd-empty { cursor: default; }
+
+/* ---------------- feedback view (digest browser) ---------------- */
+
+.feedback-view { display: flex; flex-direction: column; gap: 18px; }
+.feedback-view .fb-counts { display: flex; gap: 18px; flex-wrap: wrap; }
+.feedback-view .fb-count { font-size: 11px; color: var(--fg2); }
+.feedback-view .fb-count .v-ok { color: var(--success); }
+.feedback-view .fb-count .v-bad { color: var(--warn); }
+.feedback-view .fb-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+}
+
 /* ---------------- laptop-width tuning ---------------- */
 
 @media (max-width: 1280px) {
@@ -951,5 +1183,14 @@ body.theme-light {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* global kill-switch already disables all transitions/animations; the
+     pin/toolbar/palette rules above are covered by this too. Restated for
+     intent so future additions in this block stay grouped. */
   * { transition: none !important; animation: none !important; }
+  .annot-pin,
+  .annot-pin:hover,
+  .thumb,
+  .cmd-item,
+  .viewer-zoom .btn-mini { transition: none !important; }
+  .annot-pin:hover { transform: translate(-50%, -50%); }
 }

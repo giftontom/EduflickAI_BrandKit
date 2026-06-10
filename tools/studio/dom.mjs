@@ -79,21 +79,72 @@ export function fmtDate(t) {
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }).toLowerCase();
 }
 
-/* Modal host (#modal in index.html). Returns a close() function. */
-export function openModal(content, { onClose } = {}) {
+const FOCUSABLE = [
+  'a[href]', 'button:not([disabled])', 'textarea:not([disabled])',
+  'input:not([disabled]):not([type="hidden"])', 'select:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(',');
+
+/* Confine Tab/Shift+Tab focus within container, focusing the first focusable
+   on open. Returns a release() that detaches the listener (does not move focus).
+   Caller restores focus to the opener. */
+export function focusTrap(container) {
+  const focusables = () => Array.from(container.querySelectorAll(FOCUSABLE))
+    .filter((n) => n.offsetParent !== null || n === document.activeElement);
+  const onKey = (e) => {
+    if (e.key !== 'Tab') return;
+    const items = focusables();
+    if (!items.length) { e.preventDefault(); container.focus(); return; }
+    const first = items[0];
+    const last = items[items.length - 1];
+    const active = document.activeElement;
+    if (e.shiftKey && (active === first || !container.contains(active))) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && active === last) {
+      e.preventDefault(); first.focus();
+    }
+  };
+  container.addEventListener('keydown', onKey);
+  const initial = focusables();
+  (initial[0] || container).focus();
+  return () => container.removeEventListener('keydown', onKey);
+}
+
+/* Modal host (#modal in index.html). Returns a close() function.
+   Traps focus inside the card, restores focus to the opener on close, and
+   keeps Escape + click-outside dismissal. */
+export function openModal(content, { onClose, hostClass } = {}) {
   const host = document.getElementById('modal');
+  const opener = document.activeElement;
   clear(host);
   host.hidden = false;
-  const card = el('div', { class: 'modal-card glass', role: 'dialog', 'aria-modal': 'true' }, content);
+  if (hostClass) host.classList.add(hostClass);
+  const card = el('div', {
+    class: 'modal-card glass', role: 'dialog', 'aria-modal': 'true', tabindex: '-1',
+  }, content);
   host.append(card);
+  const release = focusTrap(card);
+  let closed = false;
   const close = () => {
+    if (closed) return;
+    closed = true;
+    release();
     host.hidden = true;
     clear(host);
+    if (hostClass) host.classList.remove(hostClass);
     document.removeEventListener('keydown', onKey);
+    host.onclick = null;
+    if (opener && typeof opener.focus === 'function' && document.contains(opener)) opener.focus();
     if (onClose) onClose();
   };
   const onKey = (e) => { if (e.key === 'Escape') close(); };
   host.onclick = (e) => { if (e.target === host) close(); };
   document.addEventListener('keydown', onKey);
   return close;
+}
+
+/* Push a message to the polite live region (#live in index.html) for AT. */
+export function announce(msg) {
+  const live = document.getElementById('live');
+  if (live) live.textContent = String(msg == null ? '' : msg);
 }

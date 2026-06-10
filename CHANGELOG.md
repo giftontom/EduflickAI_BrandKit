@@ -10,6 +10,25 @@ alongside it.
 
 ### Added
 
+- **Design feedback that Claude Code can act on.** Annotate mode drops numbered pin comments on any
+  asset — instagram/poster/story PNGs and deck slides (normalized coordinates), brochure/deck pages
+  and the launch-grid mural (same-origin iframe element-selectors / per-page coordinates). Pins
+  persist to a committed `content-studio/design-comments.json` and are mirrored into a generated,
+  grouped-by-source-file `content-studio/DESIGN_FEEDBACK.md` digest: a separate Claude Code chat
+  opens that one file and implements each edit against the real source path + anchor + instruction.
+  Statuses (`open` / `resolved` / `won't fix`) flow from the pin popover or a new `#/feedback`
+  digest browser. New API: `GET/POST /api/comments`, `DELETE /api/comments/:id` (the 4th and only
+  other write surface — fixed paths, server-side text guard with override, atomic digest
+  regeneration), `gen:feedback` action. Comment text is exempt from the retired-string guard
+  (free-form review) via a `check-facts` `SKIP_FILES` exclusion scoped to exactly those two files.
+- **Launch grid, integrated.** `#/launch` renders the live launch-grid mural + carousels inside the
+  platform (no more external tab), with annotation and the export thumbnail grid below.
+- **Live document viewers.** Brochures (`#/brochures`) and the deck (`#/deck`) gain page/slide
+  navigation, fit/100/200 zoom, and annotation while preserving the collateral-kit edit host.
+- **Accessibility + UX.** Command palette (`Ctrl`/`Cmd-K`) over routes, docs, and actions; a focus
+  trap with opener-restore in the modal; an `aria-live` announcer; ARIA-labelled pin buttons; all
+  new motion gated behind `prefers-reduced-motion`. Manifest now carries per-asset comment counts.
+
 - **Brand studio** — a local platform to view and manage every asset in the kit:
   `cd tools && npm run studio` → `http://localhost:8090/tools/studio/`. Galleries for
   instagram/posters/stories/deck exports (lazy grids, lightbox, stale ribbons,
@@ -217,7 +236,7 @@ bump it here under **Added / Changed / Deprecated** when tokens or components ch
 - [ ] `POSTING_SCHEDULE.md` — day-by-day 6-week content calendar
 - [ ] CI/CD: lint Markdown, validate HTML, check broken links
 - [ ] `recipes/ai-image.md` + `recipes/composite-canvas.md` — wire AI imagery
-  into the assemble-don't-invent pipeline
+      into the assemble-don't-invent pipeline
 - [ ] WhatsApp sequence fleshed out to same rigor as Instagram prompts
 - [ ] Email nurture prompt template
 - [ ] Component library build step (assemble snippets into shareable HTML)

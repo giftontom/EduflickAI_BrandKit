@@ -98,6 +98,7 @@ export function render(root, ctx) {
         el('p', { class: 'tile-sub' }, 'scans every active file against the retired-fact patterns in the guard.'),
         guardBtn,
         guardLogHost),
+      feedbackTile(m),
       el('div', { class: 'panel-card' },
         el('span', { class: 'mono-up section-label' }, 'quick links'),
         el('div', { class: 'quick-links' },
@@ -112,6 +113,34 @@ export function render(root, ctx) {
     return el('a', { class: 'quick-link', href },
       el('span', { class: 'ql-label' }, label),
       el('span', { class: 'mono ql-sub' }, sub));
+  }
+
+  /* open-comments rollup: prefer the manifest's top-level comments tally,
+     fall back to summing per-surface item openCount. links to the feedback view. */
+  function feedbackTile(m) {
+    const roll = (m && m.comments) || {};
+    let total = Number.isFinite(roll.total) ? roll.total : 0;
+    let open = Number.isFinite(roll.open) ? roll.open : 0;
+    if (!roll.total && m && Array.isArray(m.surfaces)) {
+      total = 0;
+      open = 0;
+      for (const s of m.surfaces) {
+        for (const item of (s.items || [])) {
+          if (Number.isFinite(item.commentCount)) total += item.commentCount;
+          if (Number.isFinite(item.openCount)) open += item.openCount;
+        }
+      }
+    }
+    const sub = open
+      ? `${open} open of ${total} across the brand`
+      : (total ? `${total} comment${total === 1 ? '' : 's'}, none open` : 'no design comments yet');
+    return el('a', { class: 'panel-card', href: '#/feedback' },
+      el('span', { class: 'mono-up section-label' }, 'design feedback'),
+      el('h3', { class: 'tile-title' },
+        el('span', { class: open ? 'meta-warn' : 'meta-dim' }, String(open)),
+        ` open comment${open === 1 ? '' : 's'}`),
+      el('p', { class: 'tile-sub' }, sub),
+      el('span', { class: 'mono ql-sub' }, 'open the feedback digest'));
   }
 
   /* keep the guard tile (and any running log) mounted; refresh stats only */

@@ -22,6 +22,7 @@
     "tokens": "node build-tokens.mjs",
     "snippets": "node build-snippets.mjs",
     "check:facts": "node check-facts.mjs",
+    "gen:feedback": "node gen-feedback.mjs",
     "postinstall": "playwright install chromium"
   },
   "engines": {

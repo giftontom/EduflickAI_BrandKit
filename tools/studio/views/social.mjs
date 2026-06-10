@@ -5,6 +5,7 @@
 import { el, clear, rootHref } from '../dom.mjs';
 import { assetCard, aspectRatioOf } from '../components/asset-card.mjs';
 import { createLogStream } from '../components/log-stream.mjs';
+import { createAnnotationLayer } from '../components/annotation-layer.mjs';
 
 export function render(root, ctx, params = {}) {
   return renderSurfaceView(root, ctx, params.surfaceId, {});
@@ -18,6 +19,20 @@ export function renderSurfaceView(root, ctx, surfaceId, opts = {}) {
 
   let stream = null;
   let running = false;
+
+  /* comments cached at the view level: fetched once, refreshed on a pin
+     save/delete (onChange) and on studio-state, so the lightbox layer and the
+     card badges always see the same store. */
+  let comments = [];
+  async function loadComments() {
+    try {
+      const res = await ctx.api.getComments();
+      comments = (res && Array.isArray(res.comments)) ? res.comments : [];
+    } catch { comments = []; }
+  }
+  function commentsFor(assetId) {
+    return comments.filter((c) => c && c.assetRef && c.assetRef.assetId === assetId);
+  }
 
   function surface() {
     const m = ctx.manifest;
@@ -94,7 +109,10 @@ export function renderSurfaceView(root, ctx, surfaceId, opts = {}) {
         item,
         entry: ctx.entryFor(`${s.id}/${item.name}`),
         onSaveStatus: ctx.saveStatus,
-        onOpen: (it) => openLightbox(it),
+        onOpen: (it) => openLightbox(it, s, ctx, {
+          comments: commentsFor(`${s.id}/${it.name}`),
+          onChange: async () => { await loadComments(); renderGrid(); },
+        }),
         onRunExport: runExport,
       }));
     }
@@ -105,11 +123,13 @@ export function renderSurfaceView(root, ctx, surfaceId, opts = {}) {
     running = false;
     renderHeader();
     renderGrid();
+    loadComments().then(renderGrid);
   }
   window.addEventListener('studio-state', onState);
 
   renderHeader();
   renderGrid();
+  loadComments().then(renderGrid);
 
   return function dispose() {
     window.removeEventListener('studio-state', onState);
@@ -130,7 +150,7 @@ function closeLightbox() {
   host.onclick = null;
 }
 
-export function openLightbox(item) {
+export function openLightbox(item, surface, ctx, annot = {}) {
   const host = document.getElementById('lightbox');
   const src = rootHref(item.png);
   const name = String(item.name || '');
@@ -138,19 +158,54 @@ export function openLightbox(item) {
   clear(host);
   host.hidden = false;
 
+  let layer = null;
   const onKey = (e) => { if (e.key === 'Escape') close(); };
   function close() {
     document.removeEventListener('keydown', onKey);
+    if (layer) { try { layer.dispose(); } catch { /* dispose never throws */ } layer = null; }
     closeLightbox();
   }
 
-  host.append(el('figure', { class: 'lightbox-fig' },
-    el('img', { src, alt: name }),
-    el('figcaption', { class: 'lightbox-meta' },
-      el('span', { class: 'mono lb-name' }, name),
-      el('span', { class: 'mono lb-path' }, item.png),
-      el('a', { class: 'btn-mini', href: src, download: file }, 'download'),
-      el('button', { class: 'btn-mini', type: 'button', onclick: close }, 'close'))));
+  const img = el('img', { src, alt: name });
+  const fig = el('figure', { class: 'lightbox-fig', style: { position: 'relative' } });
+  const meta = el('figcaption', { class: 'lightbox-meta' },
+    el('span', { class: 'mono lb-name' }, name),
+    el('span', { class: 'mono lb-path' }, item.png),
+    el('a', { class: 'btn-mini', href: src, download: file }, 'download'),
+    el('button', { class: 'btn-mini', type: 'button', onclick: close }, 'close'));
+
+  /* annotate toggle — only when we have a surface to anchor against */
+  if (surface && ctx) {
+    const annotBtn = el('button', {
+      class: 'btn-mini annot-toggle', type: 'button',
+      'aria-pressed': 'false', 'aria-label': 'toggle annotation mode',
+    }, 'annotate');
+    annotBtn.addEventListener('click', () => {
+      if (!layer) return;
+      const on = !layer.isActive();
+      layer.setActive(on);
+      annotBtn.classList.toggle('is-on', on);
+      annotBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    meta.insertBefore(annotBtn, meta.querySelector('.btn-mini[download]'));
+
+    layer = createAnnotationLayer({
+      host: fig,
+      target: img,
+      mode: 'image',
+      assetBase: {
+        assetId: `${surface.id}/${item.name}`,
+        kind: 'image',
+        source: surface.source,
+        label: `${surface.id} · ${item.name}`,
+      },
+      comments: Array.isArray(annot.comments) ? annot.comments : [],
+      onChange: annot.onChange || null,
+    });
+  }
+
+  fig.append(img, meta);
+  host.append(fig);
   host.onclick = (e) => { if (e.target === host) close(); };
   document.addEventListener('keydown', onKey);
 }

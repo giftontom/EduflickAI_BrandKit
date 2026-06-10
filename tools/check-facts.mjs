@@ -16,11 +16,20 @@
  * content-studio/FACTS.md.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, extname, relative, dirname } from 'node:path';
+import { join, extname, relative, dirname, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const SELF = fileURLToPath(import.meta.url);
 const ROOT = join(dirname(SELF), '..'); // tools/ -> repo root
+
+// Free-form design feedback (the comment store + its generated digest) carries
+// arbitrary human instruction text — "cut the technopark line" is a legitimate
+// note ABOUT a retired string, not a usage of it. Never scan these for RETIRED;
+// the store is validated server-side at write time instead.
+const SKIP_FILES = new Set([
+  'content-studio/design-comments.json',
+  'content-studio/DESIGN_FEEDBACK.md',
+]);
 
 // Never scanned: deps, generated output, legacy archive, the definitive Brand
 // Book (finalized facts override it — flag, don't enforce), and agent tooling.
@@ -65,7 +74,11 @@ function walk(dir, files = []) {
     const full = join(dir, name);
     if (statSync(full).isDirectory()) {
       if (!SKIP_DIRS.has(name)) walk(full, files);
-    } else if (TEXT_EXT.has(extname(name)) && full !== SELF) {
+    } else if (
+      TEXT_EXT.has(extname(name)) &&
+      full !== SELF &&
+      !SKIP_FILES.has(relative(ROOT, full).split(sep).join('/'))
+    ) {
       files.push(full);
     }
   }
