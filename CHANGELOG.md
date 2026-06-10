@@ -84,8 +84,7 @@ bump it here under **Added / Changed / Deprecated** when tokens or components ch
   role aliases + text styles; the collateral copy is a thin shim.
 - `tools/package-lock.json` is now committed (CI `npm ci` requires it).
 - **Repo organization.** Deduped `design-system/uploads/` (byte-identical Leadership
-  brochure copy removed); archived the stale Full-Stack brochure draft from
-  `design-system/` root; the program deck moved to
+  brochure copy removed); the program deck moved to
   `brochures/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html` (no spaces in
   deliverable filenames); orphan render screenshots moved to `_ref/screens/`;
   `_ref` binaries (handoff zip, reference screenshots) untracked with provenance

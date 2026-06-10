@@ -35,6 +35,3 @@ _ref/*.jpg
 # IDE (user-specific only — shared config is committed)
 .vscode/settings.local.json
 .idea/
-
-# Reference archives (binary bloat — keep local only)
-_ref/*.zip
