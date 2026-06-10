@@ -7,13 +7,14 @@
 
 ## FACTS (fill before generating — pull from `content-studio/FACTS.md`)
 
-```
+```text
 PROGRAM      = [[…]]
 DATE         = [[NOT SET]]
 PRICE        = [[…]]
 SEATS        = [[… of …]]
 LINK         = [[…]]
 ```
+
 > If a value isn't in FACTS.md, leave the `[[PLACEHOLDER]]` — never invent.
 
 ## Inputs

@@ -5,6 +5,7 @@ consumer "feed for thinking." Dark theme by default. Open `index.html` and tap a
 flick card to enter the player; use the bottom nav to move between screens.
 
 ## Screens
+
 - **Feed** (`for you` / `trending` / `saved`) — vertical list of flick cards, with a
   "continue learning" lead card showing per-flick progress.
 - **Flick player** — the signature full-screen 60-second lesson: segment progress,
@@ -14,6 +15,7 @@ flick card to enter the player; use the bottom nav to move between screens.
 - **Profile** — avatar, streak **Spark**, stats, earned subject badges.
 
 ## Files
+
 | File | What |
 | --- | --- |
 | `index.html` | Mounts the app inside the iOS device frame; auto-scales to fit. |
@@ -25,6 +27,7 @@ flick card to enter the player; use the bottom nav to move between screens.
 | `../../assets/icons/sprite.js` | Injects the icon + mark-companion sprites for `<use href="#ic-…">`. |
 
 ## Conventions
+
 - Icons come from the injected house sprite: `<Icon name="play" />`.
 - The mark is `<Mark size fill />`; the wordmark is built in HTML via `<Wordmark />`.
 - All color/type pulls from `T` in `components.jsx`, mirroring `colors_and_type.css`.

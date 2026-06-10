@@ -5,7 +5,8 @@ for any brand, export it to PDF or pixel-perfect PNG. The technique is the **eng
 **data** (a `tokens.json` + a brand profile). Swap the data, get a new brand, zero code change.
 
 ## The architecture
-```
+
+```text
 brand profile (tokens.json + brand-profile.json)
         │ design-tokens compiles tokens.json →
         ▼
@@ -15,6 +16,7 @@ brand profile (tokens.json + brand-profile.json)
 ```
 
 ## The skills
+
 | Skill | What it does |
 | --- | --- |
 | **design-studio** | umbrella orchestrator: assemble → render → QA → export; owns the brand-profile contract + recipes |
@@ -26,12 +28,14 @@ brand profile (tokens.json + brand-profile.json)
 | **web-to-image** | pixel-perfect HTML → PNG export (Playwright + Chromium) for social/raster |
 
 ## Start here
+
 - **New brand?** `design-tokens` (set the palette/fonts) → `design-studio` (fill the brand profile).
 - **Designing an artifact?** `design-studio` → pick a recipe → render → QA → export.
 - **Just need one capability?** Use the engine skill directly (e.g. `web-to-pdf` to add a download
   button; `design-effects` for cinematic CSS).
 
 ## Provenance & promotion
+
 Extracted and de-branded from this repo's production Eduflick design system (token pipeline,
 cinematic snippets, the brochure PDF exporter, the Playwright launch-grid exporter, the AI-imagery
 guide). They live in `.claude/skills/` so they load as project skills here; because they're

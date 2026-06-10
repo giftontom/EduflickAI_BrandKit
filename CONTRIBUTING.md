@@ -50,7 +50,7 @@ Commit the regenerated files alongside your source change. CI fails if they drif
 
 ## Where things go
 
-```
+```text
 design-system/      visuals — tokens/, components.css, COMPONENTS.md, recipes/, collateral/,
                     ui_kits/, slides/, preview/, assets/ (canonical)
 content-studio/     words — FACTS.md, BRAND_CHEATSHEET.md, prompts/, guides, QA

@@ -7,7 +7,7 @@ exported to PDF or assembled in `../collateral/brochure-kit.html` / `../brochure
 
 ---
 
-```
+```text
 FACTS (only source of live numbers; missing → [[NEEDS: …]]):
 - Program facts to print: [[price ₹49,000 / retail ₹70,000 / 20 seats / 12 weeks / venue /
   payment ₹15K+₹17K+₹17K / cohort start / masterclass date]]
@@ -38,6 +38,7 @@ OUTPUT: one ```html ... ``` block.
 ---
 
 ## Worked example (abbreviated — curriculum page, paper)
+>
 > `@page A4`, paper bg, 72px margins. Top mono id `03 · CURRICULUM`. Headline `what you build, *month
 > by month*.` Three blocks, each: mono `MONTH 01`, lowercase title, 2–3 dashed spec rows (S12) of
 > topics + the deliverable ("→ deploy a SaaS dashboard"). Stack pills (S10): `next.js · claude ·

@@ -7,7 +7,7 @@ Output is ONE responsive, self-contained HTML section (not a fixed canvas). Mirr
 
 ---
 
-```
+```text
 FACTS (only source of live numbers; missing → [[NEEDS: …]]):
 - Masterclass date / cohort start / seats left: [[ ]]
 - Price / retail / venue:                        [[₹49,000 / ₹70,000 / Trivandrum]]
@@ -38,6 +38,7 @@ OUTPUT: one ```html ... ``` block.
 ---
 
 ## Worked example (abbreviated — hero, indigo gradient)
+>
 > `.hero-indigo` bg + faint dots. Centered container. Eyebrow `EDUFLICK · A FEED FOR THINKING`.
 > Headline `clamp(40,6vw,72)` lowercase: `learn anything in *sixty* seconds.` Serif sub: "the
 > doom-scroll antidote." Buttons: `try free` (primary) + `view the app` (ghost). On desktop, a

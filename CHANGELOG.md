@@ -6,6 +6,48 @@ alongside it.
 
 ---
 
+## Unreleased — full-project review fixes (branch `review-fixes`)
+
+### Added
+
+- **Launch deliverables committed.** Brochure variants (Dark / v2 spec / v3 platform /
+  Enquiry), the Full-Stack AI Engineer program deck, poster/story/IG collateral surfaces
+  with backdrop assets + `SOURCES.md` provenance, the export/generation tool suite
+  (`export:{pdf,slides,posters,stories,ig}`, backdrop + stock pipelines), the
+  `.claude/skills` automation layer, and launch content drafts.
+- **Fact guard upgrades** (`tools/check-facts.mjs`): regex retired-strings (wrong-domain
+  `eduflick.ai` URL/email forms, `eduflickai@gmail.com`), `[[placeholder]]` leakage scan
+  over active HTML, project-count assertion (canon: 3 deployed), invented-deadline scan,
+  link-checker fixes. All export scripts now refuse to render HTML containing `[[…]]`.
+- **SRI hashes** on every CDN `<script>` (jspdf, html2canvas, html-to-image) across
+  brochures, the deck, and launch-grid.
+
+### Fixed
+
+- **Fabricated "applications close june 15"** removed from the program deck (FACTS:
+  no close date); `[[masterclass date]]` / `[[cohort start]]` placeholders resolved out.
+- **Enquiry page**: dead WhatsApp placeholder CTA → live apply CTA; `[[NOT SET]]` row removed.
+- **Project count** reconciled to 3 deployed everywhere (capstone tiles recast); project 2
+  renamed "RAG chatbot" per FACTS (was "enterprise AI chatbot"); "agentic platform" naming.
+- **"Certified" removed** from all program artifacts and canon (FACTS.md never authorized it).
+- **Retired `eduflick.ai` domain/email family** swept from legacy brochures, slides,
+  brochure-kit, leadership poster, social README, and brand-book specimens.
+- **CC BY-SA backdrop replaced**: `poster-program.png` regenerated procedurally (was an
+  unattributed Wikimedia derivative); SOURCES.md updated.
+- **One-hue rule**: violet/electric-blue alternate palettes deleted from instagram-kit and
+  brochure-kit; off-palette coral gradient → token coral.
+- **WCAG AA contrast**: low-alpha labels raised across all FS-AI brochure variants
+  (contact keys, footers, cover stats, strikethrough price) to ≥4.6:1.
+- **Copy canon**: close-date framing replaced with seats-remaining urgency across
+  cheatsheet/prompts/schedules; Technopark few-shot fixed; unsourced "78% retention",
+  "1:1 code reviews", week-4 deploy, and Supabase/Vercel/Google ADK launch-tile claims
+  removed; playbook Wave-4 fork collapsed into a pointer to the launch plan;
+  "embeds the cheat sheet" doc claim corrected.
+- **markdownlint clean** (was 331 errors on CI): repo-wide formatting fixes; snippet
+  source now regenerates lint-clean and idempotent.
+- Stale duplicate `design-system/Eduflick Full-Stack AI Engineer Brochure.html` removed;
+  index.html gained cards for all new deliverables and dropped a gitignored-PDF link.
+
 ## Unreleased — design-system unification
 
 **Design system version:** `1.0.0` (tracked in `design-system/tokens/tokens.json` →
@@ -13,6 +55,7 @@ alongside it.
 bump it here under **Added / Changed / Deprecated** when tokens or components change.
 
 ### Added
+
 - **Design token pipeline.** `design-system/tokens/tokens.json` is the single source
   of truth for color/type/space/radius/shadow/motion + the brand mark path & fonts link.
   `cd tools && npm run tokens` (Style Dictionary) generates `tokens/tokens.css`,
@@ -28,11 +71,13 @@ bump it here under **Added / Changed / Deprecated** when tokens or components ch
 - **CI drift guard** — regenerates tokens + snippets and fails if they fall out of sync.
 
 ### Changed
+
 - `colors_and_type.css` now `@import`s the generated tokens and holds only the semantic
   role aliases + text styles; the collateral copy is a thin shim.
 - `tools/package-lock.json` is now committed (CI `npm ci` requires it).
 
 ### Fixed
+
 - CI `npm ci` no longer silently fails (missing committed lockfile).
 
 ---
@@ -40,6 +85,7 @@ bump it here under **Added / Changed / Deprecated** when tokens or components ch
 ## v4.0 — 2026-06-02
 
 ### Brand Book v4.0
+
 - Complete rewrite: 11-chapter definitive brand book (mark construction, color,
   type, motion, voice, UI, Sparks system, social templates, print, governance)
 - Single indigo hue + neutral palette locked in; coral restricted to semantic use only
@@ -49,6 +95,7 @@ bump it here under **Added / Changed / Deprecated** when tokens or components ch
 - Co-brand framework: Tomatrix Technologies Pvt Ltd as supporting parent
 
 ### New: Content Studio
+
 - `BRAND_CHEATSHEET.md` — self-contained, one-page brand context for any AI model
 - `SMALL_MODELS_GUIDE.md` — generate→check→fix loop for cheap models
 - 8 prompt templates: Instagram caption, carousel, reel script, LinkedIn post,
@@ -58,6 +105,7 @@ bump it here under **Added / Changed / Deprecated** when tokens or components ch
 - `EDUFLICK_AI_PLAYBOOK.md` — brand identity, pitch deck architecture, launch grid
 
 ### New: Design System
+
 - `colors_and_type.css` — canonical design tokens (color ramps, type scale, spacing,
   radii, shadows, motion curves)
 - `DESIGN_CHEATSHEET.md` — visual twin of the content cheat sheet
@@ -75,17 +123,20 @@ bump it here under **Added / Changed / Deprecated** when tokens or components ch
 - Logo assets: 5 mark variants, 5 lockups, favicon, social avatars/banners
 
 ### New: Tools
+
 - Playwright-based PNG exporter: every post + carousel slide → pixel-perfect 1080×1350
 - Profile avatar exporter (gradient + paper-fill mark)
 - Zero-dependency static server for in-browser export
 
 ### New: Collateral
+
 - Full-Stack AI Engineer Program brochure (10-page A4)
 - AI Leadership Program brochure + prospectus PDF + poster
 - Product brochure (4-page A4 cinematic edition)
 - 12-tile cinematic Instagram Launch Grid with carousel viewer
 
 ### Changed
+
 - Repo restructured from monolithic HTML files to modular skill-based layout
 - Two invocable agent skills: `eduflick-content` + `eduflick-design`
 - Root `index.html` landing page with card-based navigation

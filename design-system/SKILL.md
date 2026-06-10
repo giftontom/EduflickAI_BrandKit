@@ -16,10 +16,11 @@ and create static HTML files for the user to view. If working on production code
 copy assets and read the rules here to become an expert in designing with this brand.
 
 If the user invokes this skill without any other guidance, ask them what they want to build
-or design, ask some questions, and act as an expert designer who outputs HTML artifacts _or_
+or design, ask some questions, and act as an expert designer who outputs HTML artifacts *or*
 production code, depending on the need.
 
 ## Universal engines (shared technique — don't duplicate it here)
+
 The *how* (browser→PDF, pixel-perfect PNG export, cinematic CSS effects, image+graphics
 compositing, the token pipeline) now lives once, brand-neutral, in `.claude/skills/`. This skill is
 the **Eduflick brand profile** for those engines — it owns the *what* (indigo, the mark, the voice),
@@ -40,7 +41,9 @@ The Eduflick brochures keep their self-contained inline scripts (they must ship 
 instances of that generic workflow).
 
 ## Building visuals with a small/cheap model? (Haiku, mini, local)
+
 Use the **assemble-don't-invent** track — engineered so a small model stays on-brand:
+
 - `DESIGN_CHEATSHEET.md` — the whole visual system in one paste-anywhere page (tokens, mark, rules).
 - `SMALL_MODELS_GUIDE.md` — the render→inspect→fix loop + common visual failure modes.
 - `recipes/` — `00_SYSTEM_PROMPT.md`, `snippets.md` (copy-paste HTML parts bin, incl. cinematic
@@ -54,6 +57,7 @@ HTML file → **render and look** → QA → **export pixel-perfect PNGs with `.
 (`npm run export`) or drop into a `collateral/` kit.
 
 ## Quick start
+
 1. Read `README.md` — brand context, content/voice, visual foundations, iconography, manifest.
 2. Import `colors_and_type.css` (it `@import`s the generated `tokens/tokens.css` — the single
    token source). **Never hardcode brand hex/fonts:** use `var(--token)`; to change a value edit
@@ -75,6 +79,7 @@ HTML file → **render and look** → QA → **export pixel-perfect PNGs with `.
    files (every post + carousel slide); `npm run export:avatar` for the profile picture.
 
 ## The non-negotiables
+
 - **Indigo + neutral only.** `#5B5BF0` primary; paper `#F5F2EA` and ink `#0A0B10` support.
   Never introduce a third hue. Coral `#FF6E5A` is a semantic warn/CTA flag, used sparingly.
 - **Dark by default**, paper theme for documents/marketing.

@@ -7,7 +7,7 @@ Brochure Kit).
 
 ---
 
-```
+```text
 FACTS (only source of live numbers; missing → [[NEEDS: …]]):
 - Event / headline subject:     [[e.g. Free Technical Masterclass]]
 - Date / time / venue:          [[ ]]
@@ -39,6 +39,7 @@ OUTPUT: one ```html ... ``` block.
 ---
 
 ## Worked example (abbreviated — masterclass announcement, dark)
+>
 > Eyebrow `FREE · LIVE · ~90 MIN`. Headline (72–96px) `build an *ai app*, live.` Then a left-aligned
 > stack: serif lead "the doom-scroll antidote, applied." → dashed spec rows (S12): `WHEN / [[date]]`,
 > `WHERE / [[venue]]`, `BRING / a laptop`, `COST / free`. Coral scarcity flag only if seats are the
@@ -71,6 +72,7 @@ The living set is `../collateral/posters.html` (6 `[data-export]` sections, expo
 | 6 | masterclass hook | playful | keyboard-glow photo / `S24` burst | `poster-masterclass` |
 
 **The 7 fusion rules (every poster obeys):**
+
 1. **One hero device** — mockup *or* photo *or* illustration *or* number; never stacked.
 2. **Headline = a hook + one emphasis** (one `S5` serif/indigo accent word).
 3. **Proof furniture** — badge / stat / guarantee — **only facts in `FACTS.md`**.

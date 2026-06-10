@@ -11,6 +11,7 @@ engine skills into finished, on-brand artifacts. Same pipeline, any brand — sw
 different brand with zero workflow change.
 
 ## The engine skills it orchestrates
+
 | Skill | Role |
 | --- | --- |
 | **design-tokens** | the brand profile → `tokens.css` (`--accent`, neutrals, fonts) — the source of truth |
@@ -20,6 +21,7 @@ different brand with zero workflow change.
 | **web-to-image** | pixel-perfect PNG export (social/raster) |
 
 ## The brand profile (the contract)
+
 Everything brand-specific lives in one file, not in the skills. See `brand-profile.schema.json`
 (the contract) and `brand-profile.example.json` (a filled instance). It captures:
 `tokens` (path to the project's `tokens.json`), `logo` (svg/path + lockup rules), `type`
@@ -27,6 +29,7 @@ Everything brand-specific lives in one file, not in the skills. See `brand-profi
 third-hue policy), and `imagery` (stance + negatives). To onboard a new brand: fill this once.
 
 ## The core workflow (works for you OR a small/cheap model)
+
 1. **Pick the artifact** → open the matching `recipes/*.md` (poster · social-tile · slide-deck ·
    brochure-page · landing-section).
 2. **Load context** → the brand profile + `tokens.css` + `design-effects/effects.css`. For a
@@ -41,6 +44,7 @@ third-hue policy), and `imagery` (stance + negatives). To onboard a new brand: f
 7. **Export** → documents → `web-to-pdf` (inline every asset!); social/raster → `web-to-image`.
 
 ## Decision: which export?
+
 | Artifact | Export | Why |
 | --- | --- | --- |
 | Brochure, prospectus, one-pager, report, certificate | **web-to-pdf** | downloadable multi-page PDF |
@@ -48,11 +52,13 @@ third-hue policy), and `imagery` (stance + negatives). To onboard a new brand: f
 | Slide deck | either | PNG per slide, or PDF of all slides |
 
 ## Starting a brand from scratch
+
 1. `design-tokens`: copy `tokens.starter.json` → set the accent ramp, neutrals, fonts; build `tokens.css`.
 2. `design-studio`: copy `brand-profile.example.json` → set name, logo, casing/voice, imagery stance.
 3. Build the first artifact from a recipe; QA; export. The profile + tokens now drive everything.
 
 ## The one rule that makes output look designed, not templated
+
 **Discipline beats decoration.** One hue (the profile's accent) + neutrals; one type system; one
 focal per canvas; light as a halo *behind* the focal, never a filter on it; generous negative space.
 The recipes and QA enforce exactly this — for whatever brand the profile defines.

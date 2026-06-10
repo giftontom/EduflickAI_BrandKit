@@ -7,7 +7,7 @@ request at 1920×1080; assemble a deck by generating each, then an `<iframe>` co
 
 ---
 
-```
+```text
 FACTS (only source of live numbers; missing → [[NEEDS: …]]):
 - Any figures to display (seats, price, weeks, retention, dates): [[ ]]
 
@@ -37,7 +37,9 @@ OUTPUT: one ```html ... ``` block (one slide). For a deck, repeat, then a contac
 ---
 
 ## Contact sheet (to QA a whole deck at once)
+
 After generating slides as `TitleSlide.html`, `ContentSlide.html`, … build:
+
 ```html
 <div style="background:#07080C;padding:40px;display:flex;flex-direction:column;gap:22px">
   <!-- repeat per slide -->
@@ -46,6 +48,7 @@ After generating slides as `TitleSlide.html`, `ContentSlide.html`, … build:
   </div>
 </div>
 ```
+
 Render it once — visual drift between slides is obvious side-by-side. Re-gen the odd one out.
 
 **✗ Avoid:** clip-art icons, a second hue, Title Case headlines, busy backgrounds, a different font

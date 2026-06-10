@@ -3,7 +3,7 @@
 One page of a multi-page document (prospectus, one-pager, report). Built for **PDF download via
 `web-to-pdf`**, so the export-safety rules are mandatory.
 
-```
+```text
 FACTS (missing → [[NEEDS: …]]):
 - Page subject / section:  [[ ]]
 - Specs / numbers / dates: [[ ]]

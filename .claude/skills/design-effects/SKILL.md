@@ -15,6 +15,7 @@ CSS variable, so the same effects look on-brand for any project: load that proje
 > blurred radial *behind* it. Everything here follows that.
 
 ## What's in `effects.css`
+
 | Class | Effect | Use on |
 | --- | --- | --- |
 | `.canvas` + `--sq`/`--portrait`/`--story`/`--slide`/`--a4` | true-pixel frame at exact export sizes | the root of any artifact |
@@ -29,11 +30,14 @@ CSS variable, so the same effects look on-brand for any project: load that proje
 | `.on-paper` | retunes grid/grain/vignette/glass for light surfaces | light-theme artifacts |
 
 ## How to use
+
 1. **Load tokens first**, then this file:
+
    ```html
    <link rel="stylesheet" href="tokens.css">      <!-- your brand profile, from design-tokens -->
    <link rel="stylesheet" href="effects.css">
    ```
+
    (No tokens.css yet? `effects.css` ships neutral-indigo fallbacks so it still previews.)
 2. **Build at true pixels.** Start from a `.canvas--*` frame; wrap in `.preview` while designing.
 3. **Layer in the documented order** (see `reference.md`):
@@ -42,7 +46,8 @@ CSS variable, so the same effects look on-brand for any project: load that proje
    PNGs with the `web-to-image` skill, or to PDF with `web-to-pdf`.
 
 ## Composing for depth (the cinematic stack)
-```
+
+```text
 .canvas (frame)
   └ .cine + .vignette        ← directional light + focused edges
      └ .grain                ← richness, no banding
@@ -53,6 +58,7 @@ CSS variable, so the same effects look on-brand for any project: load that proje
 ```
 
 ## Export-safety (important)
+
 - The grain is an **inline `data:` SVG** — it survives `html2canvas`/PDF export.
 - For PDF via `web-to-pdf`, avoid SVG *filter* backgrounds and keep any imagery as inline data
   URIs (see `web-to-pdf`/`image-composite` for the taint rule). `drop-shadow`/`blur` on elements is fine.

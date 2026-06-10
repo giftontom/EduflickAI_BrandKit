@@ -4,7 +4,7 @@ A single high-impact canvas: an announcement, "seats closing," a launch. One dom
 editorial spec rows, one focal. Output one self-contained HTML file at A4 or 4:5; render → QA →
 export (PDF via `web-to-pdf`, PNG via `web-to-image`).
 
-```
+```text
 FACTS (only source of live numbers; missing → [[NEEDS: …]]):
 - Headline subject:        [[ ]]
 - Date / time / venue:     [[ ]]

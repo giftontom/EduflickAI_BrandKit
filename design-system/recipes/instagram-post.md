@@ -6,7 +6,7 @@ preview (S13). Render it, QA it, then recreate/export in `../collateral/instagra
 
 ---
 
-```
+```text
 FACTS (only source of live numbers — never typeset an invented value; missing → [[NEEDS: …]]):
 - Masterclass date / cohort start / seats left: [[ ]]
 - Price / retail / venue:                        [[₹49,000 / ₹70,000 / Trivandrum]]
@@ -36,6 +36,7 @@ OUTPUT: one ```html ... ``` block.
 ---
 
 ## Worked example (what good looks like — abbreviated)
+>
 > Square, dark theme. Eyebrow `PIONEER COHORT 01`. Headline `ship *ai products*, not theory.`
 > Proof `3 deployed projects · 12 weeks · 20 seats`. CTA `register free →`. Footer wordmark + mark.
 > → 1080² frame (S14) with faint dot grid (S11), 96px padding, content space-between: eyebrow top,

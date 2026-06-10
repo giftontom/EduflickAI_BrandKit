@@ -15,29 +15,36 @@ and the whole system re-themes — no code changes anywhere else.
 > spacing and radii once; everything downstream reads the generated `--vars`.
 
 ## The pipeline
-```
+
+```text
 tokens.json  ──build-tokens.mjs (Style Dictionary)──▶  tokens.css      (:root { --accent … })
                                                          tokens.flat.json (name→value map)
                                                          tokens.mjs       (JS: tokens, logoPath, fontsLink)
 ```
+
 Optional second stage for copy-paste snippet bins that must hold literals inline:
-```
+
+```text
 snippets.src.md  +  tokens.flat.json  ──build-snippets.mjs──▶  snippets.md   ({{token}} → value)
 ```
 
 ## Quick start
+
 1. Copy `templates/tokens.starter.json` to your project as `tokens.json` and edit the values —
    at minimum the `accent` ramp + aliases, neutrals (`paper`/`ink`), and the three font stacks.
 2. Install once: `npm install` (pulls `style-dictionary`).
 3. Build:
+
    ```bash
    TOKENS_SRC=tokens.json OUT_DIR=build node scripts/build-tokens.mjs
    ```
+
    → `build/tokens.css`, `build/tokens.flat.json`, `build/tokens.mjs`.
 4. Load `tokens.css` first in any HTML (`<link>`, `@import`, or inline `<style>`), then layer
    `design-effects/effects.css` and your content on top.
 
 ## The variable contract (what downstream skills expect)
+
 The **leaf key** of each token becomes its CSS var name. Keep these aliases present — the
 effects toolkit and recipes are written against them:
 
@@ -56,15 +63,19 @@ effects toolkit and recipes are written against them:
 but is available in `tokens.mjs` as `logoPath` / `fontsLink` for exporters and scripts.
 
 ## CI drift guard (keep generated files honest)
+
 Generated outputs are committed. To prove they match the source, re-run the build in CI and
 fail if the working tree changed:
+
 ```bash
 node scripts/build-tokens.mjs && node scripts/build-snippets.mjs   # if you use snippet bins
 git diff --exit-code -- build/ snippets.md
 ```
+
 See `reference.md` for a ready-to-paste GitHub Actions step.
 
 ## Notes
+
 - One hue is a feature, not a limit — a brand reads as a brand because color is disciplined.
   Add tints to the ramp, not new hues.
 - This skill ships scripts + a starter, not a brand. The brand is your `tokens.json`.

@@ -1,6 +1,7 @@
 # web-to-image — reference
 
 ## The capture model
+
 1. Launch headless Chromium at `deviceScaleFactor = SCALE`.
 2. Load the page, `await document.fonts.ready`, settle 500ms.
 3. Hide `HIDE_SELECTOR` (download buttons, on-screen chrome) so they never bake in.
@@ -13,6 +14,7 @@ behind them (a shared gradient, a sliced background mural). That's how a grid of
 each export as their own slice of one continuous backdrop.
 
 ## Designing for export
+
 - Build at **true pixels** using fixed-size frames (`design-effects` `.canvas--portrait` etc.).
   Don't rely on a scaled preview wrapper for the export node — clip uses the real box, and a
   `transform: scale()` changes the box. Export full-size nodes; scale only for on-screen viewing.
@@ -25,17 +27,20 @@ each export as their own slice of one continuous backdrop.
 - Mark transient UI (hover download buttons, nav) with `data-export-hide` so it's removed in capture.
 
 ## Single asset / avatar pattern
+
 For one isolated graphic (an avatar, an OG card), the same script works — give the single root node
 `data-export="avatar"`. For special pixel processing (e.g. a gradient avatar with transparent
 corners for a circular crop), a dedicated Node script using `sharp`/`canvas` may be cleaner; the
 repo's `tools/export-pf-avatar.mjs` is one example of that approach.
 
 ## SCALE guidance
+
 - `SCALE=1` → exact CSS pixels. Use when the platform wants an exact spec (e.g. 1080×1350).
 - `SCALE=2` → 2× supersample; the platform downscales it crisply. Default; best perceived quality.
 - Higher scales cost memory/time with diminishing returns above 2–3×.
 
 ## Troubleshooting
+
 | Symptom | Cause / fix |
 | --- | --- |
 | "No [data-export] nodes found" | add `data-export="name"` to each target; if using an export view, pass `HTML_QUERY` |
@@ -45,5 +50,6 @@ repo's `tools/export-pf-avatar.mjs` is one example of that approach.
 | Effect missing | not an html2canvas limitation here — check it isn't hidden by `HIDE_SELECTOR` |
 
 ## Output naming
+
 The file name is exactly the `data-export` value (`data-export="post-03-bl"` → `post-03-bl.png`).
 Name targets deliberately; they become your asset filenames.

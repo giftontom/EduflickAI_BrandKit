@@ -11,6 +11,7 @@ file into the model's context alongside `00_SYSTEM_PROMPT.md`.
 ---
 
 ## S0 · `:root` token block (paste once near the top of `<style>`)
+
 ```css
 :root{
   --i-500:#5B5BF0; --i-400:#6E78F5; --i-300:#8B97FF; --i-700:#3A2BB8; --i-ink:#0B0822;
@@ -26,6 +27,7 @@ body{font-family:var(--font-d);background:var(--ink);color:var(--paper);-webkit-
 ```
 
 ## S1 · HEAD (mandatory — fonts + favicon)
+
 ```html
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,6 +36,7 @@ body{font-family:var(--font-d);background:var(--ink);color:var(--paper);-webkit-
 ```
 
 ## S2 · The mark (exact path — never alter geometry/rotation/fill-to-third-hue)
+
 ```html
 <!-- fill: #5B5BF0 indigo (default) · #F5F2EA paper (on dark/indigo) · #0B0822 ink (on paper) -->
 <svg viewBox="0 0 180 180" width="48" height="48" aria-hidden="true">
@@ -42,15 +45,19 @@ body{font-family:var(--font-d);background:var(--ink);color:var(--paper);-webkit-
 ```
 
 ## S3 · Wordmark (build in HTML, never an image)
+
 ```html
 <span style="font-family:'Manrope';font-weight:800;letter-spacing:-0.045em;text-transform:lowercase;line-height:1">eduflick<i style="font-style:normal;color:#8B97FF;margin-left:0.1em">AI</i></span>
 ```
 
 ## S4 · Eyebrow / mono label (UPPERCASE)
+
 ```html
 <span style="font-family:'JetBrains Mono';font-size:11px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:#8B97FF">PIONEER COHORT 01</span>
 ```
+
 With the editorial leading rule:
+
 ```html
 <div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#7A7F90;display:flex;align-items:center;gap:12px">
   <span style="width:22px;height:1px;background:#8B97FF"></span>00 · the cohort
@@ -58,6 +65,7 @@ With the editorial leading rule:
 ```
 
 ## S5 · Display headline with one serif accent word (lowercase + one `<em>`)
+
 ```html
 <h1 style="font-family:'Manrope';font-weight:900;font-size:64px;letter-spacing:-0.05em;line-height:0.9;text-transform:lowercase;color:#F5F2EA">
   stop learning ai theory. ship <em style="font-family:'Instrument Serif';font-style:italic;font-weight:400;color:#8B97FF">ai products</em>.
@@ -65,12 +73,14 @@ With the editorial leading rule:
 ```
 
 ## S6 · Body + serif lead
+
 ```html
 <p style="font-family:'Manrope';font-weight:500;font-size:16px;line-height:1.6;color:#C9C5BA;max-width:62ch">12 weeks, in-person in Trivandrum. 3 deployed projects. 20 seats.</p>
 <p style="font-family:'Instrument Serif';font-style:italic;font-size:21px;line-height:1.35;color:#F5F2EA">a feed for thinking.</p>
 ```
 
 ## S7 · Buttons (primary + ghost, with hover lift + brand glow)
+
 ```html
 <style>
   .btn{font-family:'Manrope';font-weight:700;font-size:15px;letter-spacing:-0.01em;border:0;
@@ -86,6 +96,7 @@ With the editorial leading rule:
 ```
 
 ## S8 · Card (dark) and stat card
+
 ```html
 <div style="background:#11131C;border:1px solid rgba(245,242,234,0.08);border-radius:18px;padding:28px">
   <span style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#7A7F90">RAG · WEEK 08</span>
@@ -100,6 +111,7 @@ With the editorial leading rule:
 ```
 
 ## S9 · Flick / feed card (the product motif)
+
 ```html
 <div style="background:#11131C;border:1px solid rgba(245,242,234,0.08);border-radius:16px;padding:22px;display:flex;gap:16px;align-items:flex-start">
   <!-- subject tile: serif letter inside a mark-shaped tile -->
@@ -114,6 +126,7 @@ With the editorial leading rule:
 ```
 
 ## S10 · Tag / pill · coral scarcity flag (use coral sparingly)
+
 ```html
 <span style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.12em;text-transform:uppercase;padding:6px 12px;border-radius:999px;border:1px solid rgba(245,242,234,0.16);color:#C9C5BA">next.js</span>
 <!-- scarcity flag (coral = the ONE allowed exception, only here) -->
@@ -121,6 +134,7 @@ With the editorial leading rule:
 ```
 
 ## S11 · Backgrounds & texture
+
 ```css
 /* faint dot grid (overlay; put on a positioned wrapper) */
 .dots::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
@@ -137,6 +151,7 @@ With the editorial leading rule:
 ```
 
 ## S12 · Dashed spec/meta row (editorial hairline)
+
 ```html
 <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px dashed rgba(245,242,234,0.16);font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.06em;color:#C9C5BA">
   <span style="color:#7A7F90;text-transform:uppercase;letter-spacing:0.18em">duration</span><span>12 weeks</span>
@@ -144,6 +159,7 @@ With the editorial leading rule:
 ```
 
 ## S13 · Scale-to-fit preview wrapper (so a true-size canvas is viewable on screen)
+
 ```html
 <!-- wrap any fixed-px canvas so it fits the viewport while staying true ratio -->
 <div style="display:flex;justify-content:center;padding:40px;background:#07080C">
@@ -152,6 +168,7 @@ With the editorial leading rule:
 ```
 
 ## S14 · Canvas frames (build at true pixels)
+
 ```html
 <!-- IG square 1080×1080 (portrait: height:1350; story/reel: 1080×1920) -->
 <div style="position:relative;width:1080px;height:1080px;overflow:hidden;background:#0A0B10;
@@ -171,12 +188,15 @@ With the editorial leading rule:
 ```
 
 ## S15 · Spotlight / halo (cinematic depth — light BEHIND a focal element)
+
 The mark stays flat (never a filter on it). Put the light in a halo *behind* the mark/headline.
+
 ```css
 .halo{position:absolute;pointer-events:none;border-radius:50%;
   background:radial-gradient(closest-side,rgba(139,151,255,0.5),rgba(110,120,245,0.18) 44%,transparent 72%);filter:blur(8px)}
 .focal{position:relative;z-index:1}   /* the mark/headline sits above the halo */
 ```
+
 ```html
 <div style="position:relative;display:flex;align-items:center;justify-content:center">
   <div class="halo" style="width:900px;height:900px;left:50%;top:50%;transform:translate(-50%,-50%)"></div>
@@ -185,7 +205,9 @@ The mark stays flat (never a filter on it). Put the light in a halo *behind* the
 ```
 
 ## S16 · Film grain (faint, grayscale — richness + kills gradient banding)
+
 Desaturated noise at ≤5% — it's texture, not a hue. Layer it as the top bg of any surface.
+
 ```css
 :root{--grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E")}
 .surface::before{content:'';position:absolute;inset:0;pointer-events:none;
@@ -194,7 +216,9 @@ Desaturated noise at ≤5% — it's texture, not a hue. Layer it as the top bg o
 ```
 
 ## S17 · Cinematic surface (directional gradient + vignette)
+
 Offset the gradient hot-spot for *directional* light; add a vignette to focus the eye. One hue only.
+
 ```css
 .cine-indigo{background:radial-gradient(130% 160% at 50% 30%,#6E78F5,#4B3FE0 24%,#261A82 56%,#0B0822 100%)}
 .cine-ink   {background:radial-gradient(120% 130% at 82% 10%,#241E52,#15122F 32%,#0A0B10 64%)}
@@ -204,7 +228,9 @@ Offset the gradient hot-spot for *directional* light; add a vignette to focus th
 ```
 
 ## S18 · Footer lockup (consistent brand attribution)
+
 Small; on covers keep it ≥135px above the frame bottom so the 1:1 grid crop never cuts it.
+
 ```html
 <div style="position:absolute;left:0;right:0;bottom:150px;display:flex;align-items:center;justify-content:center;gap:14px;color:rgba(245,242,234,0.46)">
   <svg viewBox="0 0 180 180" width="34" height="34"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="currentColor"/></svg>
@@ -213,12 +239,16 @@ Small; on covers keep it ≥135px above the frame bottom so the 1:1 grid crop ne
 ```
 
 ## S19 · Glass card + deck-slide skeleton
+
 Frosted card: translucent fill + hairline + inset highlight + brand glow.
+
 ```css
 .glass{background:rgba(20,18,52,0.45);backdrop-filter:blur(12px);border:1px solid rgba(245,242,234,0.16);border-radius:18px;
   box-shadow:0 20px 50px -18px rgba(0,0,0,0.6),inset 0 1px 0 rgba(245,242,234,0.16),0 8px 32px -8px rgba(91,91,240,0.45)}
 ```
+
 Carousel **deck slide** — eyebrow + slide-index → motif + headline + support → footer + cue:
+
 ```html
 <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:150px 100px">
   <div style="display:flex;justify-content:space-between"><span class="eyebrow">01 · THE GAP</span><span class="mono">01 · 07</span></div>
@@ -228,10 +258,12 @@ Carousel **deck slide** — eyebrow + slide-index → motif + headline + support
 ```
 
 ## S20 · AI image backdrop layer (composite — image UNDER the type/mark)
+
 A generated indigo backdrop on the bottom; S16 grain + S17 vignette + S15 halo sit OVER it; the type
 and mark stay in HTML on top. No text/logo/people in the image. Generate with
 `../../tools/gen-backdrops.mjs` (Nano Banana / `gemini-3-pro-image`; needs a billing-enabled key) or
 the procedural fallback `../../tools/gen-backdrops-proc.mjs`. See `../AI_IMAGERY_GUIDE.md`.
+
 ```css
 .img-layer{position:absolute;inset:0;z-index:0;overflow:hidden}
 .img-layer img{width:100%;height:100%;object-fit:cover;display:block}
@@ -239,15 +271,18 @@ the procedural fallback `../../tools/gen-backdrops-proc.mjs`. See `../AI_IMAGERY
 .scrim{position:absolute;inset:0;z-index:2;pointer-events:none;
   background:linear-gradient(180deg,rgba(7,5,22,0.46) 0%,rgba(7,5,22,0.05) 24%,rgba(7,5,22,0.04) 54%,rgba(7,5,22,0.72) 100%)}
 ```
+
 ```html
 <div class="img-layer"><img src="assets/backdrops/NAME.png" alt=""></div><div class="scrim"></div>
 <!-- then S16 grain · S17 vignette · S15 halo · the S4/S5/S6/S2 content stack — all OVER the image -->
 ```
 
 ## S21 · Browser / app mockup frame (show the real thing you build)
+
 Window chrome wrapping an **HTML-built** faux UI — never a screenshot, so no third hue and no
 invented text leaks in. Dots are neutral (one-hue rule). Swap the `.ui` body per project:
 a **SaaS dashboard** (bars below), a **RAG chat** thread, or **agentic nodes**.
+
 ```html
 <div style="border-radius:14px;overflow:hidden;background:#11131C;border:1px solid rgba(245,242,234,0.10);box-shadow:0 30px 80px -30px rgba(0,0,0,0.7),0 8px 32px -8px rgba(91,91,240,0.35)">
   <div style="display:flex;align-items:center;gap:8px;padding:13px 16px;background:#181B28;border-bottom:1px solid rgba(245,242,234,0.08)">
@@ -290,8 +325,10 @@ a **SaaS dashboard** (bars below), a **RAG chat** thread, or **agentic nodes**.
 ```
 
 ## S22 · Achievement badge / ribbon + outcome block (proof — real facts only)
+
 The skill.mount "PLACED" device, on-brand. **No invented alumni/placements** — the cohort hasn't
 run. Use real outcomes; ship the testimonial as a labelled template until a real member exists.
+
 ```html
 <!-- the badge -->
 <span style="display:inline-flex;align-items:center;gap:10px;font-family:'Manrope';font-weight:900;font-size:18px;letter-spacing:0.04em;text-transform:uppercase;color:#0A0B10;background:#8B97FF;border-radius:9px;padding:10px 18px;box-shadow:0 10px 34px -10px rgba(91,91,240,0.55)">
@@ -313,7 +350,9 @@ run. Use real outcomes; ship the testimonial as a labelled template until a real
 ```
 
 ## S23 · Feature-point (icon + bold + caption) — the explainer infographic row
+
 Repeat 3–4×. Swap the inline icon path per point (check / pin / star / clock). One hue: indigo tile.
+
 ```html
 <div style="display:flex;gap:16px;align-items:flex-start">
   <span style="width:46px;height:46px;border-radius:12px;background:rgba(139,151,255,0.12);border:1px solid rgba(139,151,255,0.22);display:flex;align-items:center;justify-content:center;flex-shrink:0">
@@ -329,8 +368,10 @@ Repeat 3–4×. Swap the inline icon path per point (check / pin / star / clock)
 ```
 
 ## S24 · Mark-burst motif (the playful hero — energy without a mascot)
+
 An oversized flat mark over a radiating indigo sunburst. Strictly one hue; the mark stays flat
 (the light/rays are behind it, never a filter on it). The playful register's hero device.
+
 ```html
 <div style="position:relative;display:flex;align-items:center;justify-content:center;width:760px;height:760px">
   <div style="position:absolute;inset:0;border-radius:50%;
@@ -343,10 +384,12 @@ An oversized flat mark over a radiating indigo sunburst. Strictly one hue; the m
 ```
 
 ## S25 · Poll / quiz block (story engagement device)
+
 The interactive device from the references (entri / IIT / skill.mount). Bake this on-brand card into
 a **9:16 story** (`1080×1920`); for an organic story you can also overlay a **native IG poll sticker**
 on this zone (native = actually interactive). Keep it in the story's safe area (clear of the top ~250px
 and bottom ~250px IG chrome). Options are styled pills, not real buttons.
+
 ```html
 <div style="background:rgba(20,18,52,0.55);backdrop-filter:blur(10px);border:1px solid rgba(245,242,234,0.14);border-radius:22px;padding:26px 24px;box-shadow:0 20px 50px -18px rgba(0,0,0,0.6)">
   <p style="font-family:'JetBrains Mono';font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:#8B97FF;margin:0 0 16px">be honest —</p>

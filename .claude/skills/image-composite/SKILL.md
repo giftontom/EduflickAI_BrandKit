@@ -15,17 +15,20 @@ and imagery deepens a design instead of muddying it.
 > *meaning*, you're using it wrong. No text, no logo, no faces baked into the pixels.
 
 ## The composite (z-order)
-```
+
+```text
 .composite
   0  .img-layer  <img>          ← generated/photographic texture (cover) — mood only
   1  .grain  .vignette          ← design-effects: unify + focus (legibility)
   2  .halo                      ← design-effects: light the focal from behind
   3  .content   <h1> <svg logo> ← the message, crisp HTML/SVG, always on top
 ```
+
 `assets/img-layer.css` is the *only* new CSS (the image wrapper + `.content` z-index). Layers 1–2
 are existing `design-effects` classes — don't re-invent the scrim/grain/halo.
 
 ## Minimal markup
+
 ```html
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="effects.css">      <!-- design-effects -->
@@ -42,6 +45,7 @@ are existing `design-effects` classes — don't re-invent the scrim/grain/halo.
 ```
 
 ## Generating the backdrop (any image model)
+
 Use `templates/image-prompt-kit.md`: fill the `{{placeholders}}` from your brand profile once
 (brand name, accent name + ramp, mood words), then it's a reusable, model-agnostic prompt that
 yields **abstract, single-hue, text-free** backdrops. Always pass the **negative block** (no text,
@@ -53,12 +57,14 @@ texture CSS can't synthesize (volumetric fog, real particle fields, fluid/topogr
 layer the same treatment over it so it matches everything else.
 
 ## Export-path gotcha (decide before you build — see `reference.md`)
+
 | Export route | Reference the image as… |
 | --- | --- |
 | `web-to-image` (Playwright) | a normal file path or URL — Playwright shoots the real browser, nothing taints |
 | `web-to-pdf` (html2canvas) | an **inline base64 data URI** — a file/remote image taints the canvas and the PDF fails |
 
 ## QA the image alone, then the composite
+
 Hard fails (regenerate): readable text/numbers; a person/face/hand/real object/stock look; a second
 hue; a logo baked into the image; too busy / no clear area for a headline. Then composite-check:
 vignette + grain applied → headline and logo read clearly; still one hue across the whole stack;

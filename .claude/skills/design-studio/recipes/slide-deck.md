@@ -3,7 +3,7 @@
 A set of 16:9 slides sharing one system: title, section, content, quote, closing. Export PNG per
 slide (`web-to-image`) or a PDF of all slides (`web-to-pdf`).
 
-```
+```text
 FACTS (missing → [[NEEDS: …]]):
 - Deck title / subject:   [[ ]]
 - Key numbers / claims:   [[ ]]

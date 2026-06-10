@@ -16,10 +16,12 @@ The reference implementation is the Eduflick AI poster set: `design-system/colla
 (7 `[data-export]` sections) → `tools/export-posters.mjs` → `exports/posters/*.png` (1080×1350).
 
 ## The fusion idea (from a teardown of strong ed-tech / SaaS ads)
+
 Each poster fuses **text + colour + ONE hero device + proof + a course/product-detail infographic +
 ONE CTA**. Miss one and it reads thin; stack two hero devices and it reads busy.
 
 ## The 6 archetypes × 2 registers
+
 | Archetype | Register | Hero device | Eduflick export |
 | --- | --- | --- | --- |
 | hero / cinematic | premium | treated photo **or** cine surface + accent headline | `poster-program` |
@@ -35,6 +37,7 @@ ONE CTA**. Miss one and it reads thin; stack two hero devices and it reads busy.
 - Two **registers**, never two brands: no mascot, no new hue, the warm/coral accent only for scarcity.
 
 ## The 7 fusion rules (every poster obeys)
+
 1. **One hero device** — mockup *or* photo *or* illustration *or* number. Never stacked.
 2. **Headline = a hook + one emphasis** — one serif / accent-coloured word, the rest plain.
 3. **Proof furniture** — badge / stat / guarantee — **only values that exist in FACTS.** No invented alumni/placements.
@@ -44,6 +47,7 @@ ONE CTA**. Miss one and it reads thin; stack two hero devices and it reads busy.
 7. **Register dial** — premium = restraint; playful = scale + brighter field + burst.
 
 ## The image backdrop layer (the part people forget)
+
 Every poster gets a **real, text-free image** behind the type — never a flat colour, never a CSS-only
 stand-in. Two modes, one hue:
 
@@ -59,7 +63,9 @@ open) → grain + vignette + halo (z1–3) → content stack (z4)`. **Tune each 
 zones**: put the glow where the headline goes; keep the band under spec rows / feature points dark.
 
 ### Generating the backdrops — `tools/gen-backdrops.mjs`
+
 A robust pipeline that prefers real AI and degrades gracefully:
+
 1. Builds the prompt = **style preamble + palette literals + a per-poster BRIEF + a hard negative block**
    (no text / people / third hue / photoreal). Briefs and the procedural art live in
    `tools/_backdrop-art.mjs` and are the single source of truth.
@@ -69,17 +75,19 @@ A robust pipeline that prefers real AI and degrades gracefully:
    API and **falls back to the procedural generator** (`renderProcedural`) — same filenames, so a
    billed key later just overwrites them with real AI art. No poster is ever left without an image.
 
-```
+```bash
 cd tools
 GEMINI_API_KEY=… npm run gen:backdrops          # AI → procedural fallback (Mode-A set)
 ONLY=poster-why,poster-proof npm run gen:backdrops
 ALL=1 npm run gen:backdrops                       # also the hero/masterclass abstracts
 NO_GEMINI=1 npm run gen:backdrops:proc            # procedural only, offline
 ```
+
 > **Real-Gemini requires a billing-enabled Google Cloud project.** A free-tier `GEMINI_API_KEY`
 > returns `429 / limit: 0` for *every* image model (Imagen included) — the fallback is what ships now.
 
 ## Workflow
+
 1. **Fill FACTS** — dates / prices / seats / links from the brand's single source. Missing → `[[NEEDS: …]]`; never invent.
 2. **Pick archetypes** — choose the set the campaign needs; assign a register to each.
 3. **Assemble** — one `[data-export]` section per poster from the recipe + effect classes; one hero device each.
@@ -88,6 +96,7 @@ NO_GEMINI=1 npm run gen:backdrops:proc            # procedural only, offline
 6. **QA** — one hue, one hero, one CTA; FACTS verbatim; mark has a quiet zone; nothing fabricated.
 
 ## The one rule that makes a poster look designed
+
 **Discipline beats decoration.** One hue + neutrals, one hero device, one CTA, light as a *halo behind*
 the focal (never a filter on the type), generous negative space — held consistently across the whole set.
 

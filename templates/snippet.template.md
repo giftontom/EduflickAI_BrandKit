@@ -24,6 +24,7 @@ Use `{{token}}` placeholders for any brand value (resolved on `npm run snippets`
   …
 </div>
 ```
+
 Then: `cd tools && npm run snippets` (regenerates the inline `snippets.md`).
 
 ## 3. Row → `design-system/COMPONENTS.md`

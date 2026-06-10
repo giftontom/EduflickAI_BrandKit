@@ -6,6 +6,7 @@ web sections. They're built so a **small model** can run them by **assembling pr
 snippets** rather than inventing design.
 
 ## How to use
+
 1. **Once per session:** paste `00_SYSTEM_PROMPT.md` as the **system message** (it embeds the
    design cheat sheet + the assemble-don't-invent rules) and append `snippets.md` (the parts bin).
 2. **Per artifact:** paste the matching recipe below as the first user message — fill its FACTS
@@ -18,6 +19,7 @@ snippets** rather than inventing design.
 Read `../SMALL_MODELS_GUIDE.md` for why each step matters, and `../DESIGN_CHEATSHEET.md` for the rules.
 
 ## Files
+>
 > **`snippets.md` is generated — do not hand-edit it.** Its inline brand values
 > (hex, the mark path, the fonts link) come from `design-system/tokens/tokens.json`.
 > Edit `snippets.src.md` (which uses `{{token}}` placeholders), then run

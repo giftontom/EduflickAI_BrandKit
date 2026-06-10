@@ -25,18 +25,22 @@ at volume, even with small/cheap AI models.
 ## Quick start
 
 ### You need copy (words)
+
 1. Read [`content-studio/BRAND_CHEATSHEET.md`](content-studio/BRAND_CHEATSHEET.md) — the whole brand in one page.
 2. Pick a prompt from [`content-studio/prompts/`](content-studio/prompts/), fill its FACTS block.
 3. Generate. Run the [`QA checklist`](content-studio/QA_CHECKLIST.md). Ship.
 
 ### You need visuals (pixels)
+
 1. Import [`design-system/colors_and_type.css`](design-system/colors_and_type.css).
 2. Load the 3 Google Fonts (Manrope, Instrument Serif, JetBrains Mono).
 3. Compose from [`design-system/ui_kits/`](design-system/ui_kits/) or fill a [`collateral kit`](design-system/collateral/).
 4. Export pixel-perfect PNGs: `cd tools && npm install && npm run export`.
 
 ### You're using a small/cheap AI model
+
 Read the small-model guides — they're the heart of this kit:
+
 - **Copy:** [`content-studio/SMALL_MODELS_GUIDE.md`](content-studio/SMALL_MODELS_GUIDE.md)
 - **Visuals:** [`design-system/SMALL_MODELS_GUIDE.md`](design-system/SMALL_MODELS_GUIDE.md)
 
@@ -124,7 +128,7 @@ Full rules: [`content-studio/BRAND_CHEATSHEET.md`](content-studio/BRAND_CHEATSHE
 
 ## Repository structure
 
-```
+```text
 eduflick-brand-kit/
 ├── index.html               ← Landing page (open in browser)
 ├── brand-book/               ← Source of truth: Brand Book v4.0

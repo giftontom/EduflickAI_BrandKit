@@ -3,7 +3,7 @@
 A single feed or carousel canvas. One idea, must read in 2 seconds at thumb size. Export PNG with
 `web-to-image`.
 
-```
+```text
 FACTS (missing → [[NEEDS: …]]):
 - The one idea / headline:  [[ ]]
 - Proof number (if any):    [[ ]]

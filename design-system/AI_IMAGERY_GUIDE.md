@@ -72,6 +72,7 @@ in Mode B the photo is mood/proof, never the claim. (Shipped example: `collatera
 governs which surfaces use imagery is in `recipes/poster.md`.)
 
 **Guardrails for Mode B (all must hold, or fall back to Mode A):**
+
 - **One hue.** Output is a strict indigo duotone — the treatment guarantees it; never ship an
   untreated colour photo.
 - **Backdrop only.** Type, numbers, and the mark stay in HTML on top; the photo sits in the `S20`
@@ -93,7 +94,7 @@ generated image is the *bottom* layer; the treatment that makes it legible and o
 `S4`/`S5`/`S6`/`S2` snippets on top. Nothing about the current recipes changes — the image slips in
 *below* the `S14` frame's background, exactly where `S11`/`S17` normally sit.
 
-```
+```text
    ┌─ S14 canvas frame (unchanged) ───────────────────────────────┐
    │  layer 4 · TYPE · MARK · DATA    S4 S5 S6 S7 S2 S18   ← the message, always HTML/SVG
    │  layer 3 · FOCAL LIGHT           S15 halo behind     ← lights headline/mark, never on it
@@ -122,6 +123,7 @@ normal palette, the **one-hue rule holds across the whole stack**. Because no te
 halo lights it from *behind*, never as a filter on it.
 
 **Export gotcha — match the path.** How you reference the backdrop depends on how the canvas exports:
+
 - **Social PNGs via `../tools` (Playwright):** reference the image file normally — Playwright shoots
   the live browser, so nothing taints. This is the default for IG / launch-grid tiles.
 - **Brochure / one-pager → PDF via html2canvas:** the backdrop **must be an inline base64 data URI**
@@ -137,7 +139,7 @@ mood. Keep the palette literals and the negative block attached.
 
 **Style preamble (reuse verbatim, every generation):**
 
-```
+```text
 Abstract generative brand texture for "Eduflick AI". Deep INDIGO MONOCHROME only.
 Mood: precise, editorial, an engineer's calm — premium, minimal, lots of negative space.
 Form vocabulary (pick what the brief asks): volumetric indigo light in dark space;
@@ -150,7 +152,7 @@ This is a BACKGROUND TEXTURE, not a scene and not a photo.
 
 **Palette literals (embed in every prompt):**
 
-```
+```text
 ink #0A0B10 (background)  ·  indigo-ink #0B0822 (deep)  ·  indigo #5B5BF0 (primary)
 ·  light indigo #8B97FF (accent/highlight)  ·  warm paper #F5F2EA (use only as a rare faint light)
 Indigo and its ramp + neutral ONLY. No other hue anywhere.
@@ -158,7 +160,7 @@ Indigo and its ramp + neutral ONLY. No other hue anywhere.
 
 **Negative block (always pass / append "do NOT include"):**
 
-```
+```text
 text, letters, words, numbers, captions, watermark, logo, signature;
 people, faces, hands, bodies, real objects, devices, screens, UI;
 photograph, photorealism, stock-photo look;
@@ -178,7 +180,7 @@ bevels, glossy 3D, heavy lens flare, busy collage, clutter.
 
 **Fill-in template (one message → one backdrop):**
 
-```
+```text
 [STYLE PREAMBLE]   ← paste verbatim, §4
 [PALETTE LITERALS] ← paste verbatim, §4
 BRIEF: [[one line of mood — e.g. "deep indigo light pulling toward an off-center notch, calm,
@@ -242,6 +244,7 @@ Run this on the **generated image alone**, before you composite it. (This lives 
 change `QA_CHECKLIST.md`.)
 
 **Hard fails — regenerate, don't ship:**
+
 - any readable text / letters / numbers in the image
 - a person, face, hand, or a real object / device / stock-photo look
 - a third hue (teal/purple/green/red/orange) or a rainbow gradient
@@ -249,6 +252,7 @@ change `QA_CHECKLIST.md`.)
 - too busy / no clear area for a headline to land
 
 **Then composite-check (image + the HTML on top):**
+
 - `S17` vignette + `S16` grain applied → headline, proof, and footer all read clearly
 - still **one hue** across the full stack (image + treatment + type)
 - the mark sits in HTML on top, flat and exact — never in the pixels; the `S15` halo is *behind* it

@@ -185,6 +185,7 @@ All three families are **Google Fonts** — no substitution required:
 - **JetBrains Mono** — wght 400/500
 
 Load via:
+
 ```html
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 ```

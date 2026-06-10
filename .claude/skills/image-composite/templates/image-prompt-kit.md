@@ -9,7 +9,8 @@ from your brand profile (`tokens.json`) once and reuse.
 > photography, in which case adapt the preamble + negatives accordingly).
 
 ## 1 · Style preamble (paste verbatim on every generation — it's the prior)
-```
+
+```text
 Abstract generative brand texture for "{{brand-name}}". {{mood-words: e.g. precise, editorial, calm,
 premium, minimal, generous negative space}}. Single-hue palette built on {{accent-name}}.
 Form vocabulary (use what the brief asks): volumetric {{accent-name}} light in dark space;
@@ -20,14 +21,16 @@ with room for text to be added later. This is a BACKGROUND TEXTURE, not a scene 
 ```
 
 ## 2 · Palette literals (embed every time — your accent ramp + neutrals)
-```
+
+```text
 {{ink}} (background)  ·  {{accent-ink}} (deep)  ·  {{accent}} (primary)
 ·  {{accent-light}} (accent/highlight)  ·  {{paper}} (rare faint light only)
 {{accent-name}} and its ramp + neutral ONLY. No other hue anywhere.
 ```
 
 ## 3 · Negative block (always pass / append as "do NOT include")
-```
+
+```text
 text, letters, words, numbers, captions, watermark, logo, signature;
 people, faces, hands, bodies, real objects, devices, screens, UI;
 photograph, photorealism, stock-photo look;
@@ -36,6 +39,7 @@ bevels, glossy 3D, heavy lens flare, busy collage, clutter.
 ```
 
 ## 4 · Aspect-ratio map (generate at the target size — no re-crop surprises)
+
 | Canvas | Ratio | Pixels |
 | --- | --- | --- |
 | Square | 1:1 | 1080 × 1080 |
@@ -46,7 +50,8 @@ bevels, glossy 3D, heavy lens flare, busy collage, clutter.
 | Print page | A4 | 2480 × 3508 @300dpi |
 
 ## 5 · Fill-in template (one message → one backdrop)
-```
+
+```text
 [STYLE PREAMBLE]    ← §1, verbatim
 [PALETTE LITERALS]  ← §2, verbatim
 BRIEF: {{one line of mood — e.g. "deep accent light pulling toward an off-center focal point, calm,
@@ -56,6 +61,7 @@ NEGATIVE: [NEGATIVE BLOCK]   ← §3, verbatim
 ```
 
 ## 6 · Consistency controls (any modern image model)
+
 | Control | Do | Why |
 | --- | --- | --- |
 | Style preamble | send §1 on *every* call | a stable visual prior across a series |

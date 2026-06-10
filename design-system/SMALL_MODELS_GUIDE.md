@@ -41,7 +41,7 @@ does not invent CSS, colors, fonts, or layout.**
 
 ## 3. The generate → RENDER → inspect → fix loop
 
-```
+```text
   ┌─ 1. SYSTEM: recipes/00_SYSTEM_PROMPT.md  (holds DESIGN_CHEATSHEET + the snippet rules)
   ├─ 2. USER:   the recipe (e.g. recipes/instagram-post.md) + FACTS + the text to typeset
   ├─ 3. GEN:    ONE self-contained .html file
@@ -56,12 +56,14 @@ emit `#7C3AED`. Looking is the only reliable check. In a coding agent, screensho
 chat UI, paste the HTML into a live preview.
 
 ## 4. Reuse the FACTS block (anti-hallucination)
+
 Any real date/price/seat/link **typeset into the art** must come from the FACTS block — same one as
 `../content-studio/SMALL_MODELS_GUIDE.md §4`. If it's not in FACTS, the model typesets
 `[[NEEDS: …]]` so you catch it before export. Visuals are worse than copy here because a wrong
 number rendered into a poster looks *official*.
 
 ## 5. Model settings
+
 | Setting | Suggested | Why |
 | --- | --- | --- |
 | Temperature | 0.2–0.5 | Visual code wants determinism, not creativity. Low temp = it follows the snippets. |
@@ -73,6 +75,7 @@ Claude API: put the cheat sheet + snippets in the system prompt and enable **pro
 you reuse them across every artifact. Haiku handles assembly well at low temp. (See `claude-api` skill.)
 
 ## 6. The two-model pattern
+
 - **Small model = the assembler.** Emits the HTML from snippets + FACTS, in volume.
 - **You / a bigger model = art director.** Render, run QA, name defects, request targeted fixes.
 One render-and-critique pass over a cheap draft beats paying a big model to author from scratch.
@@ -95,12 +98,14 @@ One render-and-critique pass over a cheap draft beats paying a big model to auth
 | Wordmark shows lowercase 'ai' | "Wordmark is 'eduflick AI' — uppercase AI; white on dark/indigo, indigo on paper." |
 
 ## 8. Batching a set (carousel / deck) without drift
+
 Generate **slide-by-slide / card-by-card** with the *same* system prompt and snippet set, then ask
 for a **contact sheet** HTML that embeds each as an `<iframe>` (mirror `slides/index.html`). Render
 the contact sheet once — drift shows up instantly when the cards sit side by side. Re-gen only the
 odd one out.
 
 ## 9. Minimal end-to-end example
+>
 > **System:** `recipes/00_SYSTEM_PROMPT.md` (+ the snippets it references)
 > **User:** `recipes/instagram-post.md`, FACTS filled + "Square 1:1, paper theme, headline:
 > 'ship *AI products*, not theory', eyebrow 'PIONEER COHORT 01', proof '20 seats · 12 weeks'."
@@ -122,8 +127,8 @@ halo **behind** the focal element; the mark itself stays flat.
 
 **The launch grid (`recipes/launch-grid.md`).** A 12-tile Instagram mural — 4 continuous rows × 3
 columns, each row on one surface (indigo / paper / ink). For a small model: **edit the existing
-`collateral/launch-grid.html`**, one tile or slide at a time, reusing its surface classes
-+ deck-slide template + `motifHTML()`. Match the surface (paper → indigo mark + motifs; dark/indigo
+`collateral/launch-grid.html`**, one tile or slide at a time, reusing its surface classes +
+deck-slide template + `motifHTML()`. Match the surface (paper → indigo mark + motifs; dark/indigo
 → paper-fill mark). Keep grain/grid **em-based** so the in-page viewer and the export match. Don't
 treat tiles as standalone — a row only reads as a mural when its three slices line up.
 

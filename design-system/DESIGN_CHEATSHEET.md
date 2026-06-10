@@ -10,10 +10,12 @@ The full narrative version is `README.md`. This is the compressed, paste-ready v
 ---
 
 ## 0. The aesthetic in one line
+
 A precise, editorial, **engineer's** aesthetic — dark by default, **indigo as the single signal
 hue**, lots of mono metadata, tight lowercase display type, generous negative space, no photos.
 
 ## 1. Color — the iron rule
+
 - **One brand hue: indigo.** `#5B5BF0` is PRIMARY (buttons, mark, signal). Accent/light
   `#8B97FF` (the "AI" tint). Deep `#0B0822` indigo-ink for hero gradients.
 - **Neutral pair only:** warm **paper** `#F5F2EA` (light bg), cool **ink** `#0A0B10` (dark bg).
@@ -23,15 +25,19 @@ hue**, lots of mono metadata, tight lowercase display type, generous negative sp
 - Full ramp: `#EEF0FF #DCE0FF #B7C0FF #8B97FF #6E78F5 #5B5BF0 #4B3FE0 #3A2BB8 #261A82 #150D52 #0B0822`.
 
 ## 2. Theme
+
 - **Dark is the default.** Canvas `#0A0B10`, card surface `#11131C`, raised `#181B28`.
 - **Paper theme** for documents, decks, brochures, the marketing site: bg `#F5F2EA`, card `#FFF`.
 - `#5B5BF0` works on both. To flip, wrap in `class="theme-light"` (defined in `colors_and_type.css`).
 
 ## 3. Type
+
 Three Google Fonts, no substitution. Load this exact tag in `<head>`:
+
 ```html
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 ```
+
 - **Manrope** — everything structural. Display/headings **800–900**, body **500**. Lowercase
   display, **tight negative tracking** (−0.03 to −0.05em). Line-height ~0.9 on display.
 - **Instrument Serif** — *italic only*, indigo-tinted (`#8B97FF`), for **one or two accent words**
@@ -42,24 +48,29 @@ Three Google Fonts, no substitution. Load this exact tag in `<head>`:
   mono-meta 11 · micro 10.
 
 ### Casing (signature — don't get this wrong)
+
 - Display/headlines = **lowercase**. Mono labels = **UPPERCASE**. Body = sentence case.
 - Wordmark = **"eduflick AI"** in HTML: `<span class="wordmark">eduflick<i>AI</i></span>` — a
   space then **uppercase AI** (white on dark/indigo, indigo `#5B5BF0` on paper).
 
 ## 4. The mark
+
 A single closed path on a 180×180 viewBox — a square "feed card" with a triangular notch bitten
 from its **right edge** (the "play"). **One shape, one notch.**
+
 ```html
 <svg viewBox="0 0 180 180" width="48" height="48" aria-hidden="true">
   <path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#5B5BF0"/>
 </svg>
 ```
+
 Fills: indigo `#5B5BF0` (default), paper `#F5F2EA` (on dark/indigo), ink `#0B0822` (on paper).
 **Never** distort, rotate, recolor with a third hue, add bevels/glows/inner-shadows, or paste
 foreign shapes on it. It stays flat with a near-zero **3px** corner radius (reads as a sharp card).
 Min sizes: app icon ≥40px · tab ≥24px · favicon ≥16px · never <10px.
 
 ## 5. Spacing · radius · shadow · motion
+
 - **Spacing scale (px):** 4 · 8 · 12 · 16 · 20 · 24 · 32 · 40 · 48 · 64 · 80 · 96. Be generous.
 - **Radius (px):** sm 6 · md 10 · lg 14 · xl 18 · 2xl 22 · 3xl 28 · pill 999. Cards 14–18; big
   hero/section 22–28. **The mark stays at 3px.**
@@ -73,6 +84,7 @@ Min sizes: app icon ≥40px · tab ≥24px · favicon ≥16px · never <10px.
   Respect `prefers-reduced-motion`.
 
 ## 6. Backgrounds & texture (subtle, never loud)
+
 - Solid ink or paper, OR a deep **indigo gradient** on hero canvases:
   `linear-gradient(150deg, #3A2BB8, #0B0822)` (~135–160°).
 - **Faint dot grid:** `radial-gradient(circle, rgba(245,242,234,0.06) 1px, transparent 1px)` at
@@ -85,6 +97,7 @@ Min sizes: app icon ≥40px · tab ≥24px · favicon ≥16px · never <10px.
   `recipes/snippets.md` S15–S19.
 
 ## 7. Layout language
+
 - Editorial **spec-sheet** feel: mono "id" tags and section numbers label everything
   (`00 · at a glance`, `01 · the gap`). 3- and 5-column token/pillar grids recur.
 - Generous negative space. Depth comes from hairline borders + faint shadow, not heavy elevation.
@@ -92,6 +105,7 @@ Min sizes: app icon ≥40px · tab ≥24px · favicon ≥16px · never <10px.
   `rgba(10,11,16,0.14)` border on paper.
 
 ## 8. Canvas sizes (build at true ratio, scale down to preview)
+
 | Artifact | Pixels / ratio |
 | --- | --- |
 | IG feed square | 1080×1080 (1:1) |
@@ -102,6 +116,7 @@ Min sizes: app icon ≥40px · tab ≥24px · favicon ≥16px · never <10px.
 | OG card | 1200×630 |
 
 ## 9. Assets you can reference (relative to this folder)
+
 - Tokens: `colors_and_type.css` (import first). Logo: `assets/logo/mark*.svg`, `lockup-*.svg`,
   `favicon.svg`. Icons: `assets/icons/eduflick-icons.svg` (24 line icons, use `#ic-play` etc.) +
   `assets/icons/mark-companions.svg` (mark-as-state). Social PNGs: `assets/logo/social/`.
@@ -115,6 +130,7 @@ Min sizes: app icon ≥40px · tab ≥24px · favicon ≥16px · never <10px.
   (every post + carousel slide); `npm run export:avatar` for the profile picture.
 
 ## 10. Hard DOs / DON'Ts
+
 **DO:** one hue (indigo) + neutral · dark default · lowercase display · UPPERCASE mono labels ·
 one serif accent word · the mark flat & undistorted · faint dot/line texture · generous space ·
 numbers and mono ids everywhere · the 3 Google fonts.
@@ -124,6 +140,7 @@ mark-tile, or a line icon) · stock photos · Title Case headlines · drop shado
 Tomatrix logo to indigo · a glow/filter *on* the mark (light goes in a halo *behind* it).
 
 ## 11. Minimal on-brand HTML skeleton (dark)
+
 ```html
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">

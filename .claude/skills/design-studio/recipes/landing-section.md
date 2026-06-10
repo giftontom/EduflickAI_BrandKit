@@ -3,7 +3,7 @@
 A real, responsive web section (hero, feature row, pricing, CTA band) — production HTML/CSS, not a
 fixed-pixel canvas. Theme it from `tokens.css`; reuse `design-effects` for surface/atmosphere.
 
-```
+```text
 FACTS (missing → [[NEEDS: …]]):
 - Section purpose:        [[hero | features | pricing | social-proof | CTA]]
 - Headline + sub:         [[ ]]

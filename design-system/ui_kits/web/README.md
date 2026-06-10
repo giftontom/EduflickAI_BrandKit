@@ -6,6 +6,7 @@ High-fidelity recreation of the **Eduflick web product**: a dark educator/instit
 to the marketing page, and "try free" / "log in" there to return to the app.
 
 ## Views
+
 - **Dashboard › Overview** — stat cards, a 14-day completion bar chart, top subjects,
   a content-review queue.
 - **Dashboard › Library** — searchable, filterable grid of lessons (subject mark-tiles,
@@ -17,6 +18,7 @@ to the marketing page, and "try free" / "log in" there to return to the app.
   and a closing CTA. Dark indigo, the public face.
 
 ## Files
+
 | File | What |
 | --- | --- |
 | `index.html` | Mounts the app in the browser-window frame; auto-scales to fit. |
@@ -28,6 +30,7 @@ to the marketing page, and "try free" / "log in" there to return to the app.
 | `../../assets/icons/sprite.js` | Injects the icon + mark-companion sprites. |
 
 ## Conventions
+
 - Charts are pure CSS/SVG (no chart library) — bars, conic-gradient donut, progress fills.
 - Subject tiles clip a serif letter into the mark silhouette (`clipPath`).
 - All color/type pulls from `T`, mirroring `colors_and_type.css`.

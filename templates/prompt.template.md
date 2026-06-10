@@ -7,13 +7,14 @@
 
 ## FACTS (fill before generating — from `content-studio/FACTS.md`)
 
-```
+```text
 PROGRAM      = [[…]]
 MASTERCLASS  = [[date / link]]
 PRICE        = [[…]]
 SEATS        = [[… of …]]
 APPLY / LINK = [[…]]
 ```
+
 > Any value not in FACTS.md → output `[[PLACEHOLDER]]`, do not guess.
 
 ## Task

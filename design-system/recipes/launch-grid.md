@@ -29,7 +29,7 @@ exporting pixel-perfect PNGs with `../../tools`.
 
 ---
 
-```
+```text
 FACTS (only source of live numbers — never typeset an invented value; missing → [[NEEDS: …]]):
 - Handle / link / cohort + masterclass dates / seats / price: [[ pull from INSTAGRAM_LAUNCH_PLAN.md ]]
 
@@ -57,6 +57,7 @@ RENDER + EXPORT:
 ---
 
 ## Worked example (what good looks like — abbreviated)
+>
 > Row 3 is a **paper** carousel (post-08-uc). Cover = lowercase hook with one serif accent word,
 > indigo mark, faint indigo grid; "swipe →" mono label bottom-right. Four inner deck slides each
 > carry one curriculum idea + a mark-derived motif, on the paper surface with an em-based grid that

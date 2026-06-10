@@ -10,6 +10,7 @@ Ships at **≥ 85** with **zero hard-fails**.
 ---
 
 ## A. HARD FAILS (any one = do not export, fix now)
+
 - [ ] **One hue only.** Every color is the `--accent` ramp or a neutral (`--paper`/`--ink`/greys).
       Third hue: `{{color.thirdHuePolicy}}`. `--warn`/`--success` only on a real semantic element.
 - [ ] **Brand fonts, loaded.** `--font-display` / `--font-serif` / `--font-mono` from tokens; the
@@ -22,6 +23,7 @@ Ships at **≥ 85** with **zero hard-fails**.
       generated image / one hue across the composite.
 
 ## B. TYPE & CASING (target ≥ 27 / 30)
+
 - [ ] Headlines `{{type.headlineCase}}`; labels/eyebrows `{{type.labelCase}}` (mono, wide tracking).
 - [ ] Accent rule honored: `{{type.accentWord}}`.
 - [ ] Display weight `{{type.displayWeight}}`, tight negative tracking, line-height ~0.9.
@@ -29,6 +31,7 @@ Ships at **≥ 85** with **zero hard-fails**.
 - [ ] Hierarchy reads at a glance (eyebrow → headline → body → meta), not flat.
 
 ## C. LAYOUT & SURFACE (target ≥ 27 / 30)
+
 - [ ] Correct default theme (`{{defaultTheme}}`) — not a random light grey.
 - [ ] Depth from 1px hairlines + faint shadow / accent glow / a halo **behind** the focal — not
       heavy elevation/bevels.
@@ -37,6 +40,7 @@ Ships at **≥ 85** with **zero hard-fails**.
 - [ ] Correct **canvas size / true ratio** (IG 1:1/4:5/9:16, slide 16:9, A4 794×1123, OG 1200×630).
 
 ## D. BRAND FIT & FINISH (target ≥ 18 / 20)
+
 - [ ] Looks like `{{brand.name}}` (per its aesthetic) — **not a generic template / Canva default**.
 - [ ] Semantic color, if used, is a single flag — never decorative.
 - [ ] Exports clean at target size (no clipping/overflow; fonts rendered before screenshot;
@@ -46,7 +50,8 @@ Ships at **≥ 85** with **zero hard-fails**.
 ---
 
 ## Scorecard
-```
+
+```text
 SCORE: __ / 100
   Hard fails (A):        [none] OR list each with the offending element/color/value
   Type & casing (B):     __ / 30
@@ -58,5 +63,6 @@ FIXES (change only these elements, keep the rest):
 ```
 
 ## Fast human pass (10 seconds, eyes only)
+
 (1) Any color that isn't the accent or neutral? (2) Headline casing + accent rule right? (3) Logo
 clean and flat? (4) Does it feel designed (a sharp spec sheet) or templated? Those four catch ~90%.
