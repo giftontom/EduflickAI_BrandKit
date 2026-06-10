@@ -53,11 +53,21 @@ Commit the regenerated files alongside your source change. CI fails if they drif
 ```text
 design-system/      visuals — tokens/, components.css, COMPONENTS.md, recipes/, collateral/,
                     ui_kits/, slides/, preview/, assets/ (canonical)
-content-studio/     words — FACTS.md, BRAND_CHEATSHEET.md, prompts/, guides, QA
-brochures/          finished program deliverables
+content-studio/     words — FACTS.md, BRAND_CHEATSHEET.md, prompts/, drafts/ (WIP copy), guides, QA
+brochures/          finished program deliverables (see brochures/README.md; PDFs are
+                    regenerable and gitignored)
 planning/           campaign strategy
-tools/              build + export scripts (tokens, snippets, exporter, server)
-assets/             public mirror of design-system/assets (for index.html + external links)
+tools/              build + export scripts (tokens, snippets, exporters, backdrops,
+                    check:facts, server) — see tools/README.md
+docs/               the doc index (one map to every guide)
+templates/          copy-to-start templates for recipes, prompts, components, assets
+.claude/            agent infrastructure — skills/ (brand-neutral design engine) and
+                    agents/ (the 7-agent team + pre-publish gate) are COMMITTED;
+                    settings.local.json and worktrees/ stay local (see .gitignore)
+assets/             public mirror of design-system/assets (for index.html + external
+                    links) — kept in sync with the canonical tree, never edited directly
+_archive/           superseded versions of shipped artifacts
+_ref/               local reference inputs (binaries gitignored; see _ref/README.md)
 ```
 
 ## Adding things — follow the templates

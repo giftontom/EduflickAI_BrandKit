@@ -11,6 +11,9 @@ One place to find everything. New here? Read in this order: this map →
 | Contribute (rules, where things go) | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) |
 | Drive an AI agent | [`../AGENTS.md`](../AGENTS.md) |
 | Know the brand (the why) | [`../brand-book/Eduflick_Brand_Book_v4.html`](../brand-book/Eduflick_Brand_Book_v4.html) |
+| Use the agent team / pre-publish gate | [`../.claude/agents/README.md`](../.claude/agents/README.md) |
+| Use the brand-neutral design engine | [`../.claude/skills/README.md`](../.claude/skills/README.md) |
+| Find a brochure / deck (which is canonical) | [`../brochures/README.md`](../brochures/README.md) |
 
 ## Words (content-studio)
 
@@ -32,18 +35,23 @@ One place to find everything. New here? Read in this order: this map →
 | [`components.css`](../design-system/components.css) + [`COMPONENTS.md`](../design-system/COMPONENTS.md) | Reusable component layer + inventory |
 | [`DESIGN_CHEATSHEET.md`](../design-system/DESIGN_CHEATSHEET.md) | The visual system on one page |
 | [`SMALL_MODELS_GUIDE.md`](../design-system/SMALL_MODELS_GUIDE.md) · [`recipes/`](../design-system/recipes/) | Assemble-don't-invent build kit |
-| [`AI_IMAGERY_GUIDE.md`](../design-system/AI_IMAGERY_GUIDE.md) | Abstract indigo backdrops |
+| [`AI_IMAGERY_GUIDE.md`](../design-system/AI_IMAGERY_GUIDE.md) | Backdrops: abstract indigo + photo duotone — the hybrid per-surface policy |
 | [`QA_CHECKLIST.md`](../design-system/QA_CHECKLIST.md) | Visual pass/fail gate |
-| `collateral/` · `ui_kits/` · `slides/` · `preview/` | Kits, product UI, decks, token previews |
+| `collateral/` · `ui_kits/` · `slides/` · `preview/` | Kits (launch grid, IG posts, posters, stories…), product UI, deck templates, token previews |
 
 ## Build & automation (tools)
 
 | Command | Does |
 | --- | --- |
-| [`tools/README.md`](../tools/README.md) | Exporter + server docs |
+| [`tools/README.md`](../tools/README.md) | The full toolbox reference |
 | `npm run tokens` | tokens.json → tokens.css + flat json + brand.tokens.mjs |
 | `npm run snippets` | snippets.src.md + tokens → snippets.md |
-| `npm run export` / `export:avatar` | pixel-perfect PNGs |
+| `npm run check:facts` | facts-integrity guard (retired strings, optional `--links`) |
+| `npm run export` / `export:ig` / `export:posters` / `export:stories` | pixel-perfect PNGs per kit |
+| `npm run export:slides` / `export:pdf` | deck + brochure PDFs |
+| `npm run gen:backdrops` (`:proc`) / `gen:ig-backdrops` | AI / procedural backdrop generation |
+| `npm run fetch:stock` + `treat:stock` | photoreal indigo-duotone backdrop pipeline |
+| `npm run export:avatar` | the gradient profile avatar |
 | `npm run serve` | local preview server |
 
 ## Templates

@@ -16,9 +16,9 @@ at volume, even with small/cheap AI models.
 | **Brand Book** | The definitive 11-chapter brand book (mark, color, type, motion, voice, UI, Sparks, governance) | [`brand-book/Eduflick_Brand_Book_v4.html`](brand-book/Eduflick_Brand_Book_v4.html) |
 | **Design System** | Visual foundations — tokens, logo, icons, UI kits, slides, collateral kits | [`design-system/README.md`](design-system/README.md) |
 | **Content Studio** | Marketing copy engine — brand cheat sheet, prompt library, small-model workflow, QA | [`content-studio/README.md`](content-studio/README.md) |
-| **Brochures** | Program collateral — Full-Stack AI Engineer, Leadership Program, posters | [`brochures/`](brochures/) |
+| **Brochures** | Finished program deliverables — brochure editions, enquiry leaflet, presentation deck | [`brochures/README.md`](brochures/README.md) |
 | **Planning** | 6-week social media campaign plan, funnel, targeting, measurement | [`planning/`](planning/) |
-| **Tools** | Pixel-perfect PNG exporter (Playwright), avatar generator, static server | [`tools/README.md`](tools/README.md) |
+| **Tools** | Build + export toolbox — token/snippet builds, PNG + PDF exporters (posts, posters, stories, slides, IG), backdrop generation, facts guard, static server | [`tools/README.md`](tools/README.md) |
 
 ---
 
@@ -64,16 +64,24 @@ for the 12-tile mural grid, full copy, and posting waves.
 
 ---
 
-## The two skills (for AI agents)
+## Skills & agents (for AI tooling)
 
-This repo ships with two invocable agent skills:
+Three layers, from brand-specific to brand-neutral:
 
-| Skill | File | Owns |
+| Layer | Where | Owns |
 | --- | --- | --- |
-| `eduflick-content` | [`content-studio/SKILL.md`](content-studio/SKILL.md) | Words, strategy, small-model copy workflow |
-| `eduflick-design` | [`design-system/SKILL.md`](design-system/SKILL.md) | Visuals — colors, type, logo, UI kits, HTML artifacts |
+| `eduflick-content` skill | [`content-studio/SKILL.md`](content-studio/SKILL.md) | Words, strategy, small-model copy workflow |
+| `eduflick-design` skill | [`design-system/SKILL.md`](design-system/SKILL.md) | Visuals — colors, type, logo, UI kits, HTML artifacts |
+| Universal design skills | [`.claude/skills/README.md`](.claude/skills/README.md) | The brand-neutral engine the Eduflick skills delegate to — tokens, effects, image compositing, poster system, PNG/PDF export |
 
-Use them together: content-studio writes the carousel copy → design-system renders it.
+Use the two Eduflick skills together: content-studio writes the carousel copy →
+design-system renders it.
+
+There is also a **7-agent Claude Code team** in
+[`.claude/agents/README.md`](.claude/agents/README.md) — lead custodian,
+copywriter, design engineer, visual production, fact-QA, red team, devops —
+with the **pre-publish Definition-of-Done gate** every artifact passes before
+it ships.
 
 ---
 
@@ -106,10 +114,15 @@ cd tools && npm install && npm run serve
 
 ```bash
 cd tools
-npm run export              # All posts + carousel slides → ../exports/ (2x crisp)
-SCALE=1 npm run export      # Exact 1080×1350
-npm run export:avatar       # Profile avatar → ../assets/logo/social/
+npm run export              # Launch-grid posts + carousel slides → ../exports/ (2x crisp)
+npm run export:ig           # Instagram tiles        npm run export:posters   # Posters
+npm run export:stories      # Stories                npm run export:slides    # Program deck PDF
+npm run export:pdf          # Brochure PDFs          npm run export:avatar    # Profile avatar
+npm run check:facts         # Facts-integrity guard (run before shipping copy)
 ```
+
+Full command reference (backdrop generation, stock treatment, token builds):
+[`tools/README.md`](tools/README.md).
 
 ---
 
@@ -139,11 +152,16 @@ eduflick-brand-kit/
 │   ├── ui_kits/              ←   Product UI components (app + web)
 │   └── slides/               ←   Deck templates
 ├── content-studio/           ← Words: cheat sheet, prompts, QA, launch plan, playbook
-│   └── prompts/              ←   Per-channel copy-paste templates
-├── tools/                    ← Playwright PNG exporter + static server
-├── brochures/                ← Program collateral (HTML + PDF)
+│   ├── prompts/              ←   Per-channel copy-paste templates
+│   └── drafts/               ←   Work-in-progress copy awaiting QA
+├── tools/                    ← Build + export toolbox (tokens, snippets, exporters, backdrops, facts guard)
+├── brochures/                ← Finished program deliverables (HTML; PDFs regenerable, gitignored)
 ├── planning/                 ← Campaign strategy
+├── docs/                     ← The doc index (one map to every guide)
+├── templates/                ← Copy-to-start templates (recipes, prompts, snippets, assets)
+├── .claude/                  ← Agent team (agents/) + universal design skills (skills/) — committed
 ├── assets/                   ← Mirror of design-system/assets/ (backward compat)
+├── _archive/                 ← Superseded artifact versions   ·   _ref/ — local reference inputs
 └── exports/                  ← Generated PNGs (gitignored)
 ```
 

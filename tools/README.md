@@ -1,4 +1,36 @@
-# Launch-grid image exporter
+# tools/ — build + export toolbox
+
+Everything that builds, checks, or exports the brand kit. One `npm install`
+(Playwright + Chromium + Style Dictionary), then:
+
+| Command | Does | Output |
+| --- | --- | --- |
+| `npm run tokens` | tokens.json → CSS custom props + flat JSON + JS module | `design-system/tokens/`, `tools/brand.tokens.mjs` |
+| `npm run snippets` | snippets.src.md + tokens → inline snippet bin | `design-system/recipes/snippets.md` |
+| `npm run check:facts` | facts-integrity guard — retired brand strings (add `-- --links` for link checks) | pass/fail |
+| `npm run export` | launch-grid posts + carousel slides | `exports/*.png` |
+| `npm run export:ig` | Instagram tiles (`collateral/instagram-posts.html`) | `exports/instagram/` |
+| `npm run export:posters` | posters (`collateral/posters.html`) | `exports/posters/` |
+| `npm run export:stories` | stories (`collateral/stories.html`) | `exports/stories/` |
+| `npm run export:slides` | the program deck slides (landscape) | `exports/full-stack-ai-engineer/` |
+| `npm run export:pdf` | brochure → print-quality PDF (Chromium) | `brochures/*.pdf` (gitignored) |
+| `npm run export:avatar` | the gradient profile avatar | `assets/logo/social/` |
+| `npm run gen:backdrops` / `:proc` | poster backdrops — Gemini AI / procedural fallback | `design-system/collateral/assets/backdrops/` |
+| `npm run gen:ig-backdrops` | IG tile backdrops | same |
+| `npm run fetch:stock` + `treat:stock` | photoreal indigo-duotone pipeline | same |
+| `npm run serve` | static preview server | http://localhost:8080 |
+| `node codemod-hex.mjs` | migrate hardcoded hex → `var(--token)` (dry-run first) | — |
+
+Files starting with `_` (`_backdrop-art.mjs`, `_gen-grain.mjs`, `_inject-dark-bg.mjs`)
+are **internal helpers** imported by the scripts above — not run directly.
+
+`../exports/` is **generated output** (gitignored, ~hundreds of MB when full):
+`exports/{instagram,posters,stories,full-stack-ai-engineer}/` per kit, plus
+`post-*.png` / `slide-*.png` from the launch grid. Safe to delete; re-export anytime.
+
+---
+
+## The launch-grid exporter
 
 Turns `../design-system/collateral/launch-grid.html` into ready-to-post PNGs —
 every **post** (as its true mural slice) and every **carousel slide** at exact **1080×1350**.

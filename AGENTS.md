@@ -52,7 +52,29 @@ cd tools && npm run tokens && npm run snippets
 - Reusable components: `design-system/components.css` + inventory in `design-system/COMPONENTS.md`.
 - Paste-alone blocks (for models): `design-system/recipes/snippets.md` (generated from
   `snippets.src.md` — edit the `.src.md`, not the output).
-- Export pixel-perfect PNGs: `cd tools && npm run export` (see `tools/README.md`).
+- Export pixel-perfect PNGs: `cd tools && npm run export` (see `tools/README.md` for the full
+  toolbox: `export:ig`, `export:posters`, `export:stories`, `export:slides`, `export:pdf`,
+  backdrop generation, stock treatment).
+- Before shipping anything with facts in it: `cd tools && npm run check:facts`.
+
+## The agent team & the pre-publish gate
+
+[`.claude/agents/README.md`](.claude/agents/README.md) defines a 7-agent Claude Code team —
+**lead-brand-custodian** (orchestrator + final gate), **content-copywriter**,
+**design-system-engineer**, **visual-production**, **qa-fact-integrity** (can BLOCK),
+**red-team-auditor**, **devops-repo-hygiene** — and the **pre-publish Definition-of-Done
+gate**. Nothing ships or merges without passing that gate. If you are one of these agents,
+your role file is your contract; if you are a lone agent doing it all, walk the gate
+checklist yourself before calling anything done.
+
+## The universal skill layer
+
+The Eduflick skills delegate technique to seven **brand-neutral** skills in
+[`.claude/skills/README.md`](.claude/skills/README.md): `design-studio` (orchestrator),
+`design-tokens`, `design-effects`, `image-composite`, `poster-design`, `web-to-image`,
+`web-to-pdf`. Brand decisions live in this repo (tokens.json, FACTS.md, the cheat sheets);
+the engine — how to build, render, treat imagery, and export — lives there. Don't duplicate
+engine docs into Eduflick files; link instead.
 
 ## Adding future instructions
 

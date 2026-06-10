@@ -28,6 +28,7 @@ a VA) has to churn out captions, carousels, reels, DMs and ads every day without
 | **`CHANNELS.md`** | Per-channel specs, cadence, formats, and which design kit renders each asset. |
 | **`QA_CHECKLIST.md`** | The pass/fail gate + 100-point scorecard every piece runs through before shipping. |
 | **`prompts/`** | Copy-paste, slot-filled, few-shot prompt templates — one per content type. |
+| **`drafts/`** | Work-in-progress copy: generated batches land here, run the QA gate, then get promoted into the plan/schedule (or typeset by design-system). Nothing in `drafts/` is publish-approved yet. |
 
 `prompts/` contents:
 
