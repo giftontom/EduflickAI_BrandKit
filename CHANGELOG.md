@@ -56,6 +56,14 @@ bump it here under **Added / Changed / Deprecated** when tokens or components ch
 
 ### Added
 
+- **The agent team.** `.claude/agents/` — 7-agent Claude Code team
+  (lead/copy/design-eng/visual/QA/red-team/devops) + the pre-publish
+  Definition-of-Done gate — now committed instead of gitignored.
+- **`brochures/README.md`** — artifact index: every edition + its use, canonical
+  flags, and the PDFs-are-regenerable policy.
+- **Imagery policy v2.** `AI_IMAGERY_GUIDE.md` covers both backdrop modes
+  (abstract indigo + brand-treated photo duotone) and the hybrid per-surface policy;
+  poster recipe gains the 6-archetype × 2-register system (snippets S21–S24).
 - **Design token pipeline.** `design-system/tokens/tokens.json` is the single source
   of truth for color/type/space/radius/shadow/motion + the brand mark path & fonts link.
   `cd tools && npm run tokens` (Style Dictionary) generates `tokens/tokens.css`,
@@ -75,6 +83,16 @@ bump it here under **Added / Changed / Deprecated** when tokens or components ch
 - `colors_and_type.css` now `@import`s the generated tokens and holds only the semantic
   role aliases + text styles; the collateral copy is a thin shim.
 - `tools/package-lock.json` is now committed (CI `npm ci` requires it).
+- **Repo organization.** Deduped `design-system/uploads/` (byte-identical Leadership
+  brochure copy removed); archived the stale Full-Stack brochure draft from
+  `design-system/` root; the program deck moved to
+  `brochures/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html` (no spaces in
+  deliverable filenames); orphan render screenshots moved to `_ref/screens/`;
+  `_ref` binaries (handoff zip, reference screenshots) untracked with provenance
+  in `_ref/README.md`.
+- **Docs refreshed to match reality** — root README, AGENTS.md, docs/README.md,
+  tools/README.md, CONTRIBUTING.md, Makefile all cover the new toolbox, kits,
+  agent team, and skill layer.
 
 ### Fixed
 
