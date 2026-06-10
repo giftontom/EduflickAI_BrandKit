@@ -108,7 +108,7 @@
 .t-dark{background:linear-gradient(155deg,var(--i-900),var(--i-ink) 62%,var(--ink));color:var(--paper);}
 .t-paper{background:var(--paper);color:var(--ink);box-shadow:inset 0 0 0 1px var(--rule-2);}
 .t-indigo{background:linear-gradient(150deg,var(--i-500),var(--i-700));color:#fff;}
-.t-coral{background:linear-gradient(150deg,#FF6E5A,#E2452F);color:#fff;}
+.t-coral{background:var(--warn);color:var(--ink);}
 .t-dots::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(245,242,234,0.08) 1px,transparent 1px);background-size:16px 16px;-webkit-mask-image:radial-gradient(120% 100% at 50% 20%,#000 30%,transparent 86%);mask-image:radial-gradient(120% 100% at 50% 20%,#000 30%,transparent 86%);}
 .tile>*{position:relative;z-index:2;}
 .tile .tmark{position:absolute;top:11%;left:13%;width:15px;height:15px;z-index:2;}
@@ -534,9 +534,9 @@ body.no-texture .t-dots::before{display:none !important;}
           <div class="th" style="color:var(--ink);margin-top:5px;">shipped <em style="color:var(--i-500)">projects.</em></div>
         </div>
         <div class="tile t-coral t-dots">
-          <svg class="tmark" viewBox="0 0 180 180" style="color:#fff"><path class="mk-path" d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z"></path></svg>
-          <div class="te" style="color:rgba(255,255,255,0.9)">p5 · pioneer</div>
-          <div class="th" style="color:#fff">₹49k <em>founding.</em></div>
+          <svg class="tmark" viewBox="0 0 180 180" style="color:var(--ink)"><path class="mk-path" d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z"></path></svg>
+          <div class="te" style="color:var(--ink)">p5 · pioneer</div>
+          <div class="th" style="color:var(--ink)">₹49k <em>founding.</em></div>
         </div>
         <div class="tile t-dark t-dots">
           <svg class="tbadge" viewBox="0 0 24 24" style="color:var(--paper)"><use href="../assets/icons/eduflick-icons.svg#ic-film"></use></svg>
@@ -600,9 +600,7 @@ const IG_TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 }/*EDITMODE-END*/;
 
 const IG_ACCENTS = [
-  ["#5B5BF0","#6E78F5","#8B97FF","#B7C0FF","#3A2BB8","#150D52","#0B0822"], /* indigo · canonical */
-  ["#7A5AE0","#8C6DEC","#A78BFF","#CDBEFF","#4B2FB0","#1C0E52","#120733"], /* violet */
-  ["#3D6FE6","#5A86F2","#88A8FF","#BACDFF","#2347B0","#0C1C54","#07112E"]  /* electric blue */
+  ["#5B5BF0","#6E78F5","#8B97FF","#B7C0FF","#3A2BB8","#150D52","#0B0822"]  /* indigo · canonical */
 ];
 
 function applyIgTweaks(t){
