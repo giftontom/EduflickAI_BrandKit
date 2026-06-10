@@ -16,6 +16,7 @@ logo, UI kits, HTML artifacts). Use them together: this skill writes the carouse
 the design skill renders the carousel.
 
 ## When to use this
+
 - "Write me 5 Instagram captions for the masterclass."
 - "Give me a 7-slide curriculum carousel."
 - "Draft the WhatsApp nurture sequence."
@@ -25,6 +26,7 @@ the design skill renders the carousel.
   or the **Eduflick consumer learning app** (the product vision).
 
 ## Read these first (in order)
+
 1. **`BRAND_CHEATSHEET.md`** — the entire brand compressed into one page. This is the context
    block you paste into *any* model. If you read nothing else, read this.
 2. **`SMALL_MODELS_GUIDE.md`** — how to get reliable, on-brand output from small models: the
@@ -38,15 +40,17 @@ the design skill renders the carousel.
 6. **`QA_CHECKLIST.md`** — the gate every piece must pass before it ships.
 
 ## The core workflow (works for you OR a small model)
+
 1. **Pick the task** → open the matching file in `prompts/`.
-2. **Load context** → paste `prompts/00_SYSTEM_PROMPT.md` (which embeds `BRAND_CHEATSHEET.md`)
-   as the system/first message.
+2. **Load context** → paste `prompts/00_SYSTEM_PROMPT.md` as the system/first message, then
+   append `BRAND_CHEATSHEET.md` after it.
 3. **Fill the FACTS block** → real dates, prices, seat counts, links. Models must never invent these.
 4. **Generate** → small models do best one asset at a time, tightly constrained.
 5. **QA** → run `QA_CHECKLIST.md`. Regenerate only the parts that fail.
 6. **Render** → hand the approved copy to the `eduflick-design` skill / collateral kits for visuals.
 
 ## The non-negotiables (full detail in BRAND_CHEATSHEET.md)
+
 - **Voice:** confident, technical, no fluff. Talk like engineers, not marketers. Short declaratives.
 - **No emoji** in finished brand copy. **Numbers as proof** (`₹49K`, `20 seats`, `60s`, `12 weeks`).
 - **Own the word "flick."** Achievements are **Sparks you earn** — never "level up / unlock / claim."

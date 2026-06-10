@@ -5,7 +5,7 @@ Output is shootable: a hook, timed beats, voiceover, on-screen text, and shot no
 
 ---
 
-```
+```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
 - Masterclass date / cohort start / seats left: [[ ]]
 - Registration link / WhatsApp:                  [[ ]]

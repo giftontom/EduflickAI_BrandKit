@@ -4,7 +4,7 @@
 > visual typesetting must pull live values from here — not from memory, not from
 > a stale copy in a prompt template. Update this file first, then use its values.
 >
-> **Last updated:** [[2026-06-03]]
+> **Last updated:** 2026-06-10
 
 ---
 
@@ -13,6 +13,7 @@
 | Fact | Value |
 | --- | --- |
 | Program name | Full-Stack AI Engineer Program |
+| ↳ Note | No certification claim — the program name never includes "Certified"; deliverable is the 3-project portfolio, not a certificate. |
 | Cohort | Pioneer Cohort 01 |
 | Format | In-person, offline |
 | Venue | UXP Innovation Hub, Trivandrum |
@@ -48,9 +49,9 @@
 
 | Fact | Value | Last set |
 | --- | --- | --- |
-| Today's date | [[2026-06-03]] | |
+| Today's date | 2026-06-10 | |
 | Masterclass date/time | [[NOT SET — e.g. Sat 21 Jun 2026, 5:00 PM IST]] | |
-| Masterclass registration link | [[NEEDS LINK]] | |
+| Masterclass registration link | eduflickai.com/masterclass | |
 | Cohort start date | [[NOT SET — e.g. 6 Jul 2026]] | |
 | Applications close | [[no close date]] | |
 | Seats remaining | [[20 of 20]] | |
@@ -65,9 +66,9 @@
 | Website | eduflickai.com |
 | Apply | eduflickai.com/apply |
 | Masterclass registration | eduflickai.com/masterclass |
-| Email | info@eduflickai.com |
+| Email | <info@eduflickai.com> |
 | Instagram handle | @eduflick.ai |
-| Instagram URL | https://instagram.com/eduflick.ai |
+| Instagram URL | <https://instagram.com/eduflick.ai> |
 | WhatsApp link | [[NEEDS — wa.me/…]] |
 
 ---
@@ -81,6 +82,7 @@
 | Secondary | Parents (for the ₹49K investment conversation) |
 
 **Their words (use as hooks):**
+
 - "I know React but I've never built anything with LLMs."
 - "Job postings all want 'AI experience' — I have none."
 - "Online courses are just videos. I never finish them."
@@ -105,6 +107,7 @@ come from this file. If a value reads `[[NOT SET]]` or `[[NEEDS …]]`, typeset
 that exact placeholder — do not guess.
 
 **Update workflow:**
+
 1. Change the value in this file.
 2. Regenerate any copy/visual that uses the old value.
 3. Re-export affected PNGs.

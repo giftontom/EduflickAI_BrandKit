@@ -72,8 +72,8 @@
 | Mon | [[ ]] | IG Reel | Masterclass highlight #1 | "We built this live in 90 minutes" | ⬜ |
 | Tue | [[ ]] | LinkedIn | "What happened at the masterclass" | Attendance, energy, what was built | ⬜ |
 | Wed | [[ ]] | IG Reel | "What you'll build in Week 8" | RAG chatbot milestone preview | ⬜ |
-| Thu | [[ ]] | IG Carousel | Objection handler: "Is ₹49K worth it?" | ROI breakdown, placement track record | ⬜ |
-| Fri | [[ ]] | IG + WhatsApp | Seat booking opens | "7 of 20 seats claimed — pioneer price live" | ⬜ |
+| Thu | [[ ]] | IG Carousel | Objection handler: "Is ₹49K worth it?" | ROI breakdown, career-track focus | ⬜ |
+| Fri | [[ ]] | IG + WhatsApp | Seat booking opens | "X of 20 seats booked — pioneer price live" (X = value from FACTS.md only) | ⬜ |
 | Sat | [[ ]] | IG Stories | Poll + seat tracker | "Are you joining Cohort 01?" | ⬜ |
 | Sun | [[ ]] | LinkedIn | "From masterclass → cohort" | Attendee → enrollee journey post | ⬜ |
 
@@ -92,7 +92,7 @@
 | Tue | [[ ]] | LinkedIn | "3 projects. 12 weeks. Deployed." | Portfolio value, hiring angle | ⬜ |
 | Wed | [[ ]] | IG Carousel | Objection handler: "Online vs in-person" | Why the room matters — real mentors, real peers | ⬜ |
 | Thu | [[ ]] | IG Reel | "What you'll build in Week 11" | Capstone agentic platform preview | ⬜ |
-| Fri | [[ ]] | All + WhatsApp | Scarcity update | "X of 20 seats left — closes [[DATE]]" | ⬜ |
+| Fri | [[ ]] | All + WhatsApp | Scarcity update | "X of 20 seats left — pioneer price ends when seats do" | ⬜ |
 | Sat | [[ ]] | IG Stories | Seat tracker graphic | Live count update | ⬜ |
 | Sun | [[ ]] | LinkedIn | "The industry placement angle" | Week 12 mock interviews + recruiter networking | ⬜ |
 
@@ -102,9 +102,9 @@
 | --- | --- | --- | --- | --- | --- |
 | Mon | [[ ]] | IG Reel | Student commitment story | "I quit my job for this" / "I moved to Trivandrum" | ⬜ |
 | Tue | [[ ]] | LinkedIn | Final founder post | "Why we built this. What happens next." | ⬜ |
-| Wed | [[ ]] | IG + WhatsApp | Final 48h urgency | "Seats closing — last chance for ₹49K" | ⬜ |
-| Thu | [[ ]] | IG Stories | Countdown sticker | "Final 24h" | ⬜ |
-| Fri | [[ ]] | All channels | **SEATS CLOSED** | Sold-out announcement + Cohort 2 waitlist | ⬜ |
+| Wed | [[ ]] | IG + WhatsApp | Final-seats urgency | "X of 20 seats left — ₹49K is cohort-01 only" | ⬜ |
+| Thu | [[ ]] | IG Stories | Seat-tracker sticker | "Final seats" — live count from FACTS.md | ⬜ |
+| Fri | [[ ]] | All channels | **SOLD OUT** (when the last seat books) | Sold-out announcement + Cohort 2 waitlist | ⬜ |
 | Sat | [[ ]] | IG + LinkedIn | "Thank you, Cohort 01" | Gratitude, what's coming, waitlist link | ⬜ |
 | Sun | [[ ]] | — | Rest & retrospect | — | ⬜ |
 

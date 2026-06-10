@@ -8,7 +8,7 @@ output. (For long individual assets, then run the dedicated prompt per item — 
 
 ---
 
-```
+```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
 - Today's date / current week of the 6-week sprint: [[ ]]   Funnel phase: [[1 Awareness | 2 Consideration | 3 Conversion]]
 - Masterclass date / cohort start / seats left:      [[ ]]

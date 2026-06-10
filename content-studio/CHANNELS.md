@@ -10,6 +10,7 @@ sprint). The funnel: **Awareness → Free Masterclass (lead capture) → Seat bo
 ---
 
 ## Instagram — primary (reach + brand)
+
 - **Roles:** Reels (project demos, "day in the cohort"), carousels (curriculum, offer, objections),
   Stories (countdown, polls, seat tracker).
 - **Sizes:** feed square **1080×1080**, portrait/carousel **1080×1350 (4:5)**, story/reel **1080×1920 (9:16)**.
@@ -25,6 +26,7 @@ sprint). The funnel: **Awareness → Free Masterclass (lead capture) → Seat bo
   `../design-system/collateral/launch-grid.html`.
 
 ## LinkedIn — primary (credibility + hiring narrative)
+
 - **Roles:** founder POV posts ("why we capped Cohort 1 at 20"), curriculum breakdowns, the
   industry placement angle, real job-listing screenshots.
 - **Shape:** strong first 1–2 lines (LinkedIn truncates at "…see more"), short paragraphs / line
@@ -34,6 +36,7 @@ sprint). The funnel: **Awareness → Free Masterclass (lead capture) → Seat bo
 - **Prompt:** `prompts/linkedin-post.md`.
 
 ## WhatsApp — conversion engine
+
 - **Roles:** masterclass reminders, seat-booking nudges, 1:1 closing. This is where leads convert.
 - **Shape:** very short, personal, one ask per message, sent as a human would type. Mono labels
   and headline-casing are relaxed here — it's a chat, not a canvas — but the voice (calm, concrete,
@@ -42,11 +45,13 @@ sprint). The funnel: **Awareness → Free Masterclass (lead capture) → Seat bo
 - **Prompt:** `prompts/whatsapp-sequence.md`.
 
 ## YouTube Shorts — proof
+
 - **Roles:** capstone walkthroughs, student build clips, "what is RAG in 60s."
 - **Shape:** 9:16, ≤60s, same script discipline as a Reel; title + first line carry it.
 - **Renders with:** reuse Reel scripts. → `prompts/reel-script.md` (set platform = Shorts).
 
 ## Meta / Instagram Ads — paid acceleration
+
 - **Roles:** lead-gen → Masterclass; retargeting → seat booking. Geo: 10 km of central Trivandrum, age
   21–28, interests software dev / AI / Next.js / B.Tech / job-search.
 - **Shape:** primary text (pain hook → promise → proof → CTA), 3–5 short **headline** variants,
@@ -63,14 +68,14 @@ sprint). The funnel: **Awareness → Free Masterclass (lead capture) → Seat bo
 | --- | --- | --- | --- |
 | **1 · Awareness & list-building** | 1–2 | Build audience + collect masterclass regs | Reels + carousels on the pain/promise; **masterclass announcement** Fri; LinkedIn founder + curriculum posts. |
 | **2 · Consideration & masterclass push** | 3–4 | Max masterclass attendance; seed the offer | Daily Stories countdown; "what you build in week 4/8/11" reels; industry hiring angle; **run the masterclass, record it**; ₹49K vs ₹70K carousel. |
-| **3 · Conversion & scarcity close** | 5–6 | Convert attendees → bookings; sell out | Live "X of 20 seats left" graphics; masterclass highlight reels; objection-handler carousels; WhatsApp 1:1 close; final-48h urgency; sold-out + Cohort 2 waitlist. |
+| **3 · Conversion & scarcity close** | 5–6 | Convert attendees → bookings; sell out | Live "X of 20 seats left" graphics; masterclass highlight reels; objection-handler carousels; WhatsApp 1:1 close; final-seats urgency; sold-out + Cohort 2 waitlist. |
 
 **Weekly default mix** (Phase 1 template from the plan): Mon Reel · Tue LinkedIn founder · Wed
 carousel ("2026 AI engineer stack") · Thu Reel ("theory vs shipping") · Fri masterclass announcement
 (all + WhatsApp) · Sat Stories poll/countdown · Sun LinkedIn curriculum carousel.
 
 **Match CTA to phase:** Awareness → "follow / save / register free." Consideration → "register for
-the free masterclass." Conversion → "book your seat — X of 20 left, closes [[DATE]]."
+the free masterclass." Conversion → "book your seat — X of 20 left."
 
 ---
 

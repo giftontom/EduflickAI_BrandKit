@@ -6,7 +6,7 @@ but the same engineer voice: no hype, no emoji.
 
 ---
 
-```
+```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
 - Masterclass date / cohort start / seats left: [[ ]]
 - Registration link:                             [[ ]]

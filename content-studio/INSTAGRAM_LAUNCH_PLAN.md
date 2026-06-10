@@ -1,7 +1,7 @@
 # Eduflick AI — Instagram Launch Grid: The Complete Plan
 
 *A venture of Tomatrix Technologies Private Limited*
-**Web:** eduflickai.com · **Email:** info@eduflickai.com · **Instagram:** @eduflick.ai
+**Web:** eduflickai.com · **Email:** <info@eduflickai.com> · **Instagram:** @eduflick.ai
 
 > One self-contained execution plan for the launch grid: strategy, grid architecture, posting
 > schedule, safe-zone spec, brand rules, and the **full copy for all 12 posts** (every carousel
@@ -27,7 +27,7 @@ are single-image mural slices.
 
 ## 2. Grid architecture
 
-```
+```text
 ROW 1  TOP    │ TL │ TC │ TR │  ← COURSE mural — one indigo image split 3 ways (posted last)
 ROW 2  UPPER  │ UL │ UC │ UR │
 ROW 3  MID    │ ML │ MC │ MR │  ← BRAND mural — one indigo image split 9 ways (posted first)
@@ -93,6 +93,7 @@ freshest thing a profile visitor sees.
 ## 6. FACTS (single source of live values)
 
 **Known constants — use as-is:**
+
 - Course: Full-Stack AI Engineer Program, **Pioneer Cohort 01** (offline / in person)
 - Price: **₹49,000** founding · **₹70,000** from Cohort 2
 - Intake: **20 selective** seats · Duration: **12 weeks** · **3 deployed projects**
@@ -100,7 +101,7 @@ freshest thing a profile visitor sees.
 - Stack: Cursor, Next.js, Claude/OpenAI, Pinecone, LangChain, n8n
 - Lead step: free technical masterclass (~90 min, live, builds a real AI app)
 - Web: **eduflickai.com** · Apply: **eduflickai.com/apply** · Masterclass:
-  **eduflickai.com/masterclass** · Email: **info@eduflickai.com** · Handle: **@eduflick.ai**
+  **eduflickai.com/masterclass** · Email: **<info@eduflickai.com>** · Handle: **@eduflick.ai**
 
 **Fill before publishing:** exact masterclass date/time · cohort start date · live `[[seats left]]`
 count for the scarcity post.
@@ -116,6 +117,7 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
 ### BRAND MURAL · Wave 1 (bottom row)
 
 #### Post 1 — BR · Day 1 · Single image · Brand / Awareness
+
 - **Visual concept:** opener teaser. The mark (faint) with eyebrow `EDUFLICK AI`; small wordmark.
   Bottom-right corner of the brand mural (darkest part of the gradient).
 - **Safe zone:** headline + wordmark centered in the safe square; nothing in the bottom 135 px.
@@ -127,6 +129,7 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
   - **Hashtags:** #LearnAI #AIEngineer #Kerala #Trivandrum
 
 #### Post 2 — BC · Day 1 · Single image · Brand / Awareness
+
 - **Visual concept:** the unit promise. Big lowercase focal headline; mono support.
 - **Safe zone:** single centered headline block.
 - **On-image headline:** `one concept per *flick*`
@@ -137,6 +140,7 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
   - **Hashtags:** #LearnAI #AIEngineer #Trivandrum #Kerala
 
 #### Post 3 — BL · Day 1 · Carousel (major) · Brand / Awareness
+
 - **Visual concept:** brand-story carousel; cover = the mural's bottom-left slice. Carousel marker
   top-right.
 - **Safe zone:** cover headline centered; each slide keeps text in the safe square.
@@ -159,6 +163,7 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
 ### BRAND MURAL · Wave 2 (middle row)
 
 #### Post 4 — MR · Day 2 · Single image · Brand / Awareness
+
 - **Visual concept:** positioning statement; editorial type, generous negative space.
 - **On-image headline:** `the *doom-scroll* antidote`
 - **Caption**
@@ -168,6 +173,7 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
   - **Hashtags:** #LearnAI #AIEngineer #Kerala #Trivandrum
 
 #### Post 5 — MC · Day 2 · Single image · Brand / Awareness (the mark)
+
 - **Visual concept:** the **identity centerpiece** — the mark, large, paper-fill, with indigo glow,
   dead-center of the 3×3 mural. Small caption headline beneath.
 - **Safe zone:** mark + line centered; the glow may extend but the mark stays inside the safe square.
@@ -179,6 +185,7 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
   - **Hashtags:** #LearnAI #AIEngineer #Trivandrum
 
 #### Post 6 — ML · Day 2 · Carousel (major) · Brand · Learn-Fast / Awareness
+
 - **Visual concept:** "how it works" carousel; cover = mural mid-left slice. Carousel marker.
 - **On-cover headline:** `the *flick* is the unit`
 - **Slides**
@@ -199,6 +206,7 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
 ### BRAND MURAL · Wave 3 (upper row)
 
 #### Post 7 — UR · Day 3 · Single image · Brand / Awareness
+
 - **Visual concept:** awareness hook; contrast with the doom-scroll. Bright part of the gradient.
 - **On-image headline:** `your feed, but it makes you *smarter*`
 - **Caption**
@@ -208,6 +216,7 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
   - **Hashtags:** #LearnAI #AIEngineer #CareerInAI #Trivandrum
 
 #### Post 8 — UC · Day 3 · Carousel (major) · Brand / Awareness
+
 - **Visual concept:** the vision carousel; cover = mural upper-center slice. Carousel marker.
 - **On-cover headline:** `why we *built* eduflick`
 - **Slides**
@@ -224,6 +233,7 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
   - **Hashtags:** #LearnAI #AIEngineer #BuildInPublic #Trivandrum
 
 #### Post 9 — UL · Day 3 · Single image · Brand → Program / Awareness (bridge)
+
 - **Visual concept:** the bridge tile, directly under the course row; eyebrow `NEXT: THE PROGRAM`.
   Brightest corner of the brand mural — visually leads the eye up into the launch.
 - **On-image:** eyebrow `NEXT: THE PROGRAM` · headline `we don't just teach it — we *ship* it`
@@ -249,6 +259,7 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
 > re-export as seats fill. Do **not** hand-type a number that isn't in FACTS.
 
 #### Post 10 — TR · Day 4 · Single image · Pioneer Urgency / Conversion
+
 - **Visual concept:** intake / scarcity tile, **center-aligned** to sit in the course banner.
   Eyebrow `PIONEER COHORT 01`, the `20 *selective* seats` ticket, the one **coral** live-seat
   pill, founding price, and the apply CTA. Rightmost slice of the course mural.
@@ -259,11 +270,12 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
   cta `apply → eduflickai.com/apply`
 - **Caption**
   - **Hook:** pioneer cohort 01: 20 *selective* seats. that's the whole room.
-  - **Body:** the full-stack ai engineer program. 12 weeks, in person at uxp innovation hub, trivandrum. founding price ₹49,000 (₹70,000 from cohort 2). strictly capped at 20 seats to guarantee 1:1 code reviews.
+  - **Body:** the full-stack ai engineer program. 12 weeks, in person at uxp innovation hub, trivandrum. founding price ₹49,000 (₹70,000 from cohort 2). strictly capped at 20 seats — selective intake.
   - **CTA:** apply now → eduflickai.com/apply
   - **Hashtags:** #FullStackAI #AIEngineer #TrivandrumTech #TechJobsKerala
 
 #### Post 11 — TC · Day 4 · Carousel (major) · The Cohort / Consideration→Conversion
+
 - **Visual concept:** the course carousel; **cover = the course mural's center slice** (the brightest
   point). The program name **`full-stack ai *engineer*`** is the hero headline; the tagline +
   the 3 product cards support it; the `eduflick AI` wordmark sits small at the foot. Carousel marker.
@@ -272,9 +284,9 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
 - **Slides** *(tight 7; months 1–3 carry a visual tech-stack row + shipped-project tag)*
   1. **Cover** — eyebrow `PIONEER COHORT 01 · 12 WEEKS · TRIVANDRUM` / hero **full-stack ai *engineer*** / sub "ship ai products, not theory. a hands-on, in-person program." / 3 product cards / swipe →
   2. `01 · THE GAP` / **"ai experience required"** / every job wants it. you know react but have never shipped with an llm. we close that.
-  3. `02 · MONTH 1` / **foundations + your first ship** / stack: `cursor · next.js · supabase · vercel` → **shipped: saas dashboard** (deployed by week 4).
-  4. `03 · MONTH 2` / **rag + agents** / stack: `openai/claude · pinecone · langchain` → **shipped: rag chatbot** grounded in real docs.
-  5. `04 · MONTH 3` / **agentic platform + hiring** / stack: `google adk · n8n` → **shipped: agentic platform**. week 12 — mock interviews + industry recruiter networking.
+  3. `02 · MONTH 1` / **foundations + your first ship** / stack: `cursor · next.js` → **shipped: saas dashboard**.
+  4. `03 · MONTH 2` / **rag + agents** / stack: `claude/openai · pinecone · langchain` → **shipped: rag chatbot** grounded in real docs.
+  5. `04 · MONTH 3` / **agentic platform + hiring** / stack: `langchain · n8n` → **shipped: agentic platform**. week 12 — mock interviews + industry recruiter networking.
   6. `05 · THE ROOM` / **20 selective seats** / in person at uxp innovation hub, trivandrum. ₹49,000 founding (₹70,000 from cohort 2).
   7. **CTA (apply-first)** — `APPLY · COHORT 01` / **claim your *seat*** / 20 selective seats. apply → eduflickai.com/apply · *(soft secondary)* not ready? free masterclass first → /masterclass
 - **Caption**
@@ -284,6 +296,7 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
   - **Hashtags:** #FullStackAI #AIEngineer #TrivandrumTech #BuildInPublic #CareerInAI
 
 #### Post 12 — TL · Day 4 · Single image · Program / Conversion (crescendo, newest tile)
+
 - **Visual concept:** the launch crescendo and the **newest tile (top-left)** — eyebrow + the mark
   (paper-fill) + the program name **`full-stack ai *engineer*`** as the hero headline + the apply CTA.
   The freshest thing every profile visitor sees, so the course name must read instantly.

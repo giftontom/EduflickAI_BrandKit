@@ -6,7 +6,7 @@ variants, descriptions, and the CTA button — ready to paste into Ads Manager.
 
 ---
 
-```
+```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
 - Masterclass date / cohort start / seats left: [[ ]]
 - Landing / registration link:                   [[ ]]
@@ -52,12 +52,14 @@ C) (scarcity angle)
 > C) 20 seats. in-person. Trivandrum. the pioneer cohort builds 3 real AI products in 12 weeks at ₹49K (₹70K from the next batch). see how it works in a free live masterclass. register free →
 >
 > **=== HEADLINES ===**
+>
 > 1) ship AI products, not theory
 > 2) build 3 AI projects in 12 weeks
 > 3) the AI engineer stack, in-person
 > 4) free AI masterclass · Trivandrum
 >
 > **=== DESCRIPTIONS ===**
+>
 > 1) capped at 20 · Trivandrum
 > 2) pioneer cohort · ₹49K
 >

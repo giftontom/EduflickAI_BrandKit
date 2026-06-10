@@ -5,7 +5,7 @@ message, with the FACTS block filled and the TASK line set.
 
 ---
 
-```
+```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
 - Today's date:          [[ ]]
 - Masterclass date/time: [[ ]]   Format: [[free, live, ~90 min, online/in-person]]
@@ -57,7 +57,7 @@ Hashtags:
 **✓ Good (Conversion · Pioneer Urgency):**
 > **Hook:** pioneer cohort: ₹49K, not *₹70K*.
 > **Body:** founding-batch price for the first 20 seats. in-person, Trivandrum. 12 weeks to 3 deployed AI projects. [[__]] of 20 left.
-> **CTA:** book your seat — closes [[date]]. dm "seat" → [[handle]]
+> **CTA:** book your seat — only [[__]] of 20 left. apply → eduflickai.com/apply
 > **Hashtags:** #FullStackAI #TrivandrumTech #AIEngineer #TechJobsKerala
 
 **✗ Bad (why):** "🚀 Ready to LEVEL UP your AI career?! Our world-class bootcamp will supercharge

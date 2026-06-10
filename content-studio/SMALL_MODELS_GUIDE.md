@@ -28,7 +28,7 @@ small model fill a tightly-constrained template — never improvise.**
 ## 2. The seven rules of prompting a small model here
 
 1. **Give it everything inline.** Small models can't "go read the brand book." Paste
-   `00_SYSTEM_PROMPT.md` (which contains the whole cheat sheet) every session.
+   `00_SYSTEM_PROMPT.md`, then append the full `BRAND_CHEATSHEET.md` after it, every session.
 2. **One task at a time.** One caption, one carousel, one script per request. Don't ask for
    "a week of content" in a single shot — batch *outputs of the same type* (§7), not types.
 3. **Constrain the output shape.** Always specify the exact format and length caps. A small model
@@ -46,8 +46,8 @@ small model fill a tightly-constrained template — never improvise.**
 
 ## 3. The generate → check → fix loop
 
-```
-  ┌─ 1. SYSTEM: paste prompts/00_SYSTEM_PROMPT.md  (once per session — holds the cheat sheet)
+```text
+  ┌─ 1. SYSTEM: paste prompts/00_SYSTEM_PROMPT.md + append BRAND_CHEATSHEET.md (once per session)
   │
   ├─ 2. USER:   paste the task prompt (e.g. instagram-carousel.md)
   │             + fill its FACTS block with real numbers
@@ -74,7 +74,7 @@ it. Anything missing becomes a visible placeholder you fix by hand — never a g
 
 Copy this, fill it, paste it with the task:
 
-```
+```text
 FACTS (the ONLY source of live numbers — do not invent anything else):
 - Today's date:            [[e.g. 2026-06-02]]
 - Masterclass date/time:   [[e.g. Sat 21 Jun 2026, 5:00 PM IST]]   (or [[NOT SET]])
@@ -85,7 +85,6 @@ FACTS (the ONLY source of live numbers — do not invent anything else):
 - Booking fee:             [[₹15,000 to reserve; then ₹17,000 + ₹17,000]]
 - Cohort start date:       [[e.g. 6 Jul 2026]]   Duration: [[12 weeks]]
 - Venue:                   [[UXP Innovation Hub, Trivandrum]]
-- Seat-close deadline:     [[e.g. 28 Jun 2026]]
 - WhatsApp / contact:      [[wa.me/… or phone]]
 
 RULE: Use ONLY the values above for any date, price, number, link, or name. If something
@@ -98,8 +97,9 @@ Never substitute a value from memory.
 > links) must come from this block. When unsure which a fact is, treat it as volatile.
 >
 > **For the Instagram launch:** the finished copy for all 12 posts + every carousel slide is already
-> written in `INSTAGRAM_LAUNCH_PLAN.md` (context in `EDUFLICK_AI_PLAYBOOK.md`). Reuse it and only
-> fill the FACTS placeholders — don't have a small model regenerate launch copy from scratch.
+> written in `INSTAGRAM_LAUNCH_PLAN.md` (context in `EDUFLICK_AI_PLAYBOOK.md`; LAUNCH_PLAN is
+> canonical where the playbook differs). Reuse it and only fill the FACTS placeholders — don't
+> have a small model regenerate launch copy from scratch.
 
 ---
 

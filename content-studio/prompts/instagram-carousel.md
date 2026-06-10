@@ -6,7 +6,7 @@ renders it.
 
 ---
 
-```
+```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
 - Today's date / masterclass date / cohort start: [[ ]]
 - Registration link / WhatsApp:                    [[ ]]
@@ -62,7 +62,7 @@ Hook / Body / CTA / Hashtags
 >
 > **=== SLIDE 6 (CTA) ===**
 > Eyebrow: PIONEER COHORT 01
-> Headline: learn it *in-person* at technopark
+> Headline: learn it *in-person* at uxp innovation hub
 > Support: capped at 20 seats. ₹49K founding price. free masterclass first.
 > CTA: register free → [[link]]
 

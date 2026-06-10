@@ -2,7 +2,7 @@
 
 *A venture of Tomatrix Technologies Private Limited*
 
-**Web:** eduflickai.com · **Email:** info@eduflickai.com · **Instagram:** @eduflick.ai
+**Web:** eduflickai.com · **Email:** <info@eduflickai.com> · **Instagram:** @eduflick.ai
 
 > Consolidates brand strategy, product architecture, problem→solution statements, and the
 > publish-ready social launch grid into one document. The social copy in §3 is finished and
@@ -79,7 +79,7 @@ The bottom 3×3 (9 tiles) is the **brand mural** (awareness / release); the top 
 
 ### 3.0 How to assemble & post the grid
 
-```
+```text
 ROW 1  TOP    │ TL │ TC │ TR │  ← COURSE mural — one indigo image split 3 ways (posted last)
 ROW 2  UPPER  │ UL │ UC │ UR │
 ROW 3  MID    │ ML │ MC │ MR │  ← BRAND mural — one indigo image split 9 ways (posted first)
@@ -116,6 +116,7 @@ ROW 4  BOTTOM │ BL │ BC │ BR │
 ### BRAND MURAL — Wave 1 (bottom row)
 
 #### Post 1 · BR · single image · brand/awareness
+
 - **On-image:** `a feed for *thinking*`
 - **Hook:** your screen already owns your attention. what if it actually *taught* you?
 - **Body:** eduflick ai turns any lecture, paper, or video into sequenced micro-flicks. ai sets the order — you decide what's next. a venture of tomatrix technologies.
@@ -123,6 +124,7 @@ ROW 4  BOTTOM │ BL │ BC │ BR │
 - **Hashtags:** #LearnAI #AIEngineer #Kerala #Trivandrum
 
 #### Post 2 · BC · single image · brand/awareness
+
 - **On-image:** `one concept per *flick*`
 - **Hook:** one concept. one flick. that's the *whole* unit.
 - **Body:** we call it a flick. 1 flick = 1 core concept. stack enough of them and a feed becomes a syllabus — without the doom-scroll.
@@ -130,6 +132,7 @@ ROW 4  BOTTOM │ BL │ BC │ BR │
 - **Hashtags:** #LearnAI #AIEngineer #Trivandrum #Kerala
 
 #### Post 3 · BL · carousel (major) · brand/awareness
+
 - **On-cover:** `what is *eduflick ai*?`
 - Slide 1 (cover) — `WHAT IS EDUFLICK AI` / **what is *eduflick ai*?** / the end of empty scrolling. learning, rebuilt as a feed. / swipe →
 - Slide 2 — `01 · THE PROBLEM` / **you scroll for hours** / short video is the most engaging format ever built. it just never taught you anything.
@@ -145,6 +148,7 @@ ROW 4  BOTTOM │ BL │ BC │ BR │
 ### BRAND MURAL — Wave 2 (middle row)
 
 #### Post 4 · MR · single image · brand/awareness
+
 - **On-image:** `the *doom-scroll* antidote`
 - **Hook:** same feed. same bite-sized hits. except you walk away *sharper*.
 - **Body:** eduflick ai sequences micro-lessons so curiosity compounds instead of evaporating. learning built for the way you already consume.
@@ -152,6 +156,7 @@ ROW 4  BOTTOM │ BL │ BC │ BR │
 - **Hashtags:** #LearnAI #AIEngineer #Kerala #Trivandrum
 
 #### Post 5 · MC · single image · brand/awareness (the mark)
+
 - **On-image:** `one shape, one *notch*`
 - **Hook:** a square with a single *notch* bitten out. that's us.
 - **Body:** the notch is the play — the moment a lesson begins. one shape, one notch. our whole identity in a single geometry.
@@ -159,6 +164,7 @@ ROW 4  BOTTOM │ BL │ BC │ BR │
 - **Hashtags:** #LearnAI #AIEngineer #Trivandrum
 
 #### Post 6 · ML · carousel (major) · brand·learn-fast/awareness
+
 - **On-cover:** `the *flick* is the unit`
 - Slide 1 (cover) — `HOW IT WORKS` / **the *flick* is the unit** / how a dense paper becomes a feed you actually finish. / swipe →
 - Slide 2 — `01 · CUT` / **drop in any source** / a 2-hour lecture, a dense paper, a youtube deep-dive. anything.
@@ -174,6 +180,7 @@ ROW 4  BOTTOM │ BL │ BC │ BR │
 ### BRAND MURAL — Wave 3 (upper row)
 
 #### Post 7 · UR · single image · brand/awareness
+
 - **On-image:** `your feed, but it makes you *smarter*`
 - **Hook:** what if the next hour of scrolling left you *better* at your job?
 - **Body:** that's the whole bet. eduflick ai swaps empty scroll for sequenced micro-lessons on things worth knowing.
@@ -181,6 +188,7 @@ ROW 4  BOTTOM │ BL │ BC │ BR │
 - **Hashtags:** #LearnAI #AIEngineer #CareerInAI #Trivandrum
 
 #### Post 8 · UC · carousel (major) · brand/awareness
+
 - **On-cover:** `why we *built* eduflick`
 - Slide 1 (cover) — `THE VISION` / **why we *built* eduflick** / a venture of tomatrix technologies. here's the gap we saw. / swipe →
 - Slide 2 — `01 · THE GAP` / **courses don't get finished** / online completion rates are brutal. videos pile up; skills don't.
@@ -194,6 +202,7 @@ ROW 4  BOTTOM │ BL │ BC │ BR │
 - **Hashtags:** #LearnAI #AIEngineer #BuildInPublic #Trivandrum
 
 #### Post 9 · UL · single image · brand→program/awareness (bridge)
+
 - **On-image:** eyebrow `NEXT: THE PROGRAM` · headline `we don't just teach it — we *ship* it`
 - **Hook:** we don't just build ai products. we build the engineers who *ship* them.
 - **Body:** the same philosophy behind our app drives our academy: no wasted time, just applied learning. an offline, hands-on program in trivandrum that turns "i know react" into "i ship ai."
@@ -202,33 +211,8 @@ ROW 4  BOTTOM │ BL │ BC │ BR │
 
 ### COURSE MURAL — Wave 4 (top row · launch day)
 
-#### Post 10 · TR · single image · pioneer-urgency/conversion
-- **On-image:** eyebrow `PIONEER COHORT 01` · headline `20 *selective* seats` · coral `20 selective intake · ₹49,000` · sub `₹70,000 from cohort 2`
-- **Hook:** pioneer cohort 01: 20 *selective* seats. that's the whole room.
-- **Body:** the full-stack ai engineer program. 12 weeks, in person at uxp innovation hub, trivandrum. founding price ₹49,000 (₹70,000 from cohort 2). strictly capped at 20 seats to guarantee 1:1 code reviews.
-- **CTA:** apply now → eduflickai.com/apply
-- **Hashtags:** #FullStackAI #AIEngineer #TrivandrumTech #TechJobsKerala
-
-#### Post 11 · TC · carousel (major) · the-cohort/consideration→conversion
-- **On-cover:** `ship *ai products*, not theory`
-- Slide 1 (cover) — `FULL-STACK AI ENGINEER PROGRAM` / **ship *ai products*, not theory** / 12 weeks, in person, trivandrum. you build 3 real ones. / swipe →
-- Slide 2 — `01 · THE GAP` / **"ai experience required"** / every job wants it. you know react but have never shipped with an llm. we close that.
-- Slide 3 — `02 · MONTH 1` / **foundations + your first ship** / the real stack — cursor, next.js, claude/openai. you deploy a saas dashboard.
-- Slide 4 — `03 · MONTH 2` / **rag + agents** / pinecone, langchain, n8n. you build a rag chatbot that answers from real docs. deployed.
-- Slide 5 — `04 · MONTH 3` / **an agentic platform + hiring** / capstone agentic build, then mock interviews and industry recruiter networking.
-- Slide 6 — `05 · THE ROOM` / **20 selective seats** / in person at uxp innovation hub, trivandrum. ₹49,000 founding (₹70,000 from cohort 2).
-- Slide 7 (CTA) — `START FREE` / **see it *live* first** / free technical masterclass — we build a real ai app on the spot. / register free → eduflickai.com/masterclass
-- **Caption — Hook:** 12 weeks. 3 *deployed* ai projects. one room of 20.
-- **Body:** the full-stack ai engineer program — in person at uxp innovation hub, trivandrum. real stack, real ships, mock interviews + industry recruiter networking. ₹49,000 founding price.
-- **CTA:** start with the free masterclass → register → eduflickai.com/masterclass
-- **Hashtags:** #FullStackAI #AIEngineer #TrivandrumTech #BuildInPublic #CareerInAI
-
-#### Post 12 · TL · single image · program/conversion (crescendo, newest tile)
-- **On-image:** `the program is *live*`
-- **Hook:** it's live. the full-stack ai engineer program — pioneer cohort *01*.
-- **Body:** 12 weeks offline at uxp innovation hub, trivandrum. 3 deployed projects, 20 selective seats, ₹49,000 founding price. it starts with a free masterclass.
-- **CTA:** register free → link in bio · eduflickai.com/masterclass
-- **Hashtags:** #FullStackAI #AIEngineer #TrivandrumTech #TechJobsKerala #CareerInAI
+Final Wave-4 copy (Posts 10–12) lives in `INSTAGRAM_LAUNCH_PLAN.md` §Wave 4 — that file is
+canonical; do not copy from here.
 
 ---
 

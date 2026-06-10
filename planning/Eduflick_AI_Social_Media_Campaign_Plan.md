@@ -1,5 +1,6 @@
 # Social Media Marketing Campaign Plan
-### Eduflick Certified Full-Stack AI Engineer Program — Pioneer Cohort 1
+
+## Eduflick Full-Stack AI Engineer Program — Pioneer Cohort 1
 
 **Operating Entity:** Tomatrix Technologies Pvt Ltd
 **Campaign Owner:** Marketing & Sales
@@ -16,7 +17,7 @@
 | **Funnel goal** | Drive registrations to the **Free Technical Masterclass** (top of funnel → seat bookings) |
 | **Offer** | Pioneer Cohort price **₹49,000** (vs. ₹70,000 retail from Cohort 2) — frame as a one-time founding-batch discount |
 | **Geography** | Geo-targeted: **10 km radius of Trivandrum** + Kerala-wide for organic |
-| **Window** | 6-week paid + organic sprint, ending with seat closing |
+| **Window** | 6-week paid + organic sprint, running until all 20 seats are booked (no fixed close date) |
 
 **The single message:** *Stop learning AI theory. Ship AI products. Get hired in Trivandrum in 12 weeks.*
 
@@ -25,16 +26,19 @@
 ## 2. Audience & Positioning
 
 **Who we're talking to:**
+
 - B.Tech graduates (2024–2026) who can code but feel "AI-left-behind"
 - Junior software professionals (0–2 yrs) in/around Trivandrum wanting an AI skill jump
 - Parents/decision-influencers (secondary, for the ₹49K investment conversation)
 
 **Their pain (use their words in copy):**
+
 - "I know React but I've never built anything with LLMs."
 - "Job postings all want 'AI experience' — I have none."
 - "Online courses are just videos. I never finish them."
 
 **Our wedge (why us, not Udemy/YouTube):**
+
 1. **Build, not watch** — 3 deployed projects (SaaS dashboard, RAG chatbot, agentic platform).
 2. **In-person, capped at 20** — real cohort, real mentors, at the UXP Innovation Hub.
 3. **Hire-ready** — Week 12 is mock interviews + recruiter networking with industry HR.
@@ -56,7 +60,7 @@
 
 ## 4. The Funnel
 
-```
+```text
    AWARENESS              CONSIDERATION           CONVERSION            CLOSE
    Reels / Ads     →      Free Technical    →     Seat Booking    →     ₹15K booking fee
    Carousels              Masterclass             page / WhatsApp        → enrolled
@@ -73,6 +77,7 @@
 ## 5. 6-Week Content Calendar
 
 ### Phase 1 — Awareness & List-Building (Weeks 1–2)
+
 **Goal:** Build audience + collect Masterclass registrations.
 
 | Day | Platform | Asset | Hook / Angle |
@@ -86,6 +91,7 @@
 | Sun | LinkedIn | Curriculum carousel | Month 1/2/3 breakdown |
 
 ### Phase 2 — Consideration & Masterclass Push (Weeks 3–4)
+
 **Goal:** Maximize Masterclass attendance; seed the Pioneer offer.
 
 - **Daily Stories** countdown to Masterclass with registration link sticker.
@@ -96,13 +102,14 @@
 - **Carousel:** "₹49,000 vs ₹70,000 — what Pioneer Cohort means."
 
 ### Phase 3 — Conversion & Scarcity Close (Weeks 5–6)
+
 **Goal:** Convert Masterclass attendees → seat bookings; sell out.
 
 - **Live seat tracker:** "Only 7 of 20 seats left" graphics, updated every 2–3 days.
 - **Masterclass highlight Reels** (proof the format works).
 - **Objection-handler carousels:** "Is ₹49K worth it?", "What if I'm not job-ready?", "Online vs in-person."
 - **WhatsApp 1:1 closing** for every warm lead — payment structure (₹15K book + ₹17K + ₹17K).
-- **Final 48h:** "Seats closing" urgency across all channels + Stories countdown.
+- **Final seats:** "X of 20 left" urgency across all channels + Stories seat tracker (no deadline — seats-remaining only).
 - **Sold-out announcement** (becomes Cohort 2 waitlist bait).
 
 ---
@@ -143,7 +150,7 @@ Pull all creative from the Eduflick Brand Book (`Eduflick_Brand_Book_v4.html`) a
 | **Paper / background** | Cream `#F5F2EA` |
 | **Ink / text** | `#0A0B10` |
 | **Accent** | Coral `#FF6E5A` (use sparingly — CTAs, scarcity flags) |
-| **Headline font** | Instrument Serif (editorial) / Manrope (UI) |
+| **Headline font** | Manrope 800-900 (display); Instrument Serif italic for 1-2 accent words only |
 | **Code / labels** | JetBrains Mono (lean into the "engineer" identity) |
 | **Logo** | Use `social/` lockups for posts; `lockup-paper.svg` on dark, `lockup-indigo.svg` on cream |
 
