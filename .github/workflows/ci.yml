@@ -51,15 +51,13 @@ jobs:
 
       - name: Validate HTML files
         run: |
-          # Basic HTML structure validation for key files
+          # Basic HTML structure validation — every shipped artifact, not a fixed list
           broken=0
           for f in \
             index.html \
-            brand-book/Eduflick_Brand_Book_v4.html \
-            design-system/collateral/launch-grid.html \
-            design-system/collateral/instagram-kit.html \
-            design-system/collateral/brochure-kit.html \
-            design-system/collateral/content-calendar.html \
+            brand-book/*.html \
+            brochures/*.html \
+            design-system/collateral/*.html \
             design-system/slides/index.html; do
             if [ ! -f "$f" ]; then
               echo "⚠ Missing (skipped): $f"
@@ -100,8 +98,32 @@ jobs:
       - name: Check package.json syntax
         run: node -e "JSON.parse(require('fs').readFileSync('tools/package.json','utf8')); console.log('✓ package.json valid')"
 
-      - name: Check export script syntax
-        run: node --check tools/export-images.mjs && node --check tools/export-pf-avatar.mjs && node --check tools/serve.mjs && echo "✓ All tools parse"
+      - name: Check script syntax (all tools)
+        run: |
+          for f in tools/*.mjs; do
+            node --check "$f" || exit 1
+          done
+          echo "✓ All tools parse"
+
+      - name: Assets mirror in sync
+        run: |
+          # Root assets/ is the documented public mirror of design-system/assets/
+          # (minus design-system-only icons/). Fail if the mirrored trees drift.
+          drift=0
+          cd assets
+          # READMEs are per-tree docs, not mirrored assets
+          for f in $(find . -type f -not -name '.DS_Store' -not -name '*.md'); do
+            if [ ! -f "../design-system/assets/$f" ]; then
+              echo "✗ In assets/ but not canonical: $f"; drift=1
+            elif ! cmp -s "$f" "../design-system/assets/$f"; then
+              echo "✗ Mirror drift: $f"; drift=1
+            fi
+          done
+          if [ $drift -eq 1 ]; then
+            echo "::error::assets/ mirror has drifted from design-system/assets/ — sync it"
+            exit 1
+          fi
+          echo "✓ assets/ mirror matches design-system/assets/"
 
   generated:
     name: Tokens & snippets drift
