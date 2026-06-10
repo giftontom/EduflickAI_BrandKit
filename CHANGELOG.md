@@ -16,7 +16,7 @@ alongside it.
   (`export:{pdf,slides,posters,stories,ig}`, backdrop + stock pipelines), the
   `.claude/skills` automation layer, and launch content drafts.
 - **Fact guard upgrades** (`tools/check-facts.mjs`): regex retired-strings (wrong-domain
-  `eduflick.ai` URL/email forms, `eduflickai@gmail.com`), `[[placeholder]]` leakage scan
+  URL/email forms incl. the old gmail contact), `[[placeholder]]` leakage scan
   over active HTML, project-count assertion (canon: 3 deployed), invented-deadline scan,
   link-checker fixes. All export scripts now refuse to render HTML containing `[[…]]`.
 - **SRI hashes** on every CDN `<script>` (jspdf, html2canvas, html-to-image) across
@@ -39,7 +39,7 @@ alongside it.
 - **WCAG AA contrast**: low-alpha labels raised across all FS-AI brochure variants
   (contact keys, footers, cover stats, strikethrough price) to ≥4.6:1.
 - **Copy canon**: close-date framing replaced with seats-remaining urgency across
-  cheatsheet/prompts/schedules; Technopark few-shot fixed; unsourced "78% retention",
+  cheatsheet/prompts/schedules; de-emphasized-location few-shot fixed; unsourced "78% retention",
   "1:1 code reviews", week-4 deploy, and Supabase/Vercel/Google ADK launch-tile claims
   removed; playbook Wave-4 fork collapsed into a pointer to the launch plan;
   "embeds the cheat sheet" doc claim corrected.
