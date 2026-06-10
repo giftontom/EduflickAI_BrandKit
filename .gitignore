@@ -1,6 +1,8 @@
-# Claude Code local settings (ignored), EXCEPT the committed universal design skills
+# Claude Code local settings (ignored), EXCEPT the committed universal design
+# skills and the agent team — those are repo policy and must survive a clone.
 .claude/*
 !.claude/skills/
+!.claude/agents/
 # generated / installed bits inside the skills are not committed
 .claude/skills/*/node_modules/
 .claude/skills/*/build/
@@ -21,8 +23,14 @@ tools/node_modules/
 # in design-system/collateral/assets/backdrops/ is committed; provenance is in SOURCES.md
 tools/stock-sources/
 
-# PDFs (large binaries)
+# PDFs (large binaries) — regenerable via each artifact's Download PDF button
+# or `npm run export:pdf` / `export:slides`; see brochures/README.md
 *.pdf
+
+# Reference binaries kept local-only (provenance: _ref/README.md)
+_ref/*.zip
+_ref/*.png
+_ref/*.jpg
 
 # IDE (user-specific only — shared config is committed)
 .vscode/settings.local.json
