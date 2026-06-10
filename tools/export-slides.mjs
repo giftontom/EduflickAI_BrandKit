@@ -18,7 +18,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const HTML = path.resolve(__dirname, '../design-system/Eduflick Full-Stack AI Engineer Program Deck.html');
+const HTML = path.resolve(__dirname, '../brochures/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html');
 const OUT  = path.resolve(__dirname, '../exports/full-stack-ai-engineer');
 const SCALE = Number(process.env.SCALE || 2);                 // 2 = crisp (2560×1440) · 1 = exact 1280×720
 
