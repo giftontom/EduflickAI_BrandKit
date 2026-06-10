@@ -17,7 +17,7 @@
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, extname, relative, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const SELF = fileURLToPath(import.meta.url);
 const ROOT = join(dirname(SELF), '..'); // tools/ -> repo root
@@ -29,7 +29,7 @@ const TEXT_EXT = new Set(['.md', '.html', '.css', '.mjs', '.js', '.json', '.txt'
 
 // Retired strings -> what to use instead. `bad` is a case-sensitive substring,
 // or a RegExp (tested per line; use `label` for the report).
-const RETIRED = [
+export const RETIRED = [
   { bad: 'Enterprise Solutions', use: 'UXP Innovation Hub, Trivandrum (venue finalized)' },
   { bad: /technopark/i, label: 'Technopark (any case)', use: 'Trivandrum / industry (de-emphasized everywhere)' },
   { bad: '#TechparkTrivandrum', use: '#TrivandrumTech (hashtag finalized)' },
@@ -72,18 +72,27 @@ function walk(dir, files = []) {
   return files;
 }
 
+// Pure per-text scan — reused by the file walk below and by the studio server
+// (POST /api/facts/check) so there is a single pattern source, no drift.
+export function scanTextRetired(text) {
+  const hits = [];
+  text.split('\n').forEach((line, i) => {
+    for (const { bad, label, use } of RETIRED) {
+      const hit = bad instanceof RegExp ? bad.test(line) : line.includes(bad);
+      if (hit) {
+        hits.push({ line: i + 1, bad: label || String(bad), use });
+      }
+    }
+  });
+  return hits;
+}
+
 function scanRetired(files) {
   const hits = [];
   for (const file of files) {
-    const lines = readFileSync(file, 'utf8').split('\n');
-    lines.forEach((line, i) => {
-      for (const { bad, label, use } of RETIRED) {
-        const hit = bad instanceof RegExp ? bad.test(line) : line.includes(bad);
-        if (hit) {
-          hits.push({ file: relative(ROOT, file), line: i + 1, bad: label || bad, use });
-        }
-      }
-    });
+    for (const h of scanTextRetired(readFileSync(file, 'utf8'))) {
+      hits.push({ file: relative(ROOT, file), ...h });
+    }
   }
   return hits;
 }
@@ -143,6 +152,10 @@ async function checkLinks(urls) {
   return dead;
 }
 
+// ---- CLI (skipped when imported as a module, e.g. by the studio server) ----
+const IS_CLI = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (IS_CLI) {
 const files = walk(ROOT);
 let failed = false;
 
@@ -198,3 +211,4 @@ if (process.argv.includes('--links')) {
 }
 
 process.exit(failed ? 1 : 0);
+}
