@@ -18,7 +18,7 @@ Everything that builds, checks, or exports the brand kit. One `npm install`
 | `npm run gen:backdrops` / `:proc` | poster backdrops — Gemini AI / procedural fallback | `design-system/collateral/assets/backdrops/` |
 | `npm run gen:ig-backdrops` | IG tile backdrops | same |
 | `npm run fetch:stock` + `treat:stock` | photoreal indigo-duotone pipeline | same |
-| `npm run serve` | static preview server | http://localhost:8080 |
+| `npm run serve` | static preview server | `http://localhost:8080` |
 | `node codemod-hex.mjs` | migrate hardcoded hex → `var(--token)` (dry-run first) | — |
 
 Files starting with `_` (`_backdrop-art.mjs`, `_gen-grain.mjs`, `_inject-dark-bg.mjs`)

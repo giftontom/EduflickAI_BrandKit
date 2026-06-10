@@ -6,19 +6,20 @@ live values in `content-studio/FACTS.md`, design tokens in `design-system/tokens
 voice in `content-studio/BRAND_CHEATSHEET.md`, hard rules in `AGENTS.md`.
 
 ## The team
-| Agent | Role | Model |
-| --- | --- | --- |
-| `lead-brand-custodian` | Orchestrates, routes work, owns the final ship/merge gate | opus |
-| `content-copywriter` | On-brand copy (skill: eduflick-content) | sonnet |
-| `design-system-engineer` | Token pipeline, components, recipes (design-tokens) | sonnet |
-| `visual-production` | Assemble + render + export artifacts (design-studio, web-to-image/pdf) | sonnet |
-| `qa-fact-integrity` | Truth + brand QA gate (can block) | sonnet |
-| `red-team-auditor` | Adversarial risk / security sweep | opus |
-| `devops-repo-hygiene` | CI, builds, deps, git, renames | sonnet |
+
+| Agent                    | Role                                                                   | Model  |
+| ------------------------ | ---------------------------------------------------------------------- | ------ |
+| `lead-brand-custodian`   | Orchestrates, routes work, owns the final ship/merge gate              | opus   |
+| `content-copywriter`     | On-brand copy (skill: eduflick-content)                                | sonnet |
+| `design-system-engineer` | Token pipeline, components, recipes (design-tokens)                    | sonnet |
+| `visual-production`      | Assemble + render + export artifacts (design-studio, web-to-image/pdf) | sonnet |
+| `qa-fact-integrity`      | Truth + brand QA gate (can block)                                      | sonnet |
+| `red-team-auditor`       | Adversarial risk / security sweep                                      | opus   |
+| `devops-repo-hygiene`    | CI, builds, deps, git, renames                                         | sonnet |
 
 ## Recursive workflow
 
-```
+```text
 lead decomposes & routes
   -> producer (copywriter / design-eng / visual): pull FACTS + tokens, assemble
   -> RENDER (must be seen)
@@ -40,11 +41,11 @@ Nothing ships until ALL pass:
 - [ ] Every date/price/seat/link pulled VERBATIM from `content-studio/FACTS.md`; unknowns typeset as a literal `[[PLACEHOLDER]]`.
 - [ ] `node tools/check-facts.mjs` passes (no retired strings; add `--links` to also check external links).
 - [ ] One hue: indigo `#5B5BF0` + neutrals; coral `#FF6E5A` semantic-flag only; never a third hue; no hardcoded hex (use `var(--token)`).
-- [ ] lowercase display headings; mono UPPERCASE labels; NO emoji; exactly one *serif* accent word per hook.
+- [ ] lowercase display headings; mono UPPERCASE labels; NO emoji; exactly one _serif_ accent word per hook.
 - [ ] The notched-card mark is undistorted / not recolored; brand glow only behind a focal element via `.halo`.
 - [ ] Generated files (tokens.css, tokens.flat.json, brand.tokens.mjs, snippets.md) regenerated from source — `npm run tokens && npm run snippets` leaves a clean `git diff`.
 - [ ] Visuals were RENDERED and seen (not assumed); exports at true sizes.
-- [ ] Finalized facts honored: venue **UXP Innovation Hub, Trivandrum**; **#TrivandrumTech**; **Technopark de-emphasized** → Trivandrum / industry; **no fixed close date**; **eduflickai.com** / info@eduflickai.com.
+- [ ] Finalized facts honored: venue **UXP Innovation Hub, Trivandrum**; **#TrivandrumTech**; **Technopark de-emphasized** → Trivandrum / industry; **no fixed close date**; **eduflickai.com** / `info@eduflickai.com`.
 - [ ] Merge to main only with explicit human approval.
 
 ## Versioning this team

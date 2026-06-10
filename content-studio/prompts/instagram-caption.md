@@ -55,10 +55,12 @@ Hashtags:
 > **Hashtags:** #AIEngineer #FullStackAI #TrivandrumTech #BuildInPublic #CareerInAI
 
 **✓ Good (Conversion · Pioneer Urgency):**
+<!-- markdownlint-disable MD050 -->
 > **Hook:** pioneer cohort: ₹49K, not *₹70K*.
 > **Body:** founding-batch price for the first 20 seats. in-person, Trivandrum. 12 weeks to 3 deployed AI projects. [[__]] of 20 left.
 > **CTA:** book your seat — only [[__]] of 20 left. apply → eduflickai.com/apply
 > **Hashtags:** #FullStackAI #TrivandrumTech #AIEngineer #TechJobsKerala
+<!-- markdownlint-enable MD050 -->
 
 **✗ Bad (why):** "🚀 Ready to LEVEL UP your AI career?! Our world-class bootcamp will supercharge
 your skills! Don't miss out!! 🔥 #ai #coding #motivation #grind #success" — emoji, hype, forbidden
