@@ -43,6 +43,42 @@ Renders the gradient Instagram avatar **in isolation** — a diagonal indigo gra
 (`i-violet → indigo-ink`) with the paper-fill mark and transparent corners (correct for IG's
 circular crop). Re-run after changing the gradient or the mark.
 
+## Also: poster backdrops (the AI-imagery layer)
+
+```bash
+cd tools
+GEMINI_API_KEY=…  npm run gen:backdrops        # Nano Banana 2 / gemini-3-pro-image → ../design-system/collateral/assets/backdrops/*.png
+npm run gen:backdrops:proc                      # procedural fallback (no API) — same filenames
+npm run export:posters                          # composite posters → ../exports/posters/*.png
+```
+
+Generates the **abstract indigo backdrops** layered *behind* the type in `collateral/posters.html`
+(see `../design-system/AI_IMAGERY_GUIDE.md`). The AI path needs a **billing-enabled** Gemini key —
+image models return HTTP 429 (`limit: 0`) on the free tier. `gen:backdrops:proc` writes the same
+filenames with SVG-rendered textures, so switching to real AI later is a drop-in re-run.
+
+### Photoreal backdrops — real photos, forced on-brand (the hybrid path)
+
+```bash
+cd tools
+npm run fetch:stock                       # keyless: Wikimedia Commons → tools/stock-sources/*.jpg
+PEXELS_API_KEY=… npm run fetch:stock      # preferred: modern Pexels stock (free commercial use)
+npm run treat:stock                       # indigo DUOTONE → backdrops/poster-program.png + poster-masterclass.png
+npm run export:posters                    # composite the type/mark on top
+```
+
+`treat:stock` recolors a real photo onto the indigo ramp (luminance → ink / indigo / light-indigo
+via an SVG `feComponentTransfer`), so the output stays strictly **one hue** and **no text or logo is
+ever added** — only the photo's own pixels are remapped. Per the **hybrid** policy in
+`AI_IMAGERY_GUIDE.md §2`: `program` + `masterclass` use photoreal duotone (the human / build
+moments); `seats` keeps the abstract procedural spotlight (its hero is the number **20**).
+
+Sources: hand-drop your own `program.jpg` / `masterclass.jpg` in `tools/stock-sources/` (best taste
+control), or `fetch:stock`. Use `PICK_program=3 PICK_masterclass=2 npm run fetch:stock` to eye-pick a
+different candidate. Raw sources are **gitignored**; only the treated PNG ships, with provenance +
+license recorded in `backdrops/SOURCES.md` (Pexels & Commons CC both permit commercial use — keep
+attribution for CC-BY / CC-BY-SA).
+
 ## Notes
 - IG feed/portrait spec is 1080×1350 (4:5). `SCALE=1` matches it exactly; `SCALE=2`
   gives a crisper file that IG downscales cleanly.
