@@ -1,0 +1,115 @@
+{
+  "_comment": "BRAND PROFILE. Edit the values, run build-tokens.mjs, get tokens.css. The leaf key becomes the CSS var name (color.accent-500 -> --accent-500). The aliases (--accent, --accent-light, --accent-mid, --accent-deep, --accent-ink) are what effects.css and the recipes consume — keep them in sync with the ramp.",
+
+  "color": {
+    "accent-50":  { "value": "#EEF0FF" },
+    "accent-100": { "value": "#E0E3FF" },
+    "accent-200": { "value": "#C3C9FF" },
+    "accent-300": { "value": "#A5B4FC" },
+    "accent-400": { "value": "#818CF8" },
+    "accent-500": { "value": "#6366F1" },
+    "accent-600": { "value": "#4F46E5" },
+    "accent-700": { "value": "#4338CA" },
+    "accent-800": { "value": "#312E81" },
+    "accent-900": { "value": "#1E1B4B" },
+
+    "accent":       { "value": "#6366F1" },
+    "accent-light": { "value": "#A5B4FC" },
+    "accent-mid":   { "value": "#818CF8" },
+    "accent-deep":  { "value": "#4338CA" },
+    "accent-ink":   { "value": "#0B0A2A" },
+
+    "paper":     { "value": "#F5F3EE" },
+    "paper-2":   { "value": "#ECE8DE" },
+    "paper-dim": { "value": "#C9C5BA" },
+    "ink":       { "value": "#0A0B10" },
+    "ink-2":     { "value": "#11131C" },
+    "ink-3":     { "value": "#181B28" },
+    "muted":     { "value": "#7A7F90" },
+
+    "line":       { "value": "rgba(245,243,238,0.08)" },
+    "line-2":     { "value": "rgba(245,243,238,0.16)" },
+    "line-ink":   { "value": "rgba(10,11,16,0.08)" },
+    "line-ink-2": { "value": "rgba(10,11,16,0.14)" },
+
+    "warn":    { "value": "#FF6E5A" },
+    "success": { "value": "#4ADE80" }
+  },
+
+  "font": {
+    "font-display": { "value": "'Inter',system-ui,sans-serif" },
+    "font-serif":   { "value": "'Georgia',serif" },
+    "font-mono":    { "value": "'JetBrains Mono',ui-monospace,monospace" }
+  },
+
+  "type": {
+    "t-display":  { "value": "88px" },
+    "t-h1":       { "value": "64px" },
+    "t-h2":       { "value": "40px" },
+    "t-h3":       { "value": "28px" },
+    "t-h4":       { "value": "22px" },
+    "t-lead":     { "value": "21px" },
+    "t-body-lg":  { "value": "18px" },
+    "t-body":     { "value": "16px" },
+    "t-small":    { "value": "14px" },
+    "t-meta":     { "value": "11px" },
+    "t-micro":    { "value": "10px" }
+  },
+
+  "weight": {
+    "w-display":  { "value": "900" },
+    "w-heading":  { "value": "800" },
+    "w-semibold": { "value": "600" },
+    "w-body":     { "value": "500" },
+    "w-regular":  { "value": "400" }
+  },
+
+  "track": {
+    "track-display": { "value": "-0.05em" },
+    "track-heading": { "value": "-0.03em" },
+    "track-body":    { "value": "-0.005em" },
+    "track-mono":    { "value": "0.06em" },
+    "track-mono-up": { "value": "0.22em" }
+  },
+
+  "space": {
+    "space-1":  { "value": "4px" },
+    "space-2":  { "value": "8px" },
+    "space-3":  { "value": "12px" },
+    "space-4":  { "value": "16px" },
+    "space-6":  { "value": "24px" },
+    "space-8":  { "value": "32px" },
+    "space-12": { "value": "48px" },
+    "space-16": { "value": "64px" },
+    "space-24": { "value": "96px" }
+  },
+
+  "radius": {
+    "radius-sm":   { "value": "6px" },
+    "radius-md":   { "value": "10px" },
+    "radius-lg":   { "value": "14px" },
+    "radius-xl":   { "value": "18px" },
+    "radius-2xl":  { "value": "22px" },
+    "radius-pill": { "value": "999px" }
+  },
+
+  "shadow": {
+    "shadow-sm":    { "value": "0 1px 2px rgba(0,0,0,0.3)" },
+    "shadow-md":    { "value": "0 4px 12px rgba(0,0,0,0.4)" },
+    "shadow-lg":    { "value": "0 8px 32px rgba(0,0,0,0.5)" },
+    "shadow-brand": { "value": "0 8px 32px -8px rgba(99,102,241,0.35)" }
+  },
+
+  "motion": {
+    "ease-out":    { "value": "cubic-bezier(0.16,1,0.3,1)" },
+    "ease-spring": { "value": "cubic-bezier(0.34,1.56,0.64,1)" },
+    "dur-fast":    { "value": "150ms" },
+    "dur-base":    { "value": "300ms" }
+  },
+
+  "meta": {
+    "logo-path":  { "value": "" },
+    "fonts-link": { "value": "" },
+    "version":    { "value": "1.0.0" }
+  }
+}

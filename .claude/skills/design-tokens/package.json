@@ -1,0 +1,15 @@
+{
+  "name": "design-tokens-skill",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Brand-neutral Style Dictionary pipeline: tokens.json → tokens.css + flat JSON + JS module.",
+  "scripts": {
+    "tokens": "node scripts/build-tokens.mjs",
+    "snippets": "node scripts/build-snippets.mjs"
+  },
+  "engines": { "node": ">=18.0.0" },
+  "devDependencies": {
+    "style-dictionary": "^4.4.0"
+  }
+}

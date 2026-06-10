@@ -1,5 +1,9 @@
-# Claude Code local settings
-.claude/
+# Claude Code local settings (ignored), EXCEPT the committed universal design skills
+.claude/*
+!.claude/skills/
+# generated / installed bits inside the skills are not committed
+.claude/skills/*/node_modules/
+.claude/skills/*/build/
 
 # macOS
 .DS_Store
@@ -12,6 +16,10 @@ tools/_shots/
 # Dependencies
 tools/node_modules/
 # NOTE: tools/package-lock.json IS committed — CI uses `npm ci`, which requires it.
+
+# Raw stock-photo sources (fetched/hand-dropped) — only the treated PNG derivative
+# in design-system/collateral/assets/backdrops/ is committed; provenance is in SOURCES.md
+tools/stock-sources/
 
 # PDFs (large binaries)
 *.pdf

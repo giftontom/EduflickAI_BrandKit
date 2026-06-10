@@ -1,0 +1,61 @@
+{
+  "name": "Lumen Labs",
+  "tagline": "clarity, engineered",
+  "tokens": "../design-tokens/templates/tokens.starter.json",
+  "defaultTheme": "dark",
+
+  "logo": {
+    "svgPath": "M20 20 L160 20 L160 90 L118 110 L160 130 L160 160 L20 160 Z",
+    "viewBox": "0 0 180 180",
+    "wordmark": "lowercase 'lumen' + accent-light 'labs', built in HTML — never an image",
+    "lockupRules": [
+      "never rotate, skew, or distort the mark",
+      "never recolor the mark to a hue outside the accent ramp",
+      "no bevel / inner-shadow / glow filter ON the mark (light goes in a halo behind it)",
+      "keep clear space ≥ the height of the notch on all sides"
+    ],
+    "fillOnDark": "var(--accent-light)",
+    "fillOnLight": "var(--accent)"
+  },
+
+  "type": {
+    "headlineCase": "lowercase",
+    "labelCase": "uppercase",
+    "accentWord": "exactly one serif-italic accent word, tinted var(--accent-light)",
+    "displayWeight": "800-900",
+    "tracking": "display -0.03 to -0.05em; mono labels 0.22em"
+  },
+
+  "voice": {
+    "do": [
+      "confident, technical, no fluff — talk like engineers",
+      "short declaratives; numbers as proof"
+    ],
+    "dont": [
+      "no emoji in finished brand copy",
+      "no hype ('HURRY!! LIMITED!!')"
+    ],
+    "lexicon": {
+      "ship": "prefer over 'launch/release' for a builder voice"
+    }
+  },
+
+  "color": {
+    "thirdHuePolicy": "forbidden",
+    "semantic": {
+      "warn": "var(--warn)",
+      "success": "var(--success)"
+    }
+  },
+
+  "imagery": {
+    "stance": "abstract-monochrome",
+    "negatives": [
+      "text, letters, words, numbers, captions, watermark, logo, signature",
+      "people, faces, hands, bodies, real objects, devices, screens",
+      "photograph, photorealism, stock-photo look",
+      "any hue outside the accent ramp + neutral; no rainbow gradient",
+      "bevels, glossy 3D, heavy lens flare, busy collage, clutter"
+    ]
+  }
+}

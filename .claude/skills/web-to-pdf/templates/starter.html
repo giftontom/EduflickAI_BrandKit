@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>web-to-pdf · starter document</title>
+<!-- Load your brand's tokens.css here (from the design-tokens skill) to theme the sheets:
+     <link rel="stylesheet" href="tokens.css"> -->
+<link rel="stylesheet" href="print-sheet.css">
+<style>
+  .display { font-size: 56px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.0; margin: 24px 0 16px; }
+  .lead { font-size: 20px; line-height: 1.5; color: #3a3d47; max-width: 56ch; }
+  .accent { color: var(--accent); }
+  .spec { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px dashed var(--line-ink); font-family: var(--font-mono); font-size: 13px; }
+  .spec span:first-child { color: var(--muted); text-transform: uppercase; letter-spacing: 0.16em; }
+</style>
+</head>
+<body>
+
+  <!-- PAGE 1 -->
+  <section class="sheet">
+    <p class="sheet__eyebrow">Document · 01</p>
+    <h1 class="display">a multi-page<br><span class="accent">PDF</span>, from HTML</h1>
+    <p class="lead">Every <code>.sheet</code> becomes one page. Design in the browser, click
+      Download PDF, and html2canvas + jsPDF rasterize each sheet into a crisp A4 page.</p>
+    <div style="margin-top:40px">
+      <div class="spec"><span>format</span><span>A4 · 794×1123px</span></div>
+      <div class="spec"><span>engine</span><span>html2canvas 1.4.1 + jsPDF 2.5.1</span></div>
+      <div class="spec"><span>pages</span><span>2</span></div>
+    </div>
+    <div class="sheet__footer"><span>web-to-pdf</span><span>01 / 02</span></div>
+  </section>
+
+  <!-- PAGE 2 -->
+  <section class="sheet">
+    <p class="sheet__eyebrow">Document · 02</p>
+    <h2 class="display">keep assets <span class="accent">inline</span></h2>
+    <p class="lead">For a clean export, any image or background must be an inline base64 data URI,
+      and avoid SVG-filter backgrounds — otherwise the canvas taints and the download fails.
+      See reference.md.</p>
+    <div class="sheet__footer"><span>web-to-pdf</span><span>02 / 02</span></div>
+  </section>
+
+  <!-- Download control -->
+  <div class="pdf-bar"><button id="downloadPdfBtn" type="button">Download PDF</button></div>
+
+  <!-- PDF engine -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="../assets/pdf-export.js"></script>
+  <script>
+    PdfExport.attachButton('#downloadPdfBtn', {
+      sheetSelector: '.sheet',
+      filename: 'web-to-pdf-starter.pdf',
+      // background defaults to the sheet's --paper var, else white
+    });
+  </script>
+</body>
+</html>
