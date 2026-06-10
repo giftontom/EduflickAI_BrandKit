@@ -237,12 +237,26 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
 
 ### COURSE MURAL · Wave 4 (top row · launch day)
 
+> **Course name leads (this wave).** The program name **`full-stack ai engineer`** is the
+> hero headline on the launch tile (Post 12) and the carousel cover (Post 11), and the legible
+> eyebrow on Post 10 — so a scroller understands what this is at a glance. The `eduflick AI`
+> wordmark is demoted to the footer/brand line, never the hero.
+>
+> **Funnel priority (this wave): apply-first.** The primary CTA across all three tiles is
+> `apply → eduflickai.com/apply`. The free masterclass is the *soft secondary* only (a muted
+> second line on the carousel CTA slide). Seat count is **FACTS-driven** — the coral pill reads
+> the live `Seats remaining` value from `FACTS.md` (currently `20 of 20`); update FACTS and
+> re-export as seats fill. Do **not** hand-type a number that isn't in FACTS.
+
 #### Post 10 — TR · Day 4 · Single image · Pioneer Urgency / Conversion
-- **Visual concept:** intake / scarcity tile. Eyebrow `PIONEER COHORT 01`, headline, the one
-  **coral** scarcity pill, and the apply CTA. Right of the course mural.
-- **Safe zone:** coral pill + number prominent and centered in the safe square.
-- **On-image:** eyebrow `PIONEER COHORT 01` · headline `20 *selective* seats` · coral pill
-  `20 selective intake · ₹49,000` · sub `₹70,000 from cohort 2`
+- **Visual concept:** intake / scarcity tile, **center-aligned** to sit in the course banner.
+  Eyebrow `PIONEER COHORT 01`, the `20 *selective* seats` ticket, the one **coral** live-seat
+  pill, founding price, and the apply CTA. Rightmost slice of the course mural.
+- **Safe zone:** ticket + coral pill + number prominent and centered in the safe square.
+- **On-image:** eyebrow `FULL-STACK AI ENGINEER · COHORT 01` *(names the program)* · ticket
+  `12 weeks · uxp innovation hub, trivandrum` / `20 *selective* seats` · coral pill
+  `20 of 20 seats open` *(live, from FACTS)* · sub `₹49,000 founding · ₹70,000 from cohort 2` ·
+  cta `apply → eduflickai.com/apply`
 - **Caption**
   - **Hook:** pioneer cohort 01: 20 *selective* seats. that's the whole room.
   - **Body:** the full-stack ai engineer program. 12 weeks, in person at uxp innovation hub, trivandrum. founding price ₹49,000 (₹70,000 from cohort 2). strictly capped at 20 seats to guarantee 1:1 code reviews.
@@ -251,30 +265,34 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
 
 #### Post 11 — TC · Day 4 · Carousel (major) · The Cohort / Consideration→Conversion
 - **Visual concept:** the course carousel; **cover = the course mural's center slice** (the brightest
-  point), with the wordmark hero. Carousel marker.
-- **On-cover headline:** `ship *ai products*, not theory`
-- **Slides**
-  1. **Cover** — `FULL-STACK AI ENGINEER PROGRAM` / **ship *ai products*, not theory** / 12 weeks, in person, trivandrum. you build 3 real ones. / swipe →
+  point). The program name **`full-stack ai *engineer*`** is the hero headline; the tagline +
+  the 3 product cards support it; the `eduflick AI` wordmark sits small at the foot. Carousel marker.
+  Middle slides **show** the build: a row of real tool-pills + a `shipped → <project>` tag per month.
+- **On-cover headline:** `full-stack ai *engineer*` *(course name = hero)*
+- **Slides** *(tight 7; months 1–3 carry a visual tech-stack row + shipped-project tag)*
+  1. **Cover** — eyebrow `PIONEER COHORT 01 · 12 WEEKS · TRIVANDRUM` / hero **full-stack ai *engineer*** / sub "ship ai products, not theory. a hands-on, in-person program." / 3 product cards / swipe →
   2. `01 · THE GAP` / **"ai experience required"** / every job wants it. you know react but have never shipped with an llm. we close that.
-  3. `02 · MONTH 1` / **foundations + your first ship** / the real stack — cursor, next.js, claude/openai. you deploy a saas dashboard.
-  4. `03 · MONTH 2` / **rag + agents** / pinecone, langchain, n8n. you build a rag chatbot that answers from real docs. deployed.
-  5. `04 · MONTH 3` / **an agentic platform + hiring** / capstone agentic build, then mock interviews and industry recruiter networking.
+  3. `02 · MONTH 1` / **foundations + your first ship** / stack: `cursor · next.js · supabase · vercel` → **shipped: saas dashboard** (deployed by week 4).
+  4. `03 · MONTH 2` / **rag + agents** / stack: `openai/claude · pinecone · langchain` → **shipped: rag chatbot** grounded in real docs.
+  5. `04 · MONTH 3` / **agentic platform + hiring** / stack: `google adk · n8n` → **shipped: agentic platform**. week 12 — mock interviews + industry recruiter networking.
   6. `05 · THE ROOM` / **20 selective seats** / in person at uxp innovation hub, trivandrum. ₹49,000 founding (₹70,000 from cohort 2).
-  7. **CTA** — `START FREE` / **see it *live* first** / free technical masterclass — we build a real ai app on the spot. / register free → eduflickai.com/masterclass
+  7. **CTA (apply-first)** — `APPLY · COHORT 01` / **claim your *seat*** / 20 selective seats. apply → eduflickai.com/apply · *(soft secondary)* not ready? free masterclass first → /masterclass
 - **Caption**
   - **Hook:** 12 weeks. 3 *deployed* ai projects. one room of 20.
-  - **Body:** the full-stack ai engineer program — in person at uxp innovation hub, trivandrum. real stack, real ships, mock interviews + industry recruiter networking. ₹49,000 founding price.
-  - **CTA:** start with the free masterclass → register → eduflickai.com/masterclass
+  - **Body:** the full-stack ai engineer program — in person at uxp innovation hub, trivandrum. real stack, real ships, week-12 mock interviews + industry recruiter networking. ₹49,000 founding price, 20 selective seats.
+  - **CTA:** apply now → eduflickai.com/apply
   - **Hashtags:** #FullStackAI #AIEngineer #TrivandrumTech #BuildInPublic #CareerInAI
 
 #### Post 12 — TL · Day 4 · Single image · Program / Conversion (crescendo, newest tile)
-- **Visual concept:** the launch crescendo and the **newest tile (top-left)** — the mark (paper-fill)
-  + the "live" headline + register CTA. The freshest thing every profile visitor sees.
-- **On-image headline:** `the program is *live*`
+- **Visual concept:** the launch crescendo and the **newest tile (top-left)** — eyebrow + the mark
+  (paper-fill) + the program name **`full-stack ai *engineer*`** as the hero headline + the apply CTA.
+  The freshest thing every profile visitor sees, so the course name must read instantly.
+- **On-image:** eyebrow `PIONEER COHORT 01 · NOW OPEN` · hero `full-stack ai *engineer*` ·
+  sub `the 12-week program is live. apply now.` · cta `apply → eduflickai.com/apply`
 - **Caption**
   - **Hook:** it's live. the full-stack ai engineer program — pioneer cohort *01*.
-  - **Body:** 12 weeks offline at uxp innovation hub, trivandrum. 3 deployed projects, 20 selective seats, ₹49,000 founding price. it starts with a free masterclass.
-  - **CTA:** register free → link in bio · eduflickai.com/masterclass
+  - **Body:** 12 weeks offline at uxp innovation hub, trivandrum. 3 deployed projects, 20 selective seats, ₹49,000 founding price. apply now — or see it live first at a free masterclass.
+  - **CTA:** apply now → eduflickai.com/apply
   - **Hashtags:** #FullStackAI #AIEngineer #TrivandrumTech #TechJobsKerala #CareerInAI
 
 ---
