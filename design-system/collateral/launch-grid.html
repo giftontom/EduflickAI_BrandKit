@@ -68,7 +68,7 @@
   body:has(#safe:checked) .safe{opacity:1}
 
   /* ---------- type (dark-surface defaults) ---------- */
-  .eb{font-family:var(--font-m);font-size:23px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:var(--i-200);position:relative;z-index:3}
+  .eb{font-family:var(--font-m);font-size:24px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--i-100);position:relative;z-index:3}
   .hl{font-family:var(--font-d);font-weight:900;font-size:76px;letter-spacing:-0.05em;line-height:0.92;text-transform:lowercase;color:var(--paper);position:relative;z-index:3}
   .hl.sm{font-size:58px}
   .hl.lg{font-size:104px}
@@ -212,7 +212,7 @@
   /* deck layout */
   .sdeck{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:space-between;padding:4.4em 2.9em}
   .srow{display:flex;align-items:center;justify-content:space-between;gap:1em}
-  .seb{font-family:var(--font-m);font-weight:500;font-size:0.72em;letter-spacing:0.22em;text-transform:uppercase;color:var(--i-200)}
+  .seb{font-family:var(--font-m);font-weight:600;font-size:0.72em;letter-spacing:0.22em;text-transform:uppercase;color:var(--i-100)}
   .sidx{font-family:var(--font-m);font-weight:500;font-size:0.66em;letter-spacing:0.16em;color:rgba(245,242,234,0.5)}
   .smid{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:0.66em}
   .smotif{position:relative;display:flex;align-items:center;min-height:3.4em;margin-bottom:0.15em}
@@ -266,6 +266,19 @@
   .mco .cb{width:2px;height:2.7em;background:rgba(10,11,16,0.25)}
   .mco .ct{font-family:var(--font-d);font-weight:600;font-size:1.3em;text-transform:lowercase;color:var(--ink);display:flex;align-items:center;gap:0.4em}
   .mco .ct b{width:1.05em;height:1.05em;border-radius:50%;background:var(--ink);display:block}
+  /* stack-row motif — the real tools per module + the shipped project (show, don't tell) */
+  .mstackwrap{flex-direction:column;align-items:flex-start;gap:0.6em}
+  .mstack{display:flex;flex-wrap:wrap;align-items:center;gap:0.42em;max-width:18em}
+  .mtool{font-family:var(--font-m);font-weight:500;font-size:0.92em;letter-spacing:0.02em;text-transform:lowercase;color:var(--paper);
+    border:1.5px solid rgba(139,151,255,0.55);border-radius:0.5em;padding:0.3em 0.6em;background:rgba(91,91,240,0.16);white-space:nowrap;line-height:1}
+  .mship{display:inline-flex;align-items:baseline;gap:0.42em;font-family:var(--font-m);font-weight:500;font-size:0.82em;letter-spacing:0.12em;text-transform:uppercase;color:var(--i-200)}
+  .mship::before{content:'→';font-family:var(--font-d);font-weight:700;color:var(--i-300);transform:translateY(0.05em)}
+  .mship b{font-weight:500;color:var(--paper);text-transform:none;letter-spacing:0.01em;border-bottom:1.5px solid rgba(139,151,255,0.5);padding-bottom:0.08em}
+  .vs-paper .mtool{color:var(--ink);border-color:rgba(91,91,240,0.5)}
+  .vs-paper .mship{color:var(--i-500)} .vs-paper .mship b{color:var(--ink);border-bottom-color:rgba(91,91,240,0.5)}
+  /* secondary (soft) line under a CTA slide's support text */
+  .snote{display:block;margin-top:0.55em;font-size:0.8em;color:rgba(245,242,234,0.5)}
+  .vs-paper .snote{color:rgba(10,11,16,0.5)}
 
   /* viewer chrome */
   .vnav{position:fixed;top:50%;transform:translateY(-50%);background:rgba(245,242,234,0.08);border:1px solid rgba(245,242,234,0.22);
@@ -329,32 +342,36 @@
         <div class="cv center">
           <div class="pos">TL · post 12</div>
           <svg class="ghost" style="bottom:-120px;left:-120px" viewBox="0 0 180 180" width="640" height="640"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
-          <div class="halo" style="width:600px;height:600px;left:50%;top:42%;transform:translate(-50%,-50%)"></div>
-          <svg class="glow" viewBox="0 0 180 180" width="180" height="180"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
-          <div class="hl">the program is <em>live</em></div>
-          <div class="cta">register free → eduflickai.com</div>
+          <div class="halo" style="width:560px;height:560px;left:50%;top:34%;transform:translate(-50%,-50%)"></div>
+          <div class="eb">pioneer cohort 01 · now open</div>
+          <svg class="glow" viewBox="0 0 180 180" width="118" height="118"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+          <div class="hl lg">full-stack ai<br><em>engineer</em></div>
+          <div class="sub" style="text-align:center">the 12-week program is live. apply now.</div>
+          <div class="cta">apply → eduflickai.com/apply</div>
           <div class="safe"></div>
         </div>
         <div class="cv center tap" onclick="openViewer('tc')">
           <div class="pos">TC · post 11 · carousel</div>
           <div class="car"><div class="carstack"><i></i><i></i></div><div class="carlbl">carousel · 7 ›</div></div>
-          <div class="wm">eduflick<i>AI</i></div>
-          <div class="hl sm">ship <em>ai products</em>, not theory</div>
+          <div class="eb">pioneer cohort 01 · 12 weeks · trivandrum</div>
+          <div class="hl lg">full-stack ai<br><em>engineer</em></div>
+          <div class="sub" style="text-align:center">ship ai products, not theory.<br>a hands-on, in-person program.</div>
           <div class="ui">
             <div class="uicard"><div class="bar1"></div><div class="bar2"></div><div class="bar3"></div><span class="chip">saas dashboard</span></div>
             <div class="uicard"><div class="bar1"></div><div class="bar2"></div><div class="bar3"></div><span class="chip">rag chatbot</span></div>
             <div class="uicard"><div class="bar1"></div><div class="bar2"></div><div class="bar3"></div><span class="chip">agentic platform</span></div>
           </div>
+          <div class="wm sm" style="opacity:0.5;font-size:34px;margin-top:6px">eduflick<i>AI</i></div>
           <div class="safe"></div>
         </div>
-        <div class="cv">
+        <div class="cv center">
           <div class="pos">TR · post 10</div>
-          <div class="eb">pioneer cohort 01</div>
+          <div class="eb">full-stack ai engineer · cohort 01</div>
           <div class="ticket">
-            <div class="t-eb">in person · uxp innovation hub</div>
+            <div class="t-eb">12 weeks · uxp innovation hub, trivandrum</div>
             <div class="t-h">20 <em>selective</em> seats</div>
           </div>
-          <div class="coral">7 of 20 seats left</div>
+          <div class="coral">20 of 20 seats open</div>
           <div class="sub">₹49,000 founding · ₹70,000 from cohort 2</div>
           <div class="cta">apply → eduflickai.com/apply</div>
           <div class="safe"></div>
@@ -532,13 +549,13 @@
         { eb:"EDUFLICK AI", motif:"mark", hl:"follow the <em>build</em>", sup:"follow → @eduflick.ai" }
       ]},
       tc: { title: "the course", surf: "top", slides: [
-        { eb:"FULL-STACK AI ENGINEER PROGRAM", motif:"checklist", hl:"ship <em>ai products</em>, not theory", sup:"12 weeks, in person, trivandrum. you build 3 real ones." },
+        { eb:"PIONEER COHORT 01 · 12 WEEKS · TRIVANDRUM", motif:"checklist", hl:"full-stack ai <em>engineer</em>", sup:"ship ai products, not theory. a hands-on, in-person program." },
         { eb:"01 · THE GAP", motif:"gapbars", hl:"ai experience <em>required</em>", sup:"every job wants it. you know react but have never shipped with an llm. we close that." },
-        { eb:"02 · MONTH 1", motif:"chip:01", hl:"foundations + your first <em>ship</em>", sup:"the real stack — cursor, next.js, claude/openai. you deploy a saas dashboard." },
-        { eb:"03 · MONTH 2", motif:"chip:02", hl:"rag + <em>agents</em>", sup:"pinecone, langchain, n8n. you build a rag chatbot that answers from real docs. deployed." },
-        { eb:"04 · MONTH 3", motif:"chip:03", hl:"an agentic platform + <em>hiring</em>", sup:"capstone build, then mock interviews and industry recruiter networking." },
+        { eb:"02 · MONTH 1", motif:"stack:cursor,next.js,supabase,vercel|ship:saas dashboard", hl:"foundations + your first <em>ship</em>", sup:"the real ai-dev stack. by week 4 you deploy a live saas dashboard." },
+        { eb:"03 · MONTH 2", motif:"stack:openai/claude,pinecone,langchain|ship:rag chatbot", hl:"rag + <em>agents</em>", sup:"retrieval + memory. a chatbot that answers from real docs — deployed." },
+        { eb:"04 · MONTH 3", motif:"stack:google adk,n8n|ship:agentic platform", hl:"agentic platform + <em>hiring</em>", sup:"a capstone agentic build, then week 12 — mock interviews + industry recruiter networking." },
         { eb:"05 · THE ROOM", motif:"stat:20", hl:"20 <em>selective</em> seats", sup:"in person at uxp innovation hub, trivandrum. ₹49,000 founding (₹70,000 from cohort 2)." },
-        { eb:"START FREE", motif:"spark", hl:"see it <em>live</em> first", sup:"free masterclass → register → eduflickai.com/masterclass" }
+        { eb:"APPLY · COHORT 01", motif:"spark", hl:"claim your <em>seat</em>", sup:"20 selective seats. apply → eduflickai.com/apply<span class='snote'>not ready? start with the free masterclass → /masterclass</span>" }
       ]},
       ur: { title: "tomatrix technologies pvt ltd", surf: "paper", slides: [
         { eb:"BACKED BY", motif:"cobrand", hl:"a deep-tech <em>venture</em>", sup:"eduflick ai is the flagship product of <span class='proper'>Tomatrix Technologies Pvt Ltd</span> — the ai-first studio that builds it." },
@@ -602,6 +619,16 @@
         case 'checklist':return '<div class="mo mcheck"><i>build</i><i>review</i><i>deploy</i></div>';
         case 'slicer':  return '<div class="mo"><span class="mframe"></span><span class="marr">→</span><span class="mframe lit"></span></div>';
         case 'chip':    return '<div class="mo"><span class="mchip">'+(arg||'01')+'</span></div>';
+        case 'stack': { // stack:tool,tool,tool|ship:project name  — re-parse from m so the ship label can contain ':'
+          const body = String(m).slice(6), segs = body.split('|');
+          const tools = (segs[0]||'').split(',').map(t=>t.trim()).filter(Boolean);
+          const shipSeg = segs.find(x=>x.trim().toLowerCase().startsWith('ship:'));
+          const ship = shipSeg ? shipSeg.trim().slice(5).trim() : '';
+          return '<div class="mo mstackwrap">'
+            + '<div class="mstack">'+tools.map(t=>'<span class="mtool">'+t+'</span>').join('')+'</div>'
+            + (ship ? '<div class="mship">shipped <b>'+ship+'</b></div>' : '')
+            + '</div>';
+        }
         case 'cobrand': return '<div class="mo mco"><svg viewBox="0 0 180 180" style="width:1.5em;height:1.5em;flex-shrink:0"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#0B0822"/></svg><span class="cw">eduflick<i>AI</i></span><span class="cb"></span><img src="../../assets/partners/tomatrix-logo-light.png" alt="Tomatrix Technologies" style="height:3.1em;width:auto;display:block;flex-shrink:0"></div>';
         default: return '';
       }

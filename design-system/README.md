@@ -206,10 +206,10 @@ Root files:
 | `SKILL.md` | Agent Skill entry point (cross-compatible with Claude Code) |
 | `DESIGN_CHEATSHEET.md` | The whole visual system compressed to one paste-anywhere page — for feeding a model (esp. small ones) as context. |
 | `SMALL_MODELS_GUIDE.md` | How to get on-brand HTML out of small/cheap models: the render→inspect→fix loop + failure modes. |
-| `AI_IMAGERY_GUIDE.md` | When/how to generate abstract indigo backdrops (Nano Banana 2) and layer them *behind* the type + mark — the master image-prompt kit + imagery QA. |
+| `AI_IMAGERY_GUIDE.md` | When/how to make on-brand backdrops and layer them *behind* the type + mark — abstract indigo (Nano Banana 2) **and** brand-treated representational photography (indigo duotone); the hybrid per-surface policy, image-prompt kit + imagery QA. |
 | `QA_CHECKLIST.md` | Visual pass/fail gate + scorecard run on any rendered artifact before export. |
 | `recipes/` | Assemble-don't-invent build kit: `00_SYSTEM_PROMPT.md`, `snippets.md` (HTML parts bin — incl. cinematic `S15–S19`; **generated** from `snippets.src.md` via `npm run snippets`), and recipes for instagram-post · poster · slide-deck · landing-section · brochure-page · **launch-grid**. |
-| `collateral/` | Ready-to-fill kits: **`launch-grid.html`** (the 12-tile cinematic IG launch mural + in-page carousel viewer + deck slides), `instagram-kit.html`, `brochure-kit.html`, `content-calendar.html` |
+| `collateral/` | Ready-to-fill kits: **`launch-grid.html`** (the 12-tile cinematic IG launch mural + in-page carousel viewer + deck slides), **`posters.html`** (3 cinematic launch posters — program · cohort · masterclass, 1080×1350, with an `assets/backdrops/` image layer), `instagram-kit.html`, `brochure-kit.html`, `content-calendar.html` |
 | `assets/logo/` | Canonical marks (`mark*.svg`), lockups (`lockup-*.svg`), `favicon.svg`, `LOGO_README.md` |
 | `assets/logo/social/` | Avatars (indigo/ink/paper + the **gradient `avatar-pf-av-*`**, built by `../tools` `export:avatar`), LinkedIn/YouTube/Twitter banners, OG card |
 | `assets/partners/` | Partner/parent logos — `tomatrix-logo-light.png` (transparent) for the co-brand lockup |
@@ -218,7 +218,7 @@ Root files:
 | `ui_kits/app/` | Consumer mobile app UI kit (feed, flick player, search, profile, Sparks) |
 | `ui_kits/web/` | Educator/institution web UI kit (dashboard, library, analytics, marketing) |
 | `slides/` | Sample brand presentation slides (title, section, content, quote, closing) |
-| `../tools/` | **Pixel-perfect PNG exporter** (Playwright): `npm run export` (every post + carousel slide → 1080×1350), `export:avatar`, `serve`. See `../tools/README.md`. |
+| `../tools/` | **Pixel-perfect PNG exporter** (Playwright): `npm run export` (every post + carousel slide → 1080×1350), `export:posters` (the 3 launch posters), `gen:backdrops` (abstract AI backdrops + `:proc` fallback), `fetch:stock` + `treat:stock` (photoreal indigo-duotone backdrops), `export:avatar`, `serve`. See `../tools/README.md`. |
 
 **Start here:** import `colors_and_type.css`, load the three Google fonts, then compose
 with components from the relevant UI kit. Build wordmarks in HTML

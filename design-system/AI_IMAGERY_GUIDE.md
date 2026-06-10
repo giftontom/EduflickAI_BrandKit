@@ -9,8 +9,11 @@ The whole strategy in one line: **the AI generates only the imagery layer; the w
 and the mark stay in HTML/CSS on top of it.** That single rule is what keeps the FACTS-block
 anti-hallucination guarantee intact and the mark untouched, while still letting the brand breathe.
 
-> Decision baked in: imagery is **abstract, indigo-monochrome, on-brand only** — never photoreal
-> people, objects, or stock scenes. The standard generator is **Nano Banana 2 (Gemini 3 Pro Image)**.
+> Decision baked in: backdrops are **indigo-monochrome, on-brand only**, in one of two modes —
+> (A) **abstract generative texture** (Nano Banana 2 / procedural), or (B) **brand-treated
+> representational photography** forced to an indigo **duotone**. Which mode per surface is the
+> **hybrid policy** in §2. Either way the image is the *backdrop*; the words, numbers, and mark
+> stay in HTML on top.
 
 ---
 
@@ -34,24 +37,53 @@ then, layer it under the same `S16`/`S17` treatment so it matches everything els
 Rule of thumb: if removing the image changes the *meaning*, you're using it wrong. The image is
 **mood**, never **message**. The message is always the type on top.
 
-## 2. The brand stance — this extends the rules, it doesn't break them
+## 2. The brand stance — two backdrop modes, one hue
 
-The system says *"No photography. No stock photos. Imagery replaced by the mark, by data, or by
-editorial type"* (`recipes/00_SYSTEM_PROMPT.md`, `README.md §3`). AI imagery lives inside that rule,
-not against it, because what we generate is **abstract texture, not a photograph**:
+The system's original line is *"No photography. No stock photos. Imagery replaced by the mark, by
+data, or by editorial type"* (`recipes/00_SYSTEM_PROMPT.md`, `README.md §3`). That still governs the
+**default**. What we add is a **narrow, treated exception**: a backdrop may be a real photograph
+**only after** it is forced onto the indigo ramp (a duotone) so it reads as one-hue brand texture,
+not a stock photo. So there are now **two backdrop modes**, and both stay indigo-monochrome:
 
-**Allowed (and only this):** abstract indigo-monochrome fields — volumetric light, fine particle
-fields, topographic contours, soft geometric planes, the square-feed-card-with-a-notch motif
-abstracted into shape. Dark by default. One hue plus its ramp.
+**Mode A — abstract generative texture** (the original).
+Volumetric indigo light, particle fields, topographic contours, soft geometric planes, the
+square-feed-card-with-a-notch motif. Dark by default. Generated (Nano Banana 2) or procedural
+(`tools/gen-backdrops-proc.mjs`). Nothing recognizable; pure mood. One hue plus its ramp.
 
-**Never generated into the image:**
-- **text, letters, words, numbers** — they hallucinate facts and never match Manrope/Mono anyway
-- **the mark / any logo / watermark** — the mark stays exact HTML/SVG on top, untouched
-- **people, faces, hands, real objects, devices** — that's the "no stock photos" line
-- **a third hue** — no teal, no purple drift, no green/red/orange; indigo + neutral only
-- **bevels, heavy lens flare, busy collage** — calm, editorial, generous negative space
+**Mode B — brand-treated representational photography** (the new, narrow exception).
+A real photo of the actual thing — a room of people building, hands on a keyboard, code on a
+screen — run through `tools/treat-stock.mjs`: an SVG `feComponentTransfer` remaps luminance onto
+the indigo ramp (a duotone), erasing all original colour. The result is representational (you can
+tell it's people building) but unmistakably Eduflick (one hue). The photo is still only a
+*backdrop* — the message is the HTML type/mark on top.
 
-If you can read a word in it, or point to a person in it, it failed. Re-generate.
+**The hybrid policy — which mode per surface:**
+
+| Surface | Mode | Why |
+| --- | --- | --- |
+| human / "hero" moments — the room, hands building, an in-person session | **B · photoreal duotone** | warmth + proof; shows the real thing |
+| free masterclass / "see it built live" | **B · photoreal duotone** | the live-build moment is human |
+| number-is-the-hero ("20 seats"), spec-dense, pricing, curriculum | **A · abstract** | a photo competes with the number; keep it calm |
+| OG cards, dividers, atmospheric fills where no subject helps | **A · abstract** | mood only |
+
+Rule of thumb unchanged: if removing the image changes the *meaning*, you're using it wrong — even
+in Mode B the photo is mood/proof, never the claim. (Shipped example: `collateral/posters.html` —
+`program` + `masterclass` are Mode B, `seats` is Mode A; the full 6-archetype poster system that
+governs which surfaces use imagery is in `recipes/poster.md`.)
+
+**Guardrails for Mode B (all must hold, or fall back to Mode A):**
+- **One hue.** Output is a strict indigo duotone — the treatment guarantees it; never ship an
+  untreated colour photo.
+- **Backdrop only.** Type, numbers, and the mark stay in HTML on top; the photo sits in the `S20`
+  image-layer with the `S16`/`S17`/scrim treatment over it.
+- **No added text or logo**, and **no readable text in the source** — incidental on-screen code
+  must be reduced to texture by the treatment + scrim, never a legible word or a real brand/logo.
+- **People as atmosphere, not testimonial** — a figure building is fine; no posed face presented as
+  a named student, no implied claim a photo can't back.
+- **Same eyes-only QA** (§6) — if it doesn't sit beside the launch grid as one-hue Eduflick, it fails.
+
+**Still never (either mode):** a third hue (teal/purple/green/red/orange), a rainbow gradient, added
+text/letters/numbers, the mark or any logo baked into the pixels, bevels/heavy flare/busy collage.
 
 ## 3. The blend — a composite layer model
 
@@ -155,6 +187,28 @@ ASPECT: [[4:5]]
 NEGATIVE: [NEGATIVE BLOCK]   ← paste verbatim, §4
 ```
 
+### Treatment (Mode B) — the indigo duotone
+
+For representational photography you don't *prompt* — you **treat**. `tools/treat-stock.mjs` maps
+the photo's luminance onto the indigo ramp via an SVG `feComponentTransfer` (shadows → mids →
+highlights), so every pixel lands on one hue. Two ramps:
+
+- **dark** (default, over ink) — 4-stop for richer gradation: `#0A0B10` → `#0B0822` → `#5B5BF0` → `#8B97FF`
+  - `feFuncR "0.039 0.043 0.357 0.545"` · `feFuncG "0.043 0.031 0.357 0.592"` · `feFuncB "0.063 0.133 0.941 1.0"`
+- **paper** (high-key, light surfaces): `#5B5BF0` → `#8B97FF` → `#F5F2EA`
+  - `feFuncR "0.357 0.545 0.961"` · `feFuncG "0.357 0.592 0.949"` · `feFuncB "0.941 1.0 0.918"`
+
+Pick sources that **duotone well**: high-contrast, dramatic light, simple composition (a server
+wall, a backlit keyboard, a dev at monitors in the dark) read premium; flat, evenly-lit group
+photos read amateur no matter the ramp. Harvest several and look — `HARVEST=10 npm run fetch:stock`
+then `PICK_<name>=N`.
+
+The **negative block above is for Mode A.** Mode B *keeps* every line of it **except** the
+people/photo line — a real photo of people building is the whole point — because the duotone + the
+§2 guardrails do the policing instead. What never changes: one hue, no added text, no logo, no third
+colour. (Note: over a high-key *paper* duotone, dark display type needs a light text-shadow halo to
+stay legible — see the `.poster.paper .headline` rule in `posters.html`.)
+
 ## 5. Nano Banana 2 / Gemini 3 Pro Image — how to run it
 
 Chosen because it's **API-first** (slots into the repo's Claude-API + prompt-cache workflow) and
@@ -208,16 +262,33 @@ change `QA_CHECKLIST.md`.)
 && npm run export` (or screenshot it). A model will *say* "indigo only" and emit a teal wash. Looking
 is the only reliable check.
 
-## 7. Where this goes next (future — not built here)
+## 7. Where this goes next (what's built · what's next)
 
-This guide is the research + the reusable prompt kit. When the team is ready to wire imagery into the
-assemble-don't-invent pipeline the way recipes are today, the next step is:
+**Built so far:** the **`S20` image-layer** snippet (`recipes/snippets.src.md`), the composite in
+`collateral/posters.html` (**all 7 posters carry a real backdrop** — every `[data-export]` has an
+`.img-layer`), and the generator `tools/gen-backdrops.mjs`. The generator is now **robust**: it tries
+a **cascade** of image models (`gemini-3-pro-image` → `gemini-2.5-flash-image` →
+`gemini-3.1-flash-image` → `imagen-4`), backs off once on a transient 429, and on a **hard free-tier
+block** auto-falls-back to the procedural generator so no poster is ever left without an image. The
+art itself (briefs + the procedural SVG textures) is one source of truth in `tools/_backdrop-art.mjs`,
+shared with `tools/gen-backdrops-proc.mjs` (same filenames, so a billed key is a drop-in re-run).
+
+> **Reality check (2026-06):** *every* Gemini/Imagen image model is **paid-only** on a free key —
+> `gemini-3-pro-image` returns `429 / limit: 0`; Imagen returns *"only available on paid plans."* So
+> what ships today is the on-brand **procedural** Mode-A set; enable billing on the key's Google Cloud
+> project and `npm run gen:backdrops` swaps in real AI art with zero other changes.
+
+The **Mode B duotone pipeline** is also built: `tools/fetch-stock.mjs` (licensed sources — Pexels,
+or keyless Wikimedia Commons → `tools/stock-sources/`, with provenance in `backdrops/SOURCES.md`)
+and `tools/treat-stock.mjs` (`npm run treat:stock` → indigo duotone, §4 ramps), wired into
+`posters.html` so `program` + `masterclass` carry real treated photos (Mode B) while the other five
+(`seats`, `build`, `why`, `proof`, `enquiry`) carry abstract Mode-A textures — the hybrid policy of
+§2, shipped across the whole set.
+
+Still open:
 
 - `recipes/ai-image.md` — an image-only recipe (BRIEF → finished image prompt, §4 productized)
-- `recipes/composite-canvas.md` — layers a generated image behind a canvas, then `S17`+`S16`+`S15`
-  over it and the type on top (the §3 stack)
-- a small **`S20` image-layer** snippet in `recipes/snippets.md` — just the `.img-layer` wrapper from
-  §3 (the cinematic treatment it sits under, `S15`–`S17`/`S19`, already ships)
+- `recipes/composite-canvas.md` — generalise the `posters.html` composite to any canvas (the §3 stack)
 - ~5 lines added to `QA_CHECKLIST.md` for the §6 hard-fails
 - a content-studio `IMAGE BRIEF` field (in `prompts/`) so one brief yields **copy + a matching
   backdrop** — the full "words and visuals from one brief" blend

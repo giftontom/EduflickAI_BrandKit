@@ -227,9 +227,144 @@ Carousel **deck slide** — eyebrow + slide-index → motif + headline + support
 </div>
 ```
 
+## S20 · AI image backdrop layer (composite — image UNDER the type/mark)
+A generated indigo backdrop on the bottom; S16 grain + S17 vignette + S15 halo sit OVER it; the type
+and mark stay in HTML on top. No text/logo/people in the image. Generate with
+`../../tools/gen-backdrops.mjs` (Nano Banana / `gemini-3-pro-image`; needs a billing-enabled key) or
+the procedural fallback `../../tools/gen-backdrops-proc.mjs`. See `../AI_IMAGERY_GUIDE.md`.
+```css
+.img-layer{position:absolute;inset:0;z-index:0;overflow:hidden}
+.img-layer img{width:100%;height:100%;object-fit:cover;display:block}
+/* legibility scrim — darken top + bottom; headline zone stays open (paper theme → swap to paper rgba) */
+.scrim{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,rgba(7,5,22,0.46) 0%,rgba(7,5,22,0.05) 24%,rgba(7,5,22,0.04) 54%,rgba(7,5,22,0.72) 100%)}
+```
+```html
+<div class="img-layer"><img src="assets/backdrops/NAME.png" alt=""></div><div class="scrim"></div>
+<!-- then S16 grain · S17 vignette · S15 halo · the S4/S5/S6/S2 content stack — all OVER the image -->
+```
+
+## S21 · Browser / app mockup frame (show the real thing you build)
+Window chrome wrapping an **HTML-built** faux UI — never a screenshot, so no third hue and no
+invented text leaks in. Dots are neutral (one-hue rule). Swap the `.ui` body per project:
+a **SaaS dashboard** (bars below), a **RAG chat** thread, or **agentic nodes**.
+```html
+<div style="border-radius:14px;overflow:hidden;background:{{ink-2}};border:1px solid rgba(245,242,234,0.10);box-shadow:0 30px 80px -30px rgba(0,0,0,0.7),0 8px 32px -8px rgba(91,91,240,0.35)">
+  <div style="display:flex;align-items:center;gap:8px;padding:13px 16px;background:{{ink-3}};border-bottom:1px solid rgba(245,242,234,0.08)">
+    <span style="width:11px;height:11px;border-radius:50%;background:rgba(245,242,234,0.22)"></span>
+    <span style="width:11px;height:11px;border-radius:50%;background:rgba(245,242,234,0.16)"></span>
+    <span style="width:11px;height:11px;border-radius:50%;background:rgba(245,242,234,0.10)"></span>
+    <span style="margin-left:14px;font-family:'JetBrains Mono';font-size:11px;color:{{slate-500}}">localhost:3000 — saas-dashboard</span>
+  </div>
+  <div style="padding:26px 24px;display:flex;flex-direction:column;gap:18px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline">
+      <span style="font-family:'Manrope';font-weight:800;font-size:22px;letter-spacing:-0.02em;color:{{paper}}">revenue</span>
+      <span style="font-family:'JetBrains Mono';font-size:12px;color:{{i-300}}">+18.4% ↑</span>
+    </div>
+    <div style="height:130px;display:flex;align-items:flex-end;gap:12px">
+      <!-- bars: indigo gradient, varying heights -->
+      <span style="flex:1;height:46%;background:linear-gradient(180deg,{{i-300}},{{i-500}});border-radius:5px 5px 0 0"></span>
+      <span style="flex:1;height:64%;background:linear-gradient(180deg,{{i-300}},{{i-500}});border-radius:5px 5px 0 0"></span>
+      <span style="flex:1;height:38%;background:linear-gradient(180deg,{{i-300}},{{i-500}});border-radius:5px 5px 0 0"></span>
+      <span style="flex:1;height:82%;background:linear-gradient(180deg,{{i-300}},{{i-500}});border-radius:5px 5px 0 0"></span>
+      <span style="flex:1;height:70%;background:linear-gradient(180deg,{{i-300}},{{i-500}});border-radius:5px 5px 0 0"></span>
+      <span style="flex:1;height:100%;background:linear-gradient(180deg,{{paper}},{{i-300}});border-radius:5px 5px 0 0"></span>
+    </div>
+    <div style="display:flex;gap:12px">
+      <div style="flex:1;background:rgba(245,242,234,0.04);border:1px solid rgba(245,242,234,0.08);border-radius:12px;padding:14px 16px">
+        <div style="font-family:'Manrope';font-weight:900;font-size:26px;color:{{paper}}">2,481</div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:{{slate-500}};margin-top:2px">users</div>
+      </div>
+      <div style="flex:1;background:rgba(245,242,234,0.04);border:1px solid rgba(245,242,234,0.08);border-radius:12px;padding:14px 16px">
+        <div style="font-family:'Manrope';font-weight:900;font-size:26px;color:{{paper}}">99.9%</div>
+        <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:{{slate-500}};margin-top:2px">uptime</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- RAG-chat body variant (drop in place of the dashboard body):
+<div style="padding:22px;display:flex;flex-direction:column;gap:12px">
+  <div style="align-self:flex-end;max-width:78%;background:{{i-500}};color:{{paper}};border-radius:14px 14px 4px 14px;padding:12px 16px;font-family:'Manrope';font-size:15px">summarise our refund policy</div>
+  <div style="align-self:flex-start;max-width:86%;background:rgba(245,242,234,0.05);border:1px solid rgba(245,242,234,0.08);color:{{paper-dim}};border-radius:14px 14px 14px 4px;padding:12px 16px;font-family:'Manrope';font-size:15px">Refunds are issued within 14 days… <span style="color:{{i-300}};font-family:'JetBrains Mono';font-size:11px">[policy.pdf · p.3]</span></div>
+</div> -->
+```
+
+## S22 · Achievement badge / ribbon + outcome block (proof — real facts only)
+The skill.mount "PLACED" device, on-brand. **No invented alumni/placements** — the cohort hasn't
+run. Use real outcomes; ship the testimonial as a labelled template until a real member exists.
+```html
+<!-- the badge -->
+<span style="display:inline-flex;align-items:center;gap:10px;font-family:'Manrope';font-weight:900;font-size:18px;letter-spacing:0.04em;text-transform:uppercase;color:{{ink}};background:{{i-300}};border-radius:9px;padding:10px 18px;box-shadow:0 10px 34px -10px rgba(91,91,240,0.55)">
+  <svg viewBox="0 0 180 180" width="18" height="18"><path d="{{mark-path}}" fill="{{ink}}"/></svg> deployed
+</span>
+<!-- the real outcome (FACTS) -->
+<p style="font-family:'Manrope';font-weight:700;font-size:24px;letter-spacing:-0.02em;color:{{paper}};margin-top:18px">by week 12 you ship <em style="font-family:'Instrument Serif';font-style:italic;font-weight:400;color:{{i-300}}">three real</em> ai products.</p>
+<!-- TESTIMONIAL TEMPLATE — fill ONLY with a real Pioneer Cohort member; until then leave the placeholders -->
+<figure style="display:flex;gap:18px;align-items:center;margin-top:26px">
+  <div style="width:72px;height:72px;border-radius:50%;background:{{ink-2}};border:1px solid rgba(245,242,234,0.12);flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden">
+    <!-- duotone photo cut-out goes here (treat-stock.mjs); placeholder = mark -->
+    <svg viewBox="0 0 180 180" width="30" height="30"><path d="{{mark-path}}" fill="{{i-300}}"/></svg>
+  </div>
+  <figcaption>
+    <p style="font-family:'Instrument Serif';font-style:italic;font-size:20px;line-height:1.3;color:{{paper}}">“[[QUOTE — real cohort member only]]”</p>
+    <p style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:{{slate-500}};margin-top:8px">[[STUDENT NAME]] · pioneer cohort 01</p>
+  </figcaption>
+</figure>
+```
+
+## S23 · Feature-point (icon + bold + caption) — the explainer infographic row
+Repeat 3–4×. Swap the inline icon path per point (check / pin / star / clock). One hue: indigo tile.
+```html
+<div style="display:flex;gap:16px;align-items:flex-start">
+  <span style="width:46px;height:46px;border-radius:12px;background:rgba(139,151,255,0.12);border:1px solid rgba(139,151,255,0.22);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{i-300}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+  </span>
+  <div>
+    <p style="font-family:'Manrope';font-weight:800;font-size:18px;letter-spacing:-0.01em;color:{{paper}}">ship 3 deployed projects</p>
+    <p style="font-family:'Manrope';font-weight:500;font-size:14px;line-height:1.5;color:{{paper-dim}};margin-top:3px">a SaaS dashboard, a RAG chatbot, an agentic platform.</p>
+  </div>
+</div>
+<!-- icon paths: pin "M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"+<circle cx=12 cy=10 r=3/> ·
+     clock <circle cx=12 cy=12 r=9/>+"M12 7v5l3 2" · star "M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1z" -->
+```
+
+## S24 · Mark-burst motif (the playful hero — energy without a mascot)
+An oversized flat mark over a radiating indigo sunburst. Strictly one hue; the mark stays flat
+(the light/rays are behind it, never a filter on it). The playful register's hero device.
+```html
+<div style="position:relative;display:flex;align-items:center;justify-content:center;width:760px;height:760px">
+  <div style="position:absolute;inset:0;border-radius:50%;
+    background:repeating-conic-gradient(from 0deg, rgba(139,151,255,0.18) 0deg 5deg, transparent 5deg 17deg);
+    -webkit-mask:radial-gradient(closest-side, transparent 28%, #000 44%, transparent 80%);
+    mask:radial-gradient(closest-side, transparent 28%, #000 44%, transparent 80%)"></div>
+  <div style="position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(closest-side,rgba(139,151,255,0.45),transparent 70%);filter:blur(8px)"></div>
+  <svg viewBox="0 0 180 180" width="300" height="300" style="position:relative;z-index:1"><path d="{{mark-path}}" fill="{{paper}}"/></svg>
+</div>
+```
+
+## S25 · Poll / quiz block (story engagement device)
+The interactive device from the references (entri / IIT / skill.mount). Bake this on-brand card into
+a **9:16 story** (`1080×1920`); for an organic story you can also overlay a **native IG poll sticker**
+on this zone (native = actually interactive). Keep it in the story's safe area (clear of the top ~250px
+and bottom ~250px IG chrome). Options are styled pills, not real buttons.
+```html
+<div style="background:rgba(20,18,52,0.55);backdrop-filter:blur(10px);border:1px solid rgba(245,242,234,0.14);border-radius:22px;padding:26px 24px;box-shadow:0 20px 50px -18px rgba(0,0,0,0.6)">
+  <p style="font-family:'JetBrains Mono';font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:{{i-300}};margin:0 0 16px">be honest —</p>
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <div style="font-family:'Manrope';font-weight:700;font-size:21px;color:{{paper}};background:rgba(245,242,234,0.06);border:1px solid rgba(245,242,234,0.16);border-radius:14px;padding:16px 22px">not yet</div>
+    <div style="font-family:'Manrope';font-weight:700;font-size:21px;color:{{paper}};background:rgba(245,242,234,0.06);border:1px solid rgba(245,242,234,0.16);border-radius:14px;padding:16px 22px">i'm getting there</div>
+  </div>
+</div>
+```
+
 ---
 **Assembly order for most canvases:** frame (S14) → background texture (S11) → eyebrow (S4) →
 headline with one serif word (S5) → body/proof (S6) → CTA button or scarcity flag (S7/S10) →
 footer wordmark + mark (S3/S2). Wrap in S13 to preview.
 **For cinematic depth:** swap the flat bg for S17 (directional gradient + vignette), add S16 grain
 and an S15 halo behind the focal element, build cards with S19 glass, and sign off with S18.
+**For an image backdrop:** drop an S20 `.img-layer` under everything (generated by
+`../../tools/gen-backdrops*.mjs`); the cinematic layers and the type stack sit on top, unchanged.
+**For the poster archetypes** (see `poster.md`): the *premium* register uses S20 photo/S17 cine +
+S5 + S23 feature-points; the *playful* register uses S24 mark-burst or an S21 mockup + big type. The
+fusion devices are S21 (mockup), S22 (badge/proof — real facts only), S23 (infographic), S24 (burst).
