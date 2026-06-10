@@ -61,7 +61,7 @@ Brevity is treated as a core value — *"brevity is respect."*
   (`a feed for **thinking.**`). Use it on the payoff word, never the whole line.
 - **Sentence shape.** Short. Declarative. Often fragments. Cuts to the verb.
   `Mitosis cuts a cell in half. Then it does it again. In 60 seconds, you'll understand why.`
-- **Numbers as proof.** `60s`, `8 flicks`, `78% retention`, `20 seats`. Concrete, not vague.
+- **Numbers as proof.** `60s`, `8 flicks`, `3 deployed projects`, `20 seats`. Concrete, not vague.
 - **Own the unit.** "Flick" is the trademark noun — 1 flick = 1 concept = 60 seconds.
   Use it as a category word ("flick through," "your feed").
 - **Emoji.** Effectively **not used** in product or polished brand copy. The brand book's

@@ -31,7 +31,7 @@ const TEXT_EXT = new Set(['.md', '.html', '.css', '.mjs', '.js', '.json', '.txt'
 // or a RegExp (tested per line; use `label` for the report).
 const RETIRED = [
   { bad: 'Enterprise Solutions', use: 'UXP Innovation Hub, Trivandrum (venue finalized)' },
-  { bad: 'Technopark', use: 'Trivandrum / industry (de-emphasized everywhere)' },
+  { bad: /technopark/i, label: 'Technopark (any case)', use: 'Trivandrum / industry (de-emphasized everywhere)' },
   { bad: '#TechparkTrivandrum', use: '#TrivandrumTech (hashtag finalized)' },
   { bad: 'eduflick.com', use: 'eduflickai.com (correct domain)' },
   // Wrong domain as URL or email host. The IG handle @eduflick.ai (and
