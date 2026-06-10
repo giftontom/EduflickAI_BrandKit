@@ -355,12 +355,16 @@ body {
 
 .asset-meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  row-gap: 8px;
   padding: 0 4px 2px;
 }
 .asset-name {
+  flex: 1 1 140px;
+  min-width: 0;
   font-size: 11px;
   color: var(--fg2);
   overflow: hidden;
@@ -369,7 +373,7 @@ body {
 }
 
 /* status control */
-.status-ctl { position: relative; display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.status-ctl { position: relative; display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-left: auto; }
 .status-ctl.save-err .badge { border-color: var(--warn); color: var(--warn); }
 .status-meta { font-size: 9.5px; color: var(--fg3); }
 
