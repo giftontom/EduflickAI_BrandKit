@@ -33,7 +33,9 @@
 
   /* ---------- scale-to-fit board ---------- */
   .stage{display:flex;justify-content:center;overflow-x:auto}
-  .board{transform:scale(0.255);transform-origin:top center;display:flex;flex-direction:column;gap:30px}
+  /* tight IG-profile mosaic: the 4 row-murals stack gap-free into one continuous 3×4 grid */
+  .board{transform:scale(0.30);transform-origin:top center;display:flex;flex-direction:column;gap:0;flex-shrink:0}
+  body:not(.export) .board{border-radius:46px;overflow:hidden;box-shadow:0 40px 120px -30px rgba(0,0,0,0.85)}
 
   /* ---------- row murals · ONE hue, THREE surfaces ---------- */
   .mural{position:relative;display:grid;grid-template-columns:repeat(3,1080px);grid-template-rows:1350px;overflow:hidden}
@@ -204,6 +206,19 @@
   .vs-indigo{background:radial-gradient(245% 300% at 50% 22%,#6E78F5,#4B3FE0 26%,#261A82 60%,#130C44 84%,#0B0822 100%)}
   .vs-top{background:radial-gradient(235% 280% at 40% 16%,#8E96FF,#5B5BF0 24%,#3A2BB8 56%,#1B1466 80%,#0B0822 100%)}
   .vs-paper{background:radial-gradient(120% 150% at 24% 12%,#EFEAFE,#F2EEE5 44%,#ECE7DA 100%)}
+  /* mural-true slide backdrops: every slide carries the EXACT row gradient of its parent
+     tile — the mural rendered at 3× width (3240×1350) and offset to the tile's column —
+     so the carousel's backdrop is identical to the cover post tile's. The vs-* class
+     stays on the element for its text-colour overrides; these later rules win the
+     background longhands. Column map: 0% = left, 50% = center, 100% = right third. */
+  .xm-top{background-image:radial-gradient(125% 150% at 30% 16%,#8E96FF 0%,#5B5BF0 22%,#3A2BB8 52%,#1B1466 78%,#0B0822 100%)}
+  .xm-mid{background-image:radial-gradient(130% 160% at 50% 30%,#6E78F5 0%,#4B3FE0 24%,#261A82 56%,#130C44 82%,#0B0822 100%)}
+  .xm-ink{background-image:radial-gradient(120% 130% at 82% 10%,#241E52 0%,#15122F 32%,#0A0B10 64%)}
+  .xm-paper{background-image:radial-gradient(120% 150% at 24% 12%,#EFEAFE 0%,#F2EEE5 44%,#ECE7DA 100%)}
+  .xm-top,.xm-mid,.xm-ink,.xm-paper{background-size:300% 100%;background-repeat:no-repeat}
+  .xcol-0{background-position:0% 0}
+  .xcol-1{background-position:50% 0}
+  .xcol-2{background-position:100% 0}
   .vslide::before,.xslide::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background-image:var(--grain),radial-gradient(circle,rgba(245,242,234,0.06) 1px,transparent 1px),linear-gradient(rgba(245,242,234,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(245,242,234,0.05) 1px,transparent 1px);background-size:4.12em 4.12em,1.353em 1.353em,3.529em 3.529em,3.529em 3.529em}
   .vs-paper::before{background-image:var(--grain),radial-gradient(circle,rgba(10,11,16,0.06) 1px,transparent 1px),linear-gradient(rgba(10,11,16,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(10,11,16,0.045) 1px,transparent 1px) !important;background-size:4.12em 4.12em,1.353em 1.353em,3.529em 3.529em,3.529em 3.529em}
   .vslide::after,.xslide::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(165% 150% at 50% 42%,transparent 60%,rgba(7,5,22,0.32) 100%)}
@@ -312,6 +327,44 @@
   .dlbtn{position:absolute;top:40px;right:40px;z-index:7;width:72px;height:72px;border-radius:50%;border:1px solid rgba(245,242,234,0.32);background:rgba(7,8,12,0.5);color:#F5F2EA;font-size:30px;line-height:1;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center}
   .cv:hover .dlbtn{opacity:1}
   .t-paper .dlbtn{border-color:rgba(10,11,16,0.25);background:rgba(245,242,234,0.65);color:#0A0B10}
+
+  /* ---------- launch map · organized 3×4 index (mirrors the IG profile, newest top-left) ---------- */
+  .lmap{max-width:920px;margin:0 auto 40px}
+  .lm-h{display:flex;align-items:baseline;justify-content:space-between;gap:14px 22px;flex-wrap:wrap;margin-bottom:14px}
+  .lm-t{font-family:var(--font-m);font-size:12px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:var(--i-300);display:flex;align-items:center;gap:12px}
+  .lm-t span{width:24px;height:1px;background:var(--i-300)}
+  .lm-hint{font-family:var(--font-m);font-size:11px;letter-spacing:0.04em;color:var(--muted)}
+  .lgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .lcell{appearance:none;-webkit-appearance:none;font-family:inherit;text-align:left;width:100%;
+    position:relative;border-radius:13px;padding:13px 15px 12px;min-height:112px;display:flex;flex-direction:column;gap:7px;
+    border:1px solid rgba(245,242,234,0.10);cursor:pointer;transition:transform .12s,box-shadow .12s}
+  .lcell:hover{transform:translateY(-2px);box-shadow:0 12px 30px -14px rgba(0,0,0,0.7)}
+  .lcell:focus-visible{outline:2px solid var(--i-300);outline-offset:2px}
+  /* surface bands — mirror the murals: course/identity = indigo, why+parent = paper, feed = ink */
+  .lcell.s-top{background:linear-gradient(150deg,#5B5BF0,#3A2BB8)}
+  .lcell.s-mid{background:linear-gradient(150deg,#4B3FE0,#261A82)}
+  .lcell.s-ink{background:linear-gradient(150deg,#1C1842,#0C0A22)}
+  .lcell.s-paper{background:linear-gradient(150deg,#F1ECFB,#E9E4D7);border-color:rgba(10,11,16,0.10)}
+  .lc-top{display:flex;align-items:center;justify-content:space-between;font-family:var(--font-m);font-size:11px;letter-spacing:0.12em;text-transform:uppercase}
+  .lc-pos{font-weight:600;color:var(--paper)}
+  .lc-meta{display:flex;align-items:center;gap:8px;color:rgba(245,242,234,0.6)}
+  .lc-wave{font-size:10px;padding:2px 7px;border-radius:999px;border:1px solid rgba(245,242,234,0.28);color:rgba(245,242,234,0.82)}
+  .lc-role{font-family:var(--font-d);font-weight:800;font-size:19px;line-height:1.04;letter-spacing:-0.02em;text-transform:lowercase;color:var(--paper)}
+  .lc-role em{font-family:var(--font-s);font-style:italic;font-weight:400;color:var(--i-200)}
+  .lc-bot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;font-family:var(--font-m);font-size:10px;letter-spacing:0.1em;text-transform:uppercase}
+  .lc-surf{color:rgba(245,242,234,0.58)}
+  .lc-car{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;background:rgba(245,242,234,0.15);color:var(--paper);font-weight:500}
+  .lc-coral{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;background:rgba(255,110,90,0.18);color:var(--warn);font-weight:500}
+  .lc-coral::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--warn);box-shadow:0 0 8px var(--warn)}
+  /* paper-surface text flips */
+  .lcell.s-paper .lc-pos{color:var(--ink)} .lcell.s-paper .lc-meta{color:rgba(10,11,16,0.55)}
+  .lcell.s-paper .lc-wave{border-color:rgba(10,11,16,0.25);color:rgba(10,11,16,0.7)}
+  .lcell.s-paper .lc-role{color:var(--ink)} .lcell.s-paper .lc-role em{color:var(--i-500)}
+  .lcell.s-paper .lc-surf{color:rgba(10,11,16,0.55)}
+  .lcell.s-paper .lc-car{background:rgba(10,11,16,0.10);color:var(--ink)}
+  .lm-key{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:14px;font-family:var(--font-m);font-size:11px;letter-spacing:0.04em;color:var(--muted)}
+  .lm-key b{color:var(--paper-dim);font-weight:500}
+  body.export .lmap{display:none}
 </style>
 </head>
 <body>
@@ -323,7 +376,7 @@
     <div class="legend">
       <span><b>Carousels:</b> BL · MR · ML · UC · TC · UR</span>
       <span><b>Coral:</b> scarcity only (TR)</span>
-      <span><b>Web:</b> eduflickai.com</span>
+      <span><b>IG:</b> link in bio</span>
       <span><b>IG:</b> @eduflick.ai</span>
     </div>
     <label class="toggle"><input type="checkbox" id="safe"> show 1080² safe-zone guides</label>
@@ -334,11 +387,89 @@
     </div>
   </header>
 
+  <!-- ===================== LAUNCH MAP · organized 3×4 index (mirrors the IG profile) ===================== -->
+  <section class="lmap" aria-label="Launch grid index">
+    <div class="lm-h">
+      <div class="lm-t"><span></span>launch map · 12 tiles · 6 carousels · 4 waves</div>
+      <div class="lm-hint">tap a carousel cell to view its slides · tap any other to jump to it on the board ↓</div>
+    </div>
+    <div class="lgrid">
+      <!-- ROW 1 · TOP · course · bright indigo · Wave 4 (posted last) -->
+      <button class="lcell s-top" onclick="scrollRow('row-top')" title="TL · post 12 · program / apply (newest tile)">
+        <div class="lc-top"><span class="lc-pos">TL</span><span class="lc-meta">#12 <span class="lc-wave">W4</span></span></div>
+        <div class="lc-role">program · <em>apply</em></div>
+        <div class="lc-bot"><span class="lc-surf">course</span></div>
+      </button>
+      <button class="lcell s-top" onclick="openViewer('tc')" title="TC · post 11 · the course · carousel (7 slides)">
+        <div class="lc-top"><span class="lc-pos">TC</span><span class="lc-meta">#11 <span class="lc-wave">W4</span></span></div>
+        <div class="lc-role">the <em>course</em></div>
+        <div class="lc-bot"><span class="lc-surf">course</span><span class="lc-car">7 slides ›</span></div>
+      </button>
+      <button class="lcell s-top" onclick="scrollRow('row-top')" title="TR · post 10 · 20 seats / scarcity">
+        <div class="lc-top"><span class="lc-pos">TR</span><span class="lc-meta">#10 <span class="lc-wave">W4</span></span></div>
+        <div class="lc-role">20 <em>seats</em></div>
+        <div class="lc-bot"><span class="lc-surf">course</span><span class="lc-coral">scarcity</span></div>
+      </button>
+      <!-- ROW 2 · UPPER · why + parent · paper · Wave 3 -->
+      <button class="lcell s-paper" onclick="scrollRow('row-upper')" title="UL · post 9 · we ship it">
+        <div class="lc-top"><span class="lc-pos">UL</span><span class="lc-meta">#9 <span class="lc-wave">W3</span></span></div>
+        <div class="lc-role">we <em>ship</em> it</div>
+        <div class="lc-bot"><span class="lc-surf">why + parent</span></div>
+      </button>
+      <button class="lcell s-paper" onclick="openViewer('uc')" title="UC · post 8 · why we built eduflick · carousel (7 slides)">
+        <div class="lc-top"><span class="lc-pos">UC</span><span class="lc-meta">#8 <span class="lc-wave">W3</span></span></div>
+        <div class="lc-role">why we <em>built</em> it</div>
+        <div class="lc-bot"><span class="lc-surf">why + parent</span><span class="lc-car">7 slides ›</span></div>
+      </button>
+      <button class="lcell s-paper" onclick="openViewer('ur')" title="UR · post 7 · backed by Tomatrix · carousel (4 slides)">
+        <div class="lc-top"><span class="lc-pos">UR</span><span class="lc-meta">#7 <span class="lc-wave">W3</span></span></div>
+        <div class="lc-role">backed by <em>tomatrix</em></div>
+        <div class="lc-bot"><span class="lc-surf">why + parent</span><span class="lc-car">4 slides ›</span></div>
+      </button>
+      <!-- ROW 3 · MID · identity · indigo · Wave 2 -->
+      <button class="lcell s-mid" onclick="openViewer('ml')" title="ML · post 6 · how it works · carousel (6 slides)">
+        <div class="lc-top"><span class="lc-pos">ML</span><span class="lc-meta">#6 <span class="lc-wave">W2</span></span></div>
+        <div class="lc-role">how it <em>works</em></div>
+        <div class="lc-bot"><span class="lc-surf">identity</span><span class="lc-car">6 slides ›</span></div>
+      </button>
+      <button class="lcell s-mid" onclick="scrollRow('row-mid')" title="MC · post 5 · the logo">
+        <div class="lc-top"><span class="lc-pos">MC</span><span class="lc-meta">#5 <span class="lc-wave">W2</span></span></div>
+        <div class="lc-role">the <em>logo</em></div>
+        <div class="lc-bot"><span class="lc-surf">identity</span></div>
+      </button>
+      <button class="lcell s-mid" onclick="openViewer('mr')" title="MR · post 4 · one shape, one notch · carousel (4 slides)">
+        <div class="lc-top"><span class="lc-pos">MR</span><span class="lc-meta">#4 <span class="lc-wave">W2</span></span></div>
+        <div class="lc-role">one shape, one <em>notch</em></div>
+        <div class="lc-bot"><span class="lc-surf">identity</span><span class="lc-car">4 slides ›</span></div>
+      </button>
+      <!-- ROW 4 · BOTTOM · the feed · ink · Wave 1 (posted first) -->
+      <button class="lcell s-ink" onclick="openViewer('bl')" title="BL · post 3 · what is eduflick ai · carousel (6 slides)">
+        <div class="lc-top"><span class="lc-pos">BL</span><span class="lc-meta">#3 <span class="lc-wave">W1</span></span></div>
+        <div class="lc-role">what is <em>eduflick</em></div>
+        <div class="lc-bot"><span class="lc-surf">the feed</span><span class="lc-car">6 slides ›</span></div>
+      </button>
+      <button class="lcell s-ink" onclick="scrollRow('row-bottom')" title="BC · post 2 · one concept per flick">
+        <div class="lc-top"><span class="lc-pos">BC</span><span class="lc-meta">#2 <span class="lc-wave">W1</span></span></div>
+        <div class="lc-role">one concept per <em>flick</em></div>
+        <div class="lc-bot"><span class="lc-surf">the feed</span></div>
+      </button>
+      <button class="lcell s-ink" onclick="scrollRow('row-bottom')" title="BR · post 1 · a feed for thinking (posted first)">
+        <div class="lc-top"><span class="lc-pos">BR</span><span class="lc-meta">#1 <span class="lc-wave">W1</span></span></div>
+        <div class="lc-role">a feed for <em>thinking</em></div>
+        <div class="lc-bot"><span class="lc-surf">the feed</span></div>
+      </button>
+    </div>
+    <div class="lm-key">
+      <span><b>surfaces:</b> indigo = course + identity · paper = why + parent · ink = the feed</span>
+      <span><b>waves:</b> W1 feed → W2 identity → W3 why+parent → W4 course (posted bottom→top, right→center→left)</span>
+    </div>
+  </section>
+
   <div class="stage">
     <div class="board">
 
       <!-- ===================== TOP ROW · COURSE LAUNCH · indigo (TL · TC · TR) ===================== -->
-      <section class="mural r-top">
+      <section id="row-top" class="mural r-top">
         <div class="cv center">
           <div class="pos">TL · post 12</div>
           <svg class="ghost" style="bottom:-120px;left:-120px" viewBox="0 0 180 180" width="640" height="640"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
@@ -347,7 +478,7 @@
           <svg class="glow" viewBox="0 0 180 180" width="118" height="118"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
           <div class="hl lg">full-stack ai<br><em>engineer</em></div>
           <div class="sub" style="text-align:center">the 12-week program is live. apply now.</div>
-          <div class="cta">apply → eduflickai.com/apply</div>
+          <div class="cta">apply → link in bio</div>
           <div class="safe"></div>
         </div>
         <div class="cv center tap" onclick="openViewer('tc')">
@@ -373,13 +504,13 @@
           </div>
           <div class="coral">20 of 20 seats open</div>
           <div class="sub">₹49,000 founding · ₹70,000 from cohort 2</div>
-          <div class="cta">apply → eduflickai.com/apply</div>
+          <div class="cta">apply → link in bio</div>
           <div class="safe"></div>
         </div>
       </section>
 
       <!-- ===================== UPPER ROW · WHY + PARENT · paper (UL · UC · UR) ===================== -->
-      <section class="mural t-paper">
+      <section id="row-upper" class="mural t-paper">
         <div class="cv">
           <div class="pos">UL · post 9</div>
           <div class="eb">next: the program</div>
@@ -417,7 +548,7 @@
       </section>
 
       <!-- ===================== MID ROW · IDENTITY BAND · indigo (ML · MC · MR) ===================== -->
-      <section class="mural r-mid">
+      <section id="row-mid" class="mural r-mid">
         <!-- ML · post 6 · "the flick is the unit" / how it works · CAROUSEL -->
         <div class="cv center tap" onclick="openViewer('ml')">
           <div class="pos">ML · post 6 · carousel</div>
@@ -455,7 +586,7 @@
       </section>
 
       <!-- ===================== BOTTOM ROW · THE FEED · ink (BL · BC · BR) ===================== -->
-      <section class="mural t-ink">
+      <section id="row-bottom" class="mural t-ink">
         <div class="cv tap" onclick="openViewer('bl')">
           <div class="pos">BL · post 3 · carousel</div>
           <div class="car"><div class="carstack"><i></i><i></i></div><div class="carlbl">carousel · 6 ›</div></div>
@@ -515,55 +646,252 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.js" integrity="sha384-Tha/42qsYmpYmQ07pX+nJzkKumO0BzKJxK/uzVc7xyBQxVCUgQBhQIG8L7vXK+9C" crossorigin="anonymous"></script>
+  <script type="application/json" id="caro-data">
+{
+  "bl": {
+    "title": "what is eduflick ai",
+    "surf": "ink",
+    "slides": [
+      {
+        "eb": "WHAT IS EDUFLICK AI",
+        "motif": "mark",
+        "hl": "what is <em>eduflick ai</em>?",
+        "sup": "the end of empty scrolling. learning, rebuilt as a feed."
+      },
+      {
+        "eb": "01 · THE PROBLEM",
+        "motif": "gapbars",
+        "hl": "you scroll for <em>hours</em>",
+        "sup": "short video is the most engaging format ever built. it just never taught you anything."
+      },
+      {
+        "eb": "02 · THE IDEA",
+        "motif": "nodes",
+        "hl": "so we kept the <em>feed</em>",
+        "sup": "same pull-to-refresh, same one-thumb flow — pointed at things worth knowing."
+      },
+      {
+        "eb": "03 · THE UNIT",
+        "motif": "chip:1 flick",
+        "hl": "1 flick = 1 <em>concept</em>",
+        "sup": "any lecture, paper, or video, cut into a sequence of bite-sized flicks."
+      },
+      {
+        "eb": "04 · THE PAYOFF",
+        "motif": "spark",
+        "hl": "a feed that makes you <em>smarter</em>",
+        "sup": "curiosity compounds instead of evaporating. learning that survives the scroll."
+      },
+      {
+        "eb": "EDUFLICK AI",
+        "motif": "mark",
+        "hl": "a feed for <em>thinking</em>",
+        "sup": "follow → @eduflick.ai"
+      }
+    ]
+  },
+  "mr": {
+    "title": "one shape, one notch",
+    "surf": "indigo",
+    "slides": [
+      {
+        "eb": "THE PHILOSOPHY",
+        "motif": "notch",
+        "hl": "one shape,<br>one <em>notch</em>.",
+        "sup": "our whole identity in a single geometry."
+      },
+      {
+        "eb": "01 · THE SHAPE",
+        "motif": "mark",
+        "hl": "a <em>square</em> — the feed card",
+        "sup": "flat, sharp, near-zero corners. it reads as a card, not a blob."
+      },
+      {
+        "eb": "02 · THE NOTCH",
+        "motif": "notch",
+        "hl": "the notch is the <em>play</em>",
+        "sup": "a triangle bitten from the edge — the moment a lesson begins."
+      },
+      {
+        "eb": "EDUFLICK AI",
+        "motif": "mark",
+        "hl": "one shape, one <em>notch</em>",
+        "sup": "follow → @eduflick.ai"
+      }
+    ]
+  },
+  "ml": {
+    "title": "the flick is the unit",
+    "surf": "indigo",
+    "slides": [
+      {
+        "eb": "HOW IT WORKS",
+        "motif": "slicer",
+        "hl": "the <em>flick</em> is the unit",
+        "sup": "how expert-led modules become a feed you actually finish."
+      },
+      {
+        "eb": "01 · EXPERT CURATION",
+        "motif": "nodes",
+        "hl": "explore <em>verified</em> modules",
+        "sup": "elite eduflick tutors design the foundation. no random content — just curated tracks built to transform your skills."
+      },
+      {
+        "eb": "02 · AI SEQUENCE",
+        "motif": "slicer",
+        "hl": "engineered into <em>micro-lessons</em>",
+        "sup": "our tech slices each heavy track into bite-sized flicks. one clear concept at a time, ordered so each builds on the last."
+      },
+      {
+        "eb": "03 · PRACTICAL TASKS",
+        "motif": "checklist",
+        "hl": "build as you <em>learn</em>",
+        "sup": "no passive streaming. every module forces action with real-world practicals and milestones to test your execution."
+      },
+      {
+        "eb": "04 · 1:1 MENTORSHIP",
+        "motif": "nodes",
+        "hl": "real <em>experts</em> in your corner",
+        "sup": "real human guidance — clear blockers instantly with 1:1 mentorship to keep you moving forward."
+      },
+      {
+        "eb": "EDUFLICK AI",
+        "motif": "mark",
+        "hl": "learn anything in <em>micro-steps</em>",
+        "sup": "the feed for thinking. follow → @eduflick.ai"
+      }
+    ]
+  },
+  "uc": {
+    "title": "why we built eduflick",
+    "surf": "paper",
+    "slides": [
+      {
+        "eb": "THE VISION",
+        "motif": "mark",
+        "hl": "why we <em>built</em> eduflick",
+        "sup": "a tomatrix technologies venture. here's the gap we saw."
+      },
+      {
+        "eb": "01 · THE GAP",
+        "motif": "gapbars",
+        "hl": "courses don't get <em>finished</em>",
+        "sup": "online completion rates are brutal. videos pile up; skills don't."
+      },
+      {
+        "eb": "02 · THE SHIFT",
+        "motif": "nodes",
+        "hl": "attention moved to the <em>feed</em>",
+        "sup": "so learning has to live there too — bite-sized, sequenced, in the flow of a day."
+      },
+      {
+        "eb": "03 · OUR MISSION",
+        "motif": "spark",
+        "hl": "learning, <em>un-chained</em>",
+        "sup": "we turn studying from a chore into a personalized daily habit you actually keep."
+      },
+      {
+        "eb": "04 · OUR VISION",
+        "motif": "nodes",
+        "hl": "the <em>backbone</em> of how a generation learns",
+        "sup": "accessible, personalized, engaging — for everyone, in india and beyond."
+      },
+      {
+        "eb": "05 · THE CORE",
+        "motif": "mark",
+        "hl": "ai is the <em>continuation</em>",
+        "sup": "ai is not the start. it's the continuation of human innovation."
+      },
+      {
+        "eb": "EDUFLICK AI",
+        "motif": "mark",
+        "hl": "follow the <em>build</em>",
+        "sup": "follow → @eduflick.ai"
+      }
+    ]
+  },
+  "tc": {
+    "title": "the course",
+    "surf": "top",
+    "slides": [
+      {
+        "eb": "PIONEER COHORT 01 · 12 WEEKS · TRIVANDRUM",
+        "motif": "checklist",
+        "hl": "full-stack ai <em>engineer</em>",
+        "sup": "ship ai products, not theory. a hands-on, in-person program."
+      },
+      {
+        "eb": "01 · THE GAP",
+        "motif": "gapbars",
+        "hl": "ai experience <em>required</em>",
+        "sup": "every job wants it. you know react but have never shipped with an llm. we close that."
+      },
+      {
+        "eb": "02 · MONTH 1",
+        "motif": "stack:cursor,next.js,supabase,vercel|ship:saas dashboard",
+        "hl": "foundations + your first <em>ship</em>",
+        "sup": "the real ai-dev stack. by week 4 you deploy a live saas dashboard."
+      },
+      {
+        "eb": "03 · MONTH 2",
+        "motif": "stack:openai/claude,pinecone,langchain|ship:rag chatbot",
+        "hl": "rag + <em>agents</em>",
+        "sup": "retrieval + memory. a chatbot that answers from real docs — deployed."
+      },
+      {
+        "eb": "04 · MONTH 3",
+        "motif": "stack:google adk,n8n|ship:agentic platform",
+        "hl": "agentic platform + <em>hiring</em>",
+        "sup": "a capstone agentic build, then week 12 — mock interviews + industry recruiter networking."
+      },
+      {
+        "eb": "05 · THE ROOM",
+        "motif": "stat:20",
+        "hl": "20 <em>selective</em> seats",
+        "sup": "in person at uxp innovation hub, trivandrum. ₹49,000 founding (₹70,000 from cohort 2)."
+      },
+      {
+        "eb": "APPLY · COHORT 01",
+        "motif": "spark",
+        "hl": "claim your <em>seat</em>",
+        "sup": "20 selective seats. apply → link in bio"
+      }
+    ]
+  },
+  "ur": {
+    "title": "tomatrix technologies pvt ltd",
+    "surf": "paper",
+    "slides": [
+      {
+        "eb": "BACKED BY",
+        "motif": "cobrand",
+        "hl": "a deep-tech <em>venture</em>",
+        "sup": "eduflick ai is the flagship product of <span class='proper'>Tomatrix Technologies Pvt Ltd</span> — the ai-first studio that builds it."
+      },
+      {
+        "eb": "WHAT TOMATRIX DOES",
+        "motif": "nodes",
+        "hl": "scalable ai, <em>shipped</em>",
+        "sup": "ai products and enterprise solutions that transform education and business automation."
+      },
+      {
+        "eb": "WHY EDUFLICK BELONGS",
+        "motif": "nodes",
+        "hl": "one shared <em>engine</em>",
+        "sup": "service revenue funds the r&d; eduflick ai runs on <span class='proper'>Tomatrix</span>'s generative pipelines, llm orchestration & rendering."
+      },
+      {
+        "eb": "TOMATRIX × EDUFLICK AI",
+        "motif": "cobrand",
+        "hl": "this is just the <em>start</em>",
+        "sup": "a <span class='proper'>Tomatrix Technologies Pvt Ltd</span> venture, founded by Gifton Tom Biju.<br>follow → @eduflick.ai"
+      }
+    ]
+  }
+}
+  </script>
   <script>
-    const CARO = {
-      bl: { title: "what is eduflick ai", surf: "ink", slides: [
-        { eb:"WHAT IS EDUFLICK AI", motif:"mark", hl:"what is <em>eduflick ai</em>?", sup:"the end of empty scrolling. learning, rebuilt as a feed." },
-        { eb:"01 · THE PROBLEM", motif:"gapbars", hl:"you scroll for <em>hours</em>", sup:"short video is the most engaging format ever built. it just never taught you anything." },
-        { eb:"02 · THE IDEA", motif:"nodes", hl:"so we kept the <em>feed</em>", sup:"same pull-to-refresh, same one-thumb flow — pointed at things worth knowing." },
-        { eb:"03 · THE UNIT", motif:"chip:1 flick", hl:"1 flick = 1 <em>concept</em>", sup:"any lecture, paper, or video, cut into a sequence of bite-sized flicks." },
-        { eb:"04 · THE PAYOFF", motif:"spark", hl:"a feed that makes you <em>smarter</em>", sup:"curiosity compounds instead of evaporating. learning that survives the scroll." },
-        { eb:"EDUFLICK AI", motif:"mark", hl:"a feed for <em>thinking</em>", sup:"follow → @eduflick.ai" }
-      ]},
-      mr: { title: "one shape, one notch", surf: "indigo", slides: [
-        { eb:"THE PHILOSOPHY", motif:"notch", hl:"one shape,<br>one <em>notch</em>.", sup:"our whole identity in a single geometry." },
-        { eb:"01 · THE SHAPE", motif:"mark", hl:"a <em>square</em> — the feed card", sup:"flat, sharp, near-zero corners. it reads as a card, not a blob." },
-        { eb:"02 · THE NOTCH", motif:"notch", hl:"the notch is the <em>play</em>", sup:"a triangle bitten from the edge — the moment a lesson begins." },
-        { eb:"EDUFLICK AI", motif:"mark", hl:"one shape, one <em>notch</em>", sup:"follow → @eduflick.ai" }
-      ]},
-      ml: { title: "the flick is the unit", surf: "indigo", slides: [
-        { eb:"HOW IT WORKS", motif:"slicer", hl:"the <em>flick</em> is the unit", sup:"how expert-led modules become a feed you actually finish." },
-        { eb:"01 · EXPERT CURATION", motif:"nodes", hl:"explore <em>verified</em> modules", sup:"elite eduflick tutors design the foundation. no random content — just curated tracks built to transform your skills." },
-        { eb:"02 · AI SEQUENCE", motif:"slicer", hl:"engineered into <em>micro-lessons</em>", sup:"our tech slices each heavy track into bite-sized flicks. one clear concept at a time, ordered so each builds on the last." },
-        { eb:"03 · PRACTICAL TASKS", motif:"checklist", hl:"build as you <em>learn</em>", sup:"no passive streaming. every module forces action with real-world practicals and milestones to test your execution." },
-        { eb:"04 · 1:1 MENTORSHIP", motif:"nodes", hl:"real <em>experts</em> in your corner", sup:"real human guidance — clear blockers instantly with 1:1 mentorship to keep you moving forward." },
-        { eb:"EDUFLICK AI", motif:"mark", hl:"learn anything in <em>micro-steps</em>", sup:"the feed for thinking. follow → @eduflick.ai" }
-      ]},
-      uc: { title: "why we built eduflick", surf: "paper", slides: [
-        { eb:"THE VISION", motif:"mark", hl:"why we <em>built</em> eduflick", sup:"a tomatrix technologies venture. here's the gap we saw." },
-        { eb:"01 · THE GAP", motif:"gapbars", hl:"courses don't get <em>finished</em>", sup:"online completion rates are brutal. videos pile up; skills don't." },
-        { eb:"02 · THE SHIFT", motif:"nodes", hl:"attention moved to the <em>feed</em>", sup:"so learning has to live there too — bite-sized, sequenced, in the flow of a day." },
-        { eb:"03 · OUR MISSION", motif:"spark", hl:"learning, <em>un-chained</em>", sup:"we turn studying from a chore into a personalized daily habit you actually keep." },
-        { eb:"04 · OUR VISION", motif:"nodes", hl:"the <em>backbone</em> of how a generation learns", sup:"accessible, personalized, engaging — for everyone, in india and beyond." },
-        { eb:"05 · THE CORE", motif:"mark", hl:"ai is the <em>continuation</em>", sup:"ai is not the start. it's the continuation of human innovation." },
-        { eb:"EDUFLICK AI", motif:"mark", hl:"follow the <em>build</em>", sup:"follow → @eduflick.ai" }
-      ]},
-      tc: { title: "the course", surf: "top", slides: [
-        { eb:"PIONEER COHORT 01 · 12 WEEKS · TRIVANDRUM", motif:"checklist", hl:"full-stack ai <em>engineer</em>", sup:"ship ai products, not theory. a hands-on, in-person program." },
-        { eb:"01 · THE GAP", motif:"gapbars", hl:"ai experience <em>required</em>", sup:"every job wants it. you know react but have never shipped with an llm. we close that." },
-        { eb:"02 · MONTH 1", motif:"stack:cursor,next.js,supabase,vercel|ship:saas dashboard", hl:"foundations + your first <em>ship</em>", sup:"the real ai-dev stack. by week 4 you deploy a live saas dashboard." },
-        { eb:"03 · MONTH 2", motif:"stack:openai/claude,pinecone,langchain|ship:rag chatbot", hl:"rag + <em>agents</em>", sup:"retrieval + memory. a chatbot that answers from real docs — deployed." },
-        { eb:"04 · MONTH 3", motif:"stack:google adk,n8n|ship:agentic platform", hl:"agentic platform + <em>hiring</em>", sup:"a capstone agentic build, then week 12 — mock interviews + industry recruiter networking." },
-        { eb:"05 · THE ROOM", motif:"stat:20", hl:"20 <em>selective</em> seats", sup:"in person at uxp innovation hub, trivandrum. ₹49,000 founding (₹70,000 from cohort 2)." },
-        { eb:"APPLY · COHORT 01", motif:"spark", hl:"claim your <em>seat</em>", sup:"20 selective seats. apply → eduflickai.com/apply<span class='snote'>not ready? start with the free masterclass → /masterclass</span>" }
-      ]},
-      ur: { title: "tomatrix technologies pvt ltd", surf: "paper", slides: [
-        { eb:"BACKED BY", motif:"cobrand", hl:"a deep-tech <em>venture</em>", sup:"eduflick ai is the flagship product of <span class='proper'>Tomatrix Technologies Pvt Ltd</span> — the ai-first studio that builds it." },
-        { eb:"WHAT TOMATRIX DOES", motif:"nodes", hl:"scalable ai, <em>shipped</em>", sup:"ai products and enterprise solutions that transform education and business automation." },
-        { eb:"WHY EDUFLICK BELONGS", motif:"nodes", hl:"one shared <em>engine</em>", sup:"service revenue funds the r&d; eduflick ai runs on <span class='proper'>Tomatrix</span>'s generative pipelines, llm orchestration & rendering." },
-        { eb:"TOMATRIX × EDUFLICK AI", motif:"cobrand", hl:"this is just the <em>start</em>", sup:"a <span class='proper'>Tomatrix Technologies Pvt Ltd</span> venture, founded by Gifton Tom Biju.<br>follow → @eduflick.ai" }
-      ]}
-    };
+    const CARO = JSON.parse(document.getElementById('caro-data').textContent);
     let curC = null, curI = 0;
     const viewer = document.getElementById('viewer');
     function openViewer(id){ curC = id; curI = 0; viewer.classList.add('open'); fitViewer(); render(); }
@@ -572,7 +900,7 @@
     function render(){
       const c = CARO[curC], s = c.slides[curI], n = c.slides.length;
       const el = document.getElementById('vslide');
-      el.className = 'vslide ' + SURF[c.surf];
+      el.className = 'vslide ' + SURF[c.surf] + ' ' + (MURAL[curC] || '');
       el.innerHTML = (curI === 0) ? '<div class="vcover">'+coverInner(curC)+'</div>' : deckHTML(s, curI, n);
       void el.offsetWidth; el.classList.add('vfx');   // re-trigger fade
       document.getElementById('vtitle').textContent = c.title;
@@ -605,6 +933,10 @@
 
     // ===== export infrastructure =====
     const SURF = { ink:'vs-ink', indigo:'vs-indigo', paper:'vs-paper', top:'vs-top' };
+    // slug → the parent tile's mural backdrop (row gradient + column third), so every
+    // slide's background is identical to its cover post tile's. bl/ml = left column,
+    // uc/tc = center, mr/ur = right; rows: bl=ink, ml/mr=mid, uc/ur=paper, tc=top.
+    const MURAL = { bl:'xm-ink xcol-0', ml:'xm-mid xcol-0', mr:'xm-mid xcol-2', uc:'xm-paper xcol-1', tc:'xm-top xcol-1', ur:'xm-paper xcol-2' };
     function MK(fill){ return '<svg class="mk" viewBox="0 0 180 180"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="'+(fill||'#F5F2EA')+'"/></svg>'; }
     function motifHTML(m){
       if(!m) return '';
@@ -670,8 +1002,10 @@
       let h = '';
       for(const id in CARO){ const c = CARO[id];
         c.slides.forEach((s,i) => {
-          const inner = (i === 0) ? '<div class="xcover">'+coverInner(id)+'</div>' : deckHTML(s, i, c.slides.length);
-          h += '<div class="xslide '+SURF[c.surf]+'" data-export="slide-'+id+'-'+String(i+1).padStart(2,'0')+'">' + inner + '</div>';
+          // slide 1 IS the post tile (post-NN-pos.png) — never re-staged as a separate
+          // export, so the feed cover and carousel slide 1 stay one single image.
+          if (i === 0) return;
+          h += '<div class="xslide '+SURF[c.surf]+' '+(MURAL[id]||'')+'" data-export="slide-'+id+'-'+String(i+1).padStart(2,'0')+'">' + deckHTML(s, i, c.slides.length) + '</div>';
         });
       }
       sheet.innerHTML = h; sheet.dataset.built = '1';
@@ -682,7 +1016,7 @@
       const c = CARO[curC], s = c.slides[curI];
       const holder = document.createElement('div');
       holder.style.cssText = 'position:fixed;left:-99999px;top:0;z-index:-1';
-      holder.innerHTML = '<div class="xslide '+SURF[c.surf]+'">' + ((curI === 0) ? '<div class="xcover">'+coverInner(curC)+'</div>' : deckHTML(s, curI, c.slides.length)) + '</div>';
+      holder.innerHTML = '<div class="xslide '+SURF[c.surf]+' '+(MURAL[curC]||'')+'">' + ((curI === 0) ? '<div class="xcover">'+coverInner(curC)+'</div>' : deckHTML(s, curI, c.slides.length)) + '</div>';
       document.body.appendChild(holder);
       try{
         await document.fonts.ready;
@@ -725,6 +1059,7 @@
         cv.appendChild(f);
       });
     }
+    function scrollRow(id){ const e = document.getElementById(id); if(e) e.scrollIntoView({behavior:'smooth',block:'center'}); }
     tagTiles();
     addDownloadButtons();
     addFooters();

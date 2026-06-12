@@ -14,6 +14,7 @@ import * as docs from './views/docs.mjs';
 import * as facts from './views/facts.mjs';
 import * as actions from './views/actions.mjs';
 import * as launch from './views/launch.mjs';
+import * as instagram from './views/instagram.mjs';
 import * as feedback from './views/feedback.mjs';
 import * as commandPalette from './components/command-palette.mjs';
 
@@ -74,6 +75,7 @@ const ROUTES = [
   { pattern: /^\/facts\/?$/, view: facts },
   { pattern: /^\/actions\/?$/, view: actions },
   { pattern: /^\/launch\/?$/, view: launch },
+  { pattern: /^\/instagram\/?$/, view: instagram },
   { pattern: /^\/feedback\/?$/, view: feedback },
 ];
 

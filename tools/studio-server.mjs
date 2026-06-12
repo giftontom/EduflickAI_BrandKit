@@ -8,20 +8,29 @@
 //   GET  /api/manifest             live-scanned asset manifest (nothing cached)
 //   GET  /api/status               content-studio/status.json
 //   POST /api/status               {id, patch} → merged entry (atomic write)
-//   GET  /api/actions              {running, lastRun}
+//   GET  /api/actions              {running, lastRun} (lastRun survives restarts)
 //   POST /api/actions/run          {action} → {id} | 409 busy | 400 unknown
 //   GET  /api/actions/:id/stream   SSE log/exit events (replay + live)
+//   GET  /api/tokens/status        mtime drift: token/snippet sources vs artifacts
 //   POST /api/editmode             {file, edits} → EDITMODE block rewrite
 //   POST /api/facts/check          {content} → {violations}
 //   POST /api/facts/save           {content, override?} → guarded FACTS.md write
 //   GET  /api/comments             content-studio/design-comments.json
 //   POST /api/comments             {comment, override?} → upserted <Comment> (id+seq)
 //   DELETE /api/comments/:id        delete a comment by UUID
+//   POST /api/export-zip           {files:[{src|text,name}], zipName?} → application/zip
 //
 // Write surface is exactly four paths: content-studio/status.json,
 // content-studio/FACTS.md, content-studio/design-comments.json (which also
 // regenerates content-studio/DESIGN_FEEDBACK.md), and EDITMODE blocks inside
-// design-system/*.html. Binds 127.0.0.1 only. Zero npm dependencies (built-ins).
+// design-system/*.html. Binds 127.0.0.1 only (loopback asserted at boot, exits
+// on a busy port). Every request must carry a loopback Host header, and
+// non-GET/HEAD /api calls with an Origin header must be same-origin — 403
+// otherwise (DNS-rebinding + CSRF guards; no CORS headers are ever set).
+// Writes are atomic AND durable (tmp file → fsync → rename). Actions get a
+// watchdog timeout (STUDIO_ACTION_TIMEOUT_MS, default 15 min; SIGTERM then
+// SIGKILL) and lastRun persists across restarts in tools/.studio-state.json.
+// Port: STUDIO_PORT > PORT > 8090. Zero npm dependencies (built-ins).
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -31,17 +40,28 @@ import { fileURLToPath } from 'node:url';
 import { createStaticHandler } from './lib/static.mjs';
 import { scanTextRetired } from './check-facts.mjs';
 import { renderFeedbackDigest } from './lib/feedback.mjs';
+import { zipStore } from './lib/zip.mjs';
 
 const TOOLS = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(TOOLS, '..');
-const PORT = Number(process.env.PORT || 8090);
+const PORT = Number(process.env.STUDIO_PORT || process.env.PORT || 8090);
 const HOST = '127.0.0.1';
+
+// Fail closed: the studio is a local tool and must never bind a routable
+// address. Guards against a future edit quietly exposing the write surface.
+if (!['127.0.0.1', 'localhost', '::1'].includes(HOST)) {
+  console.error(`refusing to start: HOST ${HOST} is not loopback (127.0.0.1 / localhost / ::1)`);
+  process.exit(1);
+}
 
 const STATUS_FILE = path.join(ROOT, 'content-studio', 'status.json');
 const FACTS_FILE = path.join(ROOT, 'content-studio', 'FACTS.md');
 const CAPTIONS_FILE = path.join(ROOT, 'content-studio', 'drafts', 'instagram-posts-captions.md');
 const COMMENTS_FILE = path.join(ROOT, 'content-studio', 'design-comments.json');
 const FEEDBACK_FILE = path.join(ROOT, 'content-studio', 'DESIGN_FEEDBACK.md');
+const LAUNCH_GRID_FILE = path.join(ROOT, 'content-studio', 'launch-grid.json');
+const LAUNCH_HTML_FILE = path.join(ROOT, 'design-system', 'collateral', 'launch-grid.html');
+const EXPORTS_DIR = path.join(ROOT, 'exports');
 
 const STATUSES = ['draft', 'approved', 'scheduled', 'posted', 'retired'];
 const COMMENT_STATUSES = ['open', 'resolved', 'wontfix'];
@@ -83,10 +103,17 @@ async function readJSONBody(req) {
   }
 }
 
-// Atomic write: tmp file in the same directory, then rename.
+// Atomic + durable write: tmp file in the same directory, fsync the descriptor
+// (so the bytes hit disk before the rename can make them visible), then rename.
 function writeAtomic(file, content) {
   const tmp = path.join(path.dirname(file), `.${path.basename(file)}.tmp-${process.pid}`);
-  fs.writeFileSync(tmp, content);
+  const fd = fs.openSync(tmp, 'w');
+  try {
+    fs.writeSync(fd, content);
+    fs.fsyncSync(fd);
+  } finally {
+    fs.closeSync(fd);
+  }
   fs.renameSync(tmp, file);
 }
 
@@ -190,6 +217,230 @@ function nextSeq(store, assetId) {
 function persistComments(store) {
   writeAtomic(COMMENTS_FILE, JSON.stringify(store, null, 2) + '\n');
   writeAtomic(FEEDBACK_FILE, renderFeedbackDigest(store));
+}
+
+// --------------------------------------------------------- launch-grid store
+
+// The 5th write surface: the Instagram launch-grid plan (per-post captions,
+// waves, notes) in content-studio/launch-grid.json, plus the carousel slide
+// copy living in launch-grid.html's <script id="caro-data"> JSON island.
+// Posting status itself stays in status.json under `launch-grid/<post.id>`.
+function loadLaunchPlan() {
+  const raw = readOrNull(LAUNCH_GRID_FILE);
+  if (raw == null) return null;
+  try {
+    const v = JSON.parse(raw);
+    if (v && typeof v === 'object' && Array.isArray(v.posts)) return v;
+  } catch {
+    /* corrupt file → null (the API reports it; never crash) */
+  }
+  return null;
+}
+
+const ISLAND_RE = /(<script type="application\/json" id="caro-data">\n)([\s\S]*?)(\n\s*<\/script>)/;
+
+function readSlidesIsland() {
+  const html = readOrNull(LAUNCH_HTML_FILE);
+  if (html == null) {
+    throw Object.assign(new Error('launch-grid.html not found'), { httpCode: 500 });
+  }
+  const m = html.match(ISLAND_RE);
+  if (!m) {
+    throw Object.assign(new Error('caro-data island not found in launch-grid.html'), { httpCode: 500 });
+  }
+  try {
+    return { html, data: JSON.parse(m[2]) };
+  } catch {
+    throw Object.assign(new Error('caro-data island is not valid JSON'), { httpCode: 500 });
+  }
+}
+
+// Same promise-queue pattern as enqueueStatus — one writer at a time across
+// both the plan JSON and the html island.
+let launchQueue = Promise.resolve();
+function enqueueLaunch(task) {
+  const p = launchQueue.then(task);
+  launchQueue = p.then(
+    () => {},
+    () => {},
+  );
+  return p;
+}
+
+// Collect every string leaf of a value (caption object / slides array).
+function stringLeaves(v, out = []) {
+  if (typeof v === 'string') out.push(v);
+  else if (Array.isArray(v)) for (const x of v) stringLeaves(x, out);
+  else if (v && typeof v === 'object') for (const x of Object.values(v)) stringLeaves(x, out);
+  return out;
+}
+
+// Brand-guard a set of strings; scanTextRetired-shaped violations.
+function scanStrings(strings) {
+  const violations = [];
+  for (const s of strings) {
+    if (typeof s === 'string' && s) violations.push(...scanTextRetired(s));
+  }
+  return violations;
+}
+
+const LAUNCH_PATCH_KEYS = ['caption', 'notes', 'role', 'wave'];
+
+function handleLaunchPostSave(body, res) {
+  const { id, patch, override } = body;
+  if (typeof id !== 'string' || !id.length) {
+    return sendJSON(res, 400, { error: 'id must be a non-empty string' });
+  }
+  if (!patch || typeof patch !== 'object' || Array.isArray(patch)) {
+    return sendJSON(res, 400, { error: 'patch must be an object' });
+  }
+  const unknown = Object.keys(patch).filter((k) => !LAUNCH_PATCH_KEYS.includes(k));
+  if (unknown.length) {
+    return sendJSON(res, 400, { error: `unknown patch keys: ${unknown.join(', ')}` });
+  }
+  if ('wave' in patch && !(Number.isInteger(patch.wave) && patch.wave >= 1 && patch.wave <= 4)) {
+    return sendJSON(res, 400, { error: 'wave must be an integer 1-4' });
+  }
+  if ('caption' in patch) {
+    const c = patch.caption;
+    const okShape =
+      c && typeof c === 'object' && !Array.isArray(c) &&
+      ['hook', 'body', 'cta'].every((k) => typeof c[k] === 'string') &&
+      Array.isArray(c.hashtags) && c.hashtags.every((t) => typeof t === 'string');
+    if (!okShape) {
+      return sendJSON(res, 400, { error: 'caption must be {hook, body, cta, hashtags[]} of strings' });
+    }
+  }
+  if ('notes' in patch && typeof patch.notes !== 'string') {
+    return sendJSON(res, 400, { error: 'notes must be a string' });
+  }
+  if ('role' in patch && typeof patch.role !== 'string') {
+    return sendJSON(res, 400, { error: 'role must be a string' });
+  }
+  // Never trust the client's lint — re-scan all new text server-side.
+  const violations = scanStrings(stringLeaves(patch));
+  if (violations.length && !override) {
+    return sendJSON(res, 422, { error: 'guard violations', violations });
+  }
+  return enqueueLaunch(() => {
+    const plan = loadLaunchPlan();
+    if (!plan) {
+      return sendJSON(res, 500, { error: 'content-studio/launch-grid.json missing or invalid' });
+    }
+    const post = plan.posts.find((p) => p.id === id);
+    if (!post) return sendJSON(res, 404, { error: `unknown post: ${id}` });
+    Object.assign(post, patch, { updatedAt: new Date().toISOString() });
+    plan.updatedAt = post.updatedAt;
+    writeAtomic(LAUNCH_GRID_FILE, JSON.stringify(plan, null, 2) + '\n');
+    return sendJSON(res, 200, post);
+  });
+}
+
+function handleLaunchSlidesSave(body, res) {
+  const { slug, slides, title, surf, override } = body;
+  if (typeof slug !== 'string' || !slug.length) {
+    return sendJSON(res, 400, { error: 'slug must be a non-empty string' });
+  }
+  const okSlides =
+    Array.isArray(slides) && slides.length &&
+    slides.every(
+      (s) =>
+        s && typeof s === 'object' && !Array.isArray(s) &&
+        ['eb', 'motif', 'hl', 'sup'].every((k) => typeof s[k] === 'string'),
+    );
+  if (!okSlides) {
+    return sendJSON(res, 400, { error: 'slides must be a non-empty array of {eb, motif, hl, sup} strings' });
+  }
+  const leaves = stringLeaves([slides, title, surf]);
+  // [[placeholders]] in the html brick the export pre-flight — hard reject, no override.
+  if (leaves.some((s) => s.includes('[['))) {
+    return sendJSON(res, 422, {
+      error: '[[placeholders]] are not allowed in launch-grid.html (the export pre-flight rejects them)',
+    });
+  }
+  const violations = scanStrings(leaves);
+  if (violations.length && !override) {
+    return sendJSON(res, 422, { error: 'guard violations', violations });
+  }
+  return enqueueLaunch(() => {
+    const { html, data } = readSlidesIsland();
+    if (!Object.prototype.hasOwnProperty.call(data, slug)) {
+      return sendJSON(res, 404, { error: `unknown carousel slug: ${slug}` });
+    }
+    const entry = { ...data[slug], slides };
+    if (typeof title === 'string' && title) entry.title = title;
+    if (typeof surf === 'string' && surf) entry.surf = surf;
+    data[slug] = entry;
+    const json = JSON.stringify(data, null, 2);
+    if (/<\/script/i.test(json)) {
+      return sendJSON(res, 422, { error: 'slide copy may not contain "</script"' });
+    }
+    // Function replacement — JSON content must never hit $-substitution rules.
+    writeAtomic(LAUNCH_HTML_FILE, html.replace(ISLAND_RE, (_m, a, _b, c) => a + json + c));
+    return sendJSON(res, 200, { ok: true, slug, entry });
+  });
+}
+
+// --------------------------------------------------------------- export zip
+//
+// Bundles existing rendered PNGs (and small inline text files like captions)
+// into a single .zip for download — the studio's "bulk export". Read-only: it
+// never writes the repo. `src` entries must resolve INSIDE exports/; `name` is
+// the path inside the archive (no absolute paths, no `..`). `text` entries
+// carry inline content (caption .txt files) instead of a source file.
+
+const MAX_ZIP_FILES = 600;
+const MAX_ZIP_BYTES = 400 * 1024 * 1024; // 400 MiB — far above a full launch bundle
+
+function sanitizeZipPath(name) {
+  const s = String(name == null ? '' : name).replace(/\\/g, '/').replace(/^\/+/, '');
+  if (!s) return null;
+  if (s.split('/').some((seg) => seg === '' || seg === '.' || seg === '..')) return null;
+  if (!/^[\w./ +-]+$/.test(s)) return null;
+  return s;
+}
+
+function handleExportZip(body, res) {
+  const files = body && body.files;
+  if (!Array.isArray(files) || files.length === 0) {
+    return sendJSON(res, 400, { error: 'files must be a non-empty array' });
+  }
+  if (files.length > MAX_ZIP_FILES) {
+    return sendJSON(res, 400, { error: `too many files (max ${MAX_ZIP_FILES})` });
+  }
+  const entries = [];
+  let total = 0;
+  for (const f of files) {
+    const name = sanitizeZipPath(f && f.name);
+    if (!name) return sendJSON(res, 400, { error: `invalid archive path: ${f && f.name}` });
+    let data;
+    if (f && typeof f.text === 'string') {
+      data = Buffer.from(f.text, 'utf8');
+    } else if (f && typeof f.src === 'string') {
+      const abs = path.resolve(ROOT, f.src);
+      if (abs !== EXPORTS_DIR && !abs.startsWith(EXPORTS_DIR + path.sep)) {
+        return sendJSON(res, 400, { error: `src must be inside exports/: ${f.src}` });
+      }
+      const st = statOrNull(abs);
+      if (!st || !st.isFile()) return sendJSON(res, 404, { error: `not exported: ${f.src}` });
+      data = fs.readFileSync(abs);
+    } else {
+      return sendJSON(res, 400, { error: 'each file needs a src or text' });
+    }
+    total += data.length;
+    if (total > MAX_ZIP_BYTES) return sendJSON(res, 413, { error: 'bundle too large' });
+    entries.push({ name, data });
+  }
+  const zipName = sanitizeZipPath(body.zipName) || 'export.zip';
+  const fname = path.basename(zipName.endsWith('.zip') ? zipName : `${zipName}.zip`);
+  const zip = zipStore(entries);
+  res.writeHead(200, {
+    'Content-Type': 'application/zip',
+    'Content-Disposition': `attachment; filename="${fname}"`,
+    'Content-Length': zip.length,
+    'Cache-Control': 'no-store',
+  });
+  res.end(zip);
 }
 
 // ---------------------------------------------------------------- manifest
@@ -491,10 +742,38 @@ const ACTIONS = Object.freeze({
 
 const MAX_LOG_LINES = 5000;
 const MAX_KEPT_RUNS = 5;
+const TRUNCATION_MARKER = '[…log truncated…]';
+// Watchdog: a run that exceeds this is SIGTERMed (SIGKILL 5 s later if needed).
+const ACTION_TIMEOUT_MS = Number(process.env.STUDIO_ACTION_TIMEOUT_MS || 15 * 60 * 1000);
+const STATE_FILE = path.join(TOOLS, '.studio-state.json');
 
-const runs = new Map(); // id → {id, action, startedAt, endedAt, exitCode, lines, done, clients}
+const runs = new Map(); // id → {id, action, startedAt, endedAt, exitCode, lines, done, timedOut, clients}
 let running = null; // {id, action, startedAt}
-let lastRun = null; // {id, action, exitCode, startedAt, endedAt}
+
+// lastRun survives restarts: persisted (atomic) on every finish, loaded at
+// boot. The run id is omitted on disk — replay buffers don't survive a restart.
+function persistLastRun(r) {
+  const { action, exitCode, startedAt, endedAt, timedOut } = r;
+  try {
+    writeAtomic(STATE_FILE, JSON.stringify({ action, exitCode, startedAt, endedAt, timedOut }, null, 2) + '\n');
+  } catch (err) {
+    console.error(`could not persist ${rel(STATE_FILE)}: ${err.message}`);
+  }
+}
+
+function loadLastRun() {
+  const raw = readOrNull(STATE_FILE);
+  if (raw == null) return null;
+  try {
+    const v = JSON.parse(raw);
+    if (v && typeof v === 'object' && typeof v.action === 'string') return v;
+  } catch {
+    /* corrupt file → no lastRun (never crash the boot) */
+  }
+  return null;
+}
+
+let lastRun = loadLastRun(); // {id?, action, exitCode, startedAt, endedAt, timedOut}
 
 function sseWrite(res, event, data) {
   if (res.writableEnded || res.destroyed) return;
@@ -507,7 +786,10 @@ function sseWrite(res, event, data) {
 
 function pushLine(run, line) {
   run.lines.push(line);
-  if (run.lines.length > MAX_LOG_LINES) run.lines.splice(0, run.lines.length - MAX_LOG_LINES);
+  if (run.lines.length > MAX_LOG_LINES) {
+    // Drop oldest, keep a single marker at the head so replays show the gap.
+    run.lines.splice(0, run.lines.length - MAX_LOG_LINES + 1, TRUNCATION_MARKER);
+  }
   for (const res of run.clients) sseWrite(res, 'log', line);
 }
 
@@ -521,10 +803,12 @@ function finishRun(run, code) {
     exitCode: code,
     startedAt: run.startedAt,
     endedAt: run.endedAt,
+    timedOut: !!run.timedOut,
   };
+  persistLastRun(lastRun);
   running = null;
   for (const res of run.clients) {
-    sseWrite(res, 'exit', JSON.stringify({ code }));
+    sseWrite(res, 'exit', JSON.stringify({ code, timedOut: !!run.timedOut }));
     try {
       res.end();
     } catch {
@@ -547,12 +831,23 @@ function startAction(action) {
     exitCode: null,
     lines: [],
     done: false,
+    timedOut: false,
     clients: new Set(),
   };
   runs.set(id, run);
   running = { id, action, startedAt: run.startedAt };
 
   const child = spawn('npm', ['run', action], { cwd: TOOLS, env: process.env });
+  // Watchdog: SIGTERM at the deadline, SIGKILL 5 s later if it hangs on.
+  const watchdog = setTimeout(() => {
+    run.timedOut = true;
+    pushLine(run, `[timeout] ${action} exceeded ${ACTION_TIMEOUT_MS} ms — sending SIGTERM`);
+    child.kill('SIGTERM');
+    setTimeout(() => {
+      if (!run.done) child.kill('SIGKILL');
+    }, 5000).unref();
+  }, ACTION_TIMEOUT_MS);
+  watchdog.unref();
   const partial = { out: '', err: '' };
   const onData = (key) => (chunk) => {
     partial[key] += chunk.toString('utf8');
@@ -563,10 +858,12 @@ function startAction(action) {
   child.stdout.on('data', onData('out'));
   child.stderr.on('data', onData('err'));
   child.on('error', (err) => {
+    clearTimeout(watchdog);
     pushLine(run, `spawn error: ${err.message}`);
     finishRun(run, -1);
   });
   child.on('close', (code) => {
+    clearTimeout(watchdog);
     if (partial.out) pushLine(run, partial.out);
     if (partial.err) pushLine(run, partial.err);
     if (!run.done) finishRun(run, code == null ? -1 : code);
@@ -584,7 +881,7 @@ function handleStream(req, res, id) {
   });
   for (const line of run.lines) sseWrite(res, 'log', line);
   if (run.done) {
-    sseWrite(res, 'exit', JSON.stringify({ code: run.exitCode }));
+    sseWrite(res, 'exit', JSON.stringify({ code: run.exitCode, timedOut: !!run.timedOut }));
     res.end();
     return;
   }
@@ -613,6 +910,34 @@ function runGuard() {
     child.on('error', (err) => resolve({ exitCode: -1, output: `spawn error: ${err.message}` }));
     child.on('close', (code) => resolve({ exitCode: code == null ? -1 : code, output }));
   });
+}
+
+// -------------------------------------------------------------- token status
+
+// Source → generated-artifact pairs of the token pipeline. A pair is stale
+// when the artifact is missing or older than its source — mtime compare only
+// (cheap, no hashing); `npm run tokens` / `npm run snippets` regenerate.
+const TOKEN_PAIRS = [
+  { source: 'design-system/tokens/tokens.json', artifact: 'design-system/tokens/tokens.css' },
+  { source: 'design-system/tokens/tokens.json', artifact: 'design-system/tokens/tokens.flat.json' },
+  { source: 'design-system/tokens/tokens.json', artifact: 'tools/brand.tokens.mjs' },
+  { source: 'design-system/recipes/snippets.src.md', artifact: 'design-system/recipes/snippets.md' },
+];
+
+function buildTokensStatus() {
+  const stale = [];
+  for (const { source, artifact } of TOKEN_PAIRS) {
+    const src = statOrNull(path.join(ROOT, source));
+    if (!src) continue; // missing source → nothing to compare against
+    const art = statOrNull(path.join(ROOT, artifact));
+    if (!art || src.mtimeMs > art.mtimeMs) stale.push({ source, artifact });
+  }
+  return {
+    inSync: stale.length === 0,
+    stale,
+    checkedAt: new Date().toISOString(),
+    method: 'mtime',
+  };
 }
 
 // ---------------------------------------------------------------- editmode
@@ -865,6 +1190,10 @@ async function handleApi(req, res, pathname) {
     return handleStream(req, res, stream[1]);
   }
 
+  if (pathname === '/api/tokens/status' && req.method === 'GET') {
+    return sendJSON(res, 200, buildTokensStatus());
+  }
+
   if (pathname === '/api/editmode' && req.method === 'POST') {
     const body = await readJSONBody(req);
     return handleEditmode(body, res);
@@ -907,14 +1236,75 @@ async function handleApi(req, res, pathname) {
     return handleCommentDelete(commentId[1], res);
   }
 
+  if (pathname === '/api/launch-grid') {
+    if (req.method === 'GET') {
+      const plan = loadLaunchPlan();
+      if (!plan) {
+        return sendJSON(res, 500, { error: 'content-studio/launch-grid.json missing or invalid' });
+      }
+      const { data: slides } = readSlidesIsland();
+      return sendJSON(res, 200, { plan, slides, generatedAt: new Date().toISOString() });
+    }
+    return sendJSON(res, 405, { error: 'method not allowed' });
+  }
+
+  if (pathname === '/api/launch-grid/post' && req.method === 'POST') {
+    const body = await readJSONBody(req);
+    return handleLaunchPostSave(body, res);
+  }
+
+  if (pathname === '/api/launch-grid/slides' && req.method === 'POST') {
+    const body = await readJSONBody(req);
+    return handleLaunchSlidesSave(body, res);
+  }
+
+  if (pathname === '/api/export-zip' && req.method === 'POST') {
+    const body = await readJSONBody(req);
+    return handleExportZip(body, res);
+  }
+
   return sendJSON(res, 404, { error: 'not found' });
 }
 
 const staticHandler = createStaticHandler(ROOT);
 
+// DNS-rebinding guard: a browser on this machine can be lured to a hostname an
+// attacker points at 127.0.0.1 — refuse any request whose Host is not loopback.
+const ALLOWED_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]']);
+
+// CSRF guard: state-changing API calls must come from the studio's own origin.
+// Browsers attach Origin on cross-site requests; no CORS headers are ever set,
+// so cross-origin reads stay blocked by the browser itself.
+const ALLOWED_ORIGINS = new Set([
+  `http://localhost:${PORT}`,
+  `http://127.0.0.1:${PORT}`,
+  `http://[::1]:${PORT}`,
+]);
+
+// Hostname part of a Host header: "localhost:8090" → "localhost",
+// "[::1]:8090" → "[::1]". Missing/garbled headers come back '' (→ 403).
+function hostnameOf(hostHeader) {
+  const h = String(hostHeader || '').trim().toLowerCase();
+  if (!h) return '';
+  if (h.startsWith('[')) {
+    const end = h.indexOf(']');
+    return end === -1 ? '' : h.slice(0, end + 1);
+  }
+  return h.split(':')[0];
+}
+
 const server = http.createServer((req, res) => {
+  if (!ALLOWED_HOSTNAMES.has(hostnameOf(req.headers.host))) {
+    return sendJSON(res, 403, { error: 'forbidden: non-loopback Host header' });
+  }
   const pathname = (req.url || '/').split('?')[0];
   if (pathname.startsWith('/api/')) {
+    if (req.method !== 'GET' && req.method !== 'HEAD') {
+      const origin = req.headers.origin;
+      if (origin && !ALLOWED_ORIGINS.has(origin)) {
+        return sendJSON(res, 403, { error: 'forbidden: cross-origin request' });
+      }
+    }
     handleApi(req, res, pathname).catch((err) => {
       const code = err && err.httpCode ? err.httpCode : 500;
       if (!res.headersSent) sendJSON(res, code, { error: String((err && err.message) || err) });
@@ -922,6 +1312,18 @@ const server = http.createServer((req, res) => {
     return;
   }
   staticHandler(req, res);
+});
+
+// Fail fast instead of dying with a stack trace — a busy 8090 almost always
+// means a stale test mock or a second studio.
+server.on('error', (err) => {
+  if (err && err.code === 'EADDRINUSE') {
+    console.error(`port ${PORT} is already in use — likely a stale test mock or another studio.`);
+    console.error(`free it with: lsof -ti :${PORT} | xargs kill`);
+  } else {
+    console.error(`server error: ${String((err && err.message) || err)}`);
+  }
+  process.exit(1);
 });
 
 server.listen(PORT, HOST, () => {

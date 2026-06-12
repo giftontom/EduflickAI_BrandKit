@@ -42,7 +42,7 @@
 | Lead magnet | Free Technical Masterclass |
 | Masterclass format | Live, ~90 min, builds a real AI app on the spot |
 | Masterclass CTA | "Register Free →" |
-
+(edit: no masterclass; we might have offline orentation )
 ---
 
 ## Live values (update per cohort — these CHANGE)
@@ -51,7 +51,7 @@
 | --- | --- | --- |
 | Today's date | 2026-06-10 | |
 | Masterclass date/time | [[NOT SET — e.g. Sat 21 Jun 2026, 5:00 PM IST]] | |
-| Masterclass registration link | eduflickai.com/masterclass | |
+| Masterclass registration link | eduflickai.com/masterclass | | no master class
 | Cohort start date | [[NOT SET — e.g. 6 Jul 2026]] | |
 | Applications close | [[no close date]] | |
 | Seats remaining | [[20 of 20]] | |

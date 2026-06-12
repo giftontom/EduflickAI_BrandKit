@@ -50,6 +50,16 @@ export async function copyText(text) {
   catch { return false; }
 }
 
+/* Trigger a browser download of an in-memory Blob (e.g. a generated .zip). */
+export function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = el('a', { href: url, download: filename || 'download' });
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
 /* A micro copy-to-clipboard button with transient feedback. */
 export function copyBtn(getText, label = 'copy') {
   const b = el('button', { class: 'btn-mini', type: 'button' }, label);

@@ -37,6 +37,38 @@ export const getComments = () => request('/api/comments');
 export const upsertComment = (comment, override = false) => post('/api/comments', { comment, override });
 export const deleteComment = (id) => request(`/api/comments/${encodeURIComponent(id)}`, { method: 'DELETE' });
 
+/* launch-grid — the 5th write surface (the Instagram launch plan). Plan lives
+   in content-studio/launch-grid.json; carousel slide copy lives in the html's
+   caro-data JSON island. Status stays in status.json via setStatus with
+   `launch-grid/<post.id>` ids. 422 responses carry .body.violations. */
+export const getLaunchGrid = () => request('/api/launch-grid');
+export const saveLaunchPost = (id, patch, override = false) =>
+  post('/api/launch-grid/post', { id, patch, override });
+export const saveLaunchSlides = (slug, payload, override = false) =>
+  post('/api/launch-grid/slides', { slug, ...payload, override });
+
+/* Bulk export — bundle already-rendered PNGs (+ inline caption text) into one
+   .zip. `files` is [{src,name} | {text,name}]; `src` is a repo-relative path
+   inside exports/. Returns the binary {blob, filename} (the server sets the
+   download name via Content-Disposition). Errors carry .status / .body.error. */
+export async function exportZip({ files, zipName }) {
+  const res = await fetch('/api/export-zip', {
+    method: 'POST', headers: JSON_HEADERS, body: JSON.stringify({ files, zipName }),
+  });
+  if (!res.ok) {
+    let body = null;
+    try { body = await res.json(); } catch { /* non-json error */ }
+    const err = new Error((body && body.error) || `${res.status} ${res.statusText}`.toLowerCase());
+    err.status = res.status;
+    err.body = body;
+    throw err;
+  }
+  const blob = await res.blob();
+  const cd = res.headers.get('content-disposition') || '';
+  const m = cd.match(/filename="?([^"]+)"?/);
+  return { blob, filename: (m && m[1]) || zipName || 'export.zip' };
+}
+
 /* SSE log stream for a running action. Replays buffered lines first.
    Returns { close }. onExit receives the numeric exit code (null if unparsable). */
 export function streamAction(id, { onLog, onExit } = {}) {
