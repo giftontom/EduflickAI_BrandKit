@@ -10,6 +10,27 @@ alongside it.
 
 ### Added
 
+- **Launch-grid manager.** The 12-post Instagram launch plan is now a committed, machine-readable
+  store (`content-studio/launch-grid.json`: per-post captions, waves, roles, notes, IG rules) edited
+  in-studio through guarded endpoints (`GET /api/launch-grid`, `POST /api/launch-grid/post`,
+  `POST /api/launch-grid/slides`): every string is re-scanned server-side, `[[placeholders]]` are
+  hard-rejected (they brick the export pre-flight), and carousel slide copy is rewritten inside
+  `launch-grid.html`'s `caro-data` JSON island with injection guards. `#/instagram` simulates the
+  profile grid using only approved/scheduled/posted launch posts. `POST /api/export-zip` bundles
+  rendered PNGs + caption text files into one download (read-only, `exports/`-constrained), via a
+  new dependency-free `tools/lib/zip.mjs`.
+- **Server hardening (roadmap Phase 0).** Loopback asserted at boot and the port fails fast when
+  busy (`STUDIO_PORT` > `PORT` > 8090); every request must carry a loopback Host header and non-GET
+  `/api` calls with an Origin must be same-origin (DNS-rebinding + CSRF guards — no CORS headers are
+  ever set); atomic writes now fsync before rename; actions get a watchdog timeout
+  (`STUDIO_ACTION_TIMEOUT_MS`, default 15 min) and `lastRun` survives restarts in a gitignored
+  state file; new `GET /api/tokens/status` reports token/snippet artifact drift. Verified live:
+  all 11 routes render with zero console errors, security probes hold, facts guard green.
+- **Roadmap.** `tools/studio/ROADMAP.md` — the studio's phased development plan: what shipped,
+  what is pending before merge, and the future phases (operator loop, AI-assisted content,
+  multi-brand, distribution). Development is paused at a verified-working state; the roadmap is
+  the resume point.
+
 - **Design feedback that Claude Code can act on.** Annotate mode drops numbered pin comments on any
   asset — instagram/poster/story PNGs and deck slides (normalized coordinates), brochure/deck pages
   and the launch-grid mural (same-origin iframe element-selectors / per-page coordinates). Pins
