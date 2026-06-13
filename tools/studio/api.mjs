@@ -23,7 +23,13 @@ function post(url, payload) {
 
 export const getManifest = () => request('/api/manifest');
 export const getStatus = () => request('/api/status');
-export const setStatus = (id, patch) => post('/api/status', { id, patch });
+/* status patch — the server now guards transitions via a state machine. An
+   illegal transition between two existing statuses → 409 {error, from, to,
+   legalNext}; pass override:true to force it (recorded with overridden:true).
+   `patch.override` is the wire field the server reads; the optional 4th arg is
+   a convenience that folds into the patch so callers can pass it either way. */
+export const setStatus = (id, patch, override = false) =>
+  post('/api/status', { id, patch: override ? { ...patch, override: true } : patch });
 export const getActions = () => request('/api/actions');
 export const runAction = (action) => post('/api/actions/run', { action });
 export const editmodeSave = (file, edits) => post('/api/editmode', { file, edits });

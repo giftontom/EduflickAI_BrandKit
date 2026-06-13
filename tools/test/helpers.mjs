@@ -41,6 +41,64 @@ export const WRITE_SURFACE = [
   'tools/.studio-state.json',
 ];
 
+// ---- cross-process status.json section lock -------------------------------
+
+// The suite runs test FILES concurrently, each spawning its OWN server child.
+// content-studio/status.json is a SHARED file with no inter-process lock, so any
+// two files that touch it race at the OS level in three ways:
+//   • two servers' read-modify-write cycles lose-update each other (A reads {x},
+//     B reads {x}, A writes {x,a}, B writes {x,b} — a is lost; the atomic rename
+//     prevents torn files, not lost updates);
+//   • the corrupt-store test overwrites the whole file with garbage mid-run;
+//   • a sibling's after()/restoreSnapshot rewrites the file to a pre-suite
+//     snapshot while another file is still mid-test.
+// Only api.test.mjs and status-statemachine.test.mjs write status.json (the
+// other surfaces are disjoint), so they take this whole-file advisory lock for
+// their ENTIRE lifetime — before() acquires, after() releases — and thus run
+// serially RELATIVE TO EACH OTHER on status.json. comments.test.mjs touches no
+// status.json and never blocks. Files that touch status.json call
+// acquireStatusSection() in before() (after snapshot) and releaseStatusSection()
+// in after() (before restore).
+const STATUS_LOCK = path.join(ROOT, 'content-studio', '.status.json.testlock');
+let heldStatusSection = false;
+
+export async function acquireStatusSection() {
+  const deadline = Date.now() + 60000; // generous: a whole file's run may be held
+  for (;;) {
+    try {
+      // O_CREAT|O_EXCL: the create succeeds for exactly one holder at a time.
+      const fd = fs.openSync(STATUS_LOCK, 'wx');
+      fs.writeSync(fd, `${process.pid} ${Date.now()}`);
+      fs.closeSync(fd);
+      heldStatusSection = true;
+      return;
+    } catch (e) {
+      if (e.code !== 'EEXIST') throw e;
+      // Reclaim a stale lock (a crashed holder) whose mtime is older than 45s —
+      // longer than any honest file run — so the suite never deadlocks on an
+      // orphaned lockfile.
+      try {
+        const st = fs.statSync(STATUS_LOCK);
+        if (Date.now() - st.mtimeMs > 45000) fs.rmSync(STATUS_LOCK, { force: true });
+      } catch {
+        /* vanished between stat and now — loop and retry the create */
+      }
+      if (Date.now() > deadline) throw new Error('status section lock wait timed out');
+      await delay(25);
+    }
+  }
+}
+
+export function releaseStatusSection() {
+  if (!heldStatusSection) return;
+  heldStatusSection = false;
+  try {
+    fs.rmSync(STATUS_LOCK, { force: true });
+  } catch {
+    /* already gone */
+  }
+}
+
 // ---- same-origin fetch ----------------------------------------------------
 
 // Default a same-origin Origin so non-GET /api calls pass the CSRF guard.
@@ -134,11 +192,18 @@ export async function stopServer() {
   const c = child;
   child = null;
   await new Promise((resolve) => {
-    c.once('close', resolve);
-    c.kill('SIGTERM');
-    setTimeout(() => {
+    // Keep the SIGKILL fallback timer REFERENCED (no .unref()): the suite runs
+    // files concurrently and each must fully reap its server before after()
+    // resolves. An unref'd timer could be skipped if the runner goes idle first,
+    // orphaning a child that then squats the test port and fails the next run.
+    const hardKill = setTimeout(() => {
       if (c.exitCode == null) c.kill('SIGKILL');
-    }, 3000).unref();
+    }, 3000);
+    c.once('close', () => {
+      clearTimeout(hardKill);
+      resolve();
+    });
+    c.kill('SIGTERM');
   });
 }
 

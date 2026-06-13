@@ -3,8 +3,8 @@
    clone has zero exports, the whole front door becomes a cold-start hero
    instead of empty grids. */
 
-import { el, clear } from '../dom.mjs';
-import { STATUSES } from '../components/status-badge.mjs';
+import { el, clear, fmtDate } from '../dom.mjs';
+import { STATUSES, statusBadge } from '../components/status-badge.mjs';
 import { createLogStream } from '../components/log-stream.mjs';
 import { runActionInto } from '../components/run-action.mjs';
 
@@ -22,10 +22,16 @@ const SEED_EXPORTS = [
 export function render(root, ctx) {
   const statsGrid = el('div', { class: 'grid-stats' });
   const tilesGrid = el('div', { class: 'grid-tiles' });
+  const opsGrid = el('div', { class: 'grid-ops' });
 
   let guardStream = null;
   let guardRunning = false;
   let coldRunner = null;
+  /* single-flight re-render of a stale-and-live asset (one writer at a time,
+     same as the cold-start hero); its log mounts into a shared host. */
+  let staleRunner = null;
+  let staleRunning = false;
+  const staleLogHost = el('div', { class: 'log-host', hidden: true });
 
   /* total exported assets across every surface — 0 on a fresh clone, since
      exports/ is generated, not committed. drives the cold-start hero. */
@@ -51,9 +57,13 @@ export function render(root, ctx) {
         el('span', { class: 'mono-up section-label' }, '01 · surfaces'),
         statsGrid),
       el('section', { class: 'dash-section' },
-        el('span', { class: 'mono-up section-label' }, '02 · guard + library'),
+        el('span', { class: 'mono-up section-label' }, '02 · ops'),
+        opsGrid),
+      el('section', { class: 'dash-section' },
+        el('span', { class: 'mono-up section-label' }, '03 · guard + library'),
         tilesGrid));
     renderStats();
+    renderOps();
     renderTiles();
   }
 
@@ -167,6 +177,114 @@ export function render(root, ctx) {
     }
   }
 
+  /* today at local midnight — scheduledFor is a calendar date, so a same-day
+     plan is due (not overdue) and tomorrow's plan is neither. */
+  function startOfToday() {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+
+  /* two computed operator panels, pure client-side joins of status + manifest:
+       due/overdue  — scheduledFor ≤ today and status not yet posted/retired
+       stale & live — manifest stale AND status in {scheduled, posted} (dangerous:
+                      a live or about-to-go-live asset whose source moved on)
+     each panel shows a calm empty line rather than a broken grid when clear. */
+  function renderOps() {
+    clear(opsGrid);
+    opsGrid.append(renderDuePanel(), renderStalePanel());
+  }
+
+  function renderDuePanel() {
+    const assets = (ctx.status && ctx.status.assets) || {};
+    const today = startOfToday();
+    const rows = [];
+    for (const [id, entry] of Object.entries(assets)) {
+      if (!entry || !entry.scheduledFor) continue;
+      const when = new Date(String(entry.scheduledFor));
+      if (Number.isNaN(when.getTime())) continue;
+      const status = STATUSES.includes(entry.status) ? entry.status : 'draft';
+      if (status === 'posted' || status === 'retired') continue;
+      if (when.getTime() > today.getTime()) continue;
+      rows.push({ id, when, overdue: when.getTime() < today.getTime(), status });
+    }
+    rows.sort((a, b) => a.when - b.when);
+
+    const body = rows.length
+      ? el('ul', { class: 'ops-list' },
+        rows.map((r) => el('li', { class: 'ops-row' + (r.overdue ? ' is-overdue' : '') },
+          el('span', { class: 'mono ops-id', title: r.id }, r.id),
+          el('span', { class: 'mono ops-when' }, (r.overdue ? 'overdue · ' : 'due · ') + fmtDate(r.when)),
+          statusBadge(r.status))))
+      : el('p', { class: 'ops-empty mono' }, 'nothing due — no scheduled assets at or past today.');
+
+    return el('div', { class: 'panel-card ops-panel' },
+      el('span', { class: 'mono-up section-label' }, 'due / overdue'),
+      el('p', { class: 'tile-sub' }, 'scheduled assets at or past today that have not posted.'),
+      body);
+  }
+
+  function renderStalePanel() {
+    const assets = (ctx.status && ctx.status.assets) || {};
+    const m = ctx.manifest;
+    const rows = [];
+    if (m && Array.isArray(m.surfaces)) {
+      for (const s of m.surfaces) {
+        for (const item of (s.items || [])) {
+          if (!(item.exists && item.stale)) continue;
+          const id = `${s.id}/${item.name}`;
+          const status = (assets[id] && assets[id].status) || item.status || 'draft';
+          if (status !== 'scheduled' && status !== 'posted') continue;
+          rows.push({ id, status, script: s.script });
+        }
+      }
+    }
+    rows.sort((a, b) => a.id.localeCompare(b.id));
+
+    let body;
+    if (rows.length) {
+      const btns = [];
+      const rerender = (script) => {
+        if (staleRunning) return;
+        staleRunning = true;
+        for (const b of btns) b.disabled = true;
+        if (staleRunner) staleRunner.dispose();
+        staleRunner = runActionInto({
+          api: ctx.api,
+          action: script,
+          logHost: staleLogHost,
+          /* on a clean exit main.mjs has already refetched the manifest by the
+             time 'studio-state' fires; renderOps() re-runs and drops any asset
+             that is no longer stale. on failure, re-enable so the user retries. */
+          onExit: (code) => { if (code !== 0) { staleRunning = false; for (const b of btns) b.disabled = false; } },
+        });
+        staleRunner.start.then((ok) => {
+          if (!ok) { staleRunning = false; for (const b of btns) b.disabled = false; }
+        });
+      };
+      body = el('ul', { class: 'ops-list' },
+        rows.map((r) => {
+          const btn = el('button', {
+            class: 'btn-mini', type: 'button', disabled: staleRunning,
+            onclick: () => rerender(r.script),
+          }, `re-render ${r.script}`);
+          btns.push(btn);
+          return el('li', { class: 'ops-row is-stale' },
+            el('span', { class: 'mono ops-id', title: r.id }, r.id),
+            statusBadge(r.status),
+            btn);
+        }));
+    } else {
+      body = el('p', { class: 'ops-empty mono' }, 'all live assets are fresh — no stale scheduled or posted exports.');
+    }
+
+    return el('div', { class: 'panel-card ops-panel' },
+      el('span', { class: 'mono-up section-label' }, 'stale & live'),
+      el('p', { class: 'tile-sub' }, 'scheduled or posted assets whose source moved past the export.'),
+      body,
+      staleLogHost);
+  }
+
   function renderTiles() {
     clear(tilesGrid);
     const m = ctx.manifest;
@@ -257,12 +375,15 @@ export function render(root, ctx) {
 
   /* on a fresh manifest: if we crossed the cold/full boundary (an export just
      filled the galleries), re-mount the whole front door. otherwise keep the
-     guard tile and any running log mounted and refresh the stat rollups only. */
+     guard tile and any running log mounted and refresh the rollups + ops panels.
+     a re-render just finished, so clear the stale single-flight flag and let the
+     panel rebuild drop whatever is no longer stale (and re-enable the rest). */
   function onState() {
     guardRunning = false;
+    staleRunning = false;
     const next = totalAssets() === 0 ? 'cold' : 'full';
     if (next !== mode) { mount(); return; }
-    if (mode === 'full') renderStats();
+    if (mode === 'full') { renderStats(); renderOps(); }
   }
   window.addEventListener('studio-state', onState);
 
@@ -272,5 +393,6 @@ export function render(root, ctx) {
     window.removeEventListener('studio-state', onState);
     if (guardStream) guardStream.dispose();
     if (coldRunner) coldRunner.dispose();
+    if (staleRunner) staleRunner.dispose();
   };
 }

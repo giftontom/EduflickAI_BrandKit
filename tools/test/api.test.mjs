@@ -29,6 +29,8 @@ import {
   stopServer,
   snapshot,
   restoreSnapshot,
+  acquireStatusSection,
+  releaseStatusSection,
   writeFixtures,
   removeFixtures,
   FIXTURE_ONE,
@@ -50,6 +52,12 @@ const RETIRED_TEXT = `studio test marker ${firstLiteral} end`;
 let snap;
 
 before(async () => {
+  // status.json is a SHARED file; hold the cross-process section lock for this
+  // file's whole run so it never overlaps status-statemachine.test.mjs on it —
+  // its corrupt-store test and restore would otherwise clobber sibling writes
+  // (see helpers.mjs acquireStatusSection). Acquire BEFORE snapshotting so the
+  // snapshot captures a stable, sibling-restored status.json.
+  await acquireStatusSection();
   snap = snapshot();
   writeFixtures();
   assert.ok(scanTextRetired(RETIRED_TEXT).length > 0, 'runtime retired string must trip the scanner');
@@ -60,6 +68,7 @@ after(async () => {
   await stopServer();
   removeFixtures();
   restoreSnapshot(snap);
+  releaseStatusSection();
 });
 
 // --------------------------------------------------------------- smoke / read
@@ -372,12 +381,19 @@ test('launch-grid/slides: malformed slide shape → 400', async () => {
 // ---------------------------------------------------------------- atomicity
 
 test('atomicity: no .tmp residue beside the write-path files after writes', async () => {
-  // Trigger a write (status patch) then assert no leftover tmp file.
+  // Trigger a write (status patch) then assert no LEFTOVER tmp file.
   await apiJSON('/api/status', { json: { id: 'studio-test/atomic', patch: { status: 'draft' } } });
   const statusDir = path.join(ROOT, 'content-studio');
-  const leftovers = fs
-    .readdirSync(statusDir)
-    .filter((n) => /^\.status\.json\.tmp-/.test(n));
+  const scan = () => fs.readdirSync(statusDir).filter((n) => /^\.status\.json\.tmp-/.test(n));
+  // writeAtomic is tmp→fsync→rename: a leaked tmp persists, but a SIBLING test
+  // file's server (its own pid, its own tmp name) can be caught mid-rename here
+  // since the suite runs files concurrently against the same status.json. Re-poll
+  // briefly; a genuine leak never clears, a transient cross-process tmp does.
+  let leftovers = scan();
+  for (let i = 0; i < 20 && leftovers.length; i++) {
+    await delay(50);
+    leftovers = scan();
+  }
   assert.equal(leftovers.length, 0, `tmp residue: ${leftovers.join(', ')}`);
 });
 

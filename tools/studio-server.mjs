@@ -7,7 +7,15 @@
 //
 //   GET  /api/manifest             live-scanned asset manifest (nothing cached)
 //   GET  /api/status               content-studio/status.json
-//   POST /api/status               {id, patch} → merged entry (atomic write)
+//   POST /api/status               {id, patch} → merged entry (atomic write).
+//                                  status changes obey a state machine (draft→
+//                                  approved→scheduled→posted, any→retired,
+//                                  retired→draft); an illegal move is 409 {error,
+//                                  from, to, legalNext} unless patch.override. A
+//                                  new id may take any status (creation). Every
+//                                  real change appends to an append-only history
+//                                  [{from, to, at, overridden?}] (from:null on
+//                                  creation); same-status is an idempotent no-op.
 //   GET  /api/actions              {running, lastRun} (lastRun survives restarts)
 //   POST /api/actions/run          {action} → {id} | 409 busy | 400 unknown
 //   GET  /api/actions/:id/stream   SSE log/exit events (replay + live)
@@ -70,6 +78,28 @@ const EXPORTS_DIR = path.join(ROOT, 'exports');
 
 const STATUSES = ['draft', 'approved', 'scheduled', 'posted', 'retired'];
 const COMMENT_STATUSES = ['open', 'resolved', 'wontfix'];
+
+// Status lifecycle state machine. Each key maps to the statuses it may move to
+// WITHOUT an override. The happy path walks draft → approved → scheduled →
+// posted; anything may be retired; a retired asset can be revived to draft.
+// Any move not listed here (skips like draft → posted, and all backward moves)
+// needs override:true on the patch. Setting the same status is an idempotent
+// no-op handled separately (no history entry). A brand-new id is creation, not
+// a transition, so it bypasses this map entirely.
+const STATUS_TRANSITIONS = {
+  draft: ['approved', 'retired'],
+  approved: ['scheduled', 'retired'],
+  scheduled: ['posted', 'retired'],
+  posted: ['retired'],
+  retired: ['draft'],
+};
+
+// The statuses reachable from `from` without an override (creation → every
+// status; unknown/missing from-state → none).
+function legalNext(from) {
+  if (from == null) return [...STATUSES];
+  return STATUS_TRANSITIONS[from] ? [...STATUS_TRANSITIONS[from]] : [];
+}
 
 // ---------------------------------------------------------------- utilities
 
@@ -165,13 +195,64 @@ function enqueueStatus(task) {
   return p;
 }
 
+// Guarded read-modify-write for a single asset's status entry. The whole cycle
+// runs INSIDE the queue so the from-state is read fresh and concurrent writes
+// serialize (no torn history). Resolves a discriminated result the handler maps
+// to a response WITHOUT itself touching disk:
+//   { ok: true,  entry }                    → 200, write happened (or no-op)
+//   { ok: false, from, to, legalNext }       → 409, NOTHING written
+// Legality (only relevant when the patch carries a status):
+//   • brand-new id              → creation, any status, history [{from:null,to,at}]
+//   • same status               → idempotent no-op, no history entry, still writes
+//                                  the rest of the patch (e.g. scheduledFor/caption)
+//   • from→to in STATUS_TRANSITIONS, or patch.override → applied; history appended
+//     (override moves carry overridden:true on their entry)
+//   • anything else             → illegal, { ok:false } and no write
 function patchStatus(id, patch) {
   return enqueueStatus(() => {
     const store = loadStatus();
-    const entry = { ...(store.assets[id] || {}), ...patch, updatedAt: new Date().toISOString() };
+    const existing = store.assets[id];
+    const isNew = existing === undefined;
+    const from = isNew ? null : existing.status ?? null;
+    const at = new Date().toISOString();
+    const { override, ...fields } = patch;
+
+    // Decide legality + whether this write appends a history entry. Only a real
+    // status change records history; everything else just merges fields.
+    let appendHistory = false;
+    if ('status' in fields) {
+      const to = fields.status;
+      if (isNew) {
+        // Creation: any status is allowed; seed history from null.
+        appendHistory = true;
+      } else if (to === from) {
+        // Idempotent — same status again records no new history entry.
+        appendHistory = false;
+      } else if (legalNext(from).includes(to) || override === true) {
+        appendHistory = true;
+      } else {
+        // Illegal transition, no override → 409, nothing written.
+        return { ok: false, from, to, legalNext: legalNext(from) };
+      }
+    }
+
+    const entry = { ...(existing || {}), ...fields, updatedAt: at };
+    if (appendHistory) {
+      const record = { from, to: fields.status, at };
+      // Mark only override-forced moves; creation/legal moves stay unmarked.
+      if (!isNew && override === true && !legalNext(from).includes(fields.status)) {
+        record.overridden = true;
+      }
+      entry.history = [...(existing?.history || []), record];
+    } else if (existing?.history) {
+      entry.history = existing.history;
+    }
+    // `override` is a control flag, never persisted on the entry.
+    delete entry.override;
+
     store.assets[id] = entry;
     writeAtomic(STATUS_FILE, JSON.stringify(store, null, 2) + '\n');
-    return entry;
+    return { ok: true, entry };
   });
 }
 
@@ -1169,8 +1250,20 @@ async function handleApi(req, res, pathname) {
       if ('status' in patch && !STATUSES.includes(patch.status)) {
         return sendJSON(res, 400, { error: `status must be one of: ${STATUSES.join(', ')}` });
       }
-      const entry = await patchStatus(id, patch);
-      return sendJSON(res, 200, entry);
+      if ('scheduledFor' in patch && Number.isNaN(Date.parse(patch.scheduledFor))) {
+        return sendJSON(res, 400, { error: 'scheduledFor must be an ISO date string' });
+      }
+      const result = await patchStatus(id, patch);
+      if (!result.ok) {
+        // Illegal transition, no override — nothing was written.
+        return sendJSON(res, 409, {
+          error: `illegal transition: ${result.from} → ${result.to}`,
+          from: result.from,
+          to: result.to,
+          legalNext: result.legalNext,
+        });
+      }
+      return sendJSON(res, 200, result.entry);
     }
     return sendJSON(res, 405, { error: 'method not allowed' });
   }

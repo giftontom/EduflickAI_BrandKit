@@ -6,6 +6,7 @@
 import * as api from './api.mjs';
 import { el, clear, announce } from './dom.mjs';
 import * as dashboard from './views/dashboard.mjs';
+import * as board from './views/board.mjs';
 import * as social from './views/social.mjs';
 import * as deck from './views/deck.mjs';
 import * as brochures from './views/brochures.mjs';
@@ -45,15 +46,20 @@ async function refreshState({ silent = false } = {}) {
   if (!silent) window.dispatchEvent(new CustomEvent('studio-state'));
 }
 
-/* optimistic status save: local state first, API second, revert on failure */
+/* optimistic status save: local state first, API second, revert on failure.
+   `patch.override` (when the caller forces a guarded transition) is a wire-only
+   flag — it travels to the server but is never stored on the local entry. A 409
+   from the state machine reverts the optimistic write and rethrows so the caller
+   can surface {from, to, legalNext} and offer an override. */
 async function saveStatus(id, patch) {
   if (!state.status) state.status = { version: 1, assets: {} };
   if (!state.status.assets) state.status.assets = {};
   const assets = state.status.assets;
   const prev = assets[id];
-  assets[id] = { ...(prev || {}), ...patch };
+  const { override, ...localPatch } = patch || {};
+  assets[id] = { ...(prev || {}), ...localPatch };
   try {
-    const merged = await api.setStatus(id, patch);
+    const merged = await api.setStatus(id, localPatch, Boolean(override));
     assets[id] = merged;
     return merged;
   } catch (err) {
@@ -67,6 +73,7 @@ async function saveStatus(id, patch) {
 
 const ROUTES = [
   { pattern: /^\/?$/, view: dashboard },
+  { pattern: /^\/board\/?$/, view: board },
   { pattern: /^\/social\/([^/]+)\/?$/, view: social, params: (m) => ({ surfaceId: decodeURIComponent(m[1]) }) },
   { pattern: /^\/deck\/?$/, view: deck },
   { pattern: /^\/brochures\/?$/, view: brochures },

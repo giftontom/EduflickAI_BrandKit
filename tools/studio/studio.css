@@ -1276,3 +1276,104 @@ body.theme-light {
 .sync-pairs .sync-src { color: var(--fg2); }
 .sync-pairs .sync-arrow { color: var(--fg3); }
 .sync-pairs .sync-art { color: var(--fg3); }
+
+/* ============================================================
+   PIPELINE · ops panels (dashboard) + state-machine override
+   modal + status board (kanban). Appended as one grouped block
+   per the studio convention; reuses the badge + panel-card +
+   btn-mini primitives above.
+   ============================================================ */
+
+/* ---- dashboard ops panels: due/overdue + stale-and-live ---- */
+.grid-ops {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+.ops-panel { gap: 6px; }
+.ops-panel .tile-sub { margin-bottom: 6px; }
+.ops-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+.ops-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+}
+/* overdue is the loud state — a warm hairline; stale rows carry a re-render btn */
+.ops-row.is-overdue { border-color: rgba(255, 110, 90, 0.45); }
+.ops-id { font-size: 11px; color: var(--fg2); flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ops-when { font-size: 10px; color: var(--fg3); white-space: nowrap; }
+.ops-row.is-overdue .ops-when { color: var(--warn); }
+.ops-row .btn-mini { flex-shrink: 0; }
+.ops-empty { font-size: 11px; color: var(--fg3); }
+.ops-panel .log-host { width: 100%; margin-top: 6px; }
+
+/* ---- state-machine 409 override modal (shared: dropdown + board) ---- */
+.override-form {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 300px;
+  max-width: 380px;
+}
+.override-msg { margin: 0; font-size: 13px; color: var(--fg2); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.override-arrow { color: var(--fg3); }
+.override-legal { display: flex; flex-wrap: wrap; gap: 8px; }
+.override-none { font-size: 11px; color: var(--fg3); }
+/* the force action reads as a deliberate, warm-tinted escape hatch */
+.btn-mini-warn { border-color: rgba(255, 110, 90, 0.5); color: var(--warn); }
+.btn-mini-warn:hover { border-color: var(--warn); color: var(--warn); }
+
+/* ---- status board (kanban) ---- */
+.board {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(170px, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.board-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-xl);
+  padding: 14px 12px;
+  min-height: 120px;
+}
+.board-col-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.board-col-count { font-size: 11px; color: var(--fg3); }
+.board-col-body { display: flex; flex-direction: column; gap: 8px; }
+.board-col-empty { font-size: 10.5px; color: var(--fg3); padding: 4px 2px; }
+.board-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: var(--bg-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  padding: 9px 10px;
+}
+.board-card-name { font-size: 12px; color: var(--fg1); font-weight: var(--w-semibold); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.board-card-id { font-size: 9px; color: var(--fg3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.board-card-when { font-size: 9.5px; color: var(--accent-soft); }
+.board-card-moves { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 3px; }
+.board-card-moves .btn-mini { font-size: 9px; padding: 3px 7px; }
+.board-override { color: var(--fg3); }
+
+@media (max-width: 1080px) {
+  .grid-ops { grid-template-columns: 1fr; }
+  .board { grid-template-columns: 1fr; }
+}

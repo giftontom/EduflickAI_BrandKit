@@ -35,6 +35,26 @@ export function statusControl({ id, entry = {}, onSave }) {
     meta.textContent = metaLine(current);
   }
 
+  /* commit a status patch, with the state machine in the loop. On a 409 the
+     server rejected the transition; we surface from/to + legalNext and offer to
+     force it (a second save carrying override:true). `revert` puts the control
+     back to `prev` whenever the change is abandoned or fails. */
+  async function commit(patch, prev) {
+    try {
+      current = (await onSave(id, patch)) || current;
+      paint();
+    } catch (err) {
+      if (err && err.status === 409 && err.body) {
+        const ok = await confirmOverride(err.body, id);
+        if (ok) { await commit({ ...patch, override: true }, prev); return; }
+      }
+      current = { ...current, status: prev };
+      select.value = prev;
+      paint();
+      flashError();
+    }
+  }
+
   select.addEventListener('change', async () => {
     const prev = STATUSES.includes(current.status) ? current.status : 'draft';
     const next = select.value;
@@ -42,15 +62,7 @@ export function statusControl({ id, entry = {}, onSave }) {
     if (next === 'posted' && !current.postedAt) patch.postedAt = new Date().toISOString();
     current = { ...current, ...patch };
     paint();
-    try {
-      current = (await onSave(id, patch)) || current;
-      paint();
-    } catch {
-      current = { ...current, status: prev };
-      select.value = prev;
-      paint();
-      flashError();
-    }
+    await commit(patch, prev);
   });
 
   /* plan dialog: scheduledFor + notes. Rendered through openModal (body-level,
@@ -110,4 +122,39 @@ export function statusControl({ id, entry = {}, onSave }) {
   }
 
   return root;
+}
+
+/* confirmOverride(body, id) -> Promise<boolean>
+   A modal for the state machine's 409: shows the rejected from→to and the legal
+   next steps, then lets the operator either back off or force the move (which
+   the caller re-POSTs with override:true). Shared by the status dropdown and the
+   board so the override affordance reads the same everywhere. Resolves true only
+   if the operator explicitly chooses to override. */
+export function confirmOverride(body, id) {
+  const from = body.from == null ? 'new' : String(body.from);
+  const to = String(body.to == null ? '' : body.to);
+  const legal = Array.isArray(body.legalNext) ? body.legalNext : [];
+  return new Promise((resolve) => {
+    let close = null;
+    let done = false;
+    const finish = (val) => { if (done) return; done = true; if (close) close(); resolve(val); };
+    const card = el('div', { class: 'override-form' },
+      el('span', { class: 'mono-up pop-title' }, `illegal transition · ${id}`),
+      el('p', { class: 'override-msg' },
+        el('span', { class: 'badge s-' + (STATUSES.includes(from) ? from : 'draft') }, from),
+        el('span', { class: 'override-arrow mono' }, '→'),
+        el('span', { class: 'badge s-' + (STATUSES.includes(to) ? to : 'draft') }, to),
+        ' is not allowed by the pipeline.'),
+      el('span', { class: 'mono-up pop-label' }, 'legal next'),
+      el('div', { class: 'override-legal' },
+        legal.length
+          ? legal.map((s) => el('span', { class: 'badge s-' + (STATUSES.includes(s) ? s : 'draft') }, s))
+          : el('span', { class: 'mono override-none' }, 'none — only retire or revive')),
+      el('div', { class: 'pop-actions' },
+        el('button', { class: 'btn-mini', type: 'button', onclick: () => finish(false) }, 'cancel'),
+        el('button', {
+          class: 'btn-mini btn-mini-warn', type: 'button', onclick: () => finish(true),
+        }, 'override anyway')));
+    close = openModal(card, { onClose: () => finish(false) });
+  });
 }
