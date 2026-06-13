@@ -1,14 +1,15 @@
 # Brand Studio — Roadmap
 
-The studio's phased development plan. Status as of 2026-06-13: **Phase 0 complete + Phase 1a
-complete** (HEAD `15893bc`). Phase 0 gave the studio its first test suite (now 60 node:test cases +
-a 12-route Playwright smoke), CI purity jobs, reconciled docs, cold-start UX, a tokens-sync badge,
-and hygiene. Phase 1a turned the status surface into a guarded state machine with audit history,
-added a `#/board` kanban, and two operator dashboard panels. All green: 60/60 unit, 12/12 smoke,
-facts clean, zero-dep + vendor-integrity hold. **Owner-gated items still pending:** FACTS.md
+The studio's phased development plan. Status as of 2026-06-13: **Phase 0 + Phase 1a + Phase 1b-1
+complete** (HEAD `4e2d5cb`). Phase 0 gave the studio its first test suite + CI purity jobs + docs +
+cold-start UX + hygiene. Phase 1a made status a guarded state machine with audit history, a
+`#/board` kanban, and operator dashboard panels. Phase 1b-1 added the `#/generate` panel
+(deterministic FACTS-grounded prompt assembly), a QA runner, and the guarded `drafts/` write
+surface (the 7th write path). All green: **81/81 node:test, 13/13 Playwright smoke**, facts clean
+(191 files), zero-dep + vendor-integrity hold. **Owner-gated items still pending:** FACTS.md
 content reconciliation (Phase-0 tail item 7 — brand truth, partly speculative) and the merge to
-`main` (item 8 — outward-facing push). Next un-gated work: **Phase 1b** (generation panel, QA
-runner, calendar, cohort banner). This file is the resume point.
+`main` (item 8 — outward-facing push). Next un-gated work: **Phase 1b-2** (calendar, blocked panel,
+schedule→stale cross-check, live-model bridge). This file is the resume point.
 
 The full research + planning record (81 evaluated open-source projects, the 4-lens plan, the
 adopt/build ledger) lives outside the repo; this file is the condensed, actionable version.
@@ -86,20 +87,30 @@ adopt/build ledger) lives outside the repo; this file is the condensed, actionab
 - ✅ **Operator dashboard panels**: due/overdue (`scheduledFor` ≤ today, not posted) and
   stale-and-live (manifest stale AND status ∈ scheduled/posted, one-click re-render).
 
-**Phase 1b — PENDING (no owner gate; build next):**
-- **Generation panel** (`#/generate`): server assembles the prompt deterministically —
-  system prompt + template + a live-rendered FACTS block — so a small model cannot invent
-  prices/seats/dates. Clipboard mode default (zero-dep); opt-in env-gated local-model bridge
-  (spawn/fetch only, never an SDK import). Drafts land as a guarded `drafts/`-only write path
-  (the studio's 7th write surface). *Note: best paired with the FACTS.md cleanup (Phase-0 tail
-  item 7) so the live FACTS block is clean — otherwise it grounds on placeholder rows.*
-- **QA runner on drafts**: one-click `scanTextRetired` + checklist hard-fails inline (feeds a
-  "blocked" dashboard panel — the third panel, deferred from 1a until drafts exist).
+**Phase 1b-1 — DONE (committed `4e2d5cb`, verified 81/81 tests, 13/13 smoke):**
+- ✅ **Generation panel** (`#/generate`): server assembles the prompt deterministically —
+  `00_SYSTEM_PROMPT.md` box (+ optional `BRAND_CHEATSHEET.md`) + a live CURRENT-FACTS block
+  parsed from `FACTS.md` tables + the chosen template + operator task fields. Returns
+  `{prompt, facts, warnings}` (warnings flag empty/placeholder FACTS → the model emits
+  `[[NEEDS]]`). Clipboard-mode (Copy) is the zero-dep default. *Live-model bridge intentionally
+  deferred — clipboard mode is the safe, complete core; the bridge is a later opt-in.*
+- ✅ **QA runner** (`POST /api/qa/check`): `scanTextRetired` violations + a checklist (emoji,
+  forbidden/hype words). Wired into the panel's paste-back stage.
+- ✅ **Drafts write surface** (the 7th write path): `GET/POST /api/drafts` — `drafts/<name>.md`,
+  slug/channel sanitized `^[a-z0-9][a-z0-9-]*$`, traversal-guarded, atomic, retired-string-guarded
+  (422, no override — the repo facts-guard forbids retired strings repo-wide).
+
+**Phase 1b-2 — PENDING (no owner gate):**
 - **Calendar** (month grid) over `scheduledFor`, paired with the board; wave-order guard for the
   launch mural (warn on out-of-order posting).
-- **Cohort banner**: live seat count + key date from FACTS (deferred until FACTS is reconciled).
+- **"Blocked" dashboard panel** (the third ops panel, deferred from 1a): drafts failing QA /
+  containing `[[NEEDS]]` — now buildable since drafts exist.
 - **Schedule→stale cross-check**: block/flag a transition to scheduled/posted on a stale/absent
   asset (server-side, reusing the manifest staleness).
+- **Cohort banner**: live seat count + key date from FACTS — *gated on the FACTS.md cleanup
+  (Phase-0 tail item 7); until then it would surface placeholder rows.*
+- **Live-model bridge** (opt-in): env-gated `STUDIO_MODEL_CMD`/`STUDIO_MODEL_URL` — spawn/fetch
+  only, never an SDK import; dormant (501) unless configured.
 
 ## Phase 2 — Review + pipeline (content travels end-to-end)
 
