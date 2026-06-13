@@ -57,6 +57,30 @@ export const saveLaunchPost = (id, patch, override = false) =>
 export const saveLaunchSlides = (slug, payload, override = false) =>
   post('/api/launch-grid/slides', { slug, ...payload, override });
 
+/* generate — the prompt-assembly surface (read-only). The studio bakes the
+   live FACTS.md + the chosen prompts/ template + the operator's task fields
+   into one SYSTEM+USER prompt a small model can run without inventing values.
+   getGenTemplates() lists the templates as [{file, title}]. assemblePrompt()
+   posts {template, includeCheatsheet?, task?} and gets back {prompt, facts,
+   warnings} — `warnings` flags FACTS values that will surface as [[NEEDS]].
+   qaCheck(text) re-runs the repo guard + the QA checklist (emoji / forbidden
+   words / invented numbers) over pasted model output → {violations, checklist};
+   it writes nothing. Both endpoints are read-only — no override, no disk. */
+export const getGenTemplates = () => request('/api/generate/templates');
+export const assemblePrompt = ({ template, includeCheatsheet = false, task = {} } = {}) =>
+  post('/api/generate', { template, includeCheatsheet, task });
+export const qaCheck = (text) => post('/api/qa/check', { text });
+
+/* drafts — the 7th (fixed, drafts-only) write surface. listDrafts() returns
+   [{name, mtime, size}] for content-studio/drafts/*.md. saveDraft writes
+   drafts/<name>.md atomically; the server sanitizes slug/channel and re-scans
+   for retired strings with NO override (the repo guard forbids them anywhere
+   under content-studio/), so a 422 here means the text must be cleaned, not
+   forced. 400/403 carry .body.error for the validation/path reason. */
+export const getDrafts = () => request('/api/drafts');
+export const saveDraft = ({ channel, slug, content } = {}) =>
+  post('/api/drafts', channel ? { channel, slug, content } : { slug, content });
+
 /* Bulk export — bundle already-rendered PNGs (+ inline caption text) into one
    .zip. `files` is [{src,name} | {text,name}]; `src` is a repo-relative path
    inside exports/. Returns the binary {blob, filename} (the server sets the

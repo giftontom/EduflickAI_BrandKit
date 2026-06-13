@@ -30,13 +30,29 @@
 //   POST /api/launch-grid/post     {id, patch, override?} → patch one launch post
 //   POST /api/launch-grid/slides   {slug, slides, ..., override?} → rewrite one carousel
 //   POST /api/export-zip           {files:[{src|text,name}], zipName?} → application/zip
+//   GET  /api/generate/templates   [{file, title}] — the prompts/ templates (read-only)
+//   POST /api/generate             {template, includeCheatsheet?, task?} → {prompt,
+//                                   facts, warnings}; assembles the SYSTEM+USER prompt
+//                                   from 00_SYSTEM_PROMPT.md + live FACTS.md + the
+//                                   chosen template. READ-ONLY — writes nothing.
+//   POST /api/qa/check             {text} → {violations, checklist} (read-only): the
+//                                   facts-guard violations + emoji / forbidden-word hits.
+//   GET  /api/drafts               [{name, mtime, size}] — content-studio/drafts/*.md
+//   POST /api/drafts               {channel?, slug, content} → write drafts/<name>.md
+//                                   atomically (slug/channel ^[a-z0-9][a-z0-9-]*$,
+//                                   traversal-guarded, scanTextRetired must be clean —
+//                                   422 with NO write and NO override otherwise).
 //
-// Write surface is exactly six paths: content-studio/status.json,
+// Write surface is exactly SEVEN paths: content-studio/status.json,
 // content-studio/FACTS.md, content-studio/design-comments.json (which also
 // regenerates content-studio/DESIGN_FEEDBACK.md), EDITMODE blocks inside
-// design-system/*.html, content-studio/launch-grid.json, and the caro-data JSON
-// island inside design-system/collateral/launch-grid.html. (export-zip is
-// read-only.) Binds 127.0.0.1 only (loopback asserted at boot, exits
+// design-system/*.html, content-studio/launch-grid.json, the caro-data JSON
+// island inside design-system/collateral/launch-grid.html, and (7th)
+// content-studio/drafts/<name>.md — a fixed drafts-only path, slug-sanitized,
+// traversal-guarded, atomic, and facts-guarded with NO override (the repo
+// facts-guard forbids retired strings anywhere under content-studio/, so drafts
+// must stay clean). (export-zip and the generate/qa endpoints are read-only.)
+// Binds 127.0.0.1 only (loopback asserted at boot, exits
 // on a busy port). Every request must carry a loopback Host header, and
 // non-GET/HEAD /api calls with an Origin header must be same-origin — 403
 // otherwise (DNS-rebinding + CSRF guards; no CORS headers are ever set).
@@ -75,6 +91,10 @@ const FEEDBACK_FILE = path.join(ROOT, 'content-studio', 'DESIGN_FEEDBACK.md');
 const LAUNCH_GRID_FILE = path.join(ROOT, 'content-studio', 'launch-grid.json');
 const LAUNCH_HTML_FILE = path.join(ROOT, 'design-system', 'collateral', 'launch-grid.html');
 const EXPORTS_DIR = path.join(ROOT, 'exports');
+const PROMPTS_DIR = path.join(ROOT, 'content-studio', 'prompts');
+const DRAFTS_DIR = path.join(ROOT, 'content-studio', 'drafts');
+const SYSTEM_PROMPT_FILE = path.join(PROMPTS_DIR, '00_SYSTEM_PROMPT.md');
+const CHEATSHEET_FILE = path.join(ROOT, 'content-studio', 'BRAND_CHEATSHEET.md');
 
 const STATUSES = ['draft', 'approved', 'scheduled', 'posted', 'retired'];
 const COMMENT_STATUSES = ['open', 'resolved', 'wontfix'];
@@ -527,6 +547,300 @@ function handleExportZip(body, res) {
     'Cache-Control': 'no-store',
   });
   res.end(zip);
+}
+
+// ------------------------------------------------------------ prompt assembly
+//
+// The studio's anti-hallucination job: bake the live FACTS.md values into a
+// SYSTEM+USER prompt so a small/cheap model can't invent a date, price, seat
+// count, or link. These three endpoints (/api/generate/templates, /api/generate,
+// /api/qa/check) are STRICTLY READ-ONLY — they assemble and scan text, never
+// touch the repo. The model still emits [[NEEDS: …]] wherever a value is missing;
+// `warnings` surfaces those rows so the operator knows up front.
+
+// Pull the FIRST ```text … ``` fenced box out of a markdown file. The prompt
+// templates and the system prompt each wrap their payload in one such box;
+// fall back to the whole file when there is no fence (so a hand-edited template
+// still assembles rather than coming back empty).
+const TEXT_FENCE_RE = /```text\n([\s\S]*?)\n```/;
+function extractTextBox(content) {
+  if (typeof content !== 'string') return '';
+  const m = content.match(TEXT_FENCE_RE);
+  return m ? m[1] : content;
+}
+
+// A template is any prompts/*.md EXCEPT the system prompt and the README. The
+// basename must be an own file with no path separators — never trust the body.
+function isTemplateName(name) {
+  if (typeof name !== 'string' || !name.length) return false;
+  if (name.includes('/') || name.includes('\\') || name.includes('\0')) return false;
+  if (path.basename(name) !== name) return false;
+  if (!name.endsWith('.md')) return false;
+  const lower = name.toLowerCase();
+  if (lower === '00_system_prompt.md' || lower === 'readme.md') return false;
+  return true;
+}
+
+// List the available templates: prompts/*.md minus the system prompt + README.
+// title = the file's first markdown "# " heading (basename fallback).
+function listTemplates() {
+  let names = [];
+  try {
+    names = fs
+      .readdirSync(PROMPTS_DIR, { withFileTypes: true })
+      .filter((d) => d.isFile() && isTemplateName(d.name))
+      .map((d) => d.name)
+      .sort();
+  } catch {
+    return [];
+  }
+  return names.map((file) => {
+    const content = readOrNull(path.join(PROMPTS_DIR, file)) || '';
+    const h1 = content.match(/^#\s+(.+)$/m);
+    return { file, title: h1 ? h1[1].trim() : file };
+  });
+}
+
+// Parse FACTS.md into grouped facts. Walk the file tracking the current "##
+// heading"; for every markdown table row "| a | b | …" that is NOT the header
+// row (first cell === "Fact") and NOT a "| --- | --- |" separator, emit
+// {key:a, value:b} under the active heading. The ↳ Note rows are kept (they are
+// just rows whose first cell starts with "↳"). A value is flagged in `warnings`
+// when it is empty or contains "[[" — that is exactly where the model will be
+// forced to output [[NEEDS: …]].
+function parseFactsGroups() {
+  const text = readOrNull(FACTS_FILE) || '';
+  const groups = [];
+  const warnings = [];
+  let cur = null;
+  for (const raw of text.split('\n')) {
+    const line = raw.trimEnd();
+    const h = line.match(/^##\s+(.+)$/);
+    if (h) {
+      cur = { heading: h[1].trim(), items: [] };
+      groups.push(cur);
+      continue;
+    }
+    // Only well-formed table rows: must start AND end with a pipe.
+    if (!/^\|.*\|$/.test(line.trim())) continue;
+    // Strip the leading/trailing pipe, then split the inner cells.
+    const cells = line.trim().slice(1, -1).split('|').map((c) => c.trim());
+    if (cells.length < 2) continue;
+    const key = cells[0];
+    const value = cells[1];
+    if (key === 'Fact') continue; // header row
+    if (/^-{2,}$|^:?-+:?$/.test(key)) continue; // "---" separator row
+    if (!key) continue; // blank first cell (stray pipe line)
+    const heading = cur ? cur.heading : '(ungrouped)';
+    if (!cur) {
+      cur = { heading, items: [] };
+      groups.push(cur);
+    }
+    cur.items.push({ key, value });
+    if (!value || value.includes('[[')) {
+      warnings.push({ heading, key, value, reason: value ? 'placeholder' : 'empty' });
+    }
+  }
+  return { groups, warnings };
+}
+
+// Render the grouped facts as the CURRENT-FACTS block: "## heading" → "- key: value"
+// lines under each heading, headings separated by a blank line.
+function renderFactsBlock(groups) {
+  const out = [];
+  for (const g of groups) {
+    if (out.length) out.push('');
+    out.push(`## ${g.heading}`);
+    for (const it of g.items) out.push(`- ${it.key}: ${it.value}`);
+  }
+  return out.join('\n');
+}
+
+// The operator's optional TASK SPECIFICS — fixed label order, only non-empty
+// fields rendered. Labels match the prompt templates' own TASK vocabulary.
+const TASK_FIELDS = [
+  ['brief', 'Brief'],
+  ['pillar', 'Content pillar'],
+  ['funnelPhase', 'Funnel phase'],
+  ['variants', 'Variants'],
+  ['hookAngle', 'Hook angle'],
+  ['cta', 'CTA intent'],
+  ['notes', 'Notes'],
+];
+
+function renderTaskBlock(task) {
+  if (!task || typeof task !== 'object' || Array.isArray(task)) return '';
+  const lines = [];
+  for (const [field, label] of TASK_FIELDS) {
+    const v = task[field];
+    if (v == null) continue;
+    const s = typeof v === 'string' ? v.trim() : String(v);
+    if (!s) continue;
+    lines.push(`- ${label}: ${s}`);
+  }
+  return lines.length ? lines.join('\n') : '';
+}
+
+// The CURRENT-FACTS preamble — verbatim; tells the model FACTS.md is the only
+// source of live values and to emit [[NEEDS: …]] for anything missing.
+const FACTS_PREAMBLE =
+  'CURRENT FACTS — from content-studio/FACTS.md, the only source of live values. ' +
+  'Never invent a number, date, or link; if a needed value is missing or shows ' +
+  '[[NOT SET]], output [[NEEDS: <what>]].';
+
+function handleGenerate(body, res) {
+  const { template, includeCheatsheet, task } = body;
+  if (!isTemplateName(template)) {
+    return sendJSON(res, 400, { error: 'template must be an own prompts/*.md basename (not the system prompt or README)' });
+  }
+  const tmplContent = readOrNull(path.join(PROMPTS_DIR, template));
+  if (tmplContent == null) {
+    return sendJSON(res, 400, { error: `unknown template: ${template}` });
+  }
+  // System message = first ```text box of 00_SYSTEM_PROMPT.md (whole file if
+  // there is no fence), optionally + the cheat sheet.
+  let systemBox = extractTextBox(readOrNull(SYSTEM_PROMPT_FILE) || '');
+  if (includeCheatsheet) {
+    const cheat = readOrNull(CHEATSHEET_FILE);
+    if (cheat != null) systemBox += '\n\n' + cheat;
+  }
+  const { groups, warnings } = parseFactsGroups();
+  const factsBlock = renderFactsBlock(groups);
+  const templateBody = extractTextBox(tmplContent);
+  const taskBlock = renderTaskBlock(task);
+
+  let prompt =
+    '===== SYSTEM =====\n' +
+    systemBox +
+    '\n\n===== USER =====\n' +
+    FACTS_PREAMBLE +
+    '\n\n' +
+    factsBlock +
+    '\n\n----- TEMPLATE -----\n' +
+    templateBody;
+  if (taskBlock) {
+    prompt += '\n\n----- TASK SPECIFICS (operator) -----\n' + taskBlock;
+  }
+
+  const facts = groups.map((g) => ({ heading: g.heading, items: g.items }));
+  return sendJSON(res, 200, { prompt, facts, warnings });
+}
+
+// ---------------------------------------------------------------------- QA
+//
+// The forbidden / hype word list derived from QA_CHECKLIST.md section A
+// ("No forbidden words") plus the system prompt's HARD RULE 3. Matched
+// case-insensitively as whole words (or phrases). Sparks-are-earned is the
+// reason "unlock"/"claim reward" are here; "gamechanger" and "game-changer"
+// are both caught.
+const FORBIDDEN_WORDS = [
+  'level up',
+  'leveling up',
+  'levelling up',
+  'levelled up',
+  'leveled up',
+  'unlock',
+  'boost',
+  'supercharge',
+  'gamechanger',
+  'game-changer',
+  'game changer',
+  'claim reward',
+  'world-class',
+  'world class',
+  'revolutionary',
+  'hurry',
+  'limited time',
+  "don't miss out",
+  'dont miss out',
+];
+
+// A basic emoji range (pictographs, symbols, transport, dingbats, supplemental).
+// Deliberately broad — the rule is "no emoji in finished public copy".
+const EMOJI_RE =
+  /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{1F000}-\u{1F0FF}\u{FE00}-\u{FE0F}\u{200D}]/gu;
+
+// Escape a forbidden phrase for use inside a word-boundary-ish regex.
+function escapeRe(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function qaCheck(text) {
+  const violations = scanTextRetired(text);
+  const checklist = [];
+
+  const emojiHits = [...text.matchAll(EMOJI_RE)].map((m) => m[0]);
+  if (emojiHits.length) checklist.push({ rule: 'emoji', hits: emojiHits });
+
+  const wordHits = [];
+  for (const w of FORBIDDEN_WORDS) {
+    // Bounded match so "boost" doesn't fire inside "boosted"? — these are
+    // marketing phrases, match them as standalone words/phrases, case-insensitive.
+    const re = new RegExp(`(?<![\\w-])${escapeRe(w)}(?![\\w-])`, 'gi');
+    const found = text.match(re);
+    if (found) wordHits.push(...found);
+  }
+  if (wordHits.length) checklist.push({ rule: 'forbidden-words', hits: wordHits });
+
+  return { violations, checklist };
+}
+
+// ------------------------------------------------------------- drafts (7th write)
+//
+// The 7th and final write surface: content-studio/drafts/<name>.md. A FIXED
+// drafts-only path (G5 holds — there is no generic write endpoint). slug and the
+// optional channel are each sanitized to ^[a-z0-9][a-z0-9-]*$; the resolved
+// absolute path is asserted to stay inside DRAFTS_DIR (traversal guard); and the
+// content is brand-guarded with scanTextRetired BEFORE any write — there is NO
+// override here, because the repo facts-guard forbids retired strings anywhere
+// under content-studio/, so a draft must be clean to land.
+
+const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
+
+function listDrafts() {
+  let entries;
+  try {
+    entries = fs.readdirSync(DRAFTS_DIR, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+  const out = [];
+  for (const e of entries) {
+    if (!e.isFile() || !e.name.endsWith('.md')) continue;
+    const st = statOrNull(path.join(DRAFTS_DIR, e.name));
+    out.push({ name: e.name, mtime: st ? st.mtimeMs : null, size: st ? st.size : null });
+  }
+  out.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+  return out;
+}
+
+function handleDraftSave(body, res) {
+  const { channel, slug, content } = body;
+  if (typeof slug !== 'string' || !SLUG_RE.test(slug)) {
+    return sendJSON(res, 400, { error: 'slug must match ^[a-z0-9][a-z0-9-]*$' });
+  }
+  if (channel != null && (typeof channel !== 'string' || !SLUG_RE.test(channel))) {
+    return sendJSON(res, 400, { error: 'channel must match ^[a-z0-9][a-z0-9-]*$' });
+  }
+  if (typeof content !== 'string') {
+    return sendJSON(res, 400, { error: 'content must be a string' });
+  }
+  const name = (channel ? channel + '-' : '') + slug + '.md';
+  // Traversal guard: the sanitized slug/channel can't escape, but resolve and
+  // assert the final path lives inside drafts/ anyway — same posture as the
+  // other write paths (defence in depth; a future edit can't widen this).
+  const abs = path.normalize(path.resolve(DRAFTS_DIR, name));
+  if (abs !== DRAFTS_DIR && !abs.startsWith(DRAFTS_DIR + path.sep)) {
+    return sendJSON(res, 403, { error: 'resolved path escapes content-studio/drafts/' });
+  }
+  // Facts-guard the content server-side — NO override. A retired string would
+  // make the repo facts-guard fail anywhere under content-studio/.
+  const violations = scanTextRetired(content);
+  if (violations.length) {
+    return sendJSON(res, 422, { error: 'guard violations', violations });
+  }
+  writeAtomic(abs, content);
+  return sendJSON(res, 200, { name, path: rel(abs), bytes: Buffer.byteLength(content, 'utf8') });
 }
 
 // ---------------------------------------------------------------- manifest
@@ -1359,6 +1673,32 @@ async function handleApi(req, res, pathname) {
   if (pathname === '/api/export-zip' && req.method === 'POST') {
     const body = await readJSONBody(req);
     return handleExportZip(body, res);
+  }
+
+  if (pathname === '/api/generate/templates' && req.method === 'GET') {
+    return sendJSON(res, 200, listTemplates());
+  }
+
+  if (pathname === '/api/generate' && req.method === 'POST') {
+    const body = await readJSONBody(req);
+    return handleGenerate(body, res);
+  }
+
+  if (pathname === '/api/qa/check' && req.method === 'POST') {
+    const body = await readJSONBody(req);
+    if (typeof body.text !== 'string') {
+      return sendJSON(res, 400, { error: 'text must be a string' });
+    }
+    return sendJSON(res, 200, qaCheck(body.text));
+  }
+
+  if (pathname === '/api/drafts') {
+    if (req.method === 'GET') return sendJSON(res, 200, listDrafts());
+    if (req.method === 'POST') {
+      const body = await readJSONBody(req);
+      return handleDraftSave(body, res);
+    }
+    return sendJSON(res, 405, { error: 'method not allowed' });
   }
 
   return sendJSON(res, 404, { error: 'not found' });

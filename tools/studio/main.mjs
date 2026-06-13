@@ -13,6 +13,7 @@ import * as brochures from './views/brochures.mjs';
 import * as brand from './views/brand.mjs';
 import * as docs from './views/docs.mjs';
 import * as facts from './views/facts.mjs';
+import * as generate from './views/generate.mjs';
 import * as actions from './views/actions.mjs';
 import * as launch from './views/launch.mjs';
 import * as instagram from './views/instagram.mjs';
@@ -80,6 +81,7 @@ const ROUTES = [
   { pattern: /^\/brand\/?$/, view: brand },
   { pattern: /^\/docs(?:\/(.+))?$/, view: docs, params: (m) => ({ path: m[1] ? m[1].split('/').map(decodeURIComponent).join('/') : null }) },
   { pattern: /^\/facts\/?$/, view: facts },
+  { pattern: /^\/generate\/?$/, view: generate },
   { pattern: /^\/actions\/?$/, view: actions },
   { pattern: /^\/launch\/?$/, view: launch },
   { pattern: /^\/instagram\/?$/, view: instagram },
