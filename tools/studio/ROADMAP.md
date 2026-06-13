@@ -1,9 +1,13 @@
 # Brand Studio — Roadmap
 
-The studio's phased development plan. Status as of 2026-06-12: **development paused at a
-verified-working state** (commit `7327cef`) — all 11 routes render with zero console errors,
-security probes hold, the facts guard is green across the repo, and the token pipeline is in
-sync. This file is the resume point.
+The studio's phased development plan. Status as of 2026-06-13: **Phase 0 is essentially complete**
+(commit `065bac1`). The studio now has its first automated test suite (48 node:test API/security
+tests + an 11-route Playwright smoke), CI purity jobs (studio-tests, server-zero-dep,
+vendor-integrity, feedback-digest drift), reconciled docs, cold-start UX, a tokens-sync badge, and
+hygiene (renamed package, exact-pinned deps). All green: 48/48 unit, 11/11 smoke, facts clean,
+zero-dep + vendor-integrity hold. Two Phase-0 items remain, both owner-gated: **FACTS.md content
+reconciliation** (item 7 — brand truth, partly speculative) and **the merge to `main`** (item 8 —
+outward-facing push). This file is the resume point.
 
 The full research + planning record (81 evaluated open-source projects, the 4-lens plan, the
 adopt/build ledger) lives outside the repo; this file is the condensed, actionable version.
@@ -42,18 +46,31 @@ adopt/build ledger) lives outside the repo; this file is the condensed, actionab
 - Token single-source pipeline (Style Dictionary) + tokens/snippets drift guard in CI.
 - Read-only bulk export (`/api/export-zip`, dependency-free zip writer).
 
-## PENDING — Phase 0 remainder (merge-readiness; do this first on resume)
+## DONE — Phase 0 (committed `065bac1`, all verified green)
 
-| # | Item | Size |
-|---|------|------|
-| 1 | **Test suite** (`node:test`, zero new deps) under `tools/test/`: the six EDITMODE invariants (0 blocks / 1 match / 2-match ambiguity / traversal / non-html / retired-string — each asserting write-vs-no-write), traversal corpus against the static handler, guard-bypass on facts/comments/launch-grid (422 without override, written-with-flag with), atomicity (no tmp residue; corrupt JSON never crashes the manifest), concurrency (serialized queue, no lost writes), runner (unknown 400 / busy 409), Host/Origin 403 probes, whitelist-matches-README. Plus `tools/test/smoke.mjs` route-smoke (boot on `STUDIO_PORT=8099`, every route, zero console errors). Tests must snapshot + restore every file they touch. | L |
-| 2 | **CI jobs**: `studio-tests` (npm ci → node --test → smoke), `server-zero-dep` (fail on any non-`node:`/non-relative import in server + lib), `vendor-integrity` (recompute the two vendored SHA-256s vs `vendor/README.md`), extend the generated-drift job to regenerate + diff `DESIGN_FEEDBACK.md`; run on PRs into `unify-design-system` as well as `main`. | M |
-| 3 | **Docs reconciliation**: README write-surface section still says four paths — it is now six (launch-grid.json + the caro-data island); document the launch-grid + export-zip + tokens/status endpoints and the hardening behaviors. | S |
-| 4 | **Cold-start UX**: dashboard first-class empty state when `exports/` is cold (explain + inline run buttons, refresh on exit 0); distinguish *absent* from *stale* everywhere staleness rolls up. | S/M |
-| 5 | **Tokens-sync badge** in `#/brand` reading `GET /api/tokens/status` (endpoint shipped; UI pending) with a one-click `tokens` run. | S |
-| 6 | **Hygiene**: rename `tools/package.json` to `eduflick-brand-studio`; exact-pin `playwright` + `style-dictionary`; add `test` / `test:smoke` scripts. | S |
-| 7 | **FACTS.md cleanup**: fold the informal hand-typed notes (lead-magnet retirement, orientation idea) into proper FACTS structure — they pass the guard but sit loose in the tables. | S |
-| 8 | **Merge sequence**: rebase onto `unify-design-system` → merge `unify-design-system` into `main` first (PR #1) → merge this branch with `--no-ff` + annotated tag `studio-v0.1.0` → move this CHANGELOG block under the version heading. | M |
+- ✅ **Test suite** (`tools/test/`, zero new deps): 48 node:test API/security tests
+  (`api.test.mjs` + `comments.test.mjs`) covering the six EDITMODE invariants, the static-handler
+  traversal corpus, Host/Origin 403 guards, guard-bypass on facts/launch-grid/comments, launch-grid
+  validation, atomicity, concurrency, the action runner, export-zip escape, and a docs-drift test
+  (action whitelist must match the README). `helpers.mjs` snapshots+restores all six write paths
+  byte-for-byte. `smoke.mjs` drives all 11 routes in headless Chromium asserting zero console errors.
+- ✅ **CI jobs**: `studio-tests` (node 20 + chromium), `server-zero-dep`, `vendor-integrity`,
+  generated-drift extended to `DESIGN_FEEDBACK.md`; PRs into `unify-design-system` now run CI.
+  Unit invocation is the shell-expanded glob `test/*.test.mjs` (portable across node 18/20/22 —
+  bare `node --test test/` MODULE_NOT_FOUNDs on node ≥20).
+- ✅ **Docs reconciliation**: README documents all six write paths + the new endpoints +
+  the full security posture; server header comment updated.
+- ✅ **Cold-start UX**: dashboard empty-state hero + absent-vs-stale split (per-item `exists`/`stale`).
+- ✅ **Tokens-sync badge** in `#/brand` reading `GET /api/tokens/status` with one-click rebuild.
+- ✅ **Hygiene**: package renamed `eduflick-brand-studio`; `playwright`/`style-dictionary`
+  exact-pinned; `test`/`test:smoke` scripts added.
+
+## PENDING — Phase 0 tail (both owner-gated)
+
+| # | Item | Why gated |
+|---|------|-----------|
+| 7 | **FACTS.md cleanup**: fold the informal hand-typed notes (lead-magnet retirement, the tentative "offline orientation" idea) into proper FACTS structure. | Brand truth + the orientation idea is speculative ("might") — a fact decision the owner must make, not guess. |
+| 8 | **Merge sequence**: rebase onto `unify-design-system` → merge `unify-design-system` into `main` first (PR #1) → merge this branch `--no-ff` + tag `studio-v0.1.0` → move the CHANGELOG block under the version heading. | Outward-facing (pushes to GitHub, advances PR #1, reorders branches) — needs explicit go-ahead. |
 
 **Exit criteria:** all tests green in CI, docs match code, cold-start sane, merged + tagged.
 
