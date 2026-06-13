@@ -1,33 +1,125 @@
 /* dashboard.mjs — the studio front door: focal headline with a halo,
-   per-surface rollups, the facts guard tile, and quick links. */
+   per-surface rollups, the facts guard tile, and quick links. When a fresh
+   clone has zero exports, the whole front door becomes a cold-start hero
+   instead of empty grids. */
 
 import { el, clear } from '../dom.mjs';
 import { STATUSES } from '../components/status-badge.mjs';
 import { createLogStream } from '../components/log-stream.mjs';
+import { runActionInto } from '../components/run-action.mjs';
+
+/* surfaces whose exports fill the galleries — used by the cold-start hero so a
+   fresh clone can run the exact exports that populate the dashboard. order
+   matches the actions view; deduped against the live manifest at render time. */
+const SEED_EXPORTS = [
+  { action: 'export', label: 'launch grid + carousel' },
+  { action: 'export:ig', label: 'instagram feed' },
+  { action: 'export:posters', label: 'posters' },
+  { action: 'export:stories', label: 'stories' },
+  { action: 'export:slides', label: 'deck slides' },
+];
 
 export function render(root, ctx) {
-  const hero = el('section', { class: 'hero-block' },
-    el('div', { class: 'halo hero-halo', 'aria-hidden': 'true' }),
-    el('div', { class: 'focal' },
-      el('span', { class: 'eyebrow' }, 'eduflick ai · brand studio'),
-      el('h1', { class: 'hero-title' }, 'the whole brand, in ', el('em', null, 'one room')),
-      el('p', { class: 'hero-sub' },
-        'live from the repo: galleries, documents, status and guards for the pioneer cohort launch.')));
-
   const statsGrid = el('div', { class: 'grid-stats' });
   const tilesGrid = el('div', { class: 'grid-tiles' });
 
-  root.append(
-    hero,
-    el('section', { class: 'dash-section' },
-      el('span', { class: 'mono-up section-label' }, '01 · surfaces'),
-      statsGrid),
-    el('section', { class: 'dash-section' },
-      el('span', { class: 'mono-up section-label' }, '02 · guard + library'),
-      tilesGrid));
-
   let guardStream = null;
   let guardRunning = false;
+  let coldRunner = null;
+
+  /* total exported assets across every surface — 0 on a fresh clone, since
+     exports/ is generated, not committed. drives the cold-start hero. */
+  function totalAssets() {
+    const m = ctx.manifest;
+    if (!m || !Array.isArray(m.surfaces)) return 0;
+    let n = 0;
+    for (const s of m.surfaces) n += (s.items || []).length;
+    return n;
+  }
+
+  /* mount the normal front door (hero + surface rollups + guard/library) */
+  function mountFull() {
+    root.append(
+      el('section', { class: 'hero-block' },
+        el('div', { class: 'halo hero-halo', 'aria-hidden': 'true' }),
+        el('div', { class: 'focal' },
+          el('span', { class: 'eyebrow' }, 'eduflick ai · brand studio'),
+          el('h1', { class: 'hero-title' }, 'the whole brand, in ', el('em', null, 'one room')),
+          el('p', { class: 'hero-sub' },
+            'live from the repo: galleries, documents, status and guards for the pioneer cohort launch.'))),
+      el('section', { class: 'dash-section' },
+        el('span', { class: 'mono-up section-label' }, '01 · surfaces'),
+        statsGrid),
+      el('section', { class: 'dash-section' },
+        el('span', { class: 'mono-up section-label' }, '02 · guard + library'),
+        tilesGrid));
+    renderStats();
+    renderTiles();
+  }
+
+  /* the cold-start hero: shown when no surface has any exported asset. exports/
+     is generated, not committed, so fresh clones start cold. inline run buttons
+     fill the galleries via the same run/stream path the actions view uses. */
+  function mountCold() {
+    const coldLogHost = el('div', { class: 'log-host', hidden: true });
+    const have = new Set((ctx.manifest && ctx.manifest.surfaces || []).map((s) => s.script));
+    const seeds = SEED_EXPORTS.filter((s) => have.size === 0 || have.has(s.action));
+    const list = seeds.length ? seeds : SEED_EXPORTS;
+
+    const btns = [];
+    let coldRunning = false;
+    const runSeed = (action) => {
+      if (coldRunning) return;
+      coldRunning = true;
+      for (const b of btns) b.disabled = true;
+      if (coldRunner) coldRunner.dispose();
+      coldRunner = runActionInto({
+        api: ctx.api,
+        action,
+        logHost: coldLogHost,
+        /* on a clean exit, main.mjs has already refetched the manifest by the
+           time 'studio-state' fires; onState() re-renders and, now that assets
+           exist, swaps the cold hero for the full front door. on failure or a
+           non-zero exit, re-enable the buttons so the user can retry. */
+        onExit: (code) => { if (code !== 0) { coldRunning = false; for (const b of btns) b.disabled = false; } },
+      });
+      coldRunner.start.then((ok) => {
+        if (!ok) { coldRunning = false; for (const b of btns) b.disabled = false; }
+      });
+    };
+
+    const grid = el('div', { class: 'cold-seed-grid' });
+    for (const seed of list) {
+      const btn = el('button', {
+        class: 'btn btn-primary btn-sm', type: 'button',
+        onclick: () => runSeed(seed.action),
+      }, `run ${seed.action}`);
+      btns.push(btn);
+      grid.append(el('div', { class: 'cold-seed' },
+        el('span', { class: 'mono-up action-name' }, `npm run ${seed.action}`),
+        el('span', { class: 'action-label' }, seed.label),
+        btn));
+    }
+
+    root.append(
+      el('section', { class: 'hero-block' },
+        el('div', { class: 'halo hero-halo', 'aria-hidden': 'true' }),
+        el('div', { class: 'focal' },
+          el('span', { class: 'eyebrow' }, 'eduflick ai · brand studio'),
+          el('h1', { class: 'hero-title' }, 'the galleries are ', el('em', null, 'cold')),
+          el('p', { class: 'hero-sub' },
+            'fresh clones start cold: exports/ is generated, not committed. run an export to fill the galleries — output streams below, and the dashboard fills in the moment it finishes.'))),
+      el('section', { class: 'dash-section' },
+        el('span', { class: 'mono-up section-label' }, 'fill the galleries'),
+        grid,
+        coldLogHost),
+      el('section', { class: 'dash-section' },
+        el('span', { class: 'mono-up section-label' }, 'meanwhile'),
+        el('div', { class: 'quick-links cold-links' },
+          quickLink('#/brand', 'brand', 'tokens · type · logos — committed, always available'),
+          quickLink('#/facts', 'facts editor', 'guarded source of truth'),
+          quickLink('#/actions', 'actions', 'the full runner — exports · guards · builds'))));
+  }
 
   function pipelineCounts(surfaceId) {
     const counts = {};
@@ -46,7 +138,11 @@ export function render(root, ctx) {
     if (!m) return;
     for (const s of m.surfaces) {
       const total = s.items.length;
+      /* the manifest's real per-item flags: `exists` is the export on disk,
+         `stale` is exists && source newer than the export. so:
+           absent = !exists (never exported), stale = exists && stale. */
       const exported = s.items.filter((i) => i.exists).length;
+      const absent = s.items.filter((i) => !i.exists).length;
       const stale = s.items.filter((i) => i.exists && i.stale).length;
       const pipe = pipelineCounts(s.id);
       const pipeline = STATUSES
@@ -57,9 +153,16 @@ export function render(root, ctx) {
       statsGrid.append(el('a', { class: 'stat-card surface-stat', href },
         el('span', { class: 'stat-label' }, String(s.label || s.id).toLowerCase()),
         el('span', { class: 'stat-num' }, `${exported}/${total}`),
-        el('span', { class: 'mono stat-row' },
-          el('span', null, 'exported'),
-          el('span', { class: stale ? 'meta-warn' : 'meta-dim' }, stale ? `${stale} stale` : 'fresh')),
+        el('span', { class: 'health-row mono' },
+          absent
+            ? el('span', { class: 'dash-pill pill-absent', title: `${absent} never exported` }, `${absent} absent`)
+            : null,
+          stale
+            ? el('span', { class: 'dash-pill pill-stale', title: `${stale} export${stale === 1 ? '' : 's'} older than source` }, `${stale} stale`)
+            : null,
+          (!absent && !stale)
+            ? el('span', { class: 'dash-pill pill-fresh' }, 'all fresh')
+            : null),
         pipeline ? el('span', { class: 'mono stat-row meta-dim' }, pipeline) : null));
     }
   }
@@ -143,18 +246,31 @@ export function render(root, ctx) {
       el('span', { class: 'mono ql-sub' }, 'open the feedback digest'));
   }
 
-  /* keep the guard tile (and any running log) mounted; refresh stats only */
+  let mode = null; /* 'cold' | 'full' — current mounted layout */
+
+  function mount() {
+    clear(root);
+    mode = totalAssets() === 0 ? 'cold' : 'full';
+    if (mode === 'cold') mountCold();
+    else mountFull();
+  }
+
+  /* on a fresh manifest: if we crossed the cold/full boundary (an export just
+     filled the galleries), re-mount the whole front door. otherwise keep the
+     guard tile and any running log mounted and refresh the stat rollups only. */
   function onState() {
     guardRunning = false;
-    renderStats();
+    const next = totalAssets() === 0 ? 'cold' : 'full';
+    if (next !== mode) { mount(); return; }
+    if (mode === 'full') renderStats();
   }
   window.addEventListener('studio-state', onState);
 
-  renderStats();
-  renderTiles();
+  mount();
 
   return function dispose() {
     window.removeEventListener('studio-state', onState);
     if (guardStream) guardStream.dispose();
+    if (coldRunner) coldRunner.dispose();
   };
 }

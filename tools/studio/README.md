@@ -27,6 +27,7 @@ cold state. Each surface shows a run-export button; running it populates the gri
 | ------------------- | ------------------------------------------------------------------- |
 | `#/`                | dashboard — per-surface counts, stale/missing rollup, quick actions |
 | `#/social/:surface` | gallery for `instagram` / `posters` / `stories` / `launch-grid`     |
+| `#/instagram`       | instagram showcase — the approved-only feed grid (links to gallery) |
 | `#/launch`          | the live launch-grid mural + carousels, in-app, with annotation     |
 | `#/deck`            | program deck — live slide viewer (page nav / zoom) + export grid    |
 | `#/brochures`       | brochures, deck, brand book, kits — live viewer + page nav + zoom   |
@@ -48,11 +49,16 @@ app itself, export PNGs, CSS, fonts).
 | `/api/actions`            | GET        | `{running, lastRun}`                                                                   |
 | `/api/actions/run`        | POST       | `{action}` from a hardcoded whitelist; single-flight (409 when busy)                   |
 | `/api/actions/:id/stream` | GET        | SSE (`log` / `exit` events); replays buffered lines, then live; 15 s heartbeat         |
+| `/api/tokens/status`      | GET        | `{inSync, stale[], checkedAt, method:'mtime'}` — token/snippet sources vs artifacts    |
 | `/api/editmode`           | POST       | `{file, edits}` — rewrites one EDITMODE block inside `design-system/*.html`            |
 | `/api/facts/check`        | POST       | `{content}` → `{violations}` (retired-string scan, in process)                         |
 | `/api/facts/save`         | POST       | `{content, override?}` → 422 with violations unless override; then runs the full guard |
 | `/api/comments`           | GET / POST | read store / upsert `{comment, override?}`; text guarded; regenerates the digest       |
 | `/api/comments/:id`       | DELETE     | remove a comment; regenerates the digest                                               |
+| `/api/launch-grid`        | GET        | `{plan, slides, generatedAt}` — launch-grid.json plan + the caro-data slide island     |
+| `/api/launch-grid/post`   | POST       | `{id, patch, override?}` — patch one post (`caption`/`notes`/`role`/`wave`); guarded   |
+| `/api/launch-grid/slides` | POST       | `{slug, slides, title?, surf?, override?}` — rewrite one carousel's slides; guarded     |
+| `/api/export-zip`         | POST       | `{files:[{src\|text, name}], zipName?}` → `application/zip`; read-only, `exports/`-only |
 
 Action whitelist: `export`, `export:ig`, `export:posters`, `export:stories`, `export:slides`,
 `export:pdf`, `gen:backdrops:proc`, `gen:feedback`, `check:facts`, `tokens`, `snippets`. Each runs
@@ -60,17 +66,31 @@ as `npm run <name>` in `tools/` — constant argv, no shell.
 
 ## Write surface
 
-The studio can write exactly four things, nothing else:
+The studio can write exactly six paths, nothing else:
 
-1. `content-studio/status.json` — launch-pipeline status entries (`/api/status`)
+1. `content-studio/status.json` — launch-pipeline status entries (`/api/status`); `status` must be
+   one of the known states, writes serialize through an in-process queue
 2. `content-studio/FACTS.md` — only after a server-side retired-string re-check, or with an
-   explicit override (`/api/facts/save`)
-3. the `/*EDITMODE-BEGIN*/ … /*EDITMODE-END*/` JSON blocks inside `design-system/**/*.html`
-   (`/api/editmode`) — never any other byte of those files
-4. `content-studio/design-comments.json` + its generated `content-studio/DESIGN_FEEDBACK.md`
-   digest (`/api/comments`) — both are fixed paths, never client-supplied
+   explicit override (`/api/facts/save`); the save is followed by a full `check:facts` run
+3. `content-studio/design-comments.json` + its generated `content-studio/DESIGN_FEEDBACK.md`
+   digest (`/api/comments`) — both are fixed paths, never client-supplied; on every write the
+   JSON store is persisted and the markdown digest regenerated from it; `assetRef.source` must
+   resolve to a real file under the repo root and comment text is re-scanned (422 unless override)
+4. the `/*EDITMODE-BEGIN*/ … /*EDITMODE-END*/` JSON blocks inside `design-system/**/*.html`
+   (`/api/editmode`) — never any other byte of those files; the path must resolve inside
+   `design-system/` and end in `.html`, the edit must match exactly one block, and the rewritten
+   block is guard-scanned (retired strings + `[[placeholder]]` markers) before any write
+5. `content-studio/launch-grid.json` — the Instagram launch-grid plan (`/api/launch-grid/post`);
+   only the `caption`/`notes`/`role`/`wave` keys of one post may change (caption shape enforced,
+   `wave` an integer 1–4), and all new text is re-scanned server-side (422 unless override)
+6. the `<script id="caro-data">` JSON island inside `design-system/collateral/launch-grid.html`
+   (`/api/launch-grid/slides`) — one carousel's slides at a time, matched by slug; only the island
+   bytes are rewritten, `[[placeholders]]` and a literal `</script` are hard-rejected, and the
+   copy is brand-guarded (422 unless override)
 
-All writes are atomic (tmp file + rename). There is no generic write endpoint.
+All writes are atomic and durable (tmp file → fsync → rename). There is no generic write endpoint;
+every path above is a dedicated, server-side-validated handler. `/api/export-zip` is read-only —
+it bundles already-rendered PNGs from `exports/` and never writes the repo.
 
 ## Design feedback → Claude Code
 
@@ -87,11 +107,23 @@ you save past them with an explicit override that is recorded on the comment.
 
 ## Security posture
 
-- Binds `127.0.0.1` only — never exposed to the network.
+- Binds `127.0.0.1` only — never exposed to the network. The bind host is asserted to be loopback
+  (`127.0.0.1` / `localhost` / `::1`) at boot; if a future edit points it elsewhere the process
+  refuses to start. Port is `STUDIO_PORT`, then `PORT`, then `8090`.
+- A busy port is fatal by design: the server fails fast on `EADDRINUSE` (printing the `lsof` line to
+  free it) instead of dying with a stack trace — a busy port almost always means a stale test mock
+  or a second studio.
+- DNS-rebinding guard: every request's `Host` header must be a loopback hostname (`localhost` /
+  `127.0.0.1` / `[::1]`); anything else is `403` before routing.
+- CSRF guard: a non-`GET`/`HEAD` `/api` request carrying an `Origin` header must be same-origin
+  (`http://localhost|127.0.0.1|[::1]:<port>`), else `403`. **No `Access-Control-Allow-Origin` (or any
+  CORS) header is ever set**, so the browser blocks cross-origin reads on its own.
 - Static handler rejects path traversal (decode → normalize → must stay under the repo root)
   and NUL bytes.
 - Actions: body must name an own key of the frozen whitelist; spawned without a shell;
-  single-flight.
+  single-flight (`409` when one is running). A watchdog (`STUDIO_ACTION_TIMEOUT_MS`, default
+  15 min) sends `SIGTERM` then `SIGKILL` 5 s later if the run overruns. The last finished run
+  (`lastRun`) is persisted to `tools/.studio-state.json` (gitignored) and reloaded at boot.
 - Editmode: path must resolve inside `design-system/`, end in `.html`, exist, and contain an
   EDITMODE block; the edit must match exactly one block; the rewritten block is guard-scanned
   (retired strings, unresolved placeholders) before any write.
@@ -101,5 +133,10 @@ you save past them with an explicit override that is recorded on the comment.
   validated to resolve to a real file under the repo root before a pin persists; text is re-scanned
   server-side (422 unless override). Launch-grid/iframe `postMessage` is gated on the frame's own
   `contentWindow`.
+- Launch-grid writes touch only the known keys of one post / one carousel slug; `[[placeholders]]`
+  (which would brick the export pre-flight) and a literal `</script` in the island are hard-rejected,
+  and all new copy is brand-scanned (422 unless override).
+- All writes are atomic AND durable: a tmp file in the same directory is written, `fsync`ed so the
+  bytes reach disk, then `rename`d into place — a crash mid-write can never leave a half-written file.
 - Vendored client libraries are pinned with recorded SHA-256 hashes (see `vendor/README.md`);
   rendered markdown is sanitized with DOMPurify.

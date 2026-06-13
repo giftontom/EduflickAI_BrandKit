@@ -30,6 +30,10 @@ export const editmodeSave = (file, edits) => post('/api/editmode', { file, edits
 export const factsCheck = (content) => post('/api/facts/check', { content });
 export const factsSave = (content, override = false) => post('/api/facts/save', { content, override });
 
+/* token-pipeline drift: {inSync, stale:[{source,artifact}], checkedAt, method}.
+   `npm run tokens` / `npm run snippets` regenerate the stale artifacts. */
+export const getTokensStatus = () => request('/api/tokens/status');
+
 /* design comments — the 4th write surface (see contract A). The client builds
    the assetRef (incl. source + label); the server assigns id+seq and re-scans
    text. upsertComment(comment) creates (no id) or updates (with id). */

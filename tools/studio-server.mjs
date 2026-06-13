@@ -18,12 +18,17 @@
 //   GET  /api/comments             content-studio/design-comments.json
 //   POST /api/comments             {comment, override?} → upserted <Comment> (id+seq)
 //   DELETE /api/comments/:id        delete a comment by UUID
+//   GET  /api/launch-grid          {plan, slides} — launch-grid.json + caro-data island
+//   POST /api/launch-grid/post     {id, patch, override?} → patch one launch post
+//   POST /api/launch-grid/slides   {slug, slides, ..., override?} → rewrite one carousel
 //   POST /api/export-zip           {files:[{src|text,name}], zipName?} → application/zip
 //
-// Write surface is exactly four paths: content-studio/status.json,
+// Write surface is exactly six paths: content-studio/status.json,
 // content-studio/FACTS.md, content-studio/design-comments.json (which also
-// regenerates content-studio/DESIGN_FEEDBACK.md), and EDITMODE blocks inside
-// design-system/*.html. Binds 127.0.0.1 only (loopback asserted at boot, exits
+// regenerates content-studio/DESIGN_FEEDBACK.md), EDITMODE blocks inside
+// design-system/*.html, content-studio/launch-grid.json, and the caro-data JSON
+// island inside design-system/collateral/launch-grid.html. (export-zip is
+// read-only.) Binds 127.0.0.1 only (loopback asserted at boot, exits
 // on a busy port). Every request must carry a loopback Host header, and
 // non-GET/HEAD /api calls with an Origin header must be same-origin — 403
 // otherwise (DNS-rebinding + CSRF guards; no CORS headers are ever set).

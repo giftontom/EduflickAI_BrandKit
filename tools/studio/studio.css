@@ -1195,3 +1195,84 @@ body.theme-light {
   .viewer-zoom .btn-mini { transition: none !important; }
   .annot-pin:hover { transform: translate(-50%, -50%); }
 }
+
+/* ============================================================
+   cold start + health pills + tokens sync
+   dashboard cold-start hero (fresh clone, zero exports), the
+   absent / stale / fresh rollup pills on surface stat cards, and
+   the brand-page tokens drift badge. one grouped block, appended.
+   ============================================================ */
+
+/* health rollup pills (dashboard surface cards + tokens badge reuse) */
+.health-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 10.5px;
+}
+.dash-pill {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+/* absent = never exported (exists:false); the loudest state */
+.pill-absent { color: var(--warn); border-color: rgba(255, 110, 90, 0.45); }
+/* stale = exists but source is newer; a softer amber-on-card outline */
+.pill-stale { color: var(--warn); border-color: var(--line-2); }
+/* fresh = every export present and up to date */
+.pill-fresh { color: var(--success); border-color: rgba(74, 222, 128, 0.4); }
+
+/* cold-start hero: seed-export grid that fills the galleries */
+.cold-seed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+}
+.cold-seed {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  background: var(--bg-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-xl);
+  padding: 20px 22px;
+}
+.cold-seed .action-name { color: var(--accent-soft); font-size: 10px; }
+.cold-seed .action-label { font-size: 14px; color: var(--fg2); }
+.cold-seed .btn { margin-top: 4px; }
+.cold-links { max-width: 640px; }
+
+/* brand page — tokens-sync badge */
+.tokens-sync-host { margin: 0 0 6px; }
+.tokens-sync {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-xl);
+  padding: 18px 22px;
+}
+.tokens-sync.in-sync { flex-direction: row; align-items: center; gap: 12px; }
+.tokens-sync.drift { border-color: rgba(255, 110, 90, 0.35); }
+.sync-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.sync-meta { font-size: 11px; color: var(--fg3); }
+.sync-pairs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+}
+.sync-pairs .sync-src { color: var(--fg2); }
+.sync-pairs .sync-arrow { color: var(--fg3); }
+.sync-pairs .sync-art { color: var(--fg3); }

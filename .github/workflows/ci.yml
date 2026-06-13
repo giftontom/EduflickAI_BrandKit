@@ -4,7 +4,9 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    # The studio lands on main via the unify-design-system hop, so PRs that
+    # target that integration branch must run the same gate as PRs to main.
+    branches: [main, unify-design-system]
 
 jobs:
   lint:
@@ -146,14 +148,25 @@ jobs:
           npm run tokens
           npm run snippets
 
+      - name: Regenerate design-feedback digest from its store
+        run: |
+          cd tools
+          # gen:feedback rebuilds content-studio/DESIGN_FEEDBACK.md from
+          # design-comments.json. It is corruption-safe (renders the empty
+          # digest if the store is missing/malformed), so no input guard is
+          # needed — it always produces a valid artifact to diff against.
+          npm run gen:feedback
+
       - name: Fail if generated files are out of date
         run: |
+          # Covers tokens.css, tokens.flat.json, brand.tokens.mjs, snippets.md
+          # and content-studio/DESIGN_FEEDBACK.md (the regenerated digest).
           if ! git diff --quiet; then
-            echo "::error::Generated files drifted from source. Run 'cd tools && npm run tokens && npm run snippets' and commit."
+            echo "::error::Generated files drifted from source. Run 'cd tools && npm run tokens && npm run snippets && npm run gen:feedback' and commit."
             git --no-pager diff --stat
             exit 1
           fi
-          echo "✓ tokens.css, tokens.flat.json, brand.tokens.mjs, snippets.md all in sync with source"
+          echo "✓ tokens.css, tokens.flat.json, brand.tokens.mjs, snippets.md, DESIGN_FEEDBACK.md all in sync with source"
 
   facts:
     name: Facts integrity (no retired brand strings)
@@ -168,3 +181,110 @@ jobs:
 
       - name: Check for retired brand strings
         run: node tools/check-facts.mjs
+
+  studio-tests:
+    name: Studio tests (node --test + smoke)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: tools/package-lock.json
+
+      - name: Install tool deps + Chromium
+        run: |
+          cd tools
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Run the studio unit/integration tests
+        run: cd tools && node --test test/*.test.mjs
+
+      - name: Run the studio smoke test
+        run: cd tools && node test/smoke.mjs
+
+  server-zero-dep:
+    name: "Studio server is zero-dependency (node: + relative only)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assert no npm imports in studio-server.mjs or tools/lib/*.mjs
+        run: |
+          # G1: the studio server and its libs may import ONLY node: builtins
+          # or relative paths (./ ../). Any bare/scoped package specifier is a
+          # hard failure. We scan three import forms:
+          #   from '...' / from "..."     (static import / re-export)
+          #   import('...') / import("...") (dynamic import)
+          #   require('...') / require("...") (CommonJS interop)
+          bad=0
+          for f in tools/studio-server.mjs tools/lib/*.mjs; do
+            # -n keeps line numbers so we can print the offending lines.
+            while IFS=: read -r lineno content; do
+              [ -z "$lineno" ] && continue
+              # Pull the quoted specifier out of whichever form matched.
+              spec=$(printf '%s\n' "$content" | sed -E "s/.*(from|import[[:space:]]*\(|require[[:space:]]*\()[[:space:]]*['\"]([^'\"]+)['\"].*/\2/")
+              case "$spec" in
+                node:*|./*|../*) ;;  # allowed
+                *)
+                  echo "✗ $f:$lineno → non-local import specifier: $spec"
+                  echo "    $content"
+                  bad=1
+                  ;;
+              esac
+            done <<EOF
+          $(grep -nE "(from[[:space:]]+['\"]|import[[:space:]]*\([[:space:]]*['\"]|require[[:space:]]*\([[:space:]]*['\"])" "$f")
+          EOF
+          done
+          if [ $bad -eq 1 ]; then
+            echo "::error::studio-server.mjs / tools/lib/*.mjs imported a non-node:, non-relative specifier (violates G1: zero npm deps)"
+            exit 1
+          fi
+          echo "✓ studio-server.mjs + tools/lib/*.mjs import only node: builtins and relative paths"
+
+  vendor-integrity:
+    name: Vendored libs match recorded SHA-256s
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compare vendor bundles to README hashes
+        run: |
+          # The studio vendors marked + DOMPurify as pinned, offline copies.
+          # tools/studio/vendor/README.md records each file's SHA-256 on a
+          # "SHA-256: `<hex>`" line that follows a "`<file>.js`" bullet. We
+          # extract the recorded hash per file and compare to shasum's output.
+          README=tools/studio/vendor/README.md
+          mismatch=0
+          for name in marked.min.js purify.min.js; do
+            file="tools/studio/vendor/$name"
+            if [ ! -f "$file" ]; then
+              echo "✗ Missing vendored file: $file"; mismatch=1; continue
+            fi
+            # Arm only on the bullet that names OUR file; disarm on any other
+            # .js bullet; then capture the first 64-hex digest after it.
+            recorded=$(awk -v n="$name" '
+              /`[A-Za-z0-9._-]+\.js`/ { hit = ($0 ~ ("`" n "`")) ? 1 : 0 }
+              hit && /SHA-256:/ && match($0, /[0-9a-f]{64}/) { print substr($0, RSTART, RLENGTH); exit }
+            ' "$README")
+            actual=$(shasum -a 256 "$file" | awk '{print $1}')
+            if [ -z "$recorded" ]; then
+              echo "✗ No SHA-256 recorded for $name in $README"; mismatch=1
+            elif [ "$recorded" != "$actual" ]; then
+              echo "✗ Hash mismatch for $name"
+              echo "    recorded: $recorded"
+              echo "    actual:   $actual"
+              mismatch=1
+            else
+              echo "  ✓ $name ($actual)"
+            fi
+          done
+          if [ $mismatch -eq 1 ]; then
+            echo "::error::Vendored library hash mismatch — a vendor/*.js file drifted from its recorded SHA-256 in README.md"
+            exit 1
+          fi
+          echo "✓ Vendored marked + DOMPurify match their recorded SHA-256s"

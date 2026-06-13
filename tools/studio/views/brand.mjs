@@ -1,8 +1,10 @@
 /* brand.mjs — the brand foundations as a living page: color token swatches
    (click to copy), type specimens set in the real classes, the spacing and
-   radius scales, and the logo wall from assets/logo + assets/partners. */
+   radius scales, and the logo wall from assets/logo + assets/partners. A
+   tokens-sync badge at the top flags when the token pipeline has drifted. */
 
 import { el, clear, copyText, rootHref } from '../dom.mjs';
+import { runActionInto } from '../components/run-action.mjs';
 
 const COLOR_RE = /^(#|rgb)/i;
 
@@ -12,6 +14,11 @@ export function render(root, ctx) {
     el('h1', { class: 'page-title' }, 'brand foundations'),
     el('p', { class: 'page-sub' }, 'one hue, two neutrals, three fonts. click a swatch to copy its value.')));
 
+  /* tokens-sync badge — its own host so it can refresh independently of the
+     token specimens below (which only need to reload after a rebuild). */
+  const syncHost = el('div', { class: 'tokens-sync-host' });
+  root.append(syncHost);
+
   const body = el('div', { class: 'brand-body' });
   root.append(body);
 
@@ -20,7 +27,75 @@ export function render(root, ctx) {
       `could not load tokens: ${String(err.message || err)}`.toLowerCase()));
   });
 
-  return null;
+  let syncRunner = null;
+  let syncRunning = false;
+
+  async function renderSync() {
+    let status;
+    try {
+      status = await ctx.api.getTokensStatus();
+    } catch (err) {
+      clear(syncHost).append(el('div', { class: 'banner banner-err mono' },
+        `could not read tokens status: ${String(err.message || err)}`.toLowerCase()));
+      return;
+    }
+    clear(syncHost);
+    const logHost = el('div', { class: 'log-host', hidden: true });
+
+    if (status.inSync) {
+      syncHost.append(el('div', { class: 'tokens-sync in-sync' },
+        el('span', { class: 'dash-pill pill-fresh' }, 'tokens in sync'),
+        el('span', { class: 'mono sync-meta' }, 'every artifact is newer than its source')));
+      return;
+    }
+
+    const pairs = el('ul', { class: 'sync-pairs mono' },
+      (status.stale || []).map((p) => el('li', null,
+        el('span', { class: 'sync-src' }, p.source),
+        el('span', { class: 'sync-arrow', 'aria-hidden': 'true' }, ' → '),
+        el('span', { class: 'sync-art' }, p.artifact))));
+
+    const runBtn = el('button', {
+      class: 'btn btn-primary btn-sm', type: 'button',
+      onclick: () => {
+        if (syncRunning) return;
+        syncRunning = true;
+        runBtn.disabled = true;
+        if (syncRunner) syncRunner.dispose();
+        syncRunner = runActionInto({
+          api: ctx.api,
+          action: 'tokens',
+          logHost,
+          /* after a clean rebuild, re-read the status (and reload the specimens
+             so changed values show). on failure, re-enable the button. */
+          onExit: (code) => {
+            syncRunning = false;
+            runBtn.disabled = false;
+            if (code === 0) {
+              renderSync();
+              build(clear(body), ctx).catch(() => { /* specimen reload best-effort */ });
+            }
+          },
+        });
+        syncRunner.start.then((ok) => { if (!ok) { syncRunning = false; runBtn.disabled = false; } });
+      },
+    }, 'run tokens build');
+
+    syncHost.append(el('div', { class: 'tokens-sync drift' },
+      el('div', { class: 'sync-head' },
+        el('span', { class: 'dash-pill pill-stale' }, 'tokens drift'),
+        el('span', { class: 'mono sync-meta' },
+          `${status.stale.length} artifact${status.stale.length === 1 ? '' : 's'} older than source — run tokens build`)),
+      pairs,
+      runBtn,
+      logHost));
+  }
+
+  renderSync();
+
+  return function dispose() {
+    if (syncRunner) syncRunner.dispose();
+  };
 }
 
 async function build(body, ctx) {
