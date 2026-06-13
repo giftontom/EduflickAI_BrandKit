@@ -1,13 +1,14 @@
 # Brand Studio — Roadmap
 
-The studio's phased development plan. Status as of 2026-06-13: **Phase 0 is essentially complete**
-(commit `065bac1`). The studio now has its first automated test suite (48 node:test API/security
-tests + an 11-route Playwright smoke), CI purity jobs (studio-tests, server-zero-dep,
-vendor-integrity, feedback-digest drift), reconciled docs, cold-start UX, a tokens-sync badge, and
-hygiene (renamed package, exact-pinned deps). All green: 48/48 unit, 11/11 smoke, facts clean,
-zero-dep + vendor-integrity hold. Two Phase-0 items remain, both owner-gated: **FACTS.md content
-reconciliation** (item 7 — brand truth, partly speculative) and **the merge to `main`** (item 8 —
-outward-facing push). This file is the resume point.
+The studio's phased development plan. Status as of 2026-06-13: **Phase 0 complete + Phase 1a
+complete** (HEAD `15893bc`). Phase 0 gave the studio its first test suite (now 60 node:test cases +
+a 12-route Playwright smoke), CI purity jobs, reconciled docs, cold-start UX, a tokens-sync badge,
+and hygiene. Phase 1a turned the status surface into a guarded state machine with audit history,
+added a `#/board` kanban, and two operator dashboard panels. All green: 60/60 unit, 12/12 smoke,
+facts clean, zero-dep + vendor-integrity hold. **Owner-gated items still pending:** FACTS.md
+content reconciliation (Phase-0 tail item 7 — brand truth, partly speculative) and the merge to
+`main` (item 8 — outward-facing push). Next un-gated work: **Phase 1b** (generation panel, QA
+runner, calendar, cohort banner). This file is the resume point.
 
 The full research + planning record (81 evaluated open-source projects, the 4-lens plan, the
 adopt/build ledger) lives outside the repo; this file is the condensed, actionable version.
@@ -76,18 +77,29 @@ adopt/build ledger) lives outside the repo; this file is the condensed, actionab
 
 ## Phase 1 — Operator loop (the studio becomes the daily cockpit)
 
+**Phase 1a — DONE (committed `15893bc`, verified 60/60 tests, 12/12 smoke):**
+- ✅ **Status state machine**: legal-transition guard (draft→approved→scheduled→posted, any→retired,
+  retired→draft revive; 409 + `legalNext` unless `override:true`) + append-only per-asset
+  `history`; new optional `scheduledFor`. Guard + history run inside the serialized write queue.
+- ✅ **Kanban board** (`#/board`): every asset by pipeline stage, click-to-move via `legalNext`
+  quick buttons + an override modal; the status-badge dropdown shares the same 409→override flow.
+- ✅ **Operator dashboard panels**: due/overdue (`scheduledFor` ≤ today, not posted) and
+  stale-and-live (manifest stale AND status ∈ scheduled/posted, one-click re-render).
+
+**Phase 1b — PENDING (no owner gate; build next):**
 - **Generation panel** (`#/generate`): server assembles the prompt deterministically —
   system prompt + template + a live-rendered FACTS block — so a small model cannot invent
   prices/seats/dates. Clipboard mode default (zero-dep); opt-in env-gated local-model bridge
-  (spawn/fetch only, never an SDK import). Drafts land as a guarded `drafts/`-only write path.
-- **QA runner on drafts**: one-click `scanTextRetired` + checklist hard-fails inline.
-- **Operator dashboard**: three computed panels — stale-and-live (re-render in one click),
-  due/overdue (`scheduledFor` vs today), blocked (guard failures / placeholders); cohort
-  banner reading live seat count from FACTS.
-- **Calendar + kanban board** over `status.json` (the existing 5-state enum, drag = status
-  patch); wave-order guard for the launch mural (warn on out-of-order posting).
-- **Status state machine**: legal-transition guard (draft→approved→scheduled→posted, any→retired;
-  409 unless override) + append-only per-asset history; block scheduling stale/absent assets.
+  (spawn/fetch only, never an SDK import). Drafts land as a guarded `drafts/`-only write path
+  (the studio's 7th write surface). *Note: best paired with the FACTS.md cleanup (Phase-0 tail
+  item 7) so the live FACTS block is clean — otherwise it grounds on placeholder rows.*
+- **QA runner on drafts**: one-click `scanTextRetired` + checklist hard-fails inline (feeds a
+  "blocked" dashboard panel — the third panel, deferred from 1a until drafts exist).
+- **Calendar** (month grid) over `scheduledFor`, paired with the board; wave-order guard for the
+  launch mural (warn on out-of-order posting).
+- **Cohort banner**: live seat count + key date from FACTS (deferred until FACTS is reconciled).
+- **Schedule→stale cross-check**: block/flag a transition to scheduled/posted on a stale/absent
+  asset (server-side, reusing the manifest staleness).
 
 ## Phase 2 — Review + pipeline (content travels end-to-end)
 
