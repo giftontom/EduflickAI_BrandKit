@@ -6,10 +6,11 @@ cold-start UX + hygiene. Phase 1a made status a guarded state machine with audit
 `#/board` kanban, and operator dashboard panels. Phase 1b-1 added the `#/generate` panel
 (deterministic FACTS-grounded prompt assembly), a QA runner, and the guarded `drafts/` write
 surface (the 7th write path). All green: **81/81 node:test, 13/13 Playwright smoke**, facts clean
-(191 files), zero-dep + vendor-integrity hold. **Owner-gated items still pending:** FACTS.md
-content reconciliation (Phase-0 tail item 7 — brand truth, partly speculative) and the merge to
-`main` (item 8 — outward-facing push). Next un-gated work: **Phase 1b-2** (calendar, blocked panel,
-schedule→stale cross-check, live-model bridge). This file is the resume point.
+(191 files), zero-dep + vendor-integrity hold. Phase 1b-2 is underway: the `#/calendar` view and a
+client-side stale-schedule warning shipped (`4651e7f`); the remaining 1b-2 items touch the server
+and are queued for a verified workflow. **Owner-gated items still pending:** FACTS.md content
+reconciliation (Phase-0 tail item 7 — brand truth, partly speculative) and the merge to `main`
+(item 8 — outward-facing push). This file is the resume point.
 
 The full research + planning record (81 evaluated open-source projects, the 4-lens plan, the
 adopt/build ledger) lives outside the repo; this file is the condensed, actionable version.
@@ -100,17 +101,23 @@ adopt/build ledger) lives outside the repo; this file is the condensed, actionab
   slug/channel sanitized `^[a-z0-9][a-z0-9-]*$`, traversal-guarded, atomic, retired-string-guarded
   (422, no override — the repo facts-guard forbids retired strings repo-wide).
 
-**Phase 1b-2 — PENDING (no owner gate):**
-- **Calendar** (month grid) over `scheduledFor`, paired with the board; wave-order guard for the
-  launch mural (warn on out-of-order posting).
-- **"Blocked" dashboard panel** (the third ops panel, deferred from 1a): drafts failing QA /
-  containing `[[NEEDS]]` — now buildable since drafts exist.
-- **Schedule→stale cross-check**: block/flag a transition to scheduled/posted on a stale/absent
-  asset (server-side, reusing the manifest staleness).
-- **Cohort banner**: live seat count + key date from FACTS — *gated on the FACTS.md cleanup
+**Phase 1b-2 — IN PROGRESS:**
+- ✅ **Calendar** (`#/calendar`, committed `4651e7f`): month grid over `scheduledFor` with
+  prev/next/today nav, today highlighted, overdue chips flagged, read-only detail popover.
+- ✅ **Stale-schedule warning** (client-side, in `#/board`): moving a card into scheduled/posted
+  warns first if the asset's export is stale/absent per the manifest (the server guard is separate).
+- ⬜ **"Blocked" dashboard panel**: drafts failing QA / containing `[[NEEDS]]`. *Needs server
+  support* — `/api/drafts` GET returns only metadata, so add a way to surface per-draft QA state
+  (e.g. extend the list with a `needsInput`/violations flag, or a `GET /api/drafts/:name`).
+- ⬜ **Schedule→stale cross-check (hard, server-side)**: block/flag the transition server-side,
+  reusing manifest staleness — scoped to KNOWN manifest assets so abstract ids/tests don't trip it.
+- ⬜ **Cohort banner**: live seat count + key date from FACTS — *gated on the FACTS.md cleanup
   (Phase-0 tail item 7); until then it would surface placeholder rows.*
-- **Live-model bridge** (opt-in): env-gated `STUDIO_MODEL_CMD`/`STUDIO_MODEL_URL` — spawn/fetch
+- ⬜ **Live-model bridge** (opt-in): env-gated `STUDIO_MODEL_CMD`/`STUDIO_MODEL_URL` — spawn/fetch
   only, never an SDK import; dormant (501) unless configured.
+
+*The four ⬜ items touch the server; do them as a verified workflow (server + tests + verify) on a
+future ultracode turn rather than ad-hoc.*
 
 ## Phase 2 — Review + pipeline (content travels end-to-end)
 
