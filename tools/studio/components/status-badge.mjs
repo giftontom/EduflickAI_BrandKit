@@ -35,21 +35,27 @@ export function statusControl({ id, entry = {}, onSave }) {
     meta.textContent = metaLine(current);
   }
 
-  /* commit a status patch, with both server guards in the loop. A 409 is branched
-     on the body's `reason`:
+  /* commit a status patch, with all three server guards in the loop. A 409 is
+     branched purely on the body's `reason`:
+       • open-comments (approving an asset that still has open review comments) →
+         confirmReviewGate, then a second save carrying allowOpenComments:true.
        • stale-export (scheduling/posting an absent or stale render) → a "schedule
          anyway?" confirm, then a second save carrying allowStale:true.
-       • otherwise the state machine's illegal-transition 409 (from/to/legalNext)
-         → confirmOverride, then a second save carrying override:true.
-     override and allowStale are independent wire flags. `prev` puts the control
-     back whenever the change is abandoned or fails. */
+       • else the state machine's illegal-transition 409 (from/to/legalNext) →
+         confirmOverride, then a second save carrying override:true.
+     override, allowStale and allowOpenComments are independent wire flags; each
+     re-save preserves any flags already set. `prev` puts the control back whenever
+     the change is abandoned or fails. */
   async function commit(patch, prev) {
     try {
       current = (await onSave(id, patch)) || current;
       paint();
     } catch (err) {
       if (err && err.status === 409 && err.body) {
-        if (err.body.reason === 'stale-export') {
+        if (err.body.reason === 'open-comments') {
+          const go = await confirmReviewGate(err.body, id);
+          if (go) { await commit({ ...patch, allowOpenComments: true }, prev); return; }
+        } else if (err.body.reason === 'stale-export') {
           const go = await confirmStaleExport(err.body, id);
           if (go) { await commit({ ...patch, allowStale: true }, prev); return; }
         } else {
@@ -200,6 +206,38 @@ export function confirmStaleExport(body, id) {
         el('button', {
           class: 'btn-mini btn-mini-warn', type: 'button', onclick: () => finish(true),
         }, 'schedule anyway')));
+    close = openModal(card, { onClose: () => finish(false) });
+  });
+}
+
+/* confirmReviewGate(body, id) -> Promise<boolean>
+   A modal for the review gate's 409 (the THIRD parallel case — distinct from the
+   illegal-transition one, which carries legalNext, and the stale-export one, which
+   carries assetState). Approving an asset that still has open review comments is
+   blocked: this shows the open count, points to the feedback view to resolve them,
+   and otherwise offers to approve anyway (the caller re-POSTs with
+   allowOpenComments:true). The #/feedback link dismisses the modal by navigating.
+   Resolves true only on an explicit "approve anyway". */
+export function confirmReviewGate(body, id) {
+  const n = Number((body && body.openCount) || 0);
+  const plural = n === 1 ? '' : 's';
+  return new Promise((resolve) => {
+    let close = null;
+    let done = false;
+    const finish = (val) => { if (done) return; done = true; if (close) close(); resolve(val); };
+    const card = el('div', { class: 'override-form review-warn-form' },
+      el('span', { class: 'mono-up pop-title' }, `open review comments · ${id}`),
+      el('p', { class: 'override-msg' },
+        'this asset has ',
+        el('span', { class: 'meta-warn' }, `${n} open review comment${plural}`),
+        '. resolve them in the ',
+        el('a', { class: 'review-gate-link', href: '#/feedback', onclick: () => finish(false) }, 'feedback view'),
+        ' first, or approve anyway.'),
+      el('div', { class: 'pop-actions' },
+        el('button', { class: 'btn-mini', type: 'button', onclick: () => finish(false) }, 'cancel'),
+        el('button', {
+          class: 'btn-mini btn-mini-warn', type: 'button', onclick: () => finish(true),
+        }, 'approve anyway')));
     close = openModal(card, { onClose: () => finish(false) });
   });
 }

@@ -10,7 +10,19 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { RETIRED, scanTextRetired } from '../check-facts.mjs';
-import { setPort, ROOT, apiJSON, startServer, stopServer, snapshot, restoreSnapshot } from './helpers.mjs';
+import { renderFeedbackDigest } from '../lib/feedback.mjs';
+import {
+  setPort,
+  ROOT,
+  apiJSON,
+  startServer,
+  stopServer,
+  snapshot,
+  restoreSnapshot,
+  spawnServerOnce,
+  acquireCommentsSection,
+  releaseCommentsSection,
+} from './helpers.mjs';
 
 // Own port (api.test.mjs uses 8099) so node:test can run the files concurrently.
 setPort(8097);
@@ -39,6 +51,11 @@ function pin(text, extra = {}) {
 let snap;
 
 before(async () => {
+  // design-comments.json (+ DESIGN_FEEDBACK.md) is SHARED with the review-gate
+  // cases in status-statemachine.test.mjs; hold the cross-process section lock for
+  // this file's whole run so the two never overlap on it (see helpers.mjs). Acquire
+  // BEFORE snapshotting so the snapshot captures a stable, sibling-restored state.
+  await acquireCommentsSection();
   snap = snapshot();
   assert.ok(scanTextRetired(RETIRED_TEXT).length > 0);
   await startServer();
@@ -47,6 +64,7 @@ before(async () => {
 after(async () => {
   await stopServer();
   restoreSnapshot(snap);
+  releaseCommentsSection();
 });
 
 test('comments: create with a clean pin → 200 and lands in the store', async () => {
@@ -103,4 +121,90 @@ test('comments: missing text on create → 400', async () => {
     },
   });
   assert.equal(status, 400);
+});
+
+// ----------------------------------- Contract B: comments digest self-heal on boot
+//
+// DESIGN_FEEDBACK.md is a DERIVED view of design-comments.json (the JSON is the
+// record). persistComments writes the JSON then the digest in two steps, so a crash
+// between them leaves the digest stale. At startup the server regenerates the digest
+// from the JSON of record: want = renderFeedbackDigest(loadComments()); if the file
+// on disk differs, it rewrites it (and logs a one-line notice). In the NORMAL case
+// (the committed digest already matches the committed JSON) boot writes nothing.
+//
+// These two tests boot a FRESH, isolated server on its OWN port (8095 — distinct
+// from this file's singleton 8097, smoke.mjs 8098, and every other suite port) so
+// the self-heal actually runs against the file state we set up. DESIGN_FEEDBACK.md
+// is a LIVE owner file: each test snapshots its CURRENT bytes and restores them
+// EXACTLY in a finally, even if an assertion throws.
+
+const FEEDBACK_ABS = path.join(ROOT, 'content-studio', 'DESIGN_FEEDBACK.md');
+const COMMENTS_ABS = path.join(ROOT, 'content-studio', 'design-comments.json');
+
+// Corruption-safe load of the comment store from disk, byte-identical in behaviour
+// to the server's loadComments (bad/missing JSON → empty store). The digest the
+// server self-heals TO is renderFeedbackDigest of exactly this.
+function loadCommentsFromDisk() {
+  let raw = null;
+  try {
+    raw = fs.readFileSync(COMMENTS_ABS, 'utf8');
+  } catch {
+    return { version: 1, comments: [] };
+  }
+  try {
+    const v = JSON.parse(raw);
+    if (v && typeof v === 'object' && Array.isArray(v.comments)) return v;
+  } catch {
+    /* corrupt → empty store */
+  }
+  return { version: 1, comments: [] };
+}
+
+test('contract B: a fresh boot regenerates a GARBAGE DESIGN_FEEDBACK.md from the JSON of record', async () => {
+  const feedbackBytes = fs.readFileSync(FEEDBACK_ABS); // snapshot CURRENT owner bytes
+  // What the server must converge the digest to: the digest of the JSON on disk.
+  const want = renderFeedbackDigest(loadCommentsFromDisk());
+  let srv = null;
+  try {
+    // Corrupt the digest so it is provably out of sync with the JSON.
+    fs.writeFileSync(FEEDBACK_ABS, 'GARBAGE not a valid digest @@@\n');
+    assert.notEqual(fs.readFileSync(FEEDBACK_ABS, 'utf8'), want, 'precondition: digest starts out of sync');
+
+    // Boot a fresh isolated server — the self-heal runs once, at boot.
+    srv = await spawnServerOnce(8095);
+
+    // The digest on disk must now equal the regeneration from the JSON of record.
+    assert.equal(
+      fs.readFileSync(FEEDBACK_ABS, 'utf8'),
+      want,
+      'boot must regenerate DESIGN_FEEDBACK.md from design-comments.json',
+    );
+  } finally {
+    if (srv) await srv.stop();
+    fs.writeFileSync(FEEDBACK_ABS, feedbackBytes); // restore owner bytes EXACTLY
+  }
+});
+
+test('contract B: a normal boot (digest already in sync) does NOT change DESIGN_FEEDBACK.md bytes', async () => {
+  const feedbackBytes = fs.readFileSync(FEEDBACK_ABS); // snapshot CURRENT owner bytes
+  let srv = null;
+  try {
+    // First put the digest in sync with the JSON of record (what a committed,
+    // self-consistent tree looks like). This is itself the want bytes.
+    const want = renderFeedbackDigest(loadCommentsFromDisk());
+    fs.writeFileSync(FEEDBACK_ABS, want);
+    const beforeBoot = fs.readFileSync(FEEDBACK_ABS); // exact bytes pre-boot
+
+    // Boot a fresh isolated server — with an in-sync digest this must be a no-op.
+    srv = await spawnServerOnce(8095);
+
+    assert.deepEqual(
+      fs.readFileSync(FEEDBACK_ABS),
+      beforeBoot,
+      'an in-sync digest must survive boot byte-for-byte (no-op self-heal)',
+    );
+  } finally {
+    if (srv) await srv.stop();
+    fs.writeFileSync(FEEDBACK_ABS, feedbackBytes); // restore owner bytes EXACTLY
+  }
 });

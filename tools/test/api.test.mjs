@@ -31,6 +31,8 @@ import {
   restoreSnapshot,
   acquireStatusSection,
   releaseStatusSection,
+  acquireCommentsSection,
+  releaseCommentsSection,
   writeFixtures,
   removeFixtures,
   FIXTURE_ONE,
@@ -55,9 +57,17 @@ before(async () => {
   // status.json is a SHARED file; hold the cross-process section lock for this
   // file's whole run so it never overlaps status-statemachine.test.mjs on it —
   // its corrupt-store test and restore would otherwise clobber sibling writes
-  // (see helpers.mjs acquireStatusSection). Acquire BEFORE snapshotting so the
-  // snapshot captures a stable, sibling-restored status.json.
+  // (see helpers.mjs acquireStatusSection). This file's restoreSnapshot also
+  // rewrites the WHOLE write surface (including design-comments.json +
+  // DESIGN_FEEDBACK.md), and its facts/save tests assert on FACTS.md, so it must
+  // also hold the design-comments section — otherwise comments.test.mjs's restore
+  // (which rewrites FACTS.md) and its Contract B self-heal assertions (which read
+  // DESIGN_FEEDBACK.md mid-test) race against this file. Acquire status THEN
+  // comments (the same order status-statemachine.test.mjs uses) so the two locks
+  // never deadlock. Acquire BOTH before snapshotting so the snapshot captures a
+  // stable, sibling-restored state.
   await acquireStatusSection();
+  await acquireCommentsSection();
   snap = snapshot();
   writeFixtures();
   assert.ok(scanTextRetired(RETIRED_TEXT).length > 0, 'runtime retired string must trip the scanner');
@@ -68,6 +78,7 @@ after(async () => {
   await stopServer();
   removeFixtures();
   restoreSnapshot(snap);
+  releaseCommentsSection();
   releaseStatusSection();
 });
 

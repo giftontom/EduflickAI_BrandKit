@@ -8,7 +8,7 @@
    any state, including a completely empty store. */
 
 import { el, clear, openModal, fmtDate } from '../dom.mjs';
-import { STATUSES, statusBadge, confirmOverride } from '../components/status-badge.mjs';
+import { STATUSES, statusBadge, confirmOverride, confirmReviewGate } from '../components/status-badge.mjs';
 
 /* the legal forward moves the client knows about, mirroring the server contract
    (same status is an idempotent no-op and is never offered). Used only to label
@@ -101,16 +101,20 @@ export function render(root, ctx) {
     return parts.length > 1 ? parts.slice(1).join('/') : id;
   }
 
-  /* move id to next, optimistic via ctx.saveStatus. Two independent guards can
-     reject the POST with a 409, branched on the body's `reason`:
-       • the state machine (illegal transition) → {from, to, legalNext} (no
-         reason) → confirmOverride → re-save with override:true.
+  /* move id to next, optimistic via ctx.saveStatus. Three independent guards can
+     reject the POST with a 409, branched purely on the body's `reason`:
+       • the review gate (approving with open review comments) →
+         {reason:'open-comments', openCount} → confirmReviewGate → re-save with
+         allowOpenComments:true.
        • the stale-export guard (scheduling/posting an absent/stale render) →
          {reason:'stale-export', assetState} → confirmStaleSchedule → re-save
          with allowStale:true.
-     override and allowStale are distinct wire flags: force carries override,
-     allowStale carries the stale bypass, and neither implies the other. */
-  async function move(id, next, { force = false, allowStale = false } = {}) {
+       • else the state machine (illegal transition) → {from, to, legalNext} (no
+         reason) → confirmOverride → re-save with override:true.
+     force/allowStale/allowOpenComments are distinct wire flags: force carries
+     override, allowStale carries the stale bypass, allowOpenComments carries the
+     review-gate bypass, and none implies another. */
+  async function move(id, next, { force = false, allowStale = false, allowOpenComments = false } = {}) {
     /* client-side go-live guard, before any POST: warn when scheduling/posting a
        stale or missing export, then send allowStale:true so the matching SERVER
        guard passes in one round trip. Skipped once allowStale is already set, and
@@ -128,20 +132,28 @@ export function render(root, ctx) {
     if (next === 'posted') patch.postedAt = new Date().toISOString();
     if (force) patch.override = true;
     if (allowStale) patch.allowStale = true;
+    if (allowOpenComments) patch.allowOpenComments = true;
     try {
       await ctx.saveStatus(id, patch);
       renderBoard();
     } catch (err) {
       if (err && err.status === 409 && err.body) {
-        /* the stale-export 409 (server-side guard the client check may have
-           missed): same "schedule anyway?" confirm, then re-save with allowStale. */
-        if (err.body.reason === 'stale-export' && !allowStale) {
+        /* branch purely on body.reason across the three guards, preserving any
+           flags already set so a re-save clears only the guard it just answered. */
+        if (err.body.reason === 'open-comments' && !allowOpenComments) {
+          /* the review gate: open comments block approval — confirm, then re-save
+             with allowOpenComments (resolve them in the feedback view first). */
+          const go = await confirmReviewGate(err.body, id);
+          if (go) { await move(id, next, { force, allowStale, allowOpenComments: true }); return; }
+        } else if (err.body.reason === 'stale-export' && !allowStale) {
+          /* the stale-export 409 (server-side guard the client check may have
+             missed): same "schedule anyway?" confirm, then re-save with allowStale. */
           const go = await confirmStaleFromServer(id, next, err.body);
-          if (go) { await move(id, next, { force, allowStale: true }); return; }
-        } else if (err.body.reason !== 'stale-export' && !force) {
+          if (go) { await move(id, next, { force, allowStale: true, allowOpenComments }); return; }
+        } else if (err.body.reason !== 'stale-export' && err.body.reason !== 'open-comments' && !force) {
           /* the illegal-transition 409 (carries legalNext): offer the override. */
           const ok = await confirmOverride(err.body, id);
-          if (ok) { await move(id, next, { force: true, allowStale }); return; }
+          if (ok) { await move(id, next, { force: true, allowStale, allowOpenComments }); return; }
         }
       }
       /* a non-409 failure or a declined override: re-render from canonical state

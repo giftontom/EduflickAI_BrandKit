@@ -23,20 +23,25 @@ function post(url, payload) {
 
 export const getManifest = () => request('/api/manifest');
 export const getStatus = () => request('/api/status');
-/* status patch — the server now guards transitions via a state machine. An
-   illegal transition between two existing statuses → 409 {error, from, to,
-   legalNext}; pass override:true to force it (recorded with overridden:true).
-   A move INTO scheduled/posted whose export is absent or stale → 409 {error,
-   reason:'stale-export', id, to, assetState}; pass allowStale:true to force
-   past THAT guard only. override and allowStale are independent control flags:
-   override bypasses the transition guard, allowStale bypasses the stale-export
-   guard, and neither implies the other. Both are wire-only — folded into the
-   patch the server reads, never stored on the entry. The optional 3rd/4th args
-   are a convenience so callers can pass either flag positionally. */
-export const setStatus = (id, patch, override = false, allowStale = false) => {
+/* status patch — the server now guards transitions via a state machine. Three
+   independent guards can reject a patch, each cleared by its own wire-only flag:
+     • illegal transition between two existing statuses → 409 {error, from, to,
+       legalNext}; pass override:true to force it (recorded with overridden:true).
+     • a move INTO scheduled/posted whose export is absent or stale → 409 {error,
+       reason:'stale-export', id, to, assetState}; pass allowStale:true to force
+       past THAT guard only.
+     • approving (resulting status === 'approved') while the asset still has open
+       review comments → 409 {error, reason:'open-comments', id, to:'approved',
+       openCount}; pass allowOpenComments:true to approve anyway.
+   override, allowStale and allowOpenComments are independent control flags: each
+   bypasses exactly one guard and none implies another. All three are wire-only —
+   folded into the patch the server reads, never stored on the entry. The optional
+   3rd/4th/5th args are a convenience so callers can pass any flag positionally. */
+export const setStatus = (id, patch, override = false, allowStale = false, allowOpenComments = false) => {
   let p = patch;
   if (override) p = { ...p, override: true };
   if (allowStale) p = { ...p, allowStale: true };
+  if (allowOpenComments) p = { ...p, allowOpenComments: true };
   return post('/api/status', { id, patch: p });
 };
 export const getActions = () => request('/api/actions');

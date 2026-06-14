@@ -49,21 +49,25 @@ async function refreshState({ silent = false } = {}) {
 }
 
 /* optimistic status save: local state first, API second, revert on failure.
-   `patch.override` (forces a guarded transition) and `patch.allowStale` (forces
-   a move into scheduled/posted past the stale-export guard) are both wire-only
-   control flags — they travel to the server but are never stored on the local
-   entry. A 409 from the state machine (illegal transition) or the stale-export
-   guard reverts the optimistic write and rethrows so the caller can surface the
-   reason and offer the matching override / schedule-anyway path. */
+   `patch.override` (forces a guarded transition), `patch.allowStale` (forces a
+   move into scheduled/posted past the stale-export guard) and
+   `patch.allowOpenComments` (approves past the open-comments review gate) are all
+   wire-only control flags — they travel to the server but are never stored on the
+   local entry. A 409 from the state machine (illegal transition), the stale-export
+   guard, or the review gate reverts the optimistic write and rethrows so the
+   caller can surface the reason and offer the matching override / schedule-anyway
+   / approve-anyway path. */
 async function saveStatus(id, patch) {
   if (!state.status) state.status = { version: 1, assets: {} };
   if (!state.status.assets) state.status.assets = {};
   const assets = state.status.assets;
   const prev = assets[id];
-  const { override, allowStale, ...localPatch } = patch || {};
+  const { override, allowStale, allowOpenComments, ...localPatch } = patch || {};
   assets[id] = { ...(prev || {}), ...localPatch };
   try {
-    const merged = await api.setStatus(id, localPatch, Boolean(override), Boolean(allowStale));
+    const merged = await api.setStatus(
+      id, localPatch, Boolean(override), Boolean(allowStale), Boolean(allowOpenComments),
+    );
     assets[id] = merged;
     return merged;
   } catch (err) {

@@ -35,6 +35,8 @@ import {
   restoreSnapshot,
   acquireStatusSection,
   releaseStatusSection,
+  acquireCommentsSection,
+  releaseCommentsSection,
 } from './helpers.mjs';
 
 // Own port (api.test.mjs 8099, comments.test.mjs 8097) so node:test can run the
@@ -61,9 +63,12 @@ let snap;
 before(async () => {
   // status.json is a SHARED file; hold the cross-process section lock for this
   // file's whole run so it never overlaps api.test.mjs on it (see helpers.mjs).
-  // Acquire BEFORE snapshotting so the snapshot captures a stable, sibling-
-  // restored status.json — not a mid-run state.
+  // Contract A's review-gate cases also write design-comments.json (comment pins
+  // that drive the open-comments tally), which comments.test.mjs writes too, so
+  // hold THAT section for the whole run as well. Acquire BOTH before snapshotting
+  // so the snapshot captures a stable, sibling-restored state — not a mid-run one.
   await acquireStatusSection();
+  await acquireCommentsSection();
   snap = snapshot();
   await startServer();
 });
@@ -71,6 +76,7 @@ before(async () => {
 after(async () => {
   await stopServer();
   restoreSnapshot(snap);
+  releaseCommentsSection();
   releaseStatusSection();
 });
 
@@ -418,11 +424,160 @@ test('contract A positive (absent): scheduling a KNOWN-but-absent asset → 409 
   }
 });
 
+// --------------------------------------------- Contract A: review gate (approve)
+//
+// AFTER the legality + stale-export guards, and ONLY when the RESULTING status is
+// 'approved' on a real write (creation-to-approved counts), the server tallies the
+// asset's OPEN design comments. If any are open the approve is refused 409
+// {reason:'open-comments', id, to:'approved', openCount} and NOTHING is written —
+// UNLESS the patch carries allowOpenComments:true. This flag is DISTINCT from
+// override (legality) and allowStale (stale-export): none implies another, and it
+// is never persisted on the stored entry. The gate is independent of the stale
+// guard (which fires only for scheduled/posted) and of the legality guard (override
+// forces an illegal move but does NOT bypass this gate). Resolved/wontfix comments
+// do not count as open, so they never block.
+//
+// The comments these tests create live in design-comments.json (a LIVE owner file
+// also covered by the before() snapshot), so they are DELETEd via the API in a
+// finally and the whole write surface is restored from the snapshot afterwards.
+// Comment assetIds use the '__rev_test/' prefix so the tally only ever sees this
+// file's pins on this file's status ids.
+
+// A real source file under the repo root — validateAssetRef requires the comment's
+// assetRef.source to resolve to an existing FILE (already used by comments.test.mjs).
+const REV_SOURCE = 'design-system/collateral/launch-grid.html';
+
+// Track every comment id this file creates so the finally below removes each one.
+const createdCommentIds = [];
+
+// Create an OPEN design comment for `assetId` and return its uuid (also tracked).
+async function createOpenComment(assetId) {
+  const { status, body } = await apiJSON('/api/comments', {
+    json: {
+      comment: {
+        text: `review-gate fixture for ${assetId}`,
+        assetRef: {
+          assetId,
+          source: REV_SOURCE,
+          anchor: { type: 'normalized', x: 0.5, y: 0.5 },
+        },
+      },
+    },
+  });
+  assert.equal(status, 200, `comment create should succeed: ${JSON.stringify(body)}`);
+  assert.ok(body.id, 'a created comment carries a uuid');
+  assert.equal((body.status || 'open'), 'open', 'a fresh comment defaults to open');
+  createdCommentIds.push(body.id);
+  return body.id;
+}
+
+// Flip a comment to a non-open status (resolved/wontfix) via the upsert path
+// (POST /api/comments with {id, status}) — the exact status-only edit shape.
+async function setCommentStatus(commentId, commentStatus) {
+  const { status, body } = await apiJSON('/api/comments', {
+    json: { comment: { id: commentId, status: commentStatus } },
+  });
+  assert.equal(status, 200, `comment status edit should succeed: ${JSON.stringify(body)}`);
+  assert.equal(body.status, commentStatus, 'the comment carries the new status');
+}
+
+test('contract A: approve with an OPEN comment → 409 open-comments; allowOpenComments:true → 200', async () => {
+  const id = '__rev_test/a';
+  await createOpenComment(id);
+
+  // Creation-to-approved is a real write to 'approved' → the gate must fire.
+  const blocked = await setStatus(id, { status: 'approved' });
+  assert.equal(blocked.status, 409, `open comment must block approve: ${JSON.stringify(blocked.body)}`);
+  assert.equal(blocked.body.reason, 'open-comments', 'the 409 carries reason:open-comments');
+  assert.equal(blocked.body.id, id, 'the 409 echoes the offending id');
+  assert.equal(blocked.body.to, 'approved', 'the 409 echoes the attempted status');
+  assert.ok(blocked.body.openCount >= 1, 'openCount reflects the open comment(s)');
+
+  // The blocked approve wrote NOTHING: the id must not exist in status.json yet.
+  const afterBlock = await readEntry(id);
+  assert.equal(afterBlock, undefined, 'a blocked approve must not create the entry');
+
+  // allowOpenComments:true is the distinct bypass → the same approve now lands.
+  const allowed = await apiJSON('/api/status', {
+    json: { id, patch: { status: 'approved', allowOpenComments: true } },
+  });
+  assert.equal(allowed.status, 200, `allowOpenComments:true must let approve through: ${JSON.stringify(allowed.body)}`);
+  assert.equal(allowed.body.status, 'approved', 'allowOpenComments applied the approved status');
+  // The control flag is never persisted on the stored entry.
+  assert.ok(!('allowOpenComments' in allowed.body), 'allowOpenComments must not persist on the entry');
+});
+
+test('contract A: a RESOLVED comment does not block approve → 200 (resolved/wontfix are not open)', async () => {
+  const id = '__rev_test/b';
+  const commentId = await createOpenComment(id);
+  // Resolve it: the tally for this id drops to zero open.
+  await setCommentStatus(commentId, 'resolved');
+
+  // Approve a FRESH id whose only comment is resolved → the gate must not fire.
+  const { status, body } = await setStatus(id, { status: 'approved' });
+  assert.equal(status, 200, `a resolved-only asset must approve cleanly: ${JSON.stringify(body)}`);
+  assert.equal(body.status, 'approved');
+});
+
+test('contract A independence: the gate does NOT fire for a non-approved target (open comment → retired) → 200', async () => {
+  const id = '__rev_test/c';
+  await createOpenComment(id);
+  // Creation straight to 'retired' is a real write but the target is not approved,
+  // so the open-comments gate is irrelevant and the move lands.
+  const { status, body } = await setStatus(id, { status: 'retired' });
+  assert.equal(status, 200, `open comment must not block a non-approved target: ${JSON.stringify(body)}`);
+  assert.equal(body.status, 'retired');
+});
+
+test('contract A independence: override (legality) does NOT bypass the open-comments gate → 409', async () => {
+  const id = '__rev_test/d';
+  await createOpenComment(id);
+  // Create at 'posted'; posted→approved is an illegal (backward) transition.
+  const created = await setStatus(id, { status: 'posted' });
+  assert.equal(created.status, 200, JSON.stringify(created.body));
+
+  // override:true forces the illegal transition past the legality guard, but the
+  // open-comments gate is independent and must still refuse the approve.
+  const { status, body } = await apiJSON('/api/status', {
+    json: { id, patch: { status: 'approved', override: true } },
+  });
+  assert.equal(status, 409, `override must not bypass the open-comments gate: ${JSON.stringify(body)}`);
+  assert.equal(body.reason, 'open-comments', 'override-only approve still trips the open-comments gate');
+  assert.ok(body.openCount >= 1, 'openCount reflects the open comment');
+
+  // Nothing was written: the stored status is still posted.
+  const entry = await readEntry(id);
+  assert.equal(entry.status, 'posted', 'an open-comments 409 must not mutate the stored status');
+});
+
+test('contract A teardown: delete every __rev_test comment created by this file', async () => {
+  // Remove the design pins this file added so design-comments.json + the digest
+  // return to their pre-test shape (the snapshot restore in after() and the zz
+  // residue test below are the byte-exact backstops; this exercises the DELETE
+  // path and proves no orphaned __rev_test pins remain in the live store).
+  for (const cid of createdCommentIds) {
+    const { status } = await apiJSON(`/api/comments/${cid}`, { method: 'DELETE' });
+    assert.ok(status === 200 || status === 404, `DELETE of ${cid} should resolve cleanly (got ${status})`);
+  }
+  const { body } = await apiJSON('/api/comments');
+  const residue = (body.comments || []).filter(
+    (c) => c.assetRef && typeof c.assetRef.assetId === 'string' && c.assetRef.assetId.startsWith('__rev_test/'),
+  );
+  assert.equal(residue.length, 0, 'no __rev_test comment pins may remain after teardown');
+});
+
 // ------------------------------------------------- residue / tree cleanliness
 
-test('zz residue: restore leaves no __sm_test_ entries in status.json', async () => {
+test('zz residue: restore leaves no __sm_test_ or __rev_test residue in the write surface', async () => {
   restoreSnapshot(snap);
   // After restore, the live store must hold none of this file's test ids.
   const raw = fs.readFileSync(STATUS_ABS, 'utf8');
   assert.ok(!raw.includes('__sm_test_'), 'status.json still carries __sm_test_ residue after restore');
+  assert.ok(!raw.includes('__rev_test'), 'status.json still carries __rev_test residue after restore');
+  // design-comments.json + DESIGN_FEEDBACK.md are part of the same snapshot — the
+  // Contract A pins above must not survive the restore either.
+  const commentsRaw = fs.readFileSync(path.join(ROOT, 'content-studio', 'design-comments.json'), 'utf8');
+  assert.ok(!commentsRaw.includes('__rev_test'), 'design-comments.json still carries __rev_test residue after restore');
+  const digestRaw = fs.readFileSync(path.join(ROOT, 'content-studio', 'DESIGN_FEEDBACK.md'), 'utf8');
+  assert.ok(!digestRaw.includes('__rev_test'), 'DESIGN_FEEDBACK.md still carries __rev_test residue after restore');
 });

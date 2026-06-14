@@ -1576,3 +1576,13 @@ a.ops-id:hover { color: var(--fg1); text-decoration: underline; }
    the neutral illegal-transition override modal. */
 .stale-warn-form { border-left: 2px solid var(--warn); padding-left: 12px; }
 .stale-warn-form .pop-title { color: var(--warn); }
+
+/* ---- review-gate modal (no approve with open comments; board + dropdown) ----
+   the third parallel guard modal: reuses .override-form / .override-msg /
+   .btn-mini-warn, and adds an accent hairline so the "resolve comments first?"
+   gate reads apart from the warm stale-export warning and the neutral
+   illegal-transition override. */
+.review-warn-form { border-left: 2px solid var(--accent); padding-left: 12px; }
+.review-warn-form .pop-title { color: var(--accent); }
+.review-gate-link { color: var(--accent); text-decoration: underline; }
+.review-gate-link:hover { color: var(--accent-light); }

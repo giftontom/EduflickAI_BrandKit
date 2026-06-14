@@ -20,8 +20,14 @@
 //                                  posted while it is absent or stale is 409
 //                                  {error, reason:'stale-export', id, to,
 //                                  assetState:{known,exists,stale}} unless
-//                                  patch.allowStale (distinct from override;
-//                                  neither flag is persisted).
+//                                  patch.allowStale. Landing an asset in
+//                                  'approved' while it still has open design
+//                                  comments is 409 {error, reason:'open-comments',
+//                                  id, to:'approved', openCount} unless
+//                                  patch.allowOpenComments. override, allowStale
+//                                  and allowOpenComments are three distinct
+//                                  control flags — none implies another and none
+//                                  is persisted.
 //   GET  /api/actions              {running, lastRun} (lastRun survives restarts)
 //   POST /api/actions/run          {action} → {id} | 409 busy | 400 unknown
 //   GET  /api/actions/:id/stream   SSE log/exit events (replay + live)
@@ -68,7 +74,10 @@
 // traversal-guarded, atomic, and facts-guarded with NO override (the repo
 // facts-guard forbids retired strings anywhere under content-studio/, so drafts
 // must stay clean). (export-zip and the generate/qa endpoints are read-only.)
-// Binds 127.0.0.1 only (loopback asserted at boot, exits
+// On boot, DESIGN_FEEDBACK.md is self-healed from design-comments.json (the
+// derived digest is regenerated from the JSON of record, so a crash between
+// persistComments's two writes self-corrects on the next start; a no-op when
+// already in sync). Binds 127.0.0.1 only (loopback asserted at boot, exits
 // on a busy port). Every request must carry a loopback Host header, and
 // non-GET/HEAD /api calls with an Origin header must be same-origin — 403
 // otherwise (DNS-rebinding + CSRF guards; no CORS headers are ever set).
@@ -238,6 +247,7 @@ function enqueueStatus(task) {
 //   { ok: true,  entry }                      → 200, write happened (or no-op)
 //   { ok: false, from, to, legalNext }         → 409 illegal transition, no write
 //   { ok: false, reason:'stale-export', id, to, assetState } → 409, no write
+//   { ok: false, reason:'open-comments', id, to:'approved', openCount } → 409, no write
 // Legality (only relevant when the patch carries a status):
 //   • brand-new id              → creation, any status, history [{from:null,to,at}]
 //   • same status               → idempotent no-op, no history entry, still writes
@@ -248,9 +258,14 @@ function enqueueStatus(task) {
 // Stale-export guard (independent of the legality guard, runs AFTER it): once a
 // status change to scheduled/posted is otherwise allowed, a KNOWN manifest asset
 // that is absent (never exported) or stale (source newer than export) is blocked
-// unless the patch carries allowStale:true. override and allowStale are distinct
-// control flags — neither implies the other, and neither is persisted on the
-// entry. Unknown ids (abstract/test ids, launch-grid pseudo-assets) are never
+// unless the patch carries allowStale:true. Review gate (independent of both the
+// legality and stale guards, runs AFTER them): once a status change whose result
+// is 'approved' is otherwise allowed (creation-to-approved counts), the asset is
+// blocked while it still has open design comments unless the patch carries
+// allowOpenComments:true; the open count comes from tallyComments(loadComments())
+// read fresh inside this queue. override, allowStale and allowOpenComments are
+// three distinct control flags — none implies another, and none is persisted on
+// the entry. Unknown ids (abstract/test ids, launch-grid pseudo-assets) are never
 // gated. The manifest scan runs here, inside the queue, so the verdict is fresh.
 function patchStatus(id, patch) {
   return enqueueStatus(() => {
@@ -259,7 +274,7 @@ function patchStatus(id, patch) {
     const isNew = existing === undefined;
     const from = isNew ? null : existing.status ?? null;
     const at = new Date().toISOString();
-    const { override, allowStale, ...fields } = patch;
+    const { override, allowStale, allowOpenComments, ...fields } = patch;
 
     // Decide legality + whether this write appends a history entry. Only a real
     // status change records history; everything else just merges fields.
@@ -294,6 +309,18 @@ function patchStatus(id, patch) {
           };
         }
       }
+
+      // Review gate: an asset cannot land in `approved` while it still carries
+      // open design comments. Only on a real write (creation-to-approved counts);
+      // independent of the legality and stale guards. The tally reads the fresh
+      // comment store from inside this serialized task. allowOpenComments:true is
+      // the distinct bypass (never implies/implied by override or allowStale).
+      if (appendHistory && to === 'approved' && allowOpenComments !== true) {
+        const open = tallyComments(loadComments()).byAsset.get(id)?.open || 0;
+        if (open > 0) {
+          return { ok: false, reason: 'open-comments', id, to: 'approved', openCount: open };
+        }
+      }
     }
 
     const entry = { ...(existing || {}), ...fields, updatedAt: at };
@@ -307,9 +334,11 @@ function patchStatus(id, patch) {
     } else if (existing?.history) {
       entry.history = existing.history;
     }
-    // override and allowStale are control flags, never persisted on the entry.
+    // override, allowStale and allowOpenComments are control flags, never
+    // persisted on the entry.
     delete entry.override;
     delete entry.allowStale;
+    delete entry.allowOpenComments;
 
     store.assets[id] = entry;
     writeAtomic(STATUS_FILE, JSON.stringify(store, null, 2) + '\n');
@@ -1757,6 +1786,17 @@ async function handleApi(req, res, pathname) {
             assetState: result.assetState,
           });
         }
+        if (result.reason === 'open-comments') {
+          // Approve blocked: the asset still has open design comments and the
+          // patch did not carry allowOpenComments. Nothing was written.
+          return sendJSON(res, 409, {
+            error: `cannot approve ${result.id}: ${result.openCount} open comment${result.openCount === 1 ? '' : 's'}`,
+            reason: 'open-comments',
+            id: result.id,
+            to: result.to,
+            openCount: result.openCount,
+          });
+        }
         // Illegal transition, no override — nothing was written.
         return sendJSON(res, 409, {
           error: `illegal transition: ${result.from} → ${result.to}`,
@@ -1956,6 +1996,20 @@ server.on('error', (err) => {
   }
   process.exit(1);
 });
+
+// Boot-time self-heal: DESIGN_FEEDBACK.md is a derived view of the comment store
+// of record. persistComments writes the JSON then the digest in two steps; a
+// crash between them leaves the digest stale. Regenerate it from the JSON on
+// boot so the two converge. loadComments is corruption-safe (bad JSON → empty
+// store), and in the normal case (digest already matches the JSON) this is a
+// no-op that writes nothing.
+{
+  const want = renderFeedbackDigest(loadComments());
+  if (readOrNull(FEEDBACK_FILE) !== want) {
+    writeAtomic(FEEDBACK_FILE, want);
+    console.log('self-healed DESIGN_FEEDBACK.md from design-comments.json');
+  }
+}
 
 server.listen(PORT, HOST, () => {
   console.log(`eduflick brand studio`);

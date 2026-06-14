@@ -59,45 +59,65 @@ export const WRITE_SURFACE = [
 // status.json and never blocks. Files that touch status.json call
 // acquireStatusSection() in before() (after snapshot) and releaseStatusSection()
 // in after() (before restore).
-const STATUS_LOCK = path.join(ROOT, 'content-studio', '.status.json.testlock');
-let heldStatusSection = false;
-
-export async function acquireStatusSection() {
-  const deadline = Date.now() + 60000; // generous: a whole file's run may be held
-  for (;;) {
-    try {
-      // O_CREAT|O_EXCL: the create succeeds for exactly one holder at a time.
-      const fd = fs.openSync(STATUS_LOCK, 'wx');
-      fs.writeSync(fd, `${process.pid} ${Date.now()}`);
-      fs.closeSync(fd);
-      heldStatusSection = true;
-      return;
-    } catch (e) {
-      if (e.code !== 'EEXIST') throw e;
-      // Reclaim a stale lock (a crashed holder) whose mtime is older than 45s —
-      // longer than any honest file run — so the suite never deadlocks on an
-      // orphaned lockfile.
-      try {
-        const st = fs.statSync(STATUS_LOCK);
-        if (Date.now() - st.mtimeMs > 45000) fs.rmSync(STATUS_LOCK, { force: true });
-      } catch {
-        /* vanished between stat and now — loop and retry the create */
+// Generic advisory section lock: O_CREAT|O_EXCL create succeeds for exactly one
+// holder at a time, with the same stale-reclaim (mtime > 45s) and 60s wait as
+// before. `held` tracks acquisition so release is idempotent. Both the status
+// lock and the design-comments lock (added for Contract A's review-gate tests,
+// which write design-comments.json from status-statemachine.test.mjs while
+// comments.test.mjs writes it too) are built from this one primitive.
+function makeSectionLock(lockPath) {
+  let held = false;
+  return {
+    async acquire() {
+      const deadline = Date.now() + 60000; // generous: a whole file's run may be held
+      for (;;) {
+        try {
+          const fd = fs.openSync(lockPath, 'wx');
+          fs.writeSync(fd, `${process.pid} ${Date.now()}`);
+          fs.closeSync(fd);
+          held = true;
+          return;
+        } catch (e) {
+          if (e.code !== 'EEXIST') throw e;
+          // Reclaim a stale lock (a crashed holder) whose mtime is older than 45s
+          // — longer than any honest file run — so the suite never deadlocks on an
+          // orphaned lockfile.
+          try {
+            const st = fs.statSync(lockPath);
+            if (Date.now() - st.mtimeMs > 45000) fs.rmSync(lockPath, { force: true });
+          } catch {
+            /* vanished between stat and now — loop and retry the create */
+          }
+          if (Date.now() > deadline) throw new Error(`section lock wait timed out: ${lockPath}`);
+          await delay(25);
+        }
       }
-      if (Date.now() > deadline) throw new Error('status section lock wait timed out');
-      await delay(25);
-    }
-  }
+    },
+    release() {
+      if (!held) return;
+      held = false;
+      try {
+        fs.rmSync(lockPath, { force: true });
+      } catch {
+        /* already gone */
+      }
+    },
+  };
 }
 
-export function releaseStatusSection() {
-  if (!heldStatusSection) return;
-  heldStatusSection = false;
-  try {
-    fs.rmSync(STATUS_LOCK, { force: true });
-  } catch {
-    /* already gone */
-  }
-}
+const statusLock = makeSectionLock(path.join(ROOT, 'content-studio', '.status.json.testlock'));
+export const acquireStatusSection = () => statusLock.acquire();
+export const releaseStatusSection = () => statusLock.release();
+
+// content-studio/design-comments.json is SHARED across test files the same way
+// status.json is: comments.test.mjs writes it, and Contract A's review-gate cases
+// in status-statemachine.test.mjs now create/delete comment pins to drive the tally.
+// Both files hold this section for their whole run (acquire in before(), release in
+// after()) so their snapshot/restore of design-comments.json + DESIGN_FEEDBACK.md
+// never overlaps the other file mid-test.
+const commentsLock = makeSectionLock(path.join(ROOT, 'content-studio', '.design-comments.json.testlock'));
+export const acquireCommentsSection = () => commentsLock.acquire();
+export const releaseCommentsSection = () => commentsLock.release();
 
 // ---- same-origin fetch ----------------------------------------------------
 
@@ -205,6 +225,51 @@ export async function stopServer() {
     });
     c.kill('SIGTERM');
   });
+}
+
+// Spawn an ISOLATED, one-off server child on its OWN port — independent of the
+// startServer()/stopServer() singleton. Used by Contract B's self-heal test, which
+// must boot a FRESH process AFTER writing garbage into DESIGN_FEEDBACK.md (the
+// self-heal runs once, at boot). Polls that port's own manifest until ready, then
+// returns a handle with stop() that SIGTERM/SIGKILLs only this child. The port
+// must differ from the caller's singleton port so the binds never collide.
+export async function spawnServerOnce(port) {
+  const c = spawn(NODE, ['studio-server.mjs'], {
+    cwd: TOOLS,
+    env: { ...process.env, STUDIO_PORT: String(port), PORT: String(port) },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  c.unref?.();
+  c.stdout.on('data', () => {});
+  c.stderr.on('data', () => {});
+  const origin = `http://127.0.0.1:${port}`;
+  const deadline = Date.now() + 15000;
+  for (;;) {
+    if (c.exitCode != null) throw new Error(`isolated server exited early (code ${c.exitCode})`);
+    try {
+      const res = await fetch(`${origin}/api/manifest`, { headers: { Origin: origin } });
+      if (res.status === 200) break;
+    } catch {
+      /* not up yet */
+    }
+    if (Date.now() > deadline) throw new Error('isolated server did not become ready within 15s');
+    await delay(150);
+  }
+  return {
+    child: c,
+    async stop() {
+      await new Promise((resolve) => {
+        const hardKill = setTimeout(() => {
+          if (c.exitCode == null) c.kill('SIGKILL');
+        }, 3000);
+        c.once('close', () => {
+          clearTimeout(hardKill);
+          resolve();
+        });
+        c.kill('SIGTERM');
+      });
+    },
+  };
 }
 
 export function delay(ms) {
