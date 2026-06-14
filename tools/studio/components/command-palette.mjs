@@ -30,6 +30,12 @@ const ACTION_ITEMS = [
 
 let opened = false;
 
+/* encode a doc path the same way views/docs.mjs does, so the route round-trips
+   through main.mjs's /docs/(.+) param parser (decodeURIComponent per segment). */
+function encodeDocPath(p) {
+  return String(p).split('/').map(encodeURIComponent).join('/');
+}
+
 export function init(ctx) {
   const onKey = (e) => {
     const k = e.key.toLowerCase();
@@ -46,9 +52,17 @@ function buildItems(ctx) {
   const items = [];
   for (const r of ROUTE_ITEMS) items.push({ ...r, kind: 'route' });
   for (const a of ACTION_ITEMS) items.push({ ...a, kind: 'action' });
-  const docs = (ctx.manifest && ctx.manifest.documents) || [];
+  /* the markdown corpus is manifest.docs ({title, path, dir}); manifest.documents
+     is the separate HTML kit library. Route each doc the way the #/docs view does. */
+  const docs = (ctx.manifest && ctx.manifest.docs) || [];
   for (const d of docs) {
-    items.push({ label: String(d.label || d.path).toLowerCase(), hint: `docs · ${d.path}`, route: `/docs/${d.path}`, kind: 'route' });
+    if (!d || !d.path) continue;
+    items.push({
+      label: String(d.title || d.path).toLowerCase(),
+      hint: `docs · ${d.path}`,
+      route: `/docs/${encodeDocPath(d.path)}`,
+      kind: 'route',
+    });
   }
   return items;
 }
@@ -73,13 +87,21 @@ function open(ctx) {
   let filtered = all.slice();
   let cursor = 0;
 
-  function run(item) {
+  async function run(item) {
     close();
     if (item.kind === 'action') {
+      announce(`running ${item.action}`);
       try {
-        ctx.api.runAction(item.action);
-        announce(`running ${item.action}`);
-      } catch { announce(`could not start ${item.action}`); }
+        await ctx.api.runAction(item.action);
+        announce(`started ${item.action}`);
+      } catch (err) {
+        /* runAction rejects on a non-ok response (e.g. 409 already running);
+           surface it on the live region rather than leaking an unhandled rejection. */
+        const why = err && err.status === 409
+          ? 'an action is already running'
+          : (err && err.message) || 'unknown error';
+        announce(`could not start ${item.action}: ${why}`);
+      }
     } else if (item.route) {
       ctx.navigate(item.route);
     }

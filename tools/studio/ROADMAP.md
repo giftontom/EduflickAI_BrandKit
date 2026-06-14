@@ -1,18 +1,17 @@
 # Brand Studio — Roadmap
 
-The studio's phased development plan. Status as of 2026-06-13: **Phase 0 + Phase 1a + Phase 1b-1
-complete** (HEAD `4e2d5cb`). Phase 0 gave the studio its first test suite + CI purity jobs + docs +
-cold-start UX + hygiene. Phase 1a made status a guarded state machine with audit history, a
-`#/board` kanban, and operator dashboard panels. Phase 1b-1 added the `#/generate` panel
-(deterministic FACTS-grounded prompt assembly), a QA runner, and the guarded `drafts/` write
-surface (the 7th write path). All green: **81/81 node:test, 13/13 Playwright smoke**, facts clean
-(192 files), zero-dep + vendor-integrity hold. Phase 1b-2 is essentially done — `#/calendar`, the
-client + server stale-schedule guard (`allowStale`), the "blocked" dashboard panel, and the opt-in
-local-model bridge all shipped; the ONLY remaining 1b-2 item is the cohort banner, which is gated on
-the FACTS.md cleanup. Test suite is now **90 node:test cases + a 14-route Playwright smoke**.
-Phase 2a (review gate + digest self-heal) is done, and Phase 2b is underway: `STUDIO_CONTENT_DIR`
-test isolation shipped (the suite is now provably isolated from live data). Test suite now
-**98 node:test cases + a 14-route smoke**.
+The studio's phased development plan. Status as of 2026-06-14 (current HEAD): **Phases 0, 1
+(1a + 1b-1 + 1b-2 bar the cohort banner), 2a, and Phase 2b test-isolation complete.** Phase 0 gave
+the studio its first test suite + CI purity jobs + docs + cold-start UX + hygiene. Phase 1a made
+status a guarded state machine with audit history, a `#/board` kanban, and operator dashboard
+panels. Phase 1b-1 added the `#/generate` panel (deterministic FACTS-grounded prompt assembly), a
+QA runner, and the guarded `drafts/` write surface (the 7th write path). Phase 1b-2 added
+`#/calendar`, the client + server stale-schedule guard (`allowStale`), the "blocked" dashboard
+panel, and the opt-in local-model bridge; the ONLY remaining 1b-2 item is the cohort banner, which
+is gated on the FACTS.md cleanup. Phase 2a (review gate + digest self-heal) is done, and Phase 2b is
+underway: `STUDIO_CONTENT_DIR` test isolation shipped (the suite is now provably isolated from live
+data). All green: **98 node:test cases + a 14-route Playwright smoke**, facts clean, zero-dep +
+vendor-integrity hold.
 **Owner-gated items still pending:** FACTS.md content reconciliation (Phase-0 tail item 7 — brand
 truth, partly speculative; now also unblocks the cohort banner + improves generation grounding) and
 the merge to `main` (item 8 — outward-facing push). This file is the resume point.

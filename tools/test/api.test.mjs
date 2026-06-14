@@ -24,12 +24,17 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 
 import { RETIRED, scanTextRetired } from '../check-facts.mjs';
+import zlib from 'node:zlib';
+
 import {
   setPort,
   getPort,
   api,
   apiJSON,
   rawRequest,
+  rawGet,
+  traversalCorpus,
+  TRAVERSAL_LEAK_SENTINEL,
   delay,
   ROOT,
   TOOLS,
@@ -99,6 +104,33 @@ test('GET /api/manifest returns the expected top-level shape', async () => {
 test('the API never sets Access-Control-Allow-Origin (no CORS)', async () => {
   const res = await api('/api/manifest');
   assert.equal(res.headers.get('access-control-allow-origin'), null);
+});
+
+test('STATIC responses never set Access-Control-Allow-Origin (CORS removed from lib/static.mjs)', async () => {
+  // The static handler previously emitted `Access-Control-Allow-Origin: *` on
+  // every 200; that header was removed. Mirror the /api/manifest assertion on
+  // BOTH static surfaces: (1) a repo-root file via the ROOT handler, and (2) a
+  // content-studio JSON file via the /content-studio reroute (its own handler
+  // instance). Neither may opt cross-origin reads in.
+  const indexRes = await fetch(`http://127.0.0.1:${getPort()}/tools/studio/index.html`);
+  assert.equal(indexRes.status, 200, 'the studio index.html is served 200');
+  await indexRes.text();
+  assert.equal(
+    indexRes.headers.get('access-control-allow-origin'),
+    null,
+    'GET /tools/studio/index.html must NOT carry a CORS header',
+  );
+
+  // launch-grid.json is a real file under CONTENT_DIR (the sandbox copy), served
+  // through the rerouted content-studio static handler.
+  const csRes = await fetch(`http://127.0.0.1:${getPort()}/content-studio/launch-grid.json`);
+  assert.equal(csRes.status, 200, 'a content-studio JSON file is served 200 via the reroute');
+  await csRes.text();
+  assert.equal(
+    csRes.headers.get('access-control-allow-origin'),
+    null,
+    'GET /content-studio/<json> must NOT carry a CORS header',
+  );
 });
 
 // ------------------------------------------------------------------ editmode
@@ -189,6 +221,30 @@ test('editmode: missing/empty edits → 400', async () => {
   assert.equal(b.status, 400);
 });
 
+test('editmode: a reserved key in edits ("__proto__") → 400, bytes UNCHANGED', async () => {
+  // A `k in s.parsed` test would match __proto__/constructor/toString on EVERY
+  // object via the prototype chain, letting a bogus key be written. The handler
+  // must reject reserved keys outright (400) before any block match or write.
+  // JSON.parse sets __proto__ as an OWN property, so it really arrives as an edit
+  // key over the wire. The fixture file's bytes must not change.
+  const before = fs.readFileSync(FIXTURE_ONE);
+  // Build the body as a RAW JSON string: an object literal `{ __proto__: {...} }`
+  // sets the prototype (not an own key), and JSON.stringify would drop it — so the
+  // wire JSON must be written literally. JSON.parse server-side restores __proto__
+  // as an OWN property (Object.keys sees it), which is exactly the attack shape.
+  const rawBody =
+    '{"file":' + JSON.stringify(relFromRoot(FIXTURE_ONE)) + ',"edits":{"__proto__":{"polluted":true}}}';
+  const res = await api('/api/editmode', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: rawBody,
+  });
+  assert.equal(res.status, 400, 'a reserved edit key must be rejected 400');
+  const body = await res.json();
+  assert.match(body.error, /reserved key/i);
+  assert.deepEqual(fs.readFileSync(FIXTURE_ONE), before, 'reserved-key edit must not write a byte');
+});
+
 // ------------------------------------------------------------------ traversal
 // The static handler (lib/static.mjs) must never return a file outside ROOT.
 
@@ -236,6 +292,27 @@ test('prefix-sibling directory cannot be read as if under root', async () => {
     assert.ok(!text.includes('TOP SECRET SIBLING'), 'prefix-sibling file must not be served');
   } finally {
     fs.rmSync(evilDir, { recursive: true, force: true });
+  }
+});
+
+test('traversal corpus vs the /content-studio reroute never escapes CONTENT_DIR', async () => {
+  // The reroute (contentStaticHandler rooted at CONTENT_DIR) must reject the SAME
+  // corpus as the ROOT handler, but under the /content-studio/ prefix. We try to
+  // exfiltrate /package.json (a repo-root file OUTSIDE CONTENT_DIR) plus /etc/passwd.
+  // Every case must be 4xx and never leak out-of-CONTENT_DIR bytes — this covers
+  // the encoded-slash reroute fix (a `%2f` fused to the prefix must not bypass the
+  // prefix check and reach the ROOT handler with the escape intact).
+  for (const url of traversalCorpus('/content-studio')) {
+    const { status, text } = await rawGet(url);
+    assert.ok(status >= 400 && status < 500, `expected 4xx for ${url}, got ${status}`);
+    assert.ok(
+      !text.includes(TRAVERSAL_LEAK_SENTINEL),
+      `reroute traversal ${url} leaked package.json (out-of-CONTENT_DIR) bytes`,
+    );
+    assert.ok(
+      !/root:.*:0:0:/.test(text),
+      `reroute traversal ${url} leaked /etc/passwd-like contents`,
+    );
   }
 });
 
@@ -527,16 +604,51 @@ test('export-zip: an archive name with traversal → 400', async () => {
   assert.equal(status, 400);
 });
 
-test('export-zip: an inline text entry produces a zip (200, application/zip)', async () => {
+test('export-zip: an inline text entry produces a structurally valid zip that round-trips', async () => {
+  const entryName = 'note.txt';
+  const entryText = 'hello from the studio export test';
   const res = await api('/api/export-zip', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ files: [{ text: 'hello', name: 'note.txt' }], zipName: 'studiotest' }),
+    body: JSON.stringify({ files: [{ text: entryText, name: entryName }], zipName: 'studiotest' }),
   });
   assert.equal(res.status, 200);
   assert.equal(res.headers.get('content-type'), 'application/zip');
   const buf = Buffer.from(await res.arrayBuffer());
-  assert.equal(buf.slice(0, 2).toString('utf8'), 'PK', 'looks like a zip');
+
+  // (1) PK local-file-header magic.
+  assert.equal(buf.readUInt32LE(0), 0x04034b50, 'starts with a local file header signature');
+
+  // (2) The End-Of-Central-Directory record exists and reports exactly one entry.
+  const eocdSig = 0x06054b50;
+  let eocd = -1;
+  for (let i = buf.length - 22; i >= 0; i--) {
+    if (buf.readUInt32LE(i) === eocdSig) {
+      eocd = i;
+      break;
+    }
+  }
+  assert.ok(eocd !== -1, 'an End-Of-Central-Directory record is present');
+  assert.equal(buf.readUInt16LE(eocd + 10), 1, 'EOCD total-entries == 1');
+
+  // (3) Parse the local file header: STORE (method 0), filename bytes round-trip.
+  const method = buf.readUInt16LE(8);
+  assert.equal(method, 0, 'entry is STOREd (method 0), not deflated');
+  const compSize = buf.readUInt32LE(18);
+  const uncompSize = buf.readUInt32LE(22);
+  const nameLen = buf.readUInt16LE(26);
+  const extraLen = buf.readUInt16LE(28);
+  const nameBytes = buf.slice(30, 30 + nameLen).toString('utf8');
+  assert.equal(nameBytes, entryName, 'local-file-header name bytes match the requested entry name');
+
+  // (4) Content round-trips. STORE means the stored bytes ARE the content; if a
+  // future change switches to raw-deflate (method 8) inflate them instead.
+  const dataStart = 30 + nameLen + extraLen;
+  const stored = buf.slice(dataStart, dataStart + compSize);
+  const content =
+    method === 8 ? zlib.inflateRawSync(stored).toString('utf8') : stored.toString('utf8');
+  assert.equal(uncompSize, Buffer.byteLength(entryText), 'uncompressed-size field matches the text length');
+  assert.equal(content, entryText, 'the stored entry content round-trips byte-for-byte');
 });
 
 // ---------------------------------------------------------------- docs drift
@@ -567,6 +679,77 @@ test('docs drift: action whitelist in server source == action list in README', a
     { onlyInServer, onlyInReadme },
     { onlyInServer: [], onlyInReadme: [] },
     'action whitelist drifted between server source and README',
+  );
+});
+
+test('docs drift: README write-surface COUNT WORD matches the numbered write-path list', async () => {
+  // The README states "The studio can write exactly <word> paths" and then lists
+  // them as a numbered list. The spelled count word must equal the actual number
+  // of numbered items, so the prose can never drift from the enumerated surface.
+  // (G5: there are exactly SEVEN fixed guarded write paths.)
+  const readme = fs.readFileSync(path.join(TOOLS, 'studio', 'README.md'), 'utf8');
+
+  // Isolate the "## Write surface" section (up to the next H2).
+  const sectionMatch = readme.match(/## Write surface\n([\s\S]*?)(?:\n## |\n#[^#]|$)/);
+  assert.ok(sectionMatch, 'README has no "## Write surface" section');
+  const section = sectionMatch[1];
+
+  // The spelled count word in the lead sentence ("...write exactly seven paths...").
+  const wordMatch = section.match(/write exactly (\w+) paths/i);
+  assert.ok(wordMatch, 'the write-surface lead sentence must spell the path count');
+  const NUMBER_WORDS = {
+    one: 1, two: 2, three: 3, four: 4, five: 5, six: 6,
+    seven: 7, eight: 8, nine: 9, ten: 10,
+  };
+  const spelled = NUMBER_WORDS[wordMatch[1].toLowerCase()];
+  assert.ok(typeof spelled === 'number', `unrecognized count word: ${wordMatch[1]}`);
+
+  // Count the numbered list items ("1. ", "2. ", … at the start of a line).
+  const numbered = [...section.matchAll(/^(\d+)\.\s/gm)].map((x) => Number(x[1]));
+  // The list must be a clean 1..N run with no gaps/dupes.
+  const expected = Array.from({ length: numbered.length }, (_, i) => i + 1);
+  assert.deepEqual(numbered, expected, 'the numbered write-path list must be a clean 1..N run');
+  assert.equal(
+    spelled,
+    numbered.length,
+    `README write-surface count word "${wordMatch[1]}" (${spelled}) != ${numbered.length} numbered paths`,
+  );
+  // And cross-check against the invariant: exactly seven guarded write paths.
+  assert.equal(spelled, 7, 'the documented write-surface count must be seven (G5)');
+});
+
+test('docs drift: every live /api route is documented in the README API table', async () => {
+  const serverSrc = fs.readFileSync(path.join(TOOLS, 'studio-server.mjs'), 'utf8');
+
+  // Every literal `pathname === '/api/...'` route the server answers.
+  const liveRoutes = new Set(
+    [...serverSrc.matchAll(/pathname === '(\/api\/[^']*)'/g)].map((m) => m[1]),
+  );
+  assert.ok(liveRoutes.size > 0, 'parsed no /api routes from server source');
+
+  // The two parameterized regex routes, expressed in the README's `:id` template
+  // form. Detect them from the server's actual regexes so a renamed route is caught.
+  const paramRoutes = new Set();
+  if (/\/\^\\\/api\\\/actions\\\/\(\[0-9a-f-\]\+\)\\\/stream\$\//.test(serverSrc)) {
+    paramRoutes.add('/api/actions/:id/stream');
+  }
+  if (/\/\^\\\/api\\\/comments\\\/\(\[0-9a-f-\]\+\)\$\//.test(serverSrc)) {
+    paramRoutes.add('/api/comments/:id');
+  }
+  assert.equal(paramRoutes.size, 2, 'expected to detect both parameterized /api routes in server source');
+
+  const readme = fs.readFileSync(path.join(TOOLS, 'studio', 'README.md'), 'utf8');
+  // Every backtick-quoted /api token documented in the README.
+  const documented = new Set(
+    [...readme.matchAll(/`(\/api\/[^`]*)`/g)].map((m) => m[1]),
+  );
+
+  const wanted = [...liveRoutes, ...paramRoutes].sort();
+  const undocumented = wanted.filter((r) => !documented.has(r));
+  assert.deepEqual(
+    undocumented,
+    [],
+    `live /api routes missing from the README API table:\n${undocumented.join('\n')}`,
   );
 });
 

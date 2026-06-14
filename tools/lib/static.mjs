@@ -31,6 +31,12 @@ export const TYPES = {
  * Always finishes the response (200 stream or 404 plain text). Returns true
  * when a file was served, false when it answered 404 — callers that route
  * /api/* themselves can treat the handler as terminal either way.
+ *
+ * When the caller has ALREADY decoded the path (e.g. studio-server routes on a
+ * decoded pathname to close the encoded-slash reroute hole) it passes the
+ * already-decoded path as `req.decodedPath`; the handler then uses it verbatim
+ * and does NOT decode again (no double-decode). Otherwise it self-decodes
+ * `req.url` as before (serve.mjs path, unchanged).
  */
 export function createStaticHandler(root) {
   const ROOT = path.resolve(root);
@@ -43,10 +49,14 @@ export function createStaticHandler(root) {
     };
 
     let p;
-    try {
-      p = decodeURIComponent((req.url || '/').split('?')[0]);
-    } catch {
-      return notFound(); // malformed percent-encoding
+    if (typeof req.decodedPath === 'string') {
+      p = req.decodedPath; // pre-decoded by the caller — do not decode twice
+    } else {
+      try {
+        p = decodeURIComponent((req.url || '/').split('?')[0]);
+      } catch {
+        return notFound(); // malformed percent-encoding
+      }
     }
     if (p.includes('\0')) return notFound();
 
@@ -71,7 +81,6 @@ export function createStaticHandler(root) {
 
     res.writeHead(200, {
       'Content-Type': TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream',
-      'Access-Control-Allow-Origin': '*',
     });
     fs.createReadStream(file).pipe(res);
     return true;

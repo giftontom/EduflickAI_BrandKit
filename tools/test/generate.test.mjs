@@ -324,6 +324,89 @@ test('POST /api/generate/run via bridge equals the clipboard /api/generate promp
   assert.equal(run.body.prompt, gen.body.prompt, '/run and /generate assemble a byte-identical prompt');
 });
 
+test('POST /api/generate/run watchdog: a slow model is SIGTERMed → timedOut:true, no hang, no zombie', async () => {
+  // Spawn a DEDICATED server with a short STUDIO_ACTION_TIMEOUT_MS (~300 ms) and a
+  // STUDIO_MODEL_CMD that prints a little then sleeps far past the deadline. The
+  // bridge's watchdog must SIGTERM (then SIGKILL) the child; the request resolves
+  // with timedOut:true carrying whatever stdout was captured before the kill — it
+  // must NOT hang the connection. We then prove the model child was reaped (no
+  // zombie) by checking the server exits its OWN SIGTERM cleanly in teardown.
+  const port = await freePort();
+  // node one-liner: write a marker, flush, then sleep ~30 s (well past 300 ms).
+  const modelArgs = JSON.stringify([
+    '-e',
+    "process.stdout.write('PARTIAL-OUTPUT-MARKER'); setInterval(() => {}, 1000);",
+  ]);
+  const child = spawn(NODE, ['studio-server.mjs'], {
+    cwd: TOOLS,
+    env: {
+      ...process.env,
+      STUDIO_PORT: String(port),
+      PORT: String(port),
+      STUDIO_CONTENT_DIR: sandbox,
+      STUDIO_MODEL_CMD: NODE, // run node itself as the "model"
+      STUDIO_MODEL_ARGS: modelArgs,
+      STUDIO_ACTION_TIMEOUT_MS: '300', // watchdog fires fast
+    },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  child.stdout.on('data', () => {});
+  child.stderr.on('data', () => {});
+  const origin = `http://127.0.0.1:${port}`;
+  try {
+    // Wait for the dedicated server to come up.
+    const deadline = Date.now() + 15000;
+    for (;;) {
+      if (child.exitCode != null) throw new Error(`timeout-bridge server exited early (${child.exitCode})`);
+      try {
+        const r = await fetch(`${origin}/api/manifest`, { headers: { Origin: origin } });
+        if (r.status === 200) break;
+      } catch {
+        /* not up yet */
+      }
+      if (Date.now() > deadline) throw new Error('timeout-bridge server did not become ready in 15s');
+      await delay(150);
+    }
+
+    // Drive the run. The watchdog (300 ms) must terminate the sleeping model and
+    // the response must come back PROMPTLY (well under the model's 30 s sleep),
+    // proving no hang and that the SIGTERM/KILL path actually ran.
+    const reqStart = Date.now();
+    const res = await fetch(`${origin}/api/generate/run`, {
+      method: 'POST',
+      headers: { Origin: origin, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ template: 'instagram-caption.md' }),
+    });
+    const elapsed = Date.now() - reqStart;
+    assert.equal(res.status, 200, `a timed-out run still answers 200 with the partial result`);
+    const body = await res.json();
+    assert.equal(body.timedOut, true, 'the watchdog marked the overrun as timedOut:true');
+    // The connection did NOT hang waiting out the 30 s sleep — the SIGTERM path ran.
+    assert.ok(elapsed < 15000, `the timed-out run resolved promptly (${elapsed} ms), not after the model sleep`);
+    // Whatever the model printed before the kill rides back on stdout.
+    assert.ok(
+      typeof body.output === 'string' && body.output.includes('PARTIAL-OUTPUT-MARKER'),
+      'the partial stdout captured before SIGTERM is returned',
+    );
+  } finally {
+    // Reap the server child cleanly. If the model child had been left running
+    // (a zombie / leaked process group), this SIGTERM-then-close would not settle
+    // promptly — the hardKill backstop guarantees we never wedge the suite.
+    await new Promise((resolve) => {
+      const hardKill = setTimeout(() => {
+        if (child.exitCode == null) child.kill('SIGKILL');
+      }, 3000);
+      child.once('close', () => {
+        clearTimeout(hardKill);
+        resolve();
+      });
+      child.kill('SIGTERM');
+    });
+    // The server child must actually be gone (not a zombie holding the port).
+    assert.ok(child.exitCode != null || child.signalCode != null, 'the timeout-bridge server child was reaped');
+  }
+});
+
 // ------------------------------------------------------------------- qa/check
 
 test('POST /api/qa/check on clean copy → 200, no violations, no checklist hits', async () => {

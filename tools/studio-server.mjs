@@ -143,6 +143,26 @@ const CHEATSHEET_FILE = path.join(CONTENT_DIR, 'BRAND_CHEATSHEET.md');
 const STATUSES = ['draft', 'approved', 'scheduled', 'posted', 'retired'];
 const COMMENT_STATUSES = ['open', 'resolved', 'wontfix'];
 
+// Reserved object keys that must never be accepted as an asset id (or an edit
+// key): indexing store.assets['__proto__'] etc. lands on a prototype slot, so the
+// write silently drops and a lying 200 is returned.
+const RESERVED_IDS = new Set(['__proto__', 'constructor', 'prototype']);
+
+// The ONLY keys a POST /api/status patch may carry. The frontend
+// (status-badge.mjs + board.mjs) sends status / scheduledFor / notes / postedAt;
+// override / allowStale / allowOpenComments are wire-only guard flags accepted
+// here but stripped from the persisted entry in patchStatus. Mirrors
+// LAUNCH_PATCH_KEYS — any other key is rejected 400 so nothing unknown is merged.
+const STATUS_PATCH_KEYS = new Set([
+  'status',
+  'scheduledFor',
+  'postedAt',
+  'notes',
+  'override',
+  'allowStale',
+  'allowOpenComments',
+]);
+
 // Status lifecycle state machine. Each key maps to the statuses it may move to
 // WITHOUT an override. The happy path walks draft → approved → scheduled →
 // posted; anything may be retired; a retired asset can be revived to draft.
@@ -214,6 +234,19 @@ function writeAtomic(file, content) {
     fs.closeSync(fd);
   }
   fs.renameSync(tmp, file);
+  // fsync the CONTAINING directory so the rename itself is durable (the new
+  // dirent survives a crash, not just the file bytes). Guarded: some platforms
+  // (and some filesystems) throw on opening/fsyncing a directory — ignore those.
+  try {
+    const dfd = fs.openSync(path.dirname(file), 'r');
+    try {
+      fs.fsyncSync(dfd);
+    } finally {
+      fs.closeSync(dfd);
+    }
+  } catch {
+    /* directory fsync unsupported on this platform — best-effort durability */
+  }
 }
 
 function statOrNull(p) {
@@ -309,11 +342,24 @@ function patchStatus(id, patch) {
     if ('status' in fields) {
       const to = fields.status;
       if (isNew) {
-        // Creation: any status is allowed; seed history from null.
+        // Genuine creation (brand-new id): any status is allowed; seed history
+        // from null. This free path is RESERVED for a truly new id — an existing
+        // entry that merely lacks a status (e.g. a plan-only patch wrote
+        // scheduledFor/notes first) is NOT creation and must not skip the guard.
         appendHistory = true;
       } else if (to === from) {
         // Idempotent — same status again records no new history entry.
         appendHistory = false;
+      } else if (from == null) {
+        // First real status on a PRE-EXISTING entry with no prior status. There
+        // is no legal from-edge to validate against, so this is gated like an
+        // illegal transition: only override:true may assign the first status.
+        // Without it → 409 (no legalNext edges from a stateless entry).
+        if (override === true) {
+          appendHistory = true;
+        } else {
+          return { ok: false, from: null, to, legalNext: [] };
+        }
       } else if (legalNext(from).includes(to) || override === true) {
         appendHistory = true;
       } else {
@@ -353,8 +399,14 @@ function patchStatus(id, patch) {
     const entry = { ...(existing || {}), ...fields, updatedAt: at };
     if (appendHistory) {
       const record = { from, to: fields.status, at };
-      // Mark only override-forced moves; creation/legal moves stay unmarked.
-      if (!isNew && override === true && !legalNext(from).includes(fields.status)) {
+      // Mark only override-forced moves; genuine creation and legal moves stay
+      // unmarked. A first-status assignment on a pre-existing stateless entry
+      // (from == null but NOT a new id) only lands via override, so it is marked.
+      if (
+        !isNew &&
+        override === true &&
+        (from == null || !legalNext(from).includes(fields.status))
+      ) {
         record.overridden = true;
       }
       entry.history = [...(existing?.history || []), record];
@@ -851,7 +903,7 @@ function handleGenerate(body, res) {
 // local process, never an npm SDK dependency. The watchdog mirrors the action
 // runner (STUDIO_ACTION_TIMEOUT_MS, SIGTERM then SIGKILL 5 s later).
 
-function handleGenerateRun(body, res) {
+function handleGenerateRun(req, body, res) {
   const { template, includeCheatsheet, task } = body;
   const assembled = assemblePromptText(template, includeCheatsheet, task);
   if (!assembled.ok) {
@@ -888,15 +940,47 @@ function handleGenerateRun(body, res) {
   let err = '';
   let timedOut = false;
   let settled = false;
+  let killTimer = null;
   // Watchdog mirrors the action runner: SIGTERM at the deadline, SIGKILL 5 s on.
+  // It also SELF-SETTLES the HTTP response: a child that ignores both signals
+  // would otherwise leave the request hanging forever, so once SIGKILL has been
+  // sent we answer with whatever stdout was captured rather than wait on close.
   const watchdog = setTimeout(() => {
     timedOut = true;
     child.kill('SIGTERM');
-    setTimeout(() => {
-      if (!settled) child.kill('SIGKILL');
-    }, 5000).unref();
+    killTimer = setTimeout(() => {
+      if (!settled) {
+        child.kill('SIGKILL');
+        // Last resort: reply even if the (un-killable) child never emits close.
+        if (!settled) {
+          settled = true;
+          if (!res.headersSent) {
+            sendJSON(res, 200, { output: out, stderr: err, exitCode: null, timedOut: true, prompt });
+          }
+        }
+      }
+    }, 5000);
+    killTimer.unref();
   }, ACTION_TIMEOUT_MS);
   watchdog.unref();
+
+  // Client disconnect (browser navigated away / aborted): kill the child so a
+  // runaway local model is not left running, and stop here — there is no socket
+  // left to answer. The 'close' handler below is a no-op once settled.
+  req.on('close', () => {
+    if (settled) return;
+    settled = true;
+    clearTimeout(watchdog);
+    if (killTimer) clearTimeout(killTimer);
+    child.kill('SIGTERM');
+    setTimeout(() => {
+      try {
+        child.kill('SIGKILL');
+      } catch {
+        /* already gone */
+      }
+    }, 5000).unref();
+  });
 
   child.stdout.on('data', (c) => (out += c.toString('utf8')));
   child.stderr.on('data', (c) => (err += c.toString('utf8')));
@@ -904,18 +988,24 @@ function handleGenerateRun(body, res) {
     if (settled) return;
     settled = true;
     clearTimeout(watchdog);
+    if (killTimer) clearTimeout(killTimer);
     if (!res.headersSent) sendJSON(res, 500, { error: String((e && e.message) || e) });
   });
   child.on('close', (code) => {
     if (settled) return;
     settled = true;
     clearTimeout(watchdog);
+    if (killTimer) clearTimeout(killTimer);
     // Always return whatever stdout was captured (even on a timeout). The
     // assembled prompt rides along so the UI can show exactly what was sent.
     sendJSON(res, 200, { output: out, stderr: err, exitCode: code, timedOut, prompt });
   });
 
   // Feed the assembled prompt on stdin, then close it so the child can finish.
+  // A child that exits or never reads makes the write emit an async EPIPE on the
+  // stdin stream; swallow it so the unhandled 'error' can't crash the server. The
+  // close handler still returns whatever stdout was captured.
+  child.stdin.on('error', () => {});
   try {
     child.stdin.end(prompt);
   } catch {
@@ -1626,8 +1716,18 @@ function handleEditmode(body, res) {
   if (!spans.length) return sendJSON(res, 422, { error: 'no EDITMODE block in file' });
 
   const keys = Object.keys(edits);
+  // Reject reserved object keys outright: with a plain `k in s.parsed` test,
+  // __proto__/constructor/toString match every object via the prototype chain
+  // and a bogus key would be written. Bar them, then match on OWN properties.
+  const FORBIDDEN = new Set(['__proto__', 'prototype', 'constructor']);
+  if (keys.some((k) => FORBIDDEN.has(k))) {
+    return sendJSON(res, 400, { error: 'reserved key not allowed in edits' });
+  }
   const candidates = spans.filter(
-    (s) => s.parsed && typeof s.parsed === 'object' && keys.every((k) => k in s.parsed),
+    (s) =>
+      s.parsed &&
+      typeof s.parsed === 'object' &&
+      keys.every((k) => Object.prototype.hasOwnProperty.call(s.parsed, k)),
   );
   if (candidates.length === 0) {
     return sendJSON(res, 422, { error: 'no EDITMODE block contains all edit keys', keys });
@@ -1808,8 +1908,21 @@ async function handleApi(req, res, pathname) {
       if (typeof id !== 'string' || !id.length) {
         return sendJSON(res, 400, { error: 'id must be a non-empty string' });
       }
+      // Reserved object keys would otherwise index store.assets[id] onto a
+      // prototype slot — the write silently no-ops and a lying 200 comes back.
+      if (RESERVED_IDS.has(id)) {
+        return sendJSON(res, 400, { error: 'reserved id' });
+      }
       if (!patch || typeof patch !== 'object' || Array.isArray(patch)) {
         return sendJSON(res, 400, { error: 'patch must be an object' });
+      }
+      // Allow-list the patch keys (mirrors LAUNCH_PATCH_KEYS): the frontend only
+      // ever sends status/scheduledFor/postedAt/notes plus the three wire-only
+      // guard flags. Reject anything else so a stray/poisoned key can't be merged
+      // onto the persisted entry.
+      const unknownKeys = Object.keys(patch).filter((k) => !STATUS_PATCH_KEYS.has(k));
+      if (unknownKeys.length) {
+        return sendJSON(res, 400, { error: `unknown patch keys: ${unknownKeys.join(', ')}` });
       }
       if ('status' in patch && !STATUSES.includes(patch.status)) {
         return sendJSON(res, 400, { error: `status must be one of: ${STATUSES.join(', ')}` });
@@ -1958,7 +2071,7 @@ async function handleApi(req, res, pathname) {
 
   if (pathname === '/api/generate/run' && req.method === 'POST') {
     const body = await readJSONBody(req);
-    return handleGenerateRun(body, res);
+    return handleGenerateRun(req, body, res);
   }
 
   if (pathname === '/api/qa/check' && req.method === 'POST') {
@@ -1993,11 +2106,13 @@ const staticHandler = createStaticHandler(ROOT);
 const contentStaticHandler = createStaticHandler(CONTENT_DIR);
 const CONTENT_URL_PREFIX = '/content-studio';
 
-// Strip the /content-studio prefix from a request URL, preserving the rest of the
-// path and any query string, so the rerouted handler joins it onto CONTENT_DIR.
-// "/content-studio/FACTS.md?x=1" -> "/FACTS.md?x=1"; "/content-studio" -> "/".
-function stripContentPrefix(url) {
-  const rest = url.slice(CONTENT_URL_PREFIX.length);
+// Strip the /content-studio prefix from a DECODED pathname (no query string),
+// preserving the rest of the path, so the rerouted handler joins it onto
+// CONTENT_DIR. "/content-studio/FACTS.md" -> "/FACTS.md"; "/content-studio" -> "/".
+// The result is passed to the content handler as req.decodedPath so it is never
+// decoded a second time (an encoded slash in the prefix can no longer slip past).
+function stripContentPrefix(pathname) {
+  const rest = pathname.slice(CONTENT_URL_PREFIX.length);
   return rest === '' ? '/' : rest;
 }
 
@@ -2030,7 +2145,23 @@ const server = http.createServer((req, res) => {
   if (!ALLOWED_HOSTNAMES.has(hostnameOf(req.headers.host))) {
     return sendJSON(res, 403, { error: 'forbidden: non-loopback Host header' });
   }
-  const pathname = (req.url || '/').split('?')[0];
+  // Route on a DECODED, normalized pathname. An encoded slash (%2f) or dot-dot
+  // (%2e%2e) in the URL would otherwise sneak past the literal /content-studio
+  // and /api prefix tests and, in STUDIO_CONTENT_DIR mode, reach the shadowed
+  // physical content-studio. Decode exactly once here (malformed → 400) and hand
+  // the decoded path to the static handlers via req.decodedPath so they never
+  // decode again. The /api dispatch keeps using the decoded pathname too.
+  const rawPath = (req.url || '/').split('?')[0];
+  let decodedPath;
+  try {
+    decodedPath = decodeURIComponent(rawPath);
+  } catch {
+    return sendJSON(res, 400, { error: 'malformed percent-encoding in path' });
+  }
+  // Normalize on POSIX separators so an encoded ../ collapses before the prefix
+  // tests see it; keep a leading slash so prefix matching is anchored.
+  let pathname = path.posix.normalize(decodedPath);
+  if (!pathname.startsWith('/')) pathname = '/' + pathname;
   if (pathname.startsWith('/api/')) {
     if (req.method !== 'GET' && req.method !== 'HEAD') {
       const origin = req.headers.origin;
@@ -2045,14 +2176,16 @@ const server = http.createServer((req, res) => {
     return;
   }
   // Serve /content-studio/... from CONTENT_DIR (rerouted, own traversal guard)
-  // before falling through to the repo-wide ROOT handler. A shim carries the
-  // prefix-stripped url; the live req is never mutated. The handler reads only
-  // req.url, so the shim is sufficient.
+  // before falling through to the repo-wide ROOT handler. The prefix-stripped,
+  // already-DECODED path rides on req.decodedPath; the live req is never mutated
+  // and the handler does not decode twice.
   if (pathname === CONTENT_URL_PREFIX || pathname.startsWith(CONTENT_URL_PREFIX + '/')) {
-    contentStaticHandler({ url: stripContentPrefix(req.url || '/') }, res);
+    contentStaticHandler({ decodedPath: stripContentPrefix(pathname) }, res);
     return;
   }
-  staticHandler(req, res);
+  // Generic ROOT static: hand it the decoded path too so its own traversal guard
+  // sees the same value the routing did (no double-decode of req.url).
+  staticHandler({ decodedPath: pathname }, res);
 });
 
 // Fail fast instead of dying with a stack trace — a busy 8090 almost always

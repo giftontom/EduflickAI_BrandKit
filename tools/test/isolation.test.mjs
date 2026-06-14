@@ -26,6 +26,7 @@ import {
   setPort,
   ROOT,
   apiJSON,
+  rawGet,
   startServer,
   stopServer,
   makeContentSandbox,
@@ -113,4 +114,31 @@ test('isolation: real writes through a sandboxed server leave the LIVE content-s
     }
   })();
   assert.deepEqual(draftsAfter, draftsBefore, 'LIVE content-studio/drafts/ gained a file — the sandbox leaked!');
+});
+
+test('isolation: GET /content-studio/FACTS.md is served from the SANDBOX, not the live file', async () => {
+  // The /content-studio static reroute must read from CONTENT_DIR (= the sandbox),
+  // NOT from the live content-studio/. Plant a distinct marker into the SANDBOX
+  // FACTS.md (this never touches the real file), then fetch it over the wire and
+  // assert the sandbox bytes come back — and that the real file's bytes do NOT,
+  // and the real file stays byte-identical (the live read path is not even hit).
+  const sandboxFacts = path.join(sandbox, 'FACTS.md');
+  const realFacts = path.join(REAL_CS, 'FACTS.md');
+  const realBefore = fingerprint(realFacts);
+  assert.ok(realBefore, 'precondition: the live FACTS.md exists');
+
+  // A marker that is unique and provably NOT in the live FACTS.md.
+  const marker = `SANDBOX-FACTS-MARKER-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const realFactsText = fs.readFileSync(realFacts, 'utf8');
+  assert.ok(!realFactsText.includes(marker), 'precondition: marker absent from the live FACTS.md');
+  fs.writeFileSync(sandboxFacts, `${realFactsText}\n${marker}\n`);
+
+  const { status, text } = await rawGet('/content-studio/FACTS.md');
+  assert.equal(status, 200, 'the reroute serves the file 200');
+  assert.ok(text.includes(marker), 'the reroute returned the SANDBOX FACTS.md (marker present)');
+
+  // The live file was neither served nor written.
+  const realAfter = fingerprint(realFacts);
+  assert.equal(realAfter.sha, realBefore.sha, 'the live FACTS.md must be byte-identical (never written)');
+  assert.equal(realAfter.mtimeMs, realBefore.mtimeMs, 'the live FACTS.md mtime must be unchanged');
 });

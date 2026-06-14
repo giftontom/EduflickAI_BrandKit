@@ -78,8 +78,16 @@ test('comments: create with a clean pin → 200 and lands in the store', async (
   assert.equal(body.overridden, false);
   const store = JSON.parse(fs.readFileSync(COMMENTS_ABS, 'utf8'));
   assert.ok(store.comments.some((c) => c.id === body.id), 'comment persisted to store');
-  // The digest regenerates on every write.
-  assert.ok(fs.existsSync(FEEDBACK_ABS), 'digest regenerated');
+
+  // The digest regenerates on every write. existsSync is vacuous (the sandbox
+  // ships a DESIGN_FEEDBACK.md already), so assert BYTE-EQUALITY instead: the file
+  // on disk must equal renderFeedbackDigest recomputed from the post-write JSON of
+  // record. This proves the server actually regenerated the digest FROM this exact
+  // store (not a stale leftover) and that lib/feedback.mjs is the single format
+  // source with no drift.
+  const onDisk = fs.readFileSync(FEEDBACK_ABS, 'utf8');
+  const want = renderFeedbackDigest(store);
+  assert.equal(onDisk, want, 'DESIGN_FEEDBACK.md must be byte-identical to renderFeedbackDigest(store)');
 });
 
 test('comments: retired text without override → 422 + violations, store unchanged', async () => {

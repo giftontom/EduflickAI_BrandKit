@@ -144,6 +144,41 @@ export async function apiJSON(pathname, opts = {}) {
   return { status: res.status, body, res };
 }
 
+// A bare GET against the server's own port, by RELATIVE path, with NO defaulted
+// Origin and (crucially) using `--path-as-is`-style semantics: the percent-
+// encoded path is sent verbatim. Node's fetch does NOT collapse `%2f`/`..` in the
+// path before sending, so this is the right tool for exercising the static /
+// content-studio traversal guards over the wire. Returns {status, text}.
+export async function rawGet(relPath) {
+  const res = await fetch(`${originFor()}${relPath}`, { redirect: 'manual' });
+  const text = await res.text();
+  return { status: res.status, text, res };
+}
+
+// The shared traversal corpus: ../, encoded-slash, double-encoded, %2e%2e, NUL,
+// and a sub-path climb — each a distinct escape technique. `joinUnder(prefix)`
+// returns the corpus rebased under a URL prefix (e.g. '' for the repo root, or
+// '/content-studio' for the reroute), so one corpus exercises BOTH static guards.
+// `marker` is a recognizable out-of-CONTENT_DIR file we try to exfiltrate; its
+// content sentinel (`leak`) must never appear in any response body.
+export const TRAVERSAL_LEAK_SENTINEL = '"name": "eduflick';
+export function traversalCorpus(prefix) {
+  // A trailing /package.json (repo-root file, OUTSIDE content-studio) is the
+  // exfil target for the reroute corpus; the repo-root corpus aims past ROOT.
+  const p = prefix; // '' or '/content-studio'
+  return [
+    `${p}/../package.json`,
+    `${p}/..%2f..%2fpackage.json`, // encoded slash
+    `${p}/..%2fpackage.json`,
+    `${p}%2f..%2fpackage.json`, // encoded slash fused to the prefix itself
+    `${p}/%2e%2e/package.json`, // encoded dots
+    `${p}/..%252fpackage.json`, // double-encoded slash
+    `${p}/sub/../../package.json`, // climb back through a fake subdir
+    `${p}/foo%00.json`, // NUL byte
+    `${p}/../../../../etc/passwd`, // deep climb to a real out-of-tree file
+  ];
+}
+
 // ---- server lifecycle -----------------------------------------------------
 
 let child = null;

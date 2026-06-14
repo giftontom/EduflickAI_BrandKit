@@ -256,6 +256,53 @@ test('scheduledFor: an invalid date string → 400, no write', async () => {
   assert.equal(entry, undefined, 'a 400 on scheduledFor must not create the entry');
 });
 
+// --------------------------------------------------- reserved id + patch allow-list
+//
+// A reserved object key as the asset id (__proto__/constructor/prototype) would
+// index store.assets[id] onto a prototype slot — the write silently no-ops and a
+// lying 200 comes back. The server rejects those ids 400 BEFORE the queue. And the
+// patch is allow-listed (status/scheduledFor/postedAt/notes + the wire-only guard
+// flags); any other key is 400 so nothing unknown is merged onto the entry.
+
+test('reserved id: POST /api/status id "__proto__" → 400, not a lying 200, nothing written', async () => {
+  for (const bad of ['__proto__', 'constructor', 'prototype']) {
+    const { status, body } = await setStatus(bad, { status: 'draft' });
+    assert.equal(status, 400, `reserved id ${bad} must be 400, got ${status}: ${JSON.stringify(body)}`);
+    // The store must not have gained an OWN entry under the reserved key.
+    const all = await apiJSON('/api/status');
+    assert.ok(
+      !Object.prototype.hasOwnProperty.call(all.body.assets, bad),
+      `reserved id ${bad} must not be persisted as an own key`,
+    );
+  }
+});
+
+test('patch allow-list: an unknown patch key → 400; legit fields still 200', async () => {
+  const id = freshId('allowlist');
+
+  // An unknown key is rejected outright (mirrors launch-grid/post).
+  const bad = await setStatus(id, { status: 'draft', bogusKey: 'x' });
+  assert.equal(bad.status, 400, `unknown patch key must be 400: ${JSON.stringify(bad.body)}`);
+  assert.match(bad.body.error, /unknown patch keys/i);
+  // The bad write created nothing.
+  assert.equal(await readEntry(id), undefined, 'a rejected patch must not create the entry');
+
+  // The legit fields (status + scheduledFor + notes + postedAt) all pass.
+  const okWhen = '2026-08-01T10:00:00.000Z';
+  const okPosted = '2026-08-02T10:00:00.000Z';
+  const good = await setStatus(id, {
+    status: 'scheduled',
+    scheduledFor: okWhen,
+    notes: 'a legit note',
+    postedAt: okPosted,
+  });
+  assert.equal(good.status, 200, `legit patch fields must pass: ${JSON.stringify(good.body)}`);
+  assert.equal(good.body.status, 'scheduled');
+  assert.equal(good.body.scheduledFor, okWhen, 'scheduledFor persisted');
+  assert.equal(good.body.notes, 'a legit note', 'notes persisted');
+  assert.equal(good.body.postedAt, okPosted, 'postedAt persisted');
+});
+
 // --------------------------------------------------------------- concurrency
 
 test('concurrency: N parallel legal transitions on N distinct new ids all land', async () => {
@@ -307,6 +354,24 @@ async function firstPresentItem() {
     for (const it of s.items || []) {
       if (it.exists === true && it.png) {
         return { id: `${s.id}/${it.name}`, pngAbs: path.join(ROOT, it.png) };
+      }
+    }
+  }
+  return null;
+}
+
+// Find a present (exists, NOT already stale) item whose surface source file
+// exists too, so we can manufacture staleness by aging the export below the
+// source mtime. Returns {id, pngAbs, sourceAbs}. The source is a REAL-repo
+// design-system/brochures HTML (outside CONTENT_DIR — never the sandbox).
+async function firstFreshPresentItemWithSource() {
+  const m = await getManifest();
+  for (const s of m.surfaces || []) {
+    const sourceAbs = s.source ? path.join(ROOT, s.source) : null;
+    if (!sourceAbs || !fs.existsSync(sourceAbs)) continue;
+    for (const it of s.items || []) {
+      if (it.exists === true && it.stale === false && it.png) {
+        return { id: `${s.id}/${it.name}`, pngAbs: path.join(ROOT, it.png), sourceAbs };
       }
     }
   }
@@ -415,6 +480,77 @@ test('contract A positive (absent): scheduling a KNOWN-but-absent asset → 409 
     // Belt-and-braces: put this id's SANDBOX status entry back to its pre-test
     // value. The sandbox is discarded in after(), so this only keeps the live API
     // state tidy for any later assertion in this same run.
+    if (beforeStatus !== null) {
+      await apiJSON('/api/status', { json: { id, patch: { status: beforeStatus, override: true, allowStale: true } } });
+    }
+  }
+});
+
+test('contract A positive (stale): scheduling a KNOWN-but-STALE asset → 409 stale-export; allowStale:true → 200', async () => {
+  // The companion to the absent branch: the export EXISTS but is STALE (its source
+  // is newer than the export). Manufacture it without touching bytes: age the
+  // export PNG's mtime to be OLDER than its surface source file, so the manifest
+  // computes stale=true (sourceStat.mtimeMs > exportStat.mtimeMs). The PNG is a
+  // gitignored REAL-repo file OUTSIDE content-studio (so not in the sandbox); we
+  // restore its original mtime in finally so the tree stays clean even on throw.
+  const present = await firstFreshPresentItemWithSource();
+  assert.ok(present, 'expected a present, non-stale manifest item whose source file exists');
+  const { id, pngAbs, sourceAbs } = present;
+
+  const pngStat = fs.statSync(pngAbs); // snapshot the export's real mtimes
+  const srcStat = fs.statSync(sourceAbs);
+  const before = await readEntry(id);
+  const beforeStatus = before ? before.status : null;
+
+  try {
+    // Age the export to 60 s BEFORE the source's mtime → source is now newer → stale.
+    const olderMs = srcStat.mtimeMs - 60_000;
+    fs.utimesSync(pngAbs, olderMs / 1000, olderMs / 1000);
+
+    // Confirm the manifest now reports this id as exists:true + stale:true.
+    const m = await getManifest();
+    let manItem = null;
+    for (const s of m.surfaces || []) {
+      for (const it of s.items || []) {
+        if (`${s.id}/${it.name}` === id) manItem = it;
+      }
+    }
+    assert.ok(manItem, `id ${id} must still be a known manifest item`);
+    assert.equal(manItem.exists, true, 'the aged export must still read back as exists:true');
+    assert.equal(manItem.stale, true, 'the aged export must read back as stale:true');
+
+    // Stage to approved (not a guarded status) so the scheduled move is reachable.
+    const toApproved = await apiJSON('/api/status', {
+      json: { id, patch: { status: 'approved', override: true } },
+    });
+    assert.equal(toApproved.status, 200, `staging to approved should pass: ${JSON.stringify(toApproved.body)}`);
+
+    // approved→scheduled is legal, but the export is STALE and no allowStale → 409.
+    const blocked = await apiJSON('/api/status', { json: { id, patch: { status: 'scheduled' } } });
+    assert.equal(blocked.status, 409, `stale asset → scheduled must 409: ${JSON.stringify(blocked.body)}`);
+    assert.equal(blocked.body.reason, 'stale-export', 'the 409 carries reason:stale-export');
+    assert.equal(blocked.body.id, id, 'the 409 echoes the offending id');
+    assert.equal(blocked.body.to, 'scheduled', 'the 409 echoes the attempted status');
+    assert.ok(blocked.body.assetState && blocked.body.assetState.known === true, 'assetState.known is true');
+    assert.equal(blocked.body.assetState.exists, true, 'assetState.exists is true (present but stale)');
+    assert.equal(blocked.body.assetState.stale, true, 'assetState.stale reflects the stale export');
+
+    // Nothing was written: the stored status is still approved.
+    const afterBlock = await readEntry(id);
+    assert.equal(afterBlock.status, 'approved', 'a stale-export 409 must not mutate the stored status');
+
+    // WITH allowStale:true the same legal approved→scheduled move now proceeds.
+    const allowed = await apiJSON('/api/status', {
+      json: { id, patch: { status: 'scheduled', allowStale: true } },
+    });
+    assert.equal(allowed.status, 200, `allowStale:true must let the stale move through: ${JSON.stringify(allowed.body)}`);
+    assert.equal(allowed.body.status, 'scheduled', 'allowStale applied the scheduled status');
+    assert.ok(!('allowStale' in allowed.body), 'allowStale must not persist on the entry');
+  } finally {
+    // Restore the export's original mtime (no byte change was ever made).
+    fs.utimesSync(pngAbs, pngStat.atime, pngStat.mtime);
+    // Belt-and-braces: restore this id's SANDBOX status entry (sandbox is discarded
+    // in after(); this only keeps later in-run assertions tidy).
     if (beforeStatus !== null) {
       await apiJSON('/api/status', { json: { id, patch: { status: beforeStatus, override: true, allowStale: true } } });
     }

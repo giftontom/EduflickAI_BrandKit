@@ -42,8 +42,8 @@ cd tools && npm run studio        # → http://localhost:8090/tools/studio/
 gives you galleries for every export surface (with stale/missing detection — empty grids on a
 fresh clone are normal, `exports/` is gitignored), an iframe browser for brochures/deck/kits, a
 markdown reader for all docs, launch-pipeline status tracking (`content-studio/status.json`),
-a guarded FACTS.md editor, and one-click pipeline runs with live logs. Its write surface is
-exactly three paths — see [`studio/README.md`](studio/README.md).
+a guarded FACTS.md editor, and one-click pipeline runs with live logs. Its write surface is a
+fixed set of guarded paths — see [`studio/README.md`](studio/README.md) for the enumerated list.
 
 `serve.mjs` and the studio share the static handler in `lib/static.mjs`.
 

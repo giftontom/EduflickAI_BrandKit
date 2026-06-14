@@ -59,6 +59,11 @@ app itself, export PNGs, CSS, fonts).
 | `/api/launch-grid/post`   | POST       | `{id, patch, override?}` — patch one post (`caption`/`notes`/`role`/`wave`); guarded   |
 | `/api/launch-grid/slides` | POST       | `{slug, slides, title?, surf?, override?}` — rewrite one carousel's slides; guarded     |
 | `/api/export-zip`         | POST       | `{files:[{src\|text, name}], zipName?}` → `application/zip`; read-only, `exports/`-only |
+| `/api/generate/templates` | GET        | `[{file, title}]` — the `prompts/` templates (read-only)                               |
+| `/api/generate`           | POST       | `{template, includeCheatsheet?, task?}` → `{prompt, facts, warnings}`; assembles the SYSTEM+USER prompt from `00_SYSTEM_PROMPT.md` + live `FACTS.md` + the chosen template. Read-only |
+| `/api/generate/run`       | POST       | same body → opt-in local-model bridge: assembles the same prompt, runs it through a local model, returns `{output, stderr, exitCode, timedOut, prompt}`. **Dormant `501` unless `STUDIO_MODEL_CMD` is set** (nothing is spawned); read-only |
+| `/api/qa/check`           | POST       | `{text}` → `{violations, checklist}` (read-only): facts-guard violations + emoji / forbidden-word hits |
+| `/api/drafts`             | GET / POST | GET `[{name, mtime, size, needsInput, violations}]` over `drafts/*.md`; POST `{channel?, slug, content}` → atomic `drafts/<name>.md` (slug/channel `^[a-z0-9][a-z0-9-]*$`, traversal-guarded, retired-string clean — 422 with no write and no override otherwise) |
 
 Action whitelist: `export`, `export:ig`, `export:posters`, `export:stories`, `export:slides`,
 `export:pdf`, `gen:backdrops:proc`, `gen:feedback`, `check:facts`, `tokens`, `snippets`. Each runs
@@ -66,7 +71,7 @@ as `npm run <name>` in `tools/` — constant argv, no shell.
 
 ## Write surface
 
-The studio can write exactly six paths, nothing else:
+The studio can write exactly seven paths, nothing else:
 
 1. `content-studio/status.json` — launch-pipeline status entries (`/api/status`); `status` must be
    one of the known states, writes serialize through an in-process queue
@@ -87,6 +92,12 @@ The studio can write exactly six paths, nothing else:
    (`/api/launch-grid/slides`) — one carousel's slides at a time, matched by slug; only the island
    bytes are rewritten, `[[placeholders]]` and a literal `</script` are hard-rejected, and the
    copy is brand-guarded (422 unless override)
+7. `content-studio/drafts/<name>.md` — a generated draft (`POST /api/drafts`); the `slug` and
+   optional `channel` are sanitized to `^[a-z0-9][a-z0-9-]*$` and joined into `<channel>-<slug>.md`,
+   the resolved path is traversal-guarded to stay inside `drafts/`, the write is atomic, and the
+   content is retired-string-guarded — a violation is 422 with **no write and no override** (the
+   repo facts-guard forbids retired strings anywhere under `content-studio/`, so drafts must stay
+   clean)
 
 All writes are atomic and durable (tmp file → fsync → rename). There is no generic write endpoint;
 every path above is a dedicated, server-side-validated handler. `/api/export-zip` is read-only —
@@ -116,8 +127,11 @@ you save past them with an explicit override that is recorded on the comment.
 - DNS-rebinding guard: every request's `Host` header must be a loopback hostname (`localhost` /
   `127.0.0.1` / `[::1]`); anything else is `403` before routing.
 - CSRF guard: a non-`GET`/`HEAD` `/api` request carrying an `Origin` header must be same-origin
-  (`http://localhost|127.0.0.1|[::1]:<port>`), else `403`. **No `Access-Control-Allow-Origin` (or any
-  CORS) header is ever set**, so the browser blocks cross-origin reads on its own.
+  (`http://localhost|127.0.0.1|[::1]:<port>`), else `403`.
+- **No `Access-Control-Allow-Origin` (or any other CORS) header is ever set — on the API
+  responses *or* the static handler.** The static handler previously sent
+  `Access-Control-Allow-Origin: *`; that was removed, so no response opts cross-origin reads in.
+  The browser blocks cross-origin reads on its own.
 - Static handler rejects path traversal (decode → normalize → must stay under the repo root)
   and NUL bytes.
 - Actions: body must name an own key of the frozen whitelist; spawned without a shell;
@@ -140,3 +154,11 @@ you save past them with an explicit override that is recorded on the comment.
   bytes reach disk, then `rename`d into place — a crash mid-write can never leave a half-written file.
 - Vendored client libraries are pinned with recorded SHA-256 hashes (see `vendor/README.md`);
   rendered markdown is sanitized with DOMPurify.
+- `STUDIO_CONTENT_DIR`: the directory every `content-studio` data path is read from and written to
+  (`status.json`, `FACTS.md`, `design-comments.json`, the generated `DESIGN_FEEDBACK.md`,
+  `launch-grid.json`, `BRAND_CHEATSHEET.md`, `prompts/`, `drafts/`, and the `/content-studio/`
+  static + docs surface). It defaults to `content-studio/` at the repo root; with it **unset every
+  path and behavior is byte-identical** to serving from `content-studio/`. The test harness points
+  it at a throwaway copy so a test run never touches live owner data. `design-system/` paths (the
+  launch-grid HTML, EDITMODE targets) and the repo-wide static/manifest scan always stay rooted at
+  the repo root regardless.
