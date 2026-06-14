@@ -1,7 +1,7 @@
 // generate.test.mjs — the generation panel + QA runner + drafts write surface.
 //
-// Three Phase-1b endpoints, exercised against the REAL repo via the shared
-// helpers.mjs harness (its own port so node:test runs the files concurrently):
+// Three Phase-1b endpoints, exercised via the shared helpers.mjs harness (its own
+// port so node:test runs the files concurrently):
 //
 //   GET  /api/generate/templates   the prompts/ list (read-only)
 //   POST /api/generate             deterministic SYSTEM+FACTS+TEMPLATE assembly
@@ -12,12 +12,13 @@
 //                                  sanitized, traversal-guarded, atomic, facts-
 //                                  guarded with NO override.
 //
-// DRAFTS ARE DYNAMIC FILES, not part of helpers' WRITE_SURFACE snapshot. So this
-// suite owns its own residue cleanup: every file it writes uses the unique slug
-// prefix `studio-test-gen`, the before() records the pre-suite drafts listing,
-// and the after() deletes anything new under that prefix. A final residue test
-// asserts `git status --porcelain content-studio/drafts/` is clean — nothing the
-// suite created (or any escaped/`.tmp` file) is left behind.
+// CONTENT SANDBOX: the server (and the opt-in bridge server) run with
+// STUDIO_CONTENT_DIR pointed at a throwaway COPY of content-studio
+// (makeContentSandbox). So every draft written, and every prompts/ + FACTS.md
+// read, hits the sandbox — the user's LIVE content-studio/drafts/ is never written.
+// DRAFTS_DIR below resolves to the SANDBOX drafts dir, and all file assertions read
+// it. The sandbox is rmSync'd in after(), so there is no real-tree residue to
+// scrub and no git-porcelain check is needed against content-studio/drafts/.
 //
 // IMPORTANT (guard-bypass tests): never hard-code a retired marketing string in
 // test source — the facts CI scans test files too. The violating string is built
@@ -27,7 +28,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import net from 'node:net';
-import { execFileSync, spawn } from 'node:child_process';
+import { spawn } from 'node:child_process';
 
 import { RETIRED, scanTextRetired } from '../check-facts.mjs';
 import {
@@ -39,13 +40,18 @@ import {
   delay,
   startServer,
   stopServer,
+  makeContentSandbox,
+  removeContentSandbox,
 } from './helpers.mjs';
 
 // Own port (api.test 8099, comments 8097, statemachine 8096) so node:test can
 // run the files concurrently without a bind collision.
 setPort(8093);
 
-const DRAFTS_DIR = path.join(ROOT, 'content-studio', 'drafts');
+// The sandbox content dir + its drafts/ subdir (where all writes land). Assigned
+// in before() once makeContentSandbox() has copied content-studio/ aside.
+let sandbox;
+let DRAFTS_DIR;
 // Every draft this suite writes starts with this prefix so teardown + the
 // residue assertion can target exactly what the suite created.
 const SLUG_PREFIX = 'studio-test-gen';
@@ -113,6 +119,7 @@ async function startBridgeServer() {
       ...process.env,
       STUDIO_PORT: String(bridgePort),
       PORT: String(bridgePort),
+      STUDIO_CONTENT_DIR: sandbox, // same throwaway content copy as the main server
       STUDIO_MODEL_CMD: 'cat', // echoes stdin → stdout; the bridge returns the prompt
     },
     stdio: ['ignore', 'pipe', 'pipe'],
@@ -172,16 +179,22 @@ async function bridgeFetch(pathname, opts = {}) {
 }
 
 before(async () => {
+  // A throwaway COPY of content-studio; DRAFTS_DIR is its drafts/ subdir, so every
+  // /api/drafts write lands here, never in the user's live content-studio/drafts/.
+  sandbox = makeContentSandbox();
+  DRAFTS_DIR = path.join(sandbox, 'drafts');
   preDrafts = new Set(listDrafts());
   assert.ok(scanTextRetired(RETIRED_TEXT).length > 0, 'runtime retired string must trip the scanner');
-  await startServer();
+  await startServer({ contentDir: sandbox });
   await startBridgeServer();
 });
 
 after(async () => {
   await stopServer();
   await stopBridgeServer();
+  // The sandbox is discarded wholesale; cleanupCreatedDrafts() is belt-and-braces.
   cleanupCreatedDrafts();
+  removeContentSandbox(sandbox);
 });
 
 // ----------------------------------------------------------- generate/templates
@@ -388,7 +401,9 @@ test('POST /api/drafts with a channel prefixes the filename', async () => {
 });
 
 test('POST /api/drafts with a traversal slug → 400/403, nothing escapes drafts/', async () => {
-  const escapeTarget = path.join(ROOT, 'content-studio', 'evil.md');
+  // A '../evil' slug would escape DRAFTS_DIR (= sandbox/drafts) up into the sandbox
+  // root — assert nothing lands there. (The real content-studio is never in play.)
+  const escapeTarget = path.join(sandbox, 'evil.md');
   assert.ok(!fs.existsSync(escapeTarget), 'precondition: escape target absent');
   const { status } = await apiJSON('/api/drafts', { json: { slug: '../evil', content: 'x' } });
   assert.ok(status === 400 || status === 403, `traversal slug rejected (got ${status})`);
@@ -469,16 +484,20 @@ test('no .tmp residue lingers in drafts/ after the writes', async () => {
   assert.deepEqual(tmp, [], `unexpected .tmp residue in drafts/: ${tmp.join(', ')}`);
 });
 
-test('git status shows no residue under content-studio/drafts/ from this suite', () => {
-  // Clean up first so the porcelain check reflects a properly torn-down suite.
-  cleanupCreatedDrafts();
-  const out = execFileSync('git', ['status', '--porcelain', 'content-studio/drafts/'], {
-    cwd: ROOT,
-    encoding: 'utf8',
-  });
-  const suiteResidue = out
-    .split('\n')
-    .filter((l) => l.trim().length)
-    .filter((l) => l.includes(SLUG_PREFIX) || /\.tmp-/.test(l));
-  assert.deepEqual(suiteResidue, [], `suite left residue under drafts/:\n${suiteResidue.join('\n')}`);
+test('isolation: drafts landed in the SANDBOX; the REAL content-studio/drafts/ has none of this suite\'s files', () => {
+  // The suite's writes landed in the sandbox drafts dir.
+  const sandboxNames = listDrafts().filter((n) => n.includes(SLUG_PREFIX));
+  assert.ok(sandboxNames.length > 0, 'the sandbox drafts/ should hold this suite\'s drafts');
+
+  // The user's LIVE content-studio/drafts/ must contain NONE of them (and no
+  // suite-owned .tmp residue) — the suite never wrote to the real tree.
+  const realDrafts = path.join(ROOT, 'content-studio', 'drafts');
+  let realNames = [];
+  try {
+    realNames = fs.readdirSync(realDrafts);
+  } catch {
+    realNames = [];
+  }
+  const leaked = realNames.filter((n) => n.includes(SLUG_PREFIX) || /\.tmp-/.test(n));
+  assert.deepEqual(leaked, [], `suite leaked into REAL content-studio/drafts/:\n${leaked.join('\n')}`);
 });

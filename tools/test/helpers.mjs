@@ -3,14 +3,26 @@
 // Spawns tools/studio-server.mjs as a child on STUDIO_PORT=8099, polls
 // GET /api/manifest until it answers, and exposes a fetch wrapper that defaults
 // a same-origin Origin + Host (http://127.0.0.1:8099) so ordinary requests pass
-// the DNS-rebinding + CSRF guards. Also a byte-exact snapshot/restore of every
-// file in the studio write surface, so the suite runs against the REAL repo and
-// leaves no residue.
+// the DNS-rebinding + CSRF guards.
+//
+// CONTENT SANDBOXING (the reason this file exists in its current form): the
+// studio reads + writes all content-studio data from CONTENT_DIR, which defaults
+// to <repo>/content-studio but is overridden by STUDIO_CONTENT_DIR. The user runs
+// a LIVE studio on :8090 editing those real files, so the suite must NEVER touch
+// them. makeContentSandbox() copies content-studio/ into a unique throwaway dir
+// under os.tmpdir(); startServer({ contentDir }) points the child's
+// STUDIO_CONTENT_DIR at it; every WRITE test reads/writes/asserts against the
+// SANDBOX paths and rmSync's the sandbox in after(). The old byte-exact
+// snapshot/restore of the REAL content-studio files is therefore gone for those
+// files — there is nothing to restore because nothing real was ever written.
+// (snapshot()/restoreSnapshot() remain ONLY for the design-system EDITMODE
+// surface, which is a real-repo file and not content-studio.)
 //
 // Pure node:* — no npm packages (G1). Playwright is used only by smoke.mjs.
 import { spawn } from 'node:child_process';
 import net from 'node:net';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -29,95 +41,48 @@ export const TOOLS = path.resolve(HERE, '..');
 export const ROOT = path.resolve(TOOLS, '..');
 const NODE = process.execPath; // the exact node running the suite (avoids nvm shims)
 
-// Every file the studio can write, plus the (gitignored) action-state file the
-// action-runner test mutates. Snapshotted in before(), restored in after().
+// The REAL-repo write surface that is NOT content-studio (so it is NOT
+// sandboxable via STUDIO_CONTENT_DIR): the launch-grid carousel HTML the
+// /api/launch-grid/slides path writes (it lives under design-system/), plus the
+// gitignored action-state file the action-runner test mutates. These are
+// snapshotted in before() and restored in after() because they are written to the
+// real repo. Every content-studio path (status.json, FACTS.md, design-comments.json,
+// DESIGN_FEEDBACK.md, launch-grid.json, drafts/, prompts/) is sandboxed instead —
+// see makeContentSandbox() — and is no longer listed here.
 export const WRITE_SURFACE = [
-  'content-studio/status.json',
-  'content-studio/FACTS.md',
-  'content-studio/design-comments.json',
-  'content-studio/DESIGN_FEEDBACK.md',
-  'content-studio/launch-grid.json',
   'design-system/collateral/launch-grid.html',
   'tools/.studio-state.json',
 ];
 
-// ---- cross-process status.json section lock -------------------------------
+// ---- content sandbox (the studio's STUDIO_CONTENT_DIR target) --------------
 
-// The suite runs test FILES concurrently, each spawning its OWN server child.
-// content-studio/status.json is a SHARED file with no inter-process lock, so any
-// two files that touch it race at the OS level in three ways:
-//   • two servers' read-modify-write cycles lose-update each other (A reads {x},
-//     B reads {x}, A writes {x,a}, B writes {x,b} — a is lost; the atomic rename
-//     prevents torn files, not lost updates);
-//   • the corrupt-store test overwrites the whole file with garbage mid-run;
-//   • a sibling's after()/restoreSnapshot rewrites the file to a pre-suite
-//     snapshot while another file is still mid-test.
-// Only api.test.mjs and status-statemachine.test.mjs write status.json (the
-// other surfaces are disjoint), so they take this whole-file advisory lock for
-// their ENTIRE lifetime — before() acquires, after() releases — and thus run
-// serially RELATIVE TO EACH OTHER on status.json. comments.test.mjs touches no
-// status.json and never blocks. Files that touch status.json call
-// acquireStatusSection() in before() (after snapshot) and releaseStatusSection()
-// in after() (before restore).
-// Generic advisory section lock: O_CREAT|O_EXCL create succeeds for exactly one
-// holder at a time, with the same stale-reclaim (mtime > 45s) and 60s wait as
-// before. `held` tracks acquisition so release is idempotent. Both the status
-// lock and the design-comments lock (added for Contract A's review-gate tests,
-// which write design-comments.json from status-statemachine.test.mjs while
-// comments.test.mjs writes it too) are built from this one primitive.
-function makeSectionLock(lockPath) {
-  let held = false;
-  return {
-    async acquire() {
-      const deadline = Date.now() + 60000; // generous: a whole file's run may be held
-      for (;;) {
-        try {
-          const fd = fs.openSync(lockPath, 'wx');
-          fs.writeSync(fd, `${process.pid} ${Date.now()}`);
-          fs.closeSync(fd);
-          held = true;
-          return;
-        } catch (e) {
-          if (e.code !== 'EEXIST') throw e;
-          // Reclaim a stale lock (a crashed holder) whose mtime is older than 45s
-          // — longer than any honest file run — so the suite never deadlocks on an
-          // orphaned lockfile.
-          try {
-            const st = fs.statSync(lockPath);
-            if (Date.now() - st.mtimeMs > 45000) fs.rmSync(lockPath, { force: true });
-          } catch {
-            /* vanished between stat and now — loop and retry the create */
-          }
-          if (Date.now() > deadline) throw new Error(`section lock wait timed out: ${lockPath}`);
-          await delay(25);
-        }
-      }
-    },
-    release() {
-      if (!held) return;
-      held = false;
-      try {
-        fs.rmSync(lockPath, { force: true });
-      } catch {
-        /* already gone */
-      }
-    },
-  };
+// The real content-studio/ dir, copied FROM (never written TO) by makeContentSandbox().
+const REAL_CONTENT_DIR = path.join(ROOT, 'content-studio');
+
+// Copy content-studio/ into a unique throwaway dir under os.tmpdir() and return
+// its absolute path. The studio is then spawned with STUDIO_CONTENT_DIR=<this>,
+// so EVERY read/write/regenerate of content-studio data hits the copy, never the
+// user's live files. Each call makes a fresh, uniquely named dir, so concurrent
+// test files (each calling this in their own before()) get fully disjoint
+// sandboxes and never share status.json / design-comments.json — which is what
+// retires the old cross-file advisory lockfiles.
+export function makeContentSandbox() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'studio-content-'));
+  // recursive copy of the whole tree (prompts/, drafts/, all the *.md + *.json).
+  fs.cpSync(REAL_CONTENT_DIR, dir, { recursive: true });
+  return dir;
 }
 
-const statusLock = makeSectionLock(path.join(ROOT, 'content-studio', '.status.json.testlock'));
-export const acquireStatusSection = () => statusLock.acquire();
-export const releaseStatusSection = () => statusLock.release();
-
-// content-studio/design-comments.json is SHARED across test files the same way
-// status.json is: comments.test.mjs writes it, and Contract A's review-gate cases
-// in status-statemachine.test.mjs now create/delete comment pins to drive the tally.
-// Both files hold this section for their whole run (acquire in before(), release in
-// after()) so their snapshot/restore of design-comments.json + DESIGN_FEEDBACK.md
-// never overlaps the other file mid-test.
-const commentsLock = makeSectionLock(path.join(ROOT, 'content-studio', '.design-comments.json.testlock'));
-export const acquireCommentsSection = () => commentsLock.acquire();
-export const releaseCommentsSection = () => commentsLock.release();
+// Tear a sandbox down. Idempotent + force so a half-built or already-gone dir
+// never throws in an after().
+export function removeContentSandbox(dir) {
+  if (!dir) return;
+  try {
+    fs.rmSync(dir, { recursive: true, force: true });
+  } catch {
+    /* already gone */
+  }
+}
 
 // ---- same-origin fetch ----------------------------------------------------
 
@@ -183,10 +148,16 @@ export async function apiJSON(pathname, opts = {}) {
 
 let child = null;
 
-export async function startServer() {
+// startServer({ contentDir }) — spawn the singleton server child. When contentDir
+// is given it is passed as STUDIO_CONTENT_DIR so the child reads + writes ALL
+// content-studio data from that (sandbox) dir instead of the real content-studio/.
+// With no contentDir the child behaves byte-identically to the live :8090 server.
+export async function startServer({ contentDir } = {}) {
+  const env = { ...process.env, STUDIO_PORT: String(PORT), PORT: String(PORT) };
+  if (contentDir) env.STUDIO_CONTENT_DIR = contentDir;
   child = spawn(NODE, ['studio-server.mjs'], {
     cwd: TOOLS,
-    env: { ...process.env, STUDIO_PORT: String(PORT), PORT: String(PORT) },
+    env,
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   child.unref?.(); // don't keep the test process alive on its own
@@ -233,10 +204,12 @@ export async function stopServer() {
 // self-heal runs once, at boot). Polls that port's own manifest until ready, then
 // returns a handle with stop() that SIGTERM/SIGKILLs only this child. The port
 // must differ from the caller's singleton port so the binds never collide.
-export async function spawnServerOnce(port) {
+export async function spawnServerOnce(port, { contentDir } = {}) {
+  const env = { ...process.env, STUDIO_PORT: String(port), PORT: String(port) };
+  if (contentDir) env.STUDIO_CONTENT_DIR = contentDir;
   const c = spawn(NODE, ['studio-server.mjs'], {
     cwd: TOOLS,
-    env: { ...process.env, STUDIO_PORT: String(port), PORT: String(port) },
+    env,
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   c.unref?.();
@@ -277,6 +250,11 @@ export function delay(ms) {
 }
 
 // ---- snapshot / restore (byte-exact) --------------------------------------
+//
+// Now scoped to the NON-content-studio real-repo write surface only (WRITE_SURFACE
+// above: the launch-grid carousel HTML + the gitignored action-state file).
+// content-studio is sandboxed via makeContentSandbox()/STUDIO_CONTENT_DIR, so it
+// has no entry here and is never snapshotted or restored.
 
 // Snapshot the bytes of every write-surface file (null = file absent). Returned
 // object is opaque; pass it back to restoreSnapshot().

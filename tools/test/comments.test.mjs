@@ -4,6 +4,13 @@
 // and regenerates DESIGN_FEEDBACK.md. Text is brand-guarded server-side: a
 // retired string is 422 unless override:true (recorded on the comment). Same
 // runtime-built retired string as api.test.mjs — never a hard-coded literal.
+//
+// CONTENT SANDBOX: the server is spawned with STUDIO_CONTENT_DIR pointed at a
+// throwaway COPY of content-studio (makeContentSandbox), so every read/write of
+// design-comments.json + DESIGN_FEEDBACK.md hits the sandbox and the user's LIVE
+// content-studio/ is never touched. All file assertions read the SANDBOX paths.
+// The sandbox is rmSync'd in after(); because each test file gets its OWN sandbox
+// the cross-file section lock on design-comments.json is no longer needed.
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -13,15 +20,12 @@ import { RETIRED, scanTextRetired } from '../check-facts.mjs';
 import { renderFeedbackDigest } from '../lib/feedback.mjs';
 import {
   setPort,
-  ROOT,
   apiJSON,
   startServer,
   stopServer,
-  snapshot,
-  restoreSnapshot,
   spawnServerOnce,
-  acquireCommentsSection,
-  releaseCommentsSection,
+  makeContentSandbox,
+  removeContentSandbox,
 } from './helpers.mjs';
 
 // Own port (api.test.mjs uses 8099) so node:test can run the files concurrently.
@@ -31,7 +35,8 @@ const firstLiteral = RETIRED.find((r) => typeof r.bad === 'string').bad;
 const RETIRED_TEXT = `studio comment marker ${firstLiteral} end`;
 
 // A real file under the repo root — validateAssetRef requires the source to
-// resolve to an existing FILE (no body-supplied traversal).
+// resolve to an existing FILE (no body-supplied traversal). This is a real-repo
+// path (design-system/), unaffected by the content sandbox.
 const REAL_SOURCE = 'design-system/collateral/launch-grid.html';
 
 function pin(text, extra = {}) {
@@ -48,45 +53,41 @@ function pin(text, extra = {}) {
   };
 }
 
-let snap;
+// The sandbox content dir + the two files this suite asserts against, INSIDE it.
+let sandbox;
+let COMMENTS_ABS;
+let FEEDBACK_ABS;
 
 before(async () => {
-  // design-comments.json (+ DESIGN_FEEDBACK.md) is SHARED with the review-gate
-  // cases in status-statemachine.test.mjs; hold the cross-process section lock for
-  // this file's whole run so the two never overlap on it (see helpers.mjs). Acquire
-  // BEFORE snapshotting so the snapshot captures a stable, sibling-restored state.
-  await acquireCommentsSection();
-  snap = snapshot();
+  sandbox = makeContentSandbox();
+  COMMENTS_ABS = path.join(sandbox, 'design-comments.json');
+  FEEDBACK_ABS = path.join(sandbox, 'DESIGN_FEEDBACK.md');
   assert.ok(scanTextRetired(RETIRED_TEXT).length > 0);
-  await startServer();
+  await startServer({ contentDir: sandbox });
 });
 
 after(async () => {
   await stopServer();
-  restoreSnapshot(snap);
-  releaseCommentsSection();
+  removeContentSandbox(sandbox);
 });
 
 test('comments: create with a clean pin → 200 and lands in the store', async () => {
-  const commentsAbs = path.join(ROOT, 'content-studio', 'design-comments.json');
   const { status, body } = await apiJSON('/api/comments', { json: pin('please tighten this headline') });
   assert.equal(status, 200, JSON.stringify(body));
   assert.ok(body.id, 'a created comment has a uuid');
   assert.equal(body.overridden, false);
-  const store = JSON.parse(fs.readFileSync(commentsAbs, 'utf8'));
+  const store = JSON.parse(fs.readFileSync(COMMENTS_ABS, 'utf8'));
   assert.ok(store.comments.some((c) => c.id === body.id), 'comment persisted to store');
   // The digest regenerates on every write.
-  const digestAbs = path.join(ROOT, 'content-studio', 'DESIGN_FEEDBACK.md');
-  assert.ok(fs.existsSync(digestAbs), 'digest regenerated');
+  assert.ok(fs.existsSync(FEEDBACK_ABS), 'digest regenerated');
 });
 
 test('comments: retired text without override → 422 + violations, store unchanged', async () => {
-  const commentsAbs = path.join(ROOT, 'content-studio', 'design-comments.json');
-  const before = fs.readFileSync(commentsAbs);
+  const before = fs.readFileSync(COMMENTS_ABS);
   const { status, body } = await apiJSON('/api/comments', { json: pin(RETIRED_TEXT) });
   assert.equal(status, 422, JSON.stringify(body));
   assert.ok(Array.isArray(body.violations) && body.violations.length > 0);
-  assert.deepEqual(fs.readFileSync(commentsAbs), before, 'store must not change on a 422');
+  assert.deepEqual(fs.readFileSync(COMMENTS_ABS), before, 'store must not change on a 422');
 });
 
 test('comments: retired text WITH override → 200 and overridden:true is recorded', async () => {
@@ -133,17 +134,14 @@ test('comments: missing text on create → 400', async () => {
 // (the committed digest already matches the committed JSON) boot writes nothing.
 //
 // These two tests boot a FRESH, isolated server on its OWN port (8095 — distinct
-// from this file's singleton 8097, smoke.mjs 8098, and every other suite port) so
-// the self-heal actually runs against the file state we set up. DESIGN_FEEDBACK.md
-// is a LIVE owner file: each test snapshots its CURRENT bytes and restores them
-// EXACTLY in a finally, even if an assertion throws.
+// from this file's singleton 8097, smoke.mjs 8098, and every other suite port),
+// POINTED AT THE SAME SANDBOX, so the self-heal runs against the sandbox files we
+// set up. Because the files are in the sandbox there is nothing live to restore —
+// the whole sandbox is discarded in after().
 
-const FEEDBACK_ABS = path.join(ROOT, 'content-studio', 'DESIGN_FEEDBACK.md');
-const COMMENTS_ABS = path.join(ROOT, 'content-studio', 'design-comments.json');
-
-// Corruption-safe load of the comment store from disk, byte-identical in behaviour
-// to the server's loadComments (bad/missing JSON → empty store). The digest the
-// server self-heals TO is renderFeedbackDigest of exactly this.
+// Corruption-safe load of the comment store from the SANDBOX, byte-identical in
+// behaviour to the server's loadComments (bad/missing JSON → empty store). The
+// digest the server self-heals TO is renderFeedbackDigest of exactly this.
 function loadCommentsFromDisk() {
   let raw = null;
   try {
@@ -161,7 +159,6 @@ function loadCommentsFromDisk() {
 }
 
 test('contract B: a fresh boot regenerates a GARBAGE DESIGN_FEEDBACK.md from the JSON of record', async () => {
-  const feedbackBytes = fs.readFileSync(FEEDBACK_ABS); // snapshot CURRENT owner bytes
   // What the server must converge the digest to: the digest of the JSON on disk.
   const want = renderFeedbackDigest(loadCommentsFromDisk());
   let srv = null;
@@ -170,8 +167,9 @@ test('contract B: a fresh boot regenerates a GARBAGE DESIGN_FEEDBACK.md from the
     fs.writeFileSync(FEEDBACK_ABS, 'GARBAGE not a valid digest @@@\n');
     assert.notEqual(fs.readFileSync(FEEDBACK_ABS, 'utf8'), want, 'precondition: digest starts out of sync');
 
-    // Boot a fresh isolated server — the self-heal runs once, at boot.
-    srv = await spawnServerOnce(8095);
+    // Boot a fresh isolated server on the SAME sandbox — the self-heal runs once,
+    // at boot.
+    srv = await spawnServerOnce(8095, { contentDir: sandbox });
 
     // The digest on disk must now equal the regeneration from the JSON of record.
     assert.equal(
@@ -181,12 +179,10 @@ test('contract B: a fresh boot regenerates a GARBAGE DESIGN_FEEDBACK.md from the
     );
   } finally {
     if (srv) await srv.stop();
-    fs.writeFileSync(FEEDBACK_ABS, feedbackBytes); // restore owner bytes EXACTLY
   }
 });
 
 test('contract B: a normal boot (digest already in sync) does NOT change DESIGN_FEEDBACK.md bytes', async () => {
-  const feedbackBytes = fs.readFileSync(FEEDBACK_ABS); // snapshot CURRENT owner bytes
   let srv = null;
   try {
     // First put the digest in sync with the JSON of record (what a committed,
@@ -196,7 +192,7 @@ test('contract B: a normal boot (digest already in sync) does NOT change DESIGN_
     const beforeBoot = fs.readFileSync(FEEDBACK_ABS); // exact bytes pre-boot
 
     // Boot a fresh isolated server — with an in-sync digest this must be a no-op.
-    srv = await spawnServerOnce(8095);
+    srv = await spawnServerOnce(8095, { contentDir: sandbox });
 
     assert.deepEqual(
       fs.readFileSync(FEEDBACK_ABS),
@@ -205,6 +201,5 @@ test('contract B: a normal boot (digest already in sync) does NOT change DESIGN_
     );
   } finally {
     if (srv) await srv.stop();
-    fs.writeFileSync(FEEDBACK_ABS, feedbackBytes); // restore owner bytes EXACTLY
   }
 });

@@ -2,9 +2,14 @@
 //
 // node:test + node:assert + node:* only (no npm packages). Spawns the real
 // studio-server.mjs on its own port (8096 — distinct from api.test.mjs 8099 and
-// comments.test.mjs 8097 so the files run concurrently), snapshots the six write
-// paths in before(), and restores them byte-for-byte in after() so the repo tree
-// stays clean — no __sm_test_ residue in status.json.
+// comments.test.mjs 8097 so the files run concurrently).
+//
+// CONTENT SANDBOX: the server runs with STUDIO_CONTENT_DIR pointed at a throwaway
+// COPY of content-studio (makeContentSandbox), so all of this file's status.json
+// writes AND the Contract A review-gate comment pins land in the sandbox — never
+// in the user's LIVE content-studio/. The sandbox is rmSync'd in after(), so there
+// is no __sm_test_ / __rev_test residue to scrub from the real tree, and because
+// each test file owns its OWN sandbox the cross-file section locks are gone.
 //
 // Asserts THE STATE-MACHINE CONTRACT exactly:
 //   • Allowed without override: draft→approved, approved→scheduled,
@@ -31,19 +36,18 @@ import {
   apiJSON,
   startServer,
   stopServer,
-  snapshot,
-  restoreSnapshot,
-  acquireStatusSection,
-  releaseStatusSection,
-  acquireCommentsSection,
-  releaseCommentsSection,
+  makeContentSandbox,
+  removeContentSandbox,
 } from './helpers.mjs';
 
 // Own port (api.test.mjs 8099, comments.test.mjs 8097) so node:test can run the
 // files concurrently without a bind collision.
 setPort(8096);
 
-const STATUS_ABS = path.join(ROOT, 'content-studio', 'status.json');
+// The sandbox content dir + status.json INSIDE it (the only on-disk file this
+// suite reads directly; everything else is asserted via the live API).
+let sandbox;
+let STATUS_ABS;
 
 // A fresh, unique asset id per test so no two cases ever touch the same entry.
 let seq = 0;
@@ -58,26 +62,17 @@ async function readEntry(id) {
   return body.assets[id];
 }
 
-let snap;
-
 before(async () => {
-  // status.json is a SHARED file; hold the cross-process section lock for this
-  // file's whole run so it never overlaps api.test.mjs on it (see helpers.mjs).
-  // Contract A's review-gate cases also write design-comments.json (comment pins
-  // that drive the open-comments tally), which comments.test.mjs writes too, so
-  // hold THAT section for the whole run as well. Acquire BOTH before snapshotting
-  // so the snapshot captures a stable, sibling-restored state — not a mid-run one.
-  await acquireStatusSection();
-  await acquireCommentsSection();
-  snap = snapshot();
-  await startServer();
+  // Spawn against a throwaway COPY of content-studio: every status.json write and
+  // every Contract A comment pin lands in the sandbox, never the live tree.
+  sandbox = makeContentSandbox();
+  STATUS_ABS = path.join(sandbox, 'status.json');
+  await startServer({ contentDir: sandbox });
 });
 
 after(async () => {
   await stopServer();
-  restoreSnapshot(snap);
-  releaseCommentsSection();
-  releaseStatusSection();
+  removeContentSandbox(sandbox);
 });
 
 // ----------------------------------------------------------------- creation
@@ -346,9 +341,11 @@ test('contract A positive (absent): scheduling a KNOWN-but-absent asset → 409 
   // On this worktree exports are present, so MANUFACTURE an absent asset
   // deterministically: pick a present manifest item, snapshot + delete its export
   // PNG so the live manifest reports exists:false, then exercise the guard. The
-  // PNG (gitignored) is ALWAYS restored in finally, so the tree stays clean even
-  // if an assertion throws. status.json for this id is restored from the suite
-  // snapshot afterwards (the zz residue test re-restores the whole surface).
+  // PNG (gitignored, a REAL-repo file OUTSIDE content-studio so it is not in the
+  // sandbox) is ALWAYS restored in finally, so the tree stays clean even if an
+  // assertion throws. This id's status.json entry lives in the THROWAWAY sandbox,
+  // so the post-test status restore below is belt-and-braces only — the sandbox is
+  // discarded wholesale in after().
   const present = await firstPresentItem();
   assert.ok(present, 'expected at least one present manifest item to manufacture an absent one');
   const { id, pngAbs } = present;
@@ -415,9 +412,9 @@ test('contract A positive (absent): scheduling a KNOWN-but-absent asset → 409 
     assert.ok(!('allowStale' in allowed.body), 'allowStale must not persist on the entry');
   } finally {
     fs.writeFileSync(pngAbs, pngBytes); // restore the gitignored export, identical
-    // Restore this real id's status entry to its pre-test value so the suite
-    // leaves status.json clean (the zz residue test also re-restores the whole
-    // surface from the before() snapshot).
+    // Belt-and-braces: put this id's SANDBOX status entry back to its pre-test
+    // value. The sandbox is discarded in after(), so this only keeps the live API
+    // state tidy for any later assertion in this same run.
     if (beforeStatus !== null) {
       await apiJSON('/api/status', { json: { id, patch: { status: beforeStatus, override: true, allowStale: true } } });
     }
@@ -437,11 +434,11 @@ test('contract A positive (absent): scheduling a KNOWN-but-absent asset → 409 
 // forces an illegal move but does NOT bypass this gate). Resolved/wontfix comments
 // do not count as open, so they never block.
 //
-// The comments these tests create live in design-comments.json (a LIVE owner file
-// also covered by the before() snapshot), so they are DELETEd via the API in a
-// finally and the whole write surface is restored from the snapshot afterwards.
-// Comment assetIds use the '__rev_test/' prefix so the tally only ever sees this
-// file's pins on this file's status ids.
+// The comments these tests create live in the SANDBOX design-comments.json, never
+// the user's live store, and the sandbox is discarded in after(). The teardown
+// test below still DELETEs them via the API to exercise the DELETE path. Comment
+// assetIds use the '__rev_test/' prefix so the tally only ever sees this file's
+// pins on this file's status ids.
 
 // A real source file under the repo root — validateAssetRef requires the comment's
 // assetRef.source to resolve to an existing FILE (already used by comments.test.mjs).
@@ -551,10 +548,9 @@ test('contract A independence: override (legality) does NOT bypass the open-comm
 });
 
 test('contract A teardown: delete every __rev_test comment created by this file', async () => {
-  // Remove the design pins this file added so design-comments.json + the digest
-  // return to their pre-test shape (the snapshot restore in after() and the zz
-  // residue test below are the byte-exact backstops; this exercises the DELETE
-  // path and proves no orphaned __rev_test pins remain in the live store).
+  // Exercise the DELETE path and prove no orphaned __rev_test pins remain in the
+  // SANDBOX store. (The sandbox is discarded wholesale in after(); this is the
+  // DELETE-path coverage, not a residue backstop — there is no live store to dirty.)
   for (const cid of createdCommentIds) {
     const { status } = await apiJSON(`/api/comments/${cid}`, { method: 'DELETE' });
     assert.ok(status === 200 || status === 404, `DELETE of ${cid} should resolve cleanly (got ${status})`);
@@ -567,17 +563,27 @@ test('contract A teardown: delete every __rev_test comment created by this file'
 });
 
 // ------------------------------------------------- residue / tree cleanliness
+//
+// Sandboxing means this file's test ids (__sm_test_, __rev_test) only ever live
+// inside the throwaway sandbox — proven two ways: (1) the SANDBOX status.json DOES
+// carry them (the writes really happened, against the copy); (2) the REAL
+// content-studio files carry NONE of them (the live tree was never touched). The
+// dedicated isolation.test.mjs proves the real files are byte-for-byte unchanged;
+// this is the cheap in-file guard that the suite wrote to the sandbox, not live.
 
-test('zz residue: restore leaves no __sm_test_ or __rev_test residue in the write surface', async () => {
-  restoreSnapshot(snap);
-  // After restore, the live store must hold none of this file's test ids.
-  const raw = fs.readFileSync(STATUS_ABS, 'utf8');
-  assert.ok(!raw.includes('__sm_test_'), 'status.json still carries __sm_test_ residue after restore');
-  assert.ok(!raw.includes('__rev_test'), 'status.json still carries __rev_test residue after restore');
-  // design-comments.json + DESIGN_FEEDBACK.md are part of the same snapshot — the
-  // Contract A pins above must not survive the restore either.
-  const commentsRaw = fs.readFileSync(path.join(ROOT, 'content-studio', 'design-comments.json'), 'utf8');
-  assert.ok(!commentsRaw.includes('__rev_test'), 'design-comments.json still carries __rev_test residue after restore');
-  const digestRaw = fs.readFileSync(path.join(ROOT, 'content-studio', 'DESIGN_FEEDBACK.md'), 'utf8');
-  assert.ok(!digestRaw.includes('__rev_test'), 'DESIGN_FEEDBACK.md still carries __rev_test residue after restore');
+test('zz residue: writes landed in the SANDBOX, and the REAL content-studio carries none of this file\'s ids', () => {
+  // (1) The sandbox status.json actually received this file's writes.
+  const sandboxStatus = fs.readFileSync(STATUS_ABS, 'utf8');
+  assert.ok(sandboxStatus.includes('__sm_test_'), 'sandbox status.json should hold this file\'s writes');
+
+  // (2) The REAL content-studio files (the user's live data) hold NONE of this
+  // file's test ids — the suite never wrote to them.
+  const realCS = path.join(ROOT, 'content-studio');
+  const realStatus = fs.readFileSync(path.join(realCS, 'status.json'), 'utf8');
+  assert.ok(!realStatus.includes('__sm_test_'), 'REAL status.json must not carry __sm_test_ residue');
+  assert.ok(!realStatus.includes('__rev_test'), 'REAL status.json must not carry __rev_test residue');
+  const realComments = fs.readFileSync(path.join(realCS, 'design-comments.json'), 'utf8');
+  assert.ok(!realComments.includes('__rev_test'), 'REAL design-comments.json must not carry __rev_test residue');
+  const realDigest = fs.readFileSync(path.join(realCS, 'DESIGN_FEEDBACK.md'), 'utf8');
+  assert.ok(!realDigest.includes('__rev_test'), 'REAL DESIGN_FEEDBACK.md must not carry __rev_test residue');
 });

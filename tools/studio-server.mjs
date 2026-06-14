@@ -85,6 +85,16 @@
 // watchdog timeout (STUDIO_ACTION_TIMEOUT_MS, default 15 min; SIGTERM then
 // SIGKILL) and lastRun persists across restarts in tools/.studio-state.json.
 // Port: STUDIO_PORT > PORT > 8090. Zero npm dependencies (built-ins).
+//
+// STUDIO_CONTENT_DIR: the directory every content-studio data path is read from
+// and written to (status.json, FACTS.md, design-comments.json, DESIGN_FEEDBACK.md,
+// launch-grid.json, BRAND_CHEATSHEET.md, prompts/, drafts/, and the
+// /content-studio/ static + docs surface). Defaults to content-studio/ at the
+// repo root; used to point the test harness at a throwaway copy so a test run
+// never touches the live owner data. With it UNSET, every path and behaviour is
+// byte-identical to serving from content-studio/ (CONTENT_DIR === ROOT/content-
+// studio). design-system/ paths (the launch-grid HTML, EDITMODE targets) and the
+// repo-wide static/manifest scan always stay rooted at ROOT.
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -108,18 +118,27 @@ if (!['127.0.0.1', 'localhost', '::1'].includes(HOST)) {
   process.exit(1);
 }
 
-const STATUS_FILE = path.join(ROOT, 'content-studio', 'status.json');
-const FACTS_FILE = path.join(ROOT, 'content-studio', 'FACTS.md');
-const CAPTIONS_FILE = path.join(ROOT, 'content-studio', 'drafts', 'instagram-posts-captions.md');
-const COMMENTS_FILE = path.join(ROOT, 'content-studio', 'design-comments.json');
-const FEEDBACK_FILE = path.join(ROOT, 'content-studio', 'DESIGN_FEEDBACK.md');
-const LAUNCH_GRID_FILE = path.join(ROOT, 'content-studio', 'launch-grid.json');
+// The directory all content-studio data is read from and written to. Defaults to
+// content-studio/ at the repo root; STUDIO_CONTENT_DIR overrides it (resolved to
+// an absolute path) so the test harness can isolate on a throwaway copy. With the
+// env unset, CONTENT_DIR === ROOT/content-studio and every path below is byte-
+// identical to before. design-system/ paths stay on ROOT (see LAUNCH_HTML_FILE).
+const CONTENT_DIR = process.env.STUDIO_CONTENT_DIR
+  ? path.resolve(process.env.STUDIO_CONTENT_DIR)
+  : path.join(ROOT, 'content-studio');
+
+const STATUS_FILE = path.join(CONTENT_DIR, 'status.json');
+const FACTS_FILE = path.join(CONTENT_DIR, 'FACTS.md');
+const CAPTIONS_FILE = path.join(CONTENT_DIR, 'drafts', 'instagram-posts-captions.md');
+const COMMENTS_FILE = path.join(CONTENT_DIR, 'design-comments.json');
+const FEEDBACK_FILE = path.join(CONTENT_DIR, 'DESIGN_FEEDBACK.md');
+const LAUNCH_GRID_FILE = path.join(CONTENT_DIR, 'launch-grid.json');
 const LAUNCH_HTML_FILE = path.join(ROOT, 'design-system', 'collateral', 'launch-grid.html');
 const EXPORTS_DIR = path.join(ROOT, 'exports');
-const PROMPTS_DIR = path.join(ROOT, 'content-studio', 'prompts');
-const DRAFTS_DIR = path.join(ROOT, 'content-studio', 'drafts');
+const PROMPTS_DIR = path.join(CONTENT_DIR, 'prompts');
+const DRAFTS_DIR = path.join(CONTENT_DIR, 'drafts');
 const SYSTEM_PROMPT_FILE = path.join(PROMPTS_DIR, '00_SYSTEM_PROMPT.md');
-const CHEATSHEET_FILE = path.join(ROOT, 'content-studio', 'BRAND_CHEATSHEET.md');
+const CHEATSHEET_FILE = path.join(CONTENT_DIR, 'BRAND_CHEATSHEET.md');
 
 const STATUSES = ['draft', 'approved', 'scheduled', 'posted', 'retired'];
 const COMMENT_STATUSES = ['open', 'resolved', 'wontfix'];
@@ -214,6 +233,14 @@ function readOrNull(p) {
 }
 
 const rel = (abs) => path.relative(ROOT, abs).split(path.sep).join('/');
+
+// Client-facing path for a file living under CONTENT_DIR: always presented as
+// content-studio/<rel-to-CONTENT_DIR>, regardless of where CONTENT_DIR actually
+// is on disk. This keeps the browser's fetch path (content-studio/...) and the
+// docs list stable when STUDIO_CONTENT_DIR points elsewhere. In default mode it
+// is identical to rel(abs).
+const relContent = (abs) =>
+  'content-studio/' + path.relative(CONTENT_DIR, abs).split(path.sep).join('/');
 
 // ------------------------------------------------------------- status store
 
@@ -1025,7 +1052,7 @@ function handleDraftSave(body, res) {
     return sendJSON(res, 422, { error: 'guard violations', violations });
   }
   writeAtomic(abs, content);
-  return sendJSON(res, 200, { name, path: rel(abs), bytes: Buffer.byteLength(content, 'utf8') });
+  return sendJSON(res, 200, { name, path: relContent(abs), bytes: Buffer.byteLength(content, 'utf8') });
 }
 
 // ---------------------------------------------------------------- manifest
@@ -1211,6 +1238,12 @@ function buildDocuments(commentCounts) {
 
 const DOC_SKIP_DIRS = new Set(['.git', 'node_modules', '_archive', 'exports']);
 
+// The physical content-studio dir at the repo root. The ROOT markdown walk skips
+// it so content-studio docs come from CONTENT_DIR only (presented as content-
+// studio/<rel> via relContent). In default mode CONTENT_DIR === this, so the
+// merged listing is byte-identical to a single ROOT walk.
+const ROOT_CONTENT_STUDIO = path.join(ROOT, 'content-studio');
+
 function walkMarkdown(dir, out = []) {
   let entries;
   try {
@@ -1233,8 +1266,19 @@ function walkMarkdown(dir, out = []) {
 
 function buildDocs() {
   const FACTS_REL = 'content-studio/FACTS.md';
-  const entries = walkMarkdown(ROOT).map((abs) => {
-    const relPath = rel(abs);
+  // Non-content-studio markdown from the repo root, keyed by its ROOT-relative
+  // path; plus content-studio markdown from CONTENT_DIR, keyed by content-studio/
+  // <rel-to-CONTENT_DIR>. The two scans are disjoint: the ROOT walk omits the
+  // physical content-studio dir, and CONTENT_DIR supplies it under a stable
+  // client-facing prefix. Default mode (CONTENT_DIR === ROOT/content-studio)
+  // yields exactly the same set a single ROOT walk produced before.
+  const scanned = [
+    ...walkMarkdown(ROOT)
+      .filter((abs) => abs !== ROOT_CONTENT_STUDIO && !abs.startsWith(ROOT_CONTENT_STUDIO + path.sep))
+      .map((abs) => ({ abs, relPath: rel(abs) })),
+    ...walkMarkdown(CONTENT_DIR).map((abs) => ({ abs, relPath: relContent(abs) })),
+  ];
+  const entries = scanned.map(({ abs, relPath }) => {
     const content = readOrNull(abs) || '';
     const h1 = content.match(/^#\s+(.+)$/m);
     const dir = path.posix.dirname(relPath);
@@ -1939,6 +1983,24 @@ async function handleApi(req, res, pathname) {
 
 const staticHandler = createStaticHandler(ROOT);
 
+// Static reroute for content-studio data. A request for /content-studio/<rel> is
+// served from CONTENT_DIR/<rel> (so the client's fetch of content-studio/FACTS.md
+// resolves to CONTENT_DIR/FACTS.md), with its own traversal guard rooted at
+// CONTENT_DIR via createStaticHandler. Checked BEFORE the generic ROOT handler.
+// In default mode (CONTENT_DIR === ROOT/content-studio) it serves byte-identical
+// bytes to what the ROOT handler would. design-system/ and the rest of the repo
+// keep flowing through the ROOT handler unchanged.
+const contentStaticHandler = createStaticHandler(CONTENT_DIR);
+const CONTENT_URL_PREFIX = '/content-studio';
+
+// Strip the /content-studio prefix from a request URL, preserving the rest of the
+// path and any query string, so the rerouted handler joins it onto CONTENT_DIR.
+// "/content-studio/FACTS.md?x=1" -> "/FACTS.md?x=1"; "/content-studio" -> "/".
+function stripContentPrefix(url) {
+  const rest = url.slice(CONTENT_URL_PREFIX.length);
+  return rest === '' ? '/' : rest;
+}
+
 // DNS-rebinding guard: a browser on this machine can be lured to a hostname an
 // attacker points at 127.0.0.1 — refuse any request whose Host is not loopback.
 const ALLOWED_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]']);
@@ -1980,6 +2042,14 @@ const server = http.createServer((req, res) => {
       const code = err && err.httpCode ? err.httpCode : 500;
       if (!res.headersSent) sendJSON(res, code, { error: String((err && err.message) || err) });
     });
+    return;
+  }
+  // Serve /content-studio/... from CONTENT_DIR (rerouted, own traversal guard)
+  // before falling through to the repo-wide ROOT handler. A shim carries the
+  // prefix-stripped url; the live req is never mutated. The handler reads only
+  // req.url, so the shim is sufficient.
+  if (pathname === CONTENT_URL_PREFIX || pathname.startsWith(CONTENT_URL_PREFIX + '/')) {
+    contentStaticHandler({ url: stripContentPrefix(req.url || '/') }, res);
     return;
   }
   staticHandler(req, res);

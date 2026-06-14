@@ -1,10 +1,18 @@
 // api.test.mjs — the studio server's automated test suite.
 //
 // node:test + node:assert + node:* builtins only (no npm packages). The harness
-// (helpers.mjs) spawns the real studio-server.mjs on port 8099 against the REAL
-// repo, snapshots the six write-path files (+ the gitignored action-state file)
-// in before(), and restores them byte-for-byte in after(). The final residue
-// test asserts git status --porcelain shows nothing attributable to the suite.
+// (helpers.mjs) spawns the real studio-server.mjs on port 8099.
+//
+// CONTENT SANDBOX: the server runs with STUDIO_CONTENT_DIR pointed at a throwaway
+// COPY of content-studio (makeContentSandbox), so every content-studio write
+// (status.json, FACTS.md, launch-grid.json, design-comments.json/DESIGN_FEEDBACK.md)
+// lands in the sandbox — never the user's LIVE files. Those assertions read the
+// SANDBOX paths. The NON-content-studio write surface (the launch-grid carousel
+// HTML under design-system/, the gitignored action-state file) is REAL-repo, so it
+// is still byte-snapshotted in before() and restored in after(); the editmode
+// fixtures are likewise real design-system files, written + removed here. The final
+// residue test asserts git status --porcelain shows nothing attributable to the
+// suite (now only the real-repo surface can leave residue at all).
 //
 // IMPORTANT (guard-bypass tests): never hard-code a retired marketing string in
 // test source — the facts CI scans the repo. We import the RETIRED list from
@@ -29,10 +37,8 @@ import {
   stopServer,
   snapshot,
   restoreSnapshot,
-  acquireStatusSection,
-  releaseStatusSection,
-  acquireCommentsSection,
-  releaseCommentsSection,
+  makeContentSandbox,
+  removeContentSandbox,
   writeFixtures,
   removeFixtures,
   FIXTURE_ONE,
@@ -51,35 +57,32 @@ setPort(8099);
 const firstLiteral = RETIRED.find((r) => typeof r.bad === 'string').bad;
 const RETIRED_TEXT = `studio test marker ${firstLiteral} end`;
 
+// The throwaway content sandbox + the content-studio files this suite asserts on,
+// INSIDE it. The real-repo (non-content-studio) surface is handled by snap.
+let sandbox;
 let snap;
+let STATUS_ABS;
+let FACTS_ABS;
+let LAUNCH_GRID_JSON_ABS;
 
 before(async () => {
-  // status.json is a SHARED file; hold the cross-process section lock for this
-  // file's whole run so it never overlaps status-statemachine.test.mjs on it —
-  // its corrupt-store test and restore would otherwise clobber sibling writes
-  // (see helpers.mjs acquireStatusSection). This file's restoreSnapshot also
-  // rewrites the WHOLE write surface (including design-comments.json +
-  // DESIGN_FEEDBACK.md), and its facts/save tests assert on FACTS.md, so it must
-  // also hold the design-comments section — otherwise comments.test.mjs's restore
-  // (which rewrites FACTS.md) and its Contract B self-heal assertions (which read
-  // DESIGN_FEEDBACK.md mid-test) race against this file. Acquire status THEN
-  // comments (the same order status-statemachine.test.mjs uses) so the two locks
-  // never deadlock. Acquire BOTH before snapshotting so the snapshot captures a
-  // stable, sibling-restored state.
-  await acquireStatusSection();
-  await acquireCommentsSection();
+  // Sandbox content-studio so no content write touches the live tree; snapshot the
+  // REAL-repo write surface (launch-grid.html + action-state) so it restores clean.
+  sandbox = makeContentSandbox();
+  STATUS_ABS = path.join(sandbox, 'status.json');
+  FACTS_ABS = path.join(sandbox, 'FACTS.md');
+  LAUNCH_GRID_JSON_ABS = path.join(sandbox, 'launch-grid.json');
   snap = snapshot();
   writeFixtures();
   assert.ok(scanTextRetired(RETIRED_TEXT).length > 0, 'runtime retired string must trip the scanner');
-  await startServer();
+  await startServer({ contentDir: sandbox });
 });
 
 after(async () => {
   await stopServer();
   removeFixtures();
   restoreSnapshot(snap);
-  releaseCommentsSection();
-  releaseStatusSection();
+  removeContentSandbox(sandbox);
 });
 
 // --------------------------------------------------------------- smoke / read
@@ -281,7 +284,7 @@ test('host/origin: a POST with NO Origin header passes (non-browser client)', as
 // ----------------------------------------------------------- guard bypass
 
 test('facts/save: retired string without override → 422 + violations, FACTS.md unchanged', async () => {
-  const factsAbs = path.join(ROOT, 'content-studio', 'FACTS.md');
+  const factsAbs = FACTS_ABS;
   const before = fs.readFileSync(factsAbs);
   const { status, body } = await apiJSON('/api/facts/save', { json: { content: RETIRED_TEXT } });
   assert.equal(status, 422, JSON.stringify(body));
@@ -289,8 +292,8 @@ test('facts/save: retired string without override → 422 + violations, FACTS.md
   assert.deepEqual(fs.readFileSync(factsAbs), before, 'FACTS.md must not change on a 422');
 });
 
-test('facts/save: retired string WITH override → 200 written (then restored by teardown)', async () => {
-  const factsAbs = path.join(ROOT, 'content-studio', 'FACTS.md');
+test('facts/save: retired string WITH override → 200 written (sandbox FACTS.md, discarded in after)', async () => {
+  const factsAbs = FACTS_ABS;
   const content = `${fs.readFileSync(factsAbs, 'utf8')}\n${RETIRED_TEXT}\n`;
   const { status, body } = await apiJSON('/api/facts/save', { json: { content, override: true } });
   assert.equal(status, 200, JSON.stringify(body));
@@ -346,7 +349,7 @@ test('launch-grid/post: wave out of 1-4 → 400', async () => {
 });
 
 test('launch-grid/post: retired caption text without override → 422, plan unchanged', async () => {
-  const planAbs = path.join(ROOT, 'content-studio', 'launch-grid.json');
+  const planAbs = LAUNCH_GRID_JSON_ABS;
   const before = fs.readFileSync(planAbs);
   const { status, body } = await apiJSON('/api/launch-grid/post', {
     json: {
@@ -392,14 +395,13 @@ test('launch-grid/slides: malformed slide shape → 400', async () => {
 // ---------------------------------------------------------------- atomicity
 
 test('atomicity: no .tmp residue beside the write-path files after writes', async () => {
-  // Trigger a write (status patch) then assert no LEFTOVER tmp file.
+  // Trigger a write (status patch) then assert no LEFTOVER tmp file in the sandbox
+  // content dir. writeAtomic is tmp→fsync→rename: a leaked tmp persists. This
+  // file's server owns its sandbox exclusively now, so a brief re-poll only ever
+  // catches THIS server mid-rename — a genuine leak never clears.
   await apiJSON('/api/status', { json: { id: 'studio-test/atomic', patch: { status: 'draft' } } });
-  const statusDir = path.join(ROOT, 'content-studio');
+  const statusDir = sandbox;
   const scan = () => fs.readdirSync(statusDir).filter((n) => /^\.status\.json\.tmp-/.test(n));
-  // writeAtomic is tmp→fsync→rename: a leaked tmp persists, but a SIBLING test
-  // file's server (its own pid, its own tmp name) can be caught mid-rename here
-  // since the suite runs files concurrently against the same status.json. Re-poll
-  // briefly; a genuine leak never clears, a transient cross-process tmp does.
   let leftovers = scan();
   for (let i = 0; i < 20 && leftovers.length; i++) {
     await delay(50);
@@ -409,7 +411,7 @@ test('atomicity: no .tmp residue beside the write-path files after writes', asyn
 });
 
 test('atomicity: garbage in status.json → GET /api/status sane empty; manifest still 200', async () => {
-  const statusAbs = path.join(ROOT, 'content-studio', 'status.json');
+  const statusAbs = STATUS_ABS;
   const before = fs.readFileSync(statusAbs);
   try {
     fs.writeFileSync(statusAbs, '{ this is not valid json ');
@@ -570,19 +572,15 @@ test('docs drift: action whitelist in server source == action list in README', a
 
 // ------------------------------------------------- residue / tree cleanliness
 //
-// Restore this file's write-surface snapshot + fixtures, then assert NO residue
-// attributable to THIS file remains. Two scopes:
-//   1) the unique fixture artifacts (__studio_test_*, the -evil sibling) — these
-//      are owned solely by this file, so they must never appear in porcelain.
-//   2) the SHARED write-surface files (status.json, launch-grid.json,
-//      launch-grid.html) — restored byte-for-byte here. (FACTS.md /
-//      design-comments.json / DESIGN_FEEDBACK.md are ALSO written by the sibling
-//      test files, which may still be running concurrently, so they are checked
-//      by whichever file finishes last via its own after()+restore, not raced
-//      here.)
-//
-// after() in EVERY test file restores the full write surface again, so the tree
-// is byte-clean once the whole run finishes regardless of file order.
+// Restore this file's REAL-repo write-surface snapshot + fixtures, then assert NO
+// residue attributable to THIS file remains. Because content-studio is sandboxed,
+// it can NEVER appear here — only the real-repo surface can. Three scopes:
+//   1) the unique fixture artifacts (__studio_test_*, the -evil sibling) — owned
+//      solely by this file, so they must never appear in porcelain.
+//   2) the one real-repo SHARED write-path file this file writes
+//      (design-system/collateral/launch-grid.html) — restored byte-for-byte here.
+//   3) the user's LIVE content-studio/ — must show NONE of this file's test ids,
+//      proving the sandbox kept every content write off the real tree.
 
 test('zz residue: this file leaves no git residue attributable to it', () => {
   removeFixtures();
@@ -599,16 +597,10 @@ test('zz residue: this file leaves no git residue attributable to it', () => {
   );
   assert.deepEqual(fixtureResidue, [], `fixture residue left behind:\n${fixtureResidue.join('\n')}`);
 
-  // (2) Shared files this file alone owns must be byte-restored (not in porcelain
-  // unless they were already dirty BEFORE the suite — see snapshot()).
+  // (2) The real-repo shared HTML file this file writes must be byte-restored.
   const ownedShared = lines.filter((p) =>
-    /^content-studio\/status\.json$/.test(p) ||
-    /^content-studio\/launch-grid\.json$/.test(p) ||
     /^design-system\/collateral\/launch-grid\.html$/.test(p),
   );
-  // Only flag a shared file if its snapshot was clean (null/absent or tracked
-  // unchanged at start). We can't see git state from before; restoreSnapshot
-  // wrote back the exact bytes, so any diff here is a real restore failure.
   for (const p of ownedShared) {
     const after = fs.readFileSync(path.join(ROOT, p));
     const want = snap[p];
@@ -616,4 +608,11 @@ test('zz residue: this file leaves no git residue attributable to it', () => {
       assert.deepEqual(after, want, `restore failed for ${p} (bytes differ from snapshot)`);
     }
   }
+
+  // (3) The LIVE content-studio carries none of this file's test ids (it was
+  // sandboxed — the suite's status/FACTS/launch-grid writes never reached it).
+  const realStatus = fs.readFileSync(path.join(ROOT, 'content-studio', 'status.json'), 'utf8');
+  assert.ok(!realStatus.includes('studio-test/'), 'REAL status.json must not carry studio-test/ residue');
+  const realFacts = fs.readFileSync(path.join(ROOT, 'content-studio', 'FACTS.md'), 'utf8');
+  assert.ok(!realFacts.includes(firstLiteral), 'REAL FACTS.md must not carry the override-written retired marker');
 });
