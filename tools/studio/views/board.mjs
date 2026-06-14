@@ -53,7 +53,8 @@ export function render(root, ctx) {
   /* a go-live guard: moving INTO scheduled/posted with a stale or missing export
      is dangerous (a live or about-to-go-live asset whose render is out of date).
      Mirrors the override modal's look; resolves true only on an explicit
-     "schedule anyway". The server still runs its own state-machine guard. */
+     "schedule anyway". `health` is {absent, stale}. On confirm the caller re-POSTs
+     with allowStale:true so the server's matching stale-export guard passes. */
   function confirmStaleSchedule(id, next, health) {
     const reason = health.absent
       ? 'has never been exported'
@@ -80,6 +81,19 @@ export function render(root, ctx) {
     });
   }
 
+  /* the server-side counterpart: the stale-export 409 body carries
+     assetState:{known, exists, stale} (absent === !exists). Map it to the
+     {absent, stale} shape and reuse the SAME modal, so a server-caught stale
+     move reads identically to the client-caught one. */
+  function confirmStaleFromServer(id, next, body) {
+    const a = (body && body.assetState) || {};
+    const health = { absent: a.exists === false, stale: Boolean(a.exists && a.stale) };
+    /* a known-but-otherwise-fine item (neither absent nor stale) should not have
+       tripped the guard; fall back to the absent copy rather than empty text. */
+    if (!health.absent && !health.stale) health.absent = true;
+    return confirmStaleSchedule(id, next, health);
+  }
+
   /* short label for a card: the asset name (drop the surface prefix) over the
      full id. scheduledFor (when present) rides along as a meta line. */
   function shortLabel(id) {
@@ -87,30 +101,48 @@ export function render(root, ctx) {
     return parts.length > 1 ? parts.slice(1).join('/') : id;
   }
 
-  /* move id to next, optimistic via ctx.saveStatus. On a 409 the state machine
-     rejected it; surface the modal and, if the operator forces it, re-save with
-     override:true. force=true skips straight to the override patch. */
-  async function move(id, next, force) {
+  /* move id to next, optimistic via ctx.saveStatus. Two independent guards can
+     reject the POST with a 409, branched on the body's `reason`:
+       • the state machine (illegal transition) → {from, to, legalNext} (no
+         reason) → confirmOverride → re-save with override:true.
+       • the stale-export guard (scheduling/posting an absent/stale render) →
+         {reason:'stale-export', assetState} → confirmStaleSchedule → re-save
+         with allowStale:true.
+     override and allowStale are distinct wire flags: force carries override,
+     allowStale carries the stale bypass, and neither implies the other. */
+  async function move(id, next, { force = false, allowStale = false } = {}) {
     /* client-side go-live guard, before any POST: warn when scheduling/posting a
-       stale or missing export. Skipped on a forced move (override already implies
-       intent) and never blocks ids that are not tracked surface items. */
-    if (!force && (next === 'scheduled' || next === 'posted')) {
+       stale or missing export, then send allowStale:true so the matching SERVER
+       guard passes in one round trip. Skipped once allowStale is already set, and
+       never blocks ids that are not tracked surface items. Runs even on a forced
+       move — override only bypasses the transition guard, not this one. */
+    if (!allowStale && (next === 'scheduled' || next === 'posted')) {
       const health = exportHealth(id);
       if (health && (health.absent || health.stale)) {
         const go = await confirmStaleSchedule(id, next, health);
         if (!go) { renderBoard(); return; }
+        allowStale = true;
       }
     }
     const patch = { status: next };
     if (next === 'posted') patch.postedAt = new Date().toISOString();
     if (force) patch.override = true;
+    if (allowStale) patch.allowStale = true;
     try {
       await ctx.saveStatus(id, patch);
       renderBoard();
     } catch (err) {
-      if (err && err.status === 409 && err.body && !force) {
-        const ok = await confirmOverride(err.body, id);
-        if (ok) { await move(id, next, true); return; }
+      if (err && err.status === 409 && err.body) {
+        /* the stale-export 409 (server-side guard the client check may have
+           missed): same "schedule anyway?" confirm, then re-save with allowStale. */
+        if (err.body.reason === 'stale-export' && !allowStale) {
+          const go = await confirmStaleFromServer(id, next, err.body);
+          if (go) { await move(id, next, { force, allowStale: true }); return; }
+        } else if (err.body.reason !== 'stale-export' && !force) {
+          /* the illegal-transition 409 (carries legalNext): offer the override. */
+          const ok = await confirmOverride(err.body, id);
+          if (ok) { await move(id, next, { force: true, allowStale }); return; }
+        }
       }
       /* a non-409 failure or a declined override: re-render from canonical state
          (saveStatus already reverted its optimistic local write). */
@@ -130,7 +162,7 @@ export function render(root, ctx) {
       el('div', { class: 'override-legal' },
         targets.map((s) => el('button', {
           class: 'btn-mini', type: 'button',
-          onclick: () => { if (close) close(); move(id, s, true); },
+          onclick: () => { if (close) close(); move(id, s, { force: true }); },
         }, s))),
       el('div', { class: 'pop-actions' },
         el('button', { class: 'btn-mini', type: 'button', onclick: () => { if (close) close(); } }, 'cancel')));
@@ -142,7 +174,7 @@ export function render(root, ctx) {
     const next = LEGAL_NEXT[current] || [];
     const moves = el('div', { class: 'board-card-moves' },
       next.map((s) => el('button', {
-        class: 'btn-mini', type: 'button', onclick: () => move(id, s, false),
+        class: 'btn-mini', type: 'button', onclick: () => move(id, s),
       }, `→ ${s}`)),
       el('button', { class: 'btn-mini board-override', type: 'button', onclick: () => openOverrideMenu(id, current) },
         'override…'));

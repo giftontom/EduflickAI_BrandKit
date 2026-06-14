@@ -49,19 +49,21 @@ async function refreshState({ silent = false } = {}) {
 }
 
 /* optimistic status save: local state first, API second, revert on failure.
-   `patch.override` (when the caller forces a guarded transition) is a wire-only
-   flag — it travels to the server but is never stored on the local entry. A 409
-   from the state machine reverts the optimistic write and rethrows so the caller
-   can surface {from, to, legalNext} and offer an override. */
+   `patch.override` (forces a guarded transition) and `patch.allowStale` (forces
+   a move into scheduled/posted past the stale-export guard) are both wire-only
+   control flags — they travel to the server but are never stored on the local
+   entry. A 409 from the state machine (illegal transition) or the stale-export
+   guard reverts the optimistic write and rethrows so the caller can surface the
+   reason and offer the matching override / schedule-anyway path. */
 async function saveStatus(id, patch) {
   if (!state.status) state.status = { version: 1, assets: {} };
   if (!state.status.assets) state.status.assets = {};
   const assets = state.status.assets;
   const prev = assets[id];
-  const { override, ...localPatch } = patch || {};
+  const { override, allowStale, ...localPatch } = patch || {};
   assets[id] = { ...(prev || {}), ...localPatch };
   try {
-    const merged = await api.setStatus(id, localPatch, Boolean(override));
+    const merged = await api.setStatus(id, localPatch, Boolean(override), Boolean(allowStale));
     assets[id] = merged;
     return merged;
   } catch (err) {

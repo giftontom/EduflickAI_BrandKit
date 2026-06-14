@@ -27,6 +27,7 @@ import path from 'node:path';
 import {
   setPort,
   ROOT,
+  api,
   apiJSON,
   startServer,
   stopServer,
@@ -273,6 +274,147 @@ test('concurrency: N parallel legal transitions on N distinct new ids all land',
     assert.equal(entry.history[0].from, null);
     assert.equal(entry.history[1].from, 'draft');
     assert.equal(entry.history[1].to, 'approved');
+  }
+});
+
+// ---------------------------------------- Contract A: hard schedule→stale guard
+//
+// AFTER the transition-legality check passes (or is overridden), and ONLY when
+// the resulting status is 'scheduled' or 'posted', the server looks up the
+// asset's health in the LIVE manifest. If the id is a KNOWN manifest item and it
+// is absent (exists===false) OR stale (exists && stale===true), the move is
+// refused 409 {reason:'stale-export'} and NOTHING is written — UNLESS the patch
+// carries allowStale:true. allowStale is DISTINCT from override (override bypasses
+// the transition-legality guard; allowStale bypasses ONLY the stale-export guard)
+// and is a control flag, never persisted on the stored entry.
+//
+// Crucially the stale guard is SCOPED to known manifest ids only: an abstract
+// '__sm_test_' id never appears in any surface's items, so it is exempt and the
+// whole existing state-machine suite above keeps passing. The first test pins
+// that scoping as the critical regression guard.
+
+// Pull the live manifest as the server sees it (same shape the guard reads).
+async function getManifest() {
+  const res = await api('/api/manifest');
+  return res.json();
+}
+
+// Find a present manifest item we can manufacture-absent: returns {id, pngAbs}.
+async function firstPresentItem() {
+  const m = await getManifest();
+  for (const s of m.surfaces || []) {
+    for (const it of s.items || []) {
+      if (it.exists === true && it.png) {
+        return { id: `${s.id}/${it.name}`, pngAbs: path.join(ROOT, it.png) };
+      }
+    }
+  }
+  return null;
+}
+
+test('contract A scoping: an UNKNOWN abstract id scheduled WITHOUT allowStale still works (stale guard is manifest-scoped)', async () => {
+  // This is the regression guard for the whole suite above: a '__sm_test_' id is
+  // not a manifest item, so the stale-export guard must NOT apply to it. Without
+  // this exemption the existing draft→approved→scheduled chains would 409.
+  const id = freshId('contractA-unknown');
+  const created = await setStatus(id, { status: 'draft' });
+  assert.equal(created.status, 200, JSON.stringify(created.body));
+  const approved = await setStatus(id, { status: 'approved' });
+  assert.equal(approved.status, 200, JSON.stringify(approved.body));
+  // scheduled is the guarded status — an unknown id must still pass with NO flag.
+  const { status, body } = await setStatus(id, { status: 'scheduled' });
+  assert.equal(status, 200, `unknown id → scheduled must pass without allowStale: ${JSON.stringify(body)}`);
+  assert.equal(body.status, 'scheduled');
+});
+
+test('contract A scoping: an UNKNOWN abstract id set straight to posted (creation) is exempt from the stale guard', async () => {
+  // Creation to a guarded status (posted) on a non-manifest id must also pass —
+  // the guard only fires for KNOWN manifest items, never abstract test ids.
+  const id = freshId('contractA-unknown-posted');
+  const { status, body } = await setStatus(id, { status: 'posted' });
+  assert.equal(status, 200, `unknown id → posted (creation) must pass without allowStale: ${JSON.stringify(body)}`);
+  assert.equal(body.status, 'posted');
+});
+
+test('contract A positive (absent): scheduling a KNOWN-but-absent asset → 409 stale-export; allowStale:true → 200', async () => {
+  // On this worktree exports are present, so MANUFACTURE an absent asset
+  // deterministically: pick a present manifest item, snapshot + delete its export
+  // PNG so the live manifest reports exists:false, then exercise the guard. The
+  // PNG (gitignored) is ALWAYS restored in finally, so the tree stays clean even
+  // if an assertion throws. status.json for this id is restored from the suite
+  // snapshot afterwards (the zz residue test re-restores the whole surface).
+  const present = await firstPresentItem();
+  assert.ok(present, 'expected at least one present manifest item to manufacture an absent one');
+  const { id, pngAbs } = present;
+
+  const pngBytes = fs.readFileSync(pngAbs); // snapshot the real export bytes
+  const before = await readEntry(id); // whatever status this real id already had
+  const beforeStatus = before ? before.status : null;
+
+  try {
+    fs.rmSync(pngAbs, { force: true }); // now the manifest reports exists:false
+
+    // Confirm the manifest actually flipped to absent for this id (the guard's
+    // input). If it did not, the rest of the assertions would be meaningless.
+    const m = await getManifest();
+    let manItem = null;
+    for (const s of m.surfaces || []) {
+      for (const it of s.items || []) {
+        if (`${s.id}/${it.name}` === id) manItem = it;
+      }
+    }
+    assert.ok(manItem, `id ${id} must still be a known manifest item`);
+    assert.equal(manItem.exists, false, 'the deleted export must read back as exists:false');
+
+    // Drive the id to a legal pre-scheduled state WITHOUT tripping the guard:
+    // approved is not a guarded status, so this write always lands. Use override
+    // so we reach 'approved' regardless of the id's current real status.
+    const toApproved = await apiJSON('/api/status', {
+      json: { id, patch: { status: 'approved', override: true } },
+    });
+    assert.equal(toApproved.status, 200, `staging to approved should pass: ${JSON.stringify(toApproved.body)}`);
+
+    // approved→scheduled is a LEGAL transition, but the asset is absent and we
+    // pass NO allowStale → the stale-export guard must refuse it 409, no write.
+    const blocked = await apiJSON('/api/status', { json: { id, patch: { status: 'scheduled' } } });
+    assert.equal(blocked.status, 409, `absent asset → scheduled must 409: ${JSON.stringify(blocked.body)}`);
+    assert.equal(blocked.body.reason, 'stale-export', 'the 409 carries reason:stale-export');
+    assert.equal(blocked.body.id, id, 'the 409 echoes the offending id');
+    assert.equal(blocked.body.to, 'scheduled', 'the 409 echoes the attempted status');
+    assert.ok(blocked.body.assetState && blocked.body.assetState.known === true, 'assetState.known is true');
+    assert.equal(blocked.body.assetState.exists, false, 'assetState.exists reflects the absent export');
+
+    // The blocked move wrote NOTHING: the stored status is still approved.
+    const afterBlock = await readEntry(id);
+    assert.equal(afterBlock.status, 'approved', 'a stale-export 409 must not mutate the stored status');
+
+    // override:true (transition guard) but NOT allowStale (stale guard) → still
+    // 409 stale-export: override does not bypass the stale guard. (We are already
+    // at approved, so re-scheduling with override only proves the independence.)
+    const overrideOnly = await apiJSON('/api/status', {
+      json: { id, patch: { status: 'scheduled', override: true } },
+    });
+    assert.equal(overrideOnly.status, 409, `override alone must NOT bypass the stale guard: ${JSON.stringify(overrideOnly.body)}`);
+    assert.equal(overrideOnly.body.reason, 'stale-export', 'override-only still trips the stale guard');
+    const afterOverride = await readEntry(id);
+    assert.equal(afterOverride.status, 'approved', 'override-only stale 409 must not write either');
+
+    // WITH allowStale:true the same legal approved→scheduled move now proceeds.
+    const allowed = await apiJSON('/api/status', {
+      json: { id, patch: { status: 'scheduled', allowStale: true } },
+    });
+    assert.equal(allowed.status, 200, `allowStale:true must let the move through: ${JSON.stringify(allowed.body)}`);
+    assert.equal(allowed.body.status, 'scheduled', 'allowStale applied the scheduled status');
+    // allowStale is a control flag — never persisted on the stored entry.
+    assert.ok(!('allowStale' in allowed.body), 'allowStale must not persist on the entry');
+  } finally {
+    fs.writeFileSync(pngAbs, pngBytes); // restore the gitignored export, identical
+    // Restore this real id's status entry to its pre-test value so the suite
+    // leaves status.json clean (the zz residue test also re-restores the whole
+    // surface from the before() snapshot).
+    if (beforeStatus !== null) {
+      await apiJSON('/api/status', { json: { id, patch: { status: beforeStatus, override: true, allowStale: true } } });
+    }
   }
 });
 

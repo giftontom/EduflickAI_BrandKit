@@ -1569,3 +1569,10 @@ a.ops-id:hover { color: var(--fg1); text-decoration: underline; }
   .cal-cell { min-height: 76px; }
   .cal-chip-label { font-size: 9px; }
 }
+
+/* ---- stale-export schedule guard modal (shared: board + status dropdown) ----
+   reuses .override-form / .override-msg / .btn-mini-warn; this block only adds
+   the warm hairline that sets the "schedule a stale render?" warning apart from
+   the neutral illegal-transition override modal. */
+.stale-warn-form { border-left: 2px solid var(--warn); padding-left: 12px; }
+.stale-warn-form .pop-title { color: var(--warn); }

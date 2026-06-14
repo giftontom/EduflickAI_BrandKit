@@ -35,18 +35,27 @@ export function statusControl({ id, entry = {}, onSave }) {
     meta.textContent = metaLine(current);
   }
 
-  /* commit a status patch, with the state machine in the loop. On a 409 the
-     server rejected the transition; we surface from/to + legalNext and offer to
-     force it (a second save carrying override:true). `revert` puts the control
-     back to `prev` whenever the change is abandoned or fails. */
+  /* commit a status patch, with both server guards in the loop. A 409 is branched
+     on the body's `reason`:
+       • stale-export (scheduling/posting an absent or stale render) → a "schedule
+         anyway?" confirm, then a second save carrying allowStale:true.
+       • otherwise the state machine's illegal-transition 409 (from/to/legalNext)
+         → confirmOverride, then a second save carrying override:true.
+     override and allowStale are independent wire flags. `prev` puts the control
+     back whenever the change is abandoned or fails. */
   async function commit(patch, prev) {
     try {
       current = (await onSave(id, patch)) || current;
       paint();
     } catch (err) {
       if (err && err.status === 409 && err.body) {
-        const ok = await confirmOverride(err.body, id);
-        if (ok) { await commit({ ...patch, override: true }, prev); return; }
+        if (err.body.reason === 'stale-export') {
+          const go = await confirmStaleExport(err.body, id);
+          if (go) { await commit({ ...patch, allowStale: true }, prev); return; }
+        } else {
+          const ok = await confirmOverride(err.body, id);
+          if (ok) { await commit({ ...patch, override: true }, prev); return; }
+        }
       }
       current = { ...current, status: prev };
       select.value = prev;
@@ -155,6 +164,42 @@ export function confirmOverride(body, id) {
         el('button', {
           class: 'btn-mini btn-mini-warn', type: 'button', onclick: () => finish(true),
         }, 'override anyway')));
+    close = openModal(card, { onClose: () => finish(false) });
+  });
+}
+
+/* confirmStaleExport(body, id) -> Promise<boolean>
+   A modal for the server's stale-export 409 (distinct from the illegal-transition
+   one above — that carries legalNext, this carries reason:'stale-export' +
+   assetState). Moving INTO scheduled/posted with an absent or stale render is
+   risky; this offers to back off or schedule anyway (the caller re-POSTs with
+   allowStale:true). Resolves true only on an explicit "schedule anyway". Mirrors
+   the board's client-side stale warning so both reads identically. */
+export function confirmStaleExport(body, id) {
+  const to = String(body && body.to == null ? '' : body.to);
+  const a = (body && body.assetState) || {};
+  const absent = a.exists === false;
+  const reason = absent
+    ? 'has never been exported'
+    : 'export is older than its source (stale)';
+  return new Promise((resolve) => {
+    let close = null;
+    let done = false;
+    const finish = (val) => { if (done) return; done = true; if (close) close(); resolve(val); };
+    const card = el('div', { class: 'override-form stale-warn-form' },
+      el('span', { class: 'mono-up pop-title' }, `stale export · ${id}`),
+      el('p', { class: 'override-msg' },
+        'this asset ',
+        el('span', { class: 'meta-warn' }, reason),
+        '. moving it to ',
+        el('span', { class: 'badge s-' + (STATUSES.includes(to) ? to : 'draft') }, to),
+        ' will schedule a render that is not current.'),
+      el('p', { class: 'tile-sub' }, 're-render it first from the dashboard ops panel, or schedule anyway.'),
+      el('div', { class: 'pop-actions' },
+        el('button', { class: 'btn-mini', type: 'button', onclick: () => finish(false) }, 'cancel'),
+        el('button', {
+          class: 'btn-mini btn-mini-warn', type: 'button', onclick: () => finish(true),
+        }, 'schedule anyway')));
     close = openModal(card, { onClose: () => finish(false) });
   });
 }

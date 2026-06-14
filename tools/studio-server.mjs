@@ -16,6 +16,12 @@
 //                                  real change appends to an append-only history
 //                                  [{from, to, at, overridden?}] (from:null on
 //                                  creation); same-status is an idempotent no-op.
+//                                  Moving a KNOWN manifest asset to scheduled/
+//                                  posted while it is absent or stale is 409
+//                                  {error, reason:'stale-export', id, to,
+//                                  assetState:{known,exists,stale}} unless
+//                                  patch.allowStale (distinct from override;
+//                                  neither flag is persisted).
 //   GET  /api/actions              {running, lastRun} (lastRun survives restarts)
 //   POST /api/actions/run          {action} → {id} | 409 busy | 400 unknown
 //   GET  /api/actions/:id/stream   SSE log/exit events (replay + live)
@@ -35,6 +41,12 @@
 //                                   facts, warnings}; assembles the SYSTEM+USER prompt
 //                                   from 00_SYSTEM_PROMPT.md + live FACTS.md + the
 //                                   chosen template. READ-ONLY — writes nothing.
+//   POST /api/generate/run         {template, includeCheatsheet?, task?} → the OPT-IN
+//                                   local-model bridge: assembles the SAME prompt as
+//                                   /api/generate, then runs it through a local model
+//                                   and returns {output, stderr, exitCode, timedOut,
+//                                   prompt}. DORMANT unless STUDIO_MODEL_CMD is set —
+//                                   501 otherwise (and nothing is spawned). READ-ONLY.
 //   POST /api/qa/check             {text} → {violations, checklist} (read-only): the
 //                                   facts-guard violations + emoji / forbidden-word hits.
 //   GET  /api/drafts               [{name, mtime, size, needsInput, violations}] —
@@ -223,8 +235,9 @@ function enqueueStatus(task) {
 // runs INSIDE the queue so the from-state is read fresh and concurrent writes
 // serialize (no torn history). Resolves a discriminated result the handler maps
 // to a response WITHOUT itself touching disk:
-//   { ok: true,  entry }                    → 200, write happened (or no-op)
-//   { ok: false, from, to, legalNext }       → 409, NOTHING written
+//   { ok: true,  entry }                      → 200, write happened (or no-op)
+//   { ok: false, from, to, legalNext }         → 409 illegal transition, no write
+//   { ok: false, reason:'stale-export', id, to, assetState } → 409, no write
 // Legality (only relevant when the patch carries a status):
 //   • brand-new id              → creation, any status, history [{from:null,to,at}]
 //   • same status               → idempotent no-op, no history entry, still writes
@@ -232,6 +245,13 @@ function enqueueStatus(task) {
 //   • from→to in STATUS_TRANSITIONS, or patch.override → applied; history appended
 //     (override moves carry overridden:true on their entry)
 //   • anything else             → illegal, { ok:false } and no write
+// Stale-export guard (independent of the legality guard, runs AFTER it): once a
+// status change to scheduled/posted is otherwise allowed, a KNOWN manifest asset
+// that is absent (never exported) or stale (source newer than export) is blocked
+// unless the patch carries allowStale:true. override and allowStale are distinct
+// control flags — neither implies the other, and neither is persisted on the
+// entry. Unknown ids (abstract/test ids, launch-grid pseudo-assets) are never
+// gated. The manifest scan runs here, inside the queue, so the verdict is fresh.
 function patchStatus(id, patch) {
   return enqueueStatus(() => {
     const store = loadStatus();
@@ -239,7 +259,7 @@ function patchStatus(id, patch) {
     const isNew = existing === undefined;
     const from = isNew ? null : existing.status ?? null;
     const at = new Date().toISOString();
-    const { override, ...fields } = patch;
+    const { override, allowStale, ...fields } = patch;
 
     // Decide legality + whether this write appends a history entry. Only a real
     // status change records history; everything else just merges fields.
@@ -258,6 +278,22 @@ function patchStatus(id, patch) {
         // Illegal transition, no override → 409, nothing written.
         return { ok: false, from, to, legalNext: legalNext(from) };
       }
+
+      // Stale-export guard: only when this write actually moves the asset into
+      // scheduled/posted (a no-op same-status patch is advisory-only and never
+      // re-blocks). Scoped to KNOWN manifest items so abstract ids stay free.
+      if (appendHistory && (to === 'scheduled' || to === 'posted') && allowStale !== true) {
+        const health = assetHealth(id);
+        if (health.known && (health.exists === false || health.stale === true)) {
+          return {
+            ok: false,
+            reason: 'stale-export',
+            id,
+            to,
+            assetState: { known: true, exists: health.exists, stale: health.stale },
+          };
+        }
+      }
     }
 
     const entry = { ...(existing || {}), ...fields, updatedAt: at };
@@ -271,8 +307,9 @@ function patchStatus(id, patch) {
     } else if (existing?.history) {
       entry.history = existing.history;
     }
-    // `override` is a control flag, never persisted on the entry.
+    // override and allowStale are control flags, never persisted on the entry.
     delete entry.override;
+    delete entry.allowStale;
 
     store.assets[id] = entry;
     writeAtomic(STATUS_FILE, JSON.stringify(store, null, 2) + '\n');
@@ -692,14 +729,19 @@ const FACTS_PREAMBLE =
   'Never invent a number, date, or link; if a needed value is missing or shows ' +
   '[[NOT SET]], output [[NEEDS: <what>]].';
 
-function handleGenerate(body, res) {
-  const { template, includeCheatsheet, task } = body;
+// The ONE assembler shared by POST /api/generate and POST /api/generate/run, so
+// the clipboard path and the local-model bridge produce a byte-identical prompt.
+// Validates the template exactly as /api/generate did. Returns a discriminated
+// result the handlers map to a response WITHOUT either duplicating the assembly:
+//   { ok: false, error }                         → 400 (bad/unknown template)
+//   { ok: true,  prompt, facts, warnings }        → the assembled SYSTEM+USER text
+function assemblePromptText(template, includeCheatsheet, task) {
   if (!isTemplateName(template)) {
-    return sendJSON(res, 400, { error: 'template must be an own prompts/*.md basename (not the system prompt or README)' });
+    return { ok: false, error: 'template must be an own prompts/*.md basename (not the system prompt or README)' };
   }
   const tmplContent = readOrNull(path.join(PROMPTS_DIR, template));
   if (tmplContent == null) {
-    return sendJSON(res, 400, { error: `unknown template: ${template}` });
+    return { ok: false, error: `unknown template: ${template}` };
   }
   // System message = first ```text box of 00_SYSTEM_PROMPT.md (whole file if
   // there is no fence), optionally + the cheat sheet.
@@ -727,7 +769,102 @@ function handleGenerate(body, res) {
   }
 
   const facts = groups.map((g) => ({ heading: g.heading, items: g.items }));
+  return { ok: true, prompt, facts, warnings };
+}
+
+function handleGenerate(body, res) {
+  const { template, includeCheatsheet, task } = body;
+  const assembled = assemblePromptText(template, includeCheatsheet, task);
+  if (!assembled.ok) {
+    return sendJSON(res, 400, { error: assembled.error });
+  }
+  const { prompt, facts, warnings } = assembled;
   return sendJSON(res, 200, { prompt, facts, warnings });
+}
+
+// ------------------------------------------------- local-model bridge (opt-in)
+//
+// POST /api/generate/run is the OPT-IN local-model path: it assembles the SAME
+// prompt as /api/generate, then — only when the operator has configured a local
+// model via STUDIO_MODEL_CMD — runs it through that process and returns the
+// output for the paste-back box. It writes NOTHING to the repo. It is DORMANT by
+// default: with no STUDIO_MODEL_CMD set it responds 501 and never spawns. The
+// argv is a constant shape from env (STUDIO_MODEL_CMD + JSON-array
+// STUDIO_MODEL_ARGS), spawned with shell:false — the one sanctioned bend of the
+// no-shell / node:*-only posture, because it is an explicit operator opt-in to a
+// local process, never an npm SDK dependency. The watchdog mirrors the action
+// runner (STUDIO_ACTION_TIMEOUT_MS, SIGTERM then SIGKILL 5 s later).
+
+function handleGenerateRun(body, res) {
+  const { template, includeCheatsheet, task } = body;
+  const assembled = assemblePromptText(template, includeCheatsheet, task);
+  if (!assembled.ok) {
+    return sendJSON(res, 400, { error: assembled.error });
+  }
+  const cmd = process.env.STUDIO_MODEL_CMD;
+  if (typeof cmd !== 'string' || !cmd.trim()) {
+    // Dormant default: nothing configured, nothing spawned.
+    return sendJSON(res, 501, {
+      error:
+        'no local model configured — set STUDIO_MODEL_CMD (and optional STUDIO_MODEL_ARGS) to enable the local-model bridge',
+    });
+  }
+  let args;
+  try {
+    args = JSON.parse(process.env.STUDIO_MODEL_ARGS || '[]');
+  } catch {
+    return sendJSON(res, 500, { error: 'STUDIO_MODEL_ARGS must be a JSON array' });
+  }
+  if (!Array.isArray(args)) {
+    return sendJSON(res, 500, { error: 'STUDIO_MODEL_ARGS must be a JSON array' });
+  }
+
+  const { prompt } = assembled;
+  let child;
+  try {
+    // No shell: argv is a constant shape (cmd + the JSON-array args from env).
+    child = spawn(cmd, args, { shell: false });
+  } catch (err) {
+    return sendJSON(res, 500, { error: String((err && err.message) || err) });
+  }
+
+  let out = '';
+  let err = '';
+  let timedOut = false;
+  let settled = false;
+  // Watchdog mirrors the action runner: SIGTERM at the deadline, SIGKILL 5 s on.
+  const watchdog = setTimeout(() => {
+    timedOut = true;
+    child.kill('SIGTERM');
+    setTimeout(() => {
+      if (!settled) child.kill('SIGKILL');
+    }, 5000).unref();
+  }, ACTION_TIMEOUT_MS);
+  watchdog.unref();
+
+  child.stdout.on('data', (c) => (out += c.toString('utf8')));
+  child.stderr.on('data', (c) => (err += c.toString('utf8')));
+  child.on('error', (e) => {
+    if (settled) return;
+    settled = true;
+    clearTimeout(watchdog);
+    if (!res.headersSent) sendJSON(res, 500, { error: String((e && e.message) || e) });
+  });
+  child.on('close', (code) => {
+    if (settled) return;
+    settled = true;
+    clearTimeout(watchdog);
+    // Always return whatever stdout was captured (even on a timeout). The
+    // assembled prompt rides along so the UI can show exactly what was sent.
+    sendJSON(res, 200, { output: out, stderr: err, exitCode: code, timedOut, prompt });
+  });
+
+  // Feed the assembled prompt on stdin, then close it so the child can finish.
+  try {
+    child.stdin.end(prompt);
+  } catch {
+    /* a child that ignores/closes stdin still produces output via close */
+  }
 }
 
 // ---------------------------------------------------------------------- QA
@@ -1139,6 +1276,27 @@ function buildManifest() {
     brand: buildBrand(),
     comments: rollup,
   };
+}
+
+// Fresh per-asset export health for the schedule→stale guard. Scans the live
+// surfaces (same buildSurfaces the manifest uses, so the verdict is identical)
+// and reports whether `id` is a KNOWN manifest item plus its export state:
+//   { known: false }                  → not a surface item (abstract test ids,
+//                                        launch-grid pseudo-assets) → never gated
+//   { known: true, exists, stale }     → exists=false means never exported
+//                                        (absent); exists && stale means the
+//                                        source is newer than the export.
+// Comment counts do not affect exists/stale, so we tally over an empty Map.
+function assetHealth(id) {
+  const surfaces = buildSurfaces(loadStatus(), parseCaptions(), new Map());
+  for (const s of surfaces) {
+    for (const item of s.items) {
+      if (`${s.id}/${item.name}` === id) {
+        return { known: true, exists: item.exists, stale: item.stale };
+      }
+    }
+  }
+  return { known: false };
 }
 
 // ----------------------------------------------------------------- actions
@@ -1588,6 +1746,17 @@ async function handleApi(req, res, pathname) {
       }
       const result = await patchStatus(id, patch);
       if (!result.ok) {
+        if (result.reason === 'stale-export') {
+          // Schedule/post blocked: a known asset is absent or stale and the
+          // patch did not carry allowStale. Nothing was written.
+          return sendJSON(res, 409, {
+            error: `cannot schedule/post a ${result.assetState.exists === false ? 'never-exported' : 'stale'} asset: ${result.id}`,
+            reason: 'stale-export',
+            id: result.id,
+            to: result.to,
+            assetState: result.assetState,
+          });
+        }
         // Illegal transition, no override — nothing was written.
         return sendJSON(res, 409, {
           error: `illegal transition: ${result.from} → ${result.to}`,
@@ -1701,6 +1870,11 @@ async function handleApi(req, res, pathname) {
   if (pathname === '/api/generate' && req.method === 'POST') {
     const body = await readJSONBody(req);
     return handleGenerate(body, res);
+  }
+
+  if (pathname === '/api/generate/run' && req.method === 'POST') {
+    const body = await readJSONBody(req);
+    return handleGenerateRun(body, res);
   }
 
   if (pathname === '/api/qa/check' && req.method === 'POST') {

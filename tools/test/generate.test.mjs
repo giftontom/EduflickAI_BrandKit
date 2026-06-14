@@ -26,7 +26,8 @@ import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
+import net from 'node:net';
+import { execFileSync, spawn } from 'node:child_process';
 
 import { RETIRED, scanTextRetired } from '../check-facts.mjs';
 import {
@@ -34,6 +35,8 @@ import {
   api,
   apiJSON,
   ROOT,
+  TOOLS,
+  delay,
   startServer,
   stopServer,
 } from './helpers.mjs';
@@ -79,14 +82,105 @@ function cleanupCreatedDrafts() {
   }
 }
 
+// ---- second server for the OPT-IN local-model bridge ----------------------
+//
+// The default startServer() runs with NO STUDIO_MODEL_CMD, so the bridge is
+// dormant (501). To exercise the configured path we spawn a SECOND server child
+// ourselves on a different unused port with STUDIO_MODEL_CMD='cat' — `cat` echoes
+// stdin to stdout, so the bridge returns the assembled prompt verbatim. We own
+// this child's full lifecycle and reap it in after() (no leftover process / port).
+const NODE = process.execPath;
+let bridgeChild = null;
+let bridgePort = 0;
+
+// Grab an ephemeral free port from the OS (bind to 0, read it back, release).
+function freePort() {
+  return new Promise((resolve, reject) => {
+    const srv = net.createServer();
+    srv.once('error', reject);
+    srv.listen(0, '127.0.0.1', () => {
+      const { port } = srv.address();
+      srv.close(() => resolve(port));
+    });
+  });
+}
+
+async function startBridgeServer() {
+  bridgePort = await freePort();
+  bridgeChild = spawn(NODE, ['studio-server.mjs'], {
+    cwd: TOOLS,
+    env: {
+      ...process.env,
+      STUDIO_PORT: String(bridgePort),
+      PORT: String(bridgePort),
+      STUDIO_MODEL_CMD: 'cat', // echoes stdin → stdout; the bridge returns the prompt
+    },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  bridgeChild.stdout.on('data', () => {});
+  bridgeChild.stderr.on('data', () => {});
+  const deadline = Date.now() + 15000;
+  for (;;) {
+    if (bridgeChild.exitCode != null) throw new Error(`bridge server exited early (${bridgeChild.exitCode})`);
+    try {
+      const res = await bridgeFetch('/api/manifest', { method: 'GET' });
+      if (res.status === 200) return;
+    } catch {
+      /* not up yet */
+    }
+    if (Date.now() > deadline) throw new Error('bridge server did not become ready in 15s');
+    await delay(150);
+  }
+}
+
+async function stopBridgeServer() {
+  if (!bridgeChild) return;
+  const c = bridgeChild;
+  bridgeChild = null;
+  await new Promise((resolve) => {
+    const hardKill = setTimeout(() => {
+      if (c.exitCode == null) c.kill('SIGKILL');
+    }, 3000);
+    c.once('close', () => {
+      clearTimeout(hardKill);
+      resolve();
+    });
+    c.kill('SIGTERM');
+  });
+}
+
+// Same-origin fetch against the bridge server's port (its own Origin so the CSRF
+// guard passes); returns {status, body} like apiJSON.
+async function bridgeFetch(pathname, opts = {}) {
+  const origin = `http://127.0.0.1:${bridgePort}`;
+  const headers = { Origin: origin, ...(opts.headers || {}) };
+  const init = { ...opts, headers };
+  if (init.json !== undefined) {
+    init.method = init.method || 'POST';
+    init.body = JSON.stringify(init.json);
+    headers['Content-Type'] = 'application/json';
+    delete init.json;
+  }
+  const res = await fetch(`${origin}${pathname}`, init);
+  let body = null;
+  try {
+    body = await res.json();
+  } catch {
+    body = null;
+  }
+  return { status: res.status, body };
+}
+
 before(async () => {
   preDrafts = new Set(listDrafts());
   assert.ok(scanTextRetired(RETIRED_TEXT).length > 0, 'runtime retired string must trip the scanner');
   await startServer();
+  await startBridgeServer();
 });
 
 after(async () => {
   await stopServer();
+  await stopBridgeServer();
   cleanupCreatedDrafts();
 });
 
@@ -164,6 +258,57 @@ test('POST /api/generate refuses 00_SYSTEM_PROMPT.md as a user template → 400'
 test('POST /api/generate with a missing template field → 400', async () => {
   const { status } = await apiJSON('/api/generate', { json: {} });
   assert.equal(status, 400);
+});
+
+// ----------------------------------------------------- generate/run (bridge)
+
+test('POST /api/generate/run is DORMANT by default → 501 (no STUDIO_MODEL_CMD)', async () => {
+  // The default server (started by helpers.startServer) carries no
+  // STUDIO_MODEL_CMD, so the bridge never spawns anything — it answers 501.
+  const { status, body } = await apiJSON('/api/generate/run', {
+    json: { template: 'instagram-caption.md' },
+  });
+  assert.equal(status, 501, JSON.stringify(body));
+  assert.ok(typeof body.error === 'string' && /STUDIO_MODEL_CMD/.test(body.error),
+    'the 501 names STUDIO_MODEL_CMD as the env var to set');
+});
+
+test('POST /api/generate/run with a bad template → 400 (validated before any spawn)', async () => {
+  // Bad template is rejected by the SAME validation as /api/generate, even with
+  // no model configured — never reaches the spawn path.
+  const traversal = await apiJSON('/api/generate/run', { json: { template: '../FACTS.md' } });
+  assert.equal(traversal.status, 400);
+  const missing = await apiJSON('/api/generate/run', { json: {} });
+  assert.equal(missing.status, 400);
+});
+
+test('POST /api/generate/run with STUDIO_MODEL_CMD=cat → 200, output is the assembled prompt', async () => {
+  // The second server runs with STUDIO_MODEL_CMD='cat', so the bridge pipes the
+  // assembled prompt to `cat`, which echoes it straight back as stdout.
+  const { status, body } = await bridgeFetch('/api/generate/run', {
+    json: { template: 'instagram-caption.md' },
+  });
+  assert.equal(status, 200, JSON.stringify(body));
+  assert.equal(typeof body.output, 'string', 'output is a string');
+  assert.equal(body.timedOut, false, 'a fast echo did not time out');
+  // The output is the assembled prompt (cat echoed stdin) — it carries the FACTS
+  // preamble marker AND a real live FACTS value baked in, proving the bridge ran
+  // the SAME assembly as /api/generate.
+  assert.ok(body.output.includes('CURRENT FACTS'), 'the FACTS preamble marker is in the echoed output');
+  assert.ok(body.output.includes('UXP Innovation Hub'), 'a real live FACTS value is baked into the output');
+  // The server also echoes the assembled prompt it sent; it must equal the output
+  // `cat` returned (the bridge sends exactly the prompt and nothing else).
+  assert.equal(body.prompt, body.output, 'the echoed prompt matches what cat returned (byte-identical)');
+});
+
+test('POST /api/generate/run via bridge equals the clipboard /api/generate prompt', async () => {
+  // Byte-identical assembly proof: the bridge (which echoes its prompt back) and
+  // the read-only /api/generate must produce the SAME prompt for the same input.
+  const run = await bridgeFetch('/api/generate/run', { json: { template: 'instagram-caption.md' } });
+  const gen = await apiJSON('/api/generate', { json: { template: 'instagram-caption.md' } });
+  assert.equal(run.status, 200, JSON.stringify(run.body));
+  assert.equal(gen.status, 200, JSON.stringify(gen.body));
+  assert.equal(run.body.prompt, gen.body.prompt, '/run and /generate assemble a byte-identical prompt');
 });
 
 // ------------------------------------------------------------------- qa/check

@@ -12,7 +12,7 @@
 
 import { el, clear, copyText, announce } from '../dom.mjs';
 import {
-  getGenTemplates, assemblePrompt, qaCheck, getDrafts, saveDraft,
+  getGenTemplates, assemblePrompt, runPrompt, qaCheck, getDrafts, saveDraft,
 } from '../api.mjs';
 
 /* the five content pillars + three funnel phases the prompt templates name in
@@ -48,6 +48,10 @@ export function render(root) {
     placeholder: 'anything else for the model (optional)' });
 
   const assembleBtn = el('button', { class: 'btn btn-primary btn-sm', type: 'button', disabled: true }, 'assemble prompt');
+  /* optional local-model bridge — DORMANT unless the operator set STUDIO_MODEL_CMD.
+     On 501 it shows a calm note (clipboard mode still works); on 200 it drops the
+     output into the paste-back box so QA + save-draft work on it unchanged. */
+  const runBtn = el('button', { class: 'btn btn-ghost btn-sm', type: 'button', disabled: true }, 'run with local model');
   const stage1Msg = el('div', { class: 'banner-host gen-msg' });
   const warnHost = el('div', { class: 'gen-warn-host' });
   const promptBox = el('pre', { class: 'md-raw gen-prompt', tabindex: '0', 'aria-label': 'assembled prompt' });
@@ -101,7 +105,7 @@ export function render(root) {
         labeled('hook angle', hookInput),
         labeled('cta intent', ctaInput),
         labeled('notes', notesInput)),
-      el('div', { class: 'gen-actions' }, assembleBtn),
+      el('div', { class: 'gen-actions' }, assembleBtn, runBtn),
       stage1Msg,
       promptWrap),
 
@@ -173,7 +177,9 @@ export function render(root) {
   }
 
   function syncAssemble() {
-    assembleBtn.disabled = !tplSelect.value;
+    const has = !!tplSelect.value;
+    assembleBtn.disabled = !has;
+    runBtn.disabled = !has;
   }
   tplSelect.addEventListener('change', syncAssemble);
 
@@ -198,6 +204,46 @@ export function render(root) {
     } finally {
       assembleBtn.disabled = false;
       assembleBtn.textContent = 'assemble prompt';
+    }
+  });
+
+  runBtn.addEventListener('click', async () => {
+    const template = tplSelect.value;
+    if (!template) return;
+    runBtn.disabled = true;
+    runBtn.textContent = 'running';
+    clear(stage1Msg);
+    try {
+      const res = await runPrompt({
+        template,
+        includeCheatsheet: cheatsheet.checked,
+        task: taskPayload(),
+      });
+      if (disposed) return;
+      /* the server echoes the assembled prompt back — mirror the readonly box so
+         the operator sees exactly what was sent through the local model. */
+      if (res && typeof res.prompt === 'string') renderPrompt({ prompt: res.prompt, warnings: [] });
+      const output = res && typeof res.output === 'string' ? res.output : '';
+      outputTa.value = output;
+      syncStage2();
+      const note = res && res.timedOut
+        ? 'local model timed out — partial output captured below'
+        : 'ran via local model — output dropped into the paste-back box';
+      banner(stage1Msg, 'ok', note);
+      announce('ran via local model');
+    } catch (err) {
+      if (disposed) return;
+      if (err.status === 501) {
+        /* dormant default — not an error. Stay calm; clipboard mode still works. */
+        clear(stage1Msg).append(el('div', { class: 'banner banner-warn mono gen-warn' },
+          'no local model configured — set STUDIO_MODEL_CMD to enable this; clipboard mode works without it'));
+        announce('no local model configured');
+      } else {
+        banner(stage1Msg, 'err', `local model run failed: ${msg(err)}`);
+      }
+    } finally {
+      runBtn.disabled = !tplSelect.value;
+      runBtn.textContent = 'run with local model';
     }
   });
 

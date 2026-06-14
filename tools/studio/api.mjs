@@ -26,10 +26,19 @@ export const getStatus = () => request('/api/status');
 /* status patch — the server now guards transitions via a state machine. An
    illegal transition between two existing statuses → 409 {error, from, to,
    legalNext}; pass override:true to force it (recorded with overridden:true).
-   `patch.override` is the wire field the server reads; the optional 4th arg is
-   a convenience that folds into the patch so callers can pass it either way. */
-export const setStatus = (id, patch, override = false) =>
-  post('/api/status', { id, patch: override ? { ...patch, override: true } : patch });
+   A move INTO scheduled/posted whose export is absent or stale → 409 {error,
+   reason:'stale-export', id, to, assetState}; pass allowStale:true to force
+   past THAT guard only. override and allowStale are independent control flags:
+   override bypasses the transition guard, allowStale bypasses the stale-export
+   guard, and neither implies the other. Both are wire-only — folded into the
+   patch the server reads, never stored on the entry. The optional 3rd/4th args
+   are a convenience so callers can pass either flag positionally. */
+export const setStatus = (id, patch, override = false, allowStale = false) => {
+  let p = patch;
+  if (override) p = { ...p, override: true };
+  if (allowStale) p = { ...p, allowStale: true };
+  return post('/api/status', { id, patch: p });
+};
 export const getActions = () => request('/api/actions');
 export const runAction = (action) => post('/api/actions/run', { action });
 export const editmodeSave = (file, edits) => post('/api/editmode', { file, edits });
@@ -70,6 +79,16 @@ export const getGenTemplates = () => request('/api/generate/templates');
 export const assemblePrompt = ({ template, includeCheatsheet = false, task = {} } = {}) =>
   post('/api/generate', { template, includeCheatsheet, task });
 export const qaCheck = (text) => post('/api/qa/check', { text });
+
+/* runPrompt — the OPT-IN local-model bridge (read-only). POSTs the SAME inputs as
+   assemblePrompt to /api/generate/run; the server assembles the identical prompt
+   and, only if the operator set STUDIO_MODEL_CMD, runs it through that local
+   process. On 200 returns {output, exitCode, timedOut, prompt}. It is DORMANT by
+   default: with no STUDIO_MODEL_CMD the server answers 501, which `request`
+   surfaces as a thrown error carrying .status (501) and .body.error — the caller
+   treats that as "not configured", not a failure. 400/500 throw the same way. */
+export const runPrompt = ({ template, includeCheatsheet = false, task = {} } = {}) =>
+  post('/api/generate/run', { template, includeCheatsheet, task });
 
 /* drafts — the 7th (fixed, drafts-only) write surface. listDrafts() returns
    [{name, mtime, size}] for content-studio/drafts/*.md. saveDraft writes
