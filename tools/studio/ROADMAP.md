@@ -106,9 +106,9 @@ adopt/build ledger) lives outside the repo; this file is the condensed, actionab
   prev/next/today nav, today highlighted, overdue chips flagged, read-only detail popover.
 - ✅ **Stale-schedule warning** (client-side, in `#/board`): moving a card into scheduled/posted
   warns first if the asset's export is stale/absent per the manifest (the server guard is separate).
-- ⬜ **"Blocked" dashboard panel**: drafts failing QA / containing `[[NEEDS]]`. *Needs server
-  support* — `/api/drafts` GET returns only metadata, so add a way to surface per-draft QA state
-  (e.g. extend the list with a `needsInput`/violations flag, or a `GET /api/drafts/:name`).
+- ✅ **"Blocked" dashboard panel** (committed `33cb572`): `GET /api/drafts` items now carry
+  additive `needsInput`/`violations` flags; the dashboard's third ops panel lists drafts with
+  unfilled `[[NEEDS]]` placeholders or brand-guard violations.
 - ⬜ **Schedule→stale cross-check (hard, server-side)**: block/flag the transition server-side,
   reusing manifest staleness — scoped to KNOWN manifest assets so abstract ids/tests don't trip it.
 - ⬜ **Cohort banner**: live seat count + key date from FACTS — *gated on the FACTS.md cleanup
