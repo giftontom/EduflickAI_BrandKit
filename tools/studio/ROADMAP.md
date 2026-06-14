@@ -10,9 +10,15 @@ surface (the 7th write path). All green: **81/81 node:test, 13/13 Playwright smo
 client + server stale-schedule guard (`allowStale`), the "blocked" dashboard panel, and the opt-in
 local-model bridge all shipped; the ONLY remaining 1b-2 item is the cohort banner, which is gated on
 the FACTS.md cleanup. Test suite is now **90 node:test cases + a 14-route Playwright smoke**.
+Phase 2a (review gate + digest self-heal) is also done — test suite now **97 node:test cases**.
 **Owner-gated items still pending:** FACTS.md content reconciliation (Phase-0 tail item 7 — brand
 truth, partly speculative; now also unblocks the cohort banner + improves generation grounding) and
 the merge to `main` (item 8 — outward-facing push). This file is the resume point.
+
+> **Data-hygiene note (owner):** `content-studio/design-comments.json` currently holds 5 leftover
+> `studio-test/comment` open comments (test residue from an earlier run, before snapshot/restore was
+> added). They're harmless but inflate the open-comment count; clean them out of the JSON when
+> convenient (the studio regenerates the digest on save/boot). Left untouched — it's owner data.
 
 The full research + planning record (81 evaluated open-source projects, the 4-lens plan, the
 adopt/build ledger) lives outside the repo; this file is the condensed, actionable version.
@@ -125,11 +131,18 @@ adopt/build ledger) lives outside the repo; this file is the condensed, actionab
 
 ## Phase 2 — Review + pipeline (content travels end-to-end)
 
+**Phase 2a — DONE (committed `4e19cf0`, verified 97/97 tests, 14/14 smoke):**
+- ✅ **Review gate**: an asset cannot reach `approved` with open comments — new `allowOpenComments`
+  flag (independent of `override`/`allowStale`); `409 reason:'open-comments'` (with `openCount`)
+  unless bypassed; resolved/wontfix don't block; board + dropdown branch the 409 → confirm + link
+  to `#/feedback`.
+- ✅ **Comments digest self-heal**: on boot, regenerate `DESIGN_FEEDBACK.md` from
+  `design-comments.json` when they differ (no-op when in sync) — a crash between the two writes
+  self-corrects.
+
+**Phase 2b — PENDING (no owner gate):**
 - Full brief → generate → guard → render → QA → status pipeline (mostly wiring existing parts).
-- Annotation layer matures into review gates: an asset cannot reach `approved` with open
-  blocking comments.
-- Comments double-write self-heal: regenerate the digest from JSON on boot.
-- Dirty-file warn-and-diff before FACTS/EDITMODE overwrites.
+- Dirty-file warn-and-diff before FACTS/EDITMODE overwrites (use the existing `diff` component).
 - Channel variants: one approved draft → per-channel repurposed versions, each tracked.
 
 ## Phase 3 — Multi-brand platform
