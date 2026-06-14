@@ -10,7 +10,9 @@ surface (the 7th write path). All green: **81/81 node:test, 13/13 Playwright smo
 client + server stale-schedule guard (`allowStale`), the "blocked" dashboard panel, and the opt-in
 local-model bridge all shipped; the ONLY remaining 1b-2 item is the cohort banner, which is gated on
 the FACTS.md cleanup. Test suite is now **90 node:test cases + a 14-route Playwright smoke**.
-Phase 2a (review gate + digest self-heal) is also done — test suite now **97 node:test cases**.
+Phase 2a (review gate + digest self-heal) is done, and Phase 2b is underway: `STUDIO_CONTENT_DIR`
+test isolation shipped (the suite is now provably isolated from live data). Test suite now
+**98 node:test cases + a 14-route smoke**.
 **Owner-gated items still pending:** FACTS.md content reconciliation (Phase-0 tail item 7 — brand
 truth, partly speculative; now also unblocks the cohort banner + improves generation grounding) and
 the merge to `main` (item 8 — outward-facing push). This file is the resume point.
@@ -140,10 +142,19 @@ adopt/build ledger) lives outside the repo; this file is the condensed, actionab
   `design-comments.json` when they differ (no-op when in sync) — a crash between the two writes
   self-corrects.
 
-**Phase 2b — PENDING (no owner gate):**
-- Full brief → generate → guard → render → QA → status pipeline (mostly wiring existing parts).
-- Dirty-file warn-and-diff before FACTS/EDITMODE overwrites (use the existing `diff` component).
-- Channel variants: one approved draft → per-channel repurposed versions, each tracked.
+**Phase 2b:**
+- ✅ **Test isolation via `STUDIO_CONTENT_DIR`** (committed `80b0d83`): the server reads/writes its
+  content-studio data from a configurable dir (default-identical when unset); the suite runs against
+  a throwaway copy. PROVEN byte-identical content-studio before/after a full 98-test run — tests can
+  now run safely while a live studio is open. This retires the old "don't run the suite while live"
+  caution.
+- ⬜ Full brief → generate → guard → render → QA → status pipeline (mostly wiring existing parts).
+- ⬜ Dirty-file warn-and-diff: the FACTS editor already shows a disk-vs-buffer LCS diff before save;
+  remaining gap is *server-side* optimistic concurrency (reject a save whose `baseHash` no longer
+  matches disk) + the same for EDITMODE. Lower priority (client diff already covers the common case).
+- ⬜ Channel variants: one approved draft → per-channel repurposed versions, each tracked. (Note:
+  the `repurpose-batch.md` template is already pickable in `#/generate`; this would add a one-click
+  "fan a source draft out to all channels" action.)
 
 ## Phase 3 — Multi-brand platform
 
