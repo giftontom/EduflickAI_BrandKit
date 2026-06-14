@@ -31,6 +31,55 @@ export function render(root, ctx) {
     return (entry && STATUSES.includes(entry.status)) ? entry.status : 'draft';
   }
 
+  /* manifest export-health for an asset id (`<surfaceId>/<name>`), used only to
+     warn before a go-live move. Returns null when the id is not a tracked
+     surface item (e.g. a launch-grid pseudo-asset) so those moves are never
+     blocked. `absent` = the export was never produced; `stale` = it exists but
+     its source moved past it — both make scheduling/posting risky. */
+  function exportHealth(id) {
+    const m = ctx.manifest;
+    if (!m || !Array.isArray(m.surfaces)) return null;
+    const slash = String(id).indexOf('/');
+    if (slash < 0) return null;
+    const surfaceId = String(id).slice(0, slash);
+    const name = String(id).slice(slash + 1);
+    const surface = m.surfaces.find((s) => s.id === surfaceId);
+    if (!surface || !Array.isArray(surface.items)) return null;
+    const item = surface.items.find((i) => i.name === name);
+    if (!item) return null;
+    return { absent: !item.exists, stale: Boolean(item.exists && item.stale) };
+  }
+
+  /* a go-live guard: moving INTO scheduled/posted with a stale or missing export
+     is dangerous (a live or about-to-go-live asset whose render is out of date).
+     Mirrors the override modal's look; resolves true only on an explicit
+     "schedule anyway". The server still runs its own state-machine guard. */
+  function confirmStaleSchedule(id, next, health) {
+    const reason = health.absent
+      ? 'has never been exported'
+      : 'export is older than its source (stale)';
+    return new Promise((resolve) => {
+      let close = null;
+      let done = false;
+      const finish = (val) => { if (done) return; done = true; if (close) close(); resolve(val); };
+      const card = el('div', { class: 'override-form stale-warn-form' },
+        el('span', { class: 'mono-up pop-title' }, `stale export · ${shortLabel(id)}`),
+        el('p', { class: 'override-msg' },
+          'this asset ',
+          el('span', { class: 'meta-warn' }, reason),
+          `. moving it to `,
+          el('span', { class: 'badge s-' + (STATUSES.includes(next) ? next : 'draft') }, next),
+          ' will schedule a render that is not current.'),
+        el('p', { class: 'tile-sub' }, 're-render it first from the dashboard ops panel, or schedule anyway.'),
+        el('div', { class: 'pop-actions' },
+          el('button', { class: 'btn-mini', type: 'button', onclick: () => finish(false) }, 'cancel'),
+          el('button', {
+            class: 'btn-mini btn-mini-warn', type: 'button', onclick: () => finish(true),
+          }, 'schedule anyway')));
+      close = openModal(card, { onClose: () => finish(false) });
+    });
+  }
+
   /* short label for a card: the asset name (drop the surface prefix) over the
      full id. scheduledFor (when present) rides along as a meta line. */
   function shortLabel(id) {
@@ -42,6 +91,16 @@ export function render(root, ctx) {
      rejected it; surface the modal and, if the operator forces it, re-save with
      override:true. force=true skips straight to the override patch. */
   async function move(id, next, force) {
+    /* client-side go-live guard, before any POST: warn when scheduling/posting a
+       stale or missing export. Skipped on a forced move (override already implies
+       intent) and never blocks ids that are not tracked surface items. */
+    if (!force && (next === 'scheduled' || next === 'posted')) {
+      const health = exportHealth(id);
+      if (health && (health.absent || health.stale)) {
+        const go = await confirmStaleSchedule(id, next, health);
+        if (!go) { renderBoard(); return; }
+      }
+    }
     const patch = { status: next };
     if (next === 'posted') patch.postedAt = new Date().toISOString();
     if (force) patch.override = true;

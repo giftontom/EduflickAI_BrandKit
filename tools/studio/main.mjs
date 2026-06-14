@@ -7,6 +7,7 @@ import * as api from './api.mjs';
 import { el, clear, announce } from './dom.mjs';
 import * as dashboard from './views/dashboard.mjs';
 import * as board from './views/board.mjs';
+import * as calendar from './views/calendar.mjs';
 import * as social from './views/social.mjs';
 import * as deck from './views/deck.mjs';
 import * as brochures from './views/brochures.mjs';
@@ -75,6 +76,7 @@ async function saveStatus(id, patch) {
 const ROUTES = [
   { pattern: /^\/?$/, view: dashboard },
   { pattern: /^\/board\/?$/, view: board },
+  { pattern: /^\/calendar\/?$/, view: calendar },
   { pattern: /^\/social\/([^/]+)\/?$/, view: social, params: (m) => ({ surfaceId: decodeURIComponent(m[1]) }) },
   { pattern: /^\/deck\/?$/, view: deck },
   { pattern: /^\/brochures\/?$/, view: brochures },

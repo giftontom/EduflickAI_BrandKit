@@ -1452,3 +1452,113 @@ body.theme-light {
 @media (max-width: 1080px) {
   .gen-grid, .gen-grid-save { grid-template-columns: 1fr; }
 }
+
+/* ================================================================
+   SCHEDULING CALENDAR (#/calendar) + board stale-schedule warning.
+   A 7-column month grid; each scheduled asset is a chip on its day
+   cell. Reuses the shared badge / btn-mini / panel tokens; only the
+   calendar-specific layout lives here. The board stale-schedule
+   modal reuses .override-form and .btn-mini-warn (status board CSS).
+   ================================================================ */
+
+.cal-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.cal-month-label {
+  font-family: var(--font-display);
+  font-weight: var(--w-semibold);
+  font-size: 16px;
+  color: var(--fg1);
+  min-width: 160px;
+}
+.cal-today-btn { margin-left: auto; }
+
+.cal-grid-wrap { width: 100%; }
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  align-items: stretch;
+}
+.cal-dow {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg3);
+  padding: 0 4px 4px;
+}
+.cal-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 96px;
+  background: var(--bg-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  padding: 7px 8px;
+}
+/* blanks pad the first/last week so day 1 lands under its weekday */
+.cal-cell-blank {
+  background: transparent;
+  border-color: transparent;
+  min-height: 0;
+}
+.cal-cell.is-today {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 0 0 4px var(--halo-2);
+}
+.cal-daynum { font-size: 10px; color: var(--fg3); }
+.cal-cell.is-today .cal-daynum { color: var(--accent-soft); }
+
+.cal-chips { display: flex; flex-direction: column; gap: 5px; }
+.cal-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-align: left;
+  background: var(--bg-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: 3px 7px 3px 8px;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+.cal-chip:hover { border-color: var(--accent-soft); }
+.cal-chip-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--fg2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.cal-chip .badge { flex-shrink: 0; font-size: 8px; padding: 1px 6px; }
+/* overdue chip: a warning frame plus a red leading dot */
+.cal-chip.is-overdue { border-color: rgba(255, 110, 90, 0.5); }
+.cal-chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--warn);
+  flex-shrink: 0;
+}
+
+.cal-note { font-size: 11px; color: var(--fg3); margin: 14px 0 0; }
+
+/* read-only chip detail popover (reuses .override-form framing) */
+.cal-pop-id { font-size: 10px; color: var(--fg3); overflow-wrap: anywhere; }
+.cal-pop-row { display: flex; align-items: center; gap: 10px; }
+.cal-pop-when { font-size: 11px; color: var(--accent-soft); }
+.cal-pop-notes { margin: 4px 0 0; }
+
+@media (max-width: 760px) {
+  .cal-cell { min-height: 76px; }
+  .cal-chip-label { font-size: 9px; }
+}
