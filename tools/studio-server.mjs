@@ -37,7 +37,11 @@
 //                                   chosen template. READ-ONLY — writes nothing.
 //   POST /api/qa/check             {text} → {violations, checklist} (read-only): the
 //                                   facts-guard violations + emoji / forbidden-word hits.
-//   GET  /api/drafts               [{name, mtime, size}] — content-studio/drafts/*.md
+//   GET  /api/drafts               [{name, mtime, size, needsInput, violations}] —
+//                                   content-studio/drafts/*.md; the two qa flags
+//                                   feed the dashboard's "blocked" panel:
+//                                   needsInput = content has an unfilled "[["
+//                                   placeholder, violations = scanTextRetired count.
 //   POST /api/drafts               {channel?, slug, content} → write drafts/<name>.md
 //                                   atomically (slug/channel ^[a-z0-9][a-z0-9-]*$,
 //                                   traversal-guarded, scanTextRetired must be clean —
@@ -807,8 +811,23 @@ function listDrafts() {
   const out = [];
   for (const e of entries) {
     if (!e.isFile() || !e.name.endsWith('.md')) continue;
-    const st = statOrNull(path.join(DRAFTS_DIR, e.name));
-    out.push({ name: e.name, mtime: st ? st.mtimeMs : null, size: st ? st.size : null });
+    const abs = path.join(DRAFTS_DIR, e.name);
+    const st = statOrNull(abs);
+    // Per-draft QA flags for the dashboard's "blocked" panel. Corruption-safe:
+    // a read failure defaults to clean (needsInput:false, violations:0) so a
+    // bad file never crashes the listing. `[[` catches unfilled [[NEEDS: ...]]
+    // placeholders the model emitted; violations re-scans for retired strings
+    // (normally 0 — a hand-edited draft could regress).
+    const content = readOrNull(abs);
+    const needsInput = content == null ? false : content.includes('[[');
+    const violations = content == null ? 0 : scanTextRetired(content).length;
+    out.push({
+      name: e.name,
+      mtime: st ? st.mtimeMs : null,
+      size: st ? st.size : null,
+      needsInput,
+      violations,
+    });
   }
   out.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
   return out;

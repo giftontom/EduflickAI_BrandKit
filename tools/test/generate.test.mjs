@@ -284,6 +284,39 @@ test('POST /api/drafts with non-string content → 400, no file written', async 
   assert.ok(!fs.existsSync(path.join(DRAFTS_DIR, `${slug}.md`)), 'no file written for non-string content');
 });
 
+// ------------------------------------------------------ qa flags on the list
+
+test('GET /api/drafts flags an unfilled [[NEEDS]] placeholder as needsInput', async () => {
+  const slug = `${SLUG_PREFIX}-needs`;
+  // A literal [[NEEDS: ...]] marker — the unfilled-placeholder shape the model
+  // emits. Clean of any retired string, so it lands (violations stays 0).
+  const content = 'draft body with a [[NEEDS: a date]] placeholder left unfilled';
+  const { status, body } = await apiJSON('/api/drafts', { json: { slug, content } });
+  assert.equal(status, 200, JSON.stringify(body));
+
+  const { status: lstatus, body: list } = await apiJSON('/api/drafts');
+  assert.equal(lstatus, 200);
+  const entry = list.find((d) => d.name === `${slug}.md`);
+  assert.ok(entry, 'the placeholder draft is listed');
+  assert.equal(entry.needsInput, true, 'an unfilled [[ marker sets needsInput:true');
+  assert.equal(entry.violations, 0, 'a clean (non-retired) draft has 0 violations');
+});
+
+test('GET /api/drafts marks a clean draft needsInput:false', async () => {
+  const slug = `${SLUG_PREFIX}-clean-flags`;
+  const { status, body } = await apiJSON('/api/drafts', {
+    json: { slug, content: 'fully resolved clean draft, no placeholders' },
+  });
+  assert.equal(status, 200, JSON.stringify(body));
+
+  const { status: lstatus, body: list } = await apiJSON('/api/drafts');
+  assert.equal(lstatus, 200);
+  const entry = list.find((d) => d.name === `${slug}.md`);
+  assert.ok(entry, 'the clean draft is listed');
+  assert.equal(entry.needsInput, false, 'a draft with no [[ marker has needsInput:false');
+  assert.equal(entry.violations, 0, 'a clean draft has 0 violations');
+});
+
 // ------------------------------------------------------ atomicity / residue
 
 test('no .tmp residue lingers in drafts/ after the writes', async () => {

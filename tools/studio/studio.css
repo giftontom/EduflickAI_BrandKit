@@ -1319,6 +1319,13 @@ body.theme-light {
 .ops-row .btn-mini { flex-shrink: 0; }
 .ops-empty { font-size: 11px; color: var(--fg3); }
 .ops-panel .log-host { width: 100%; margin-top: 6px; }
+/* blocked rows: an unfinished draft. warm hairline like overdue, the reason in
+   the warn tone, and the draft name is a link to the generate view (where drafts
+   are made) that keeps the muted id color instead of the default link color. */
+.ops-row.is-blocked { border-color: rgba(255, 110, 90, 0.45); }
+.ops-row.is-blocked .ops-when { color: var(--warn); }
+a.ops-id { color: var(--fg2); text-decoration: none; }
+a.ops-id:hover { color: var(--fg1); text-decoration: underline; }
 
 /* ---- state-machine 409 override modal (shared: dropdown + board) ---- */
 .override-form {

@@ -185,14 +185,18 @@ export function render(root, ctx) {
     return d;
   }
 
-  /* two computed operator panels, pure client-side joins of status + manifest:
+  /* three computed operator panels:
        due/overdue  — scheduledFor ≤ today and status not yet posted/retired
        stale & live — manifest stale AND status in {scheduled, posted} (dangerous:
                       a live or about-to-go-live asset whose source moved on)
+       blocked      — drafts the model left unfinished: an unfilled [[NEEDS]]
+                      placeholder (needsInput) or a brand-guard regression
+     the first two are pure client-side joins of already-loaded status + manifest;
+     the blocked panel fetches GET /api/drafts (the qa flags live server-side).
      each panel shows a calm empty line rather than a broken grid when clear. */
   function renderOps() {
     clear(opsGrid);
-    opsGrid.append(renderDuePanel(), renderStalePanel());
+    opsGrid.append(renderDuePanel(), renderStalePanel(), renderBlockedPanel());
   }
 
   function renderDuePanel() {
@@ -283,6 +287,45 @@ export function render(root, ctx) {
       el('p', { class: 'tile-sub' }, 'scheduled or posted assets whose source moved past the export.'),
       body,
       staleLogHost);
+  }
+
+  /* blocked drafts — the only ops panel that reads the disk: GET /api/drafts
+     carries per-draft qa flags. lists every draft the model left unfinished —
+     an unfilled [[NEEDS]] placeholder (needsInput) or a brand-guard regression
+     (violations>0). the card mounts synchronously with a loading line; the fetch
+     fills the body. a calm empty line when nothing is blocked. */
+  function renderBlockedPanel() {
+    const body = el('p', { class: 'ops-empty mono' }, 'loading drafts…');
+    const card = el('div', { class: 'panel-card ops-panel' },
+      el('span', { class: 'mono-up section-label' }, 'blocked'),
+      el('p', { class: 'tile-sub' }, 'drafts with unfilled placeholders or brand-guard violations.'),
+      body);
+
+    ctx.api.getDrafts().then((list) => {
+      const rows = (Array.isArray(list) ? list : [])
+        .filter((d) => d && (d.needsInput === true || Number(d.violations) > 0))
+        .sort((a, b) => String(a.name).localeCompare(String(b.name)));
+      if (!rows.length) {
+        body.replaceWith(el('p', { class: 'ops-empty mono' }, 'nothing blocked.'));
+        return;
+      }
+      const list_ = el('ul', { class: 'ops-list' },
+        rows.map((r) => {
+          const reasons = [];
+          if (r.needsInput === true) reasons.push('needs input');
+          const v = Number(r.violations) || 0;
+          if (v > 0) reasons.push(`${v} brand-guard violation${v === 1 ? '' : 's'}`);
+          return el('li', { class: 'ops-row is-blocked' },
+            el('a', { class: 'mono ops-id', href: '#/generate', title: String(r.name) }, String(r.name)),
+            el('span', { class: 'mono ops-when' }, reasons.join(' · ')));
+        }));
+      body.replaceWith(list_);
+    }).catch((err) => {
+      body.replaceWith(el('p', { class: 'ops-empty mono' },
+        `drafts unreachable: ${String((err && err.message) || err)}`.toLowerCase()));
+    });
+
+    return card;
   }
 
   function renderTiles() {
