@@ -6,11 +6,13 @@ cold-start UX + hygiene. Phase 1a made status a guarded state machine with audit
 `#/board` kanban, and operator dashboard panels. Phase 1b-1 added the `#/generate` panel
 (deterministic FACTS-grounded prompt assembly), a QA runner, and the guarded `drafts/` write
 surface (the 7th write path). All green: **81/81 node:test, 13/13 Playwright smoke**, facts clean
-(191 files), zero-dep + vendor-integrity hold. Phase 1b-2 is underway: the `#/calendar` view and a
-client-side stale-schedule warning shipped (`4651e7f`); the remaining 1b-2 items touch the server
-and are queued for a verified workflow. **Owner-gated items still pending:** FACTS.md content
-reconciliation (Phase-0 tail item 7 — brand truth, partly speculative) and the merge to `main`
-(item 8 — outward-facing push). This file is the resume point.
+(192 files), zero-dep + vendor-integrity hold. Phase 1b-2 is essentially done — `#/calendar`, the
+client + server stale-schedule guard (`allowStale`), the "blocked" dashboard panel, and the opt-in
+local-model bridge all shipped; the ONLY remaining 1b-2 item is the cohort banner, which is gated on
+the FACTS.md cleanup. Test suite is now **90 node:test cases + a 14-route Playwright smoke**.
+**Owner-gated items still pending:** FACTS.md content reconciliation (Phase-0 tail item 7 — brand
+truth, partly speculative; now also unblocks the cohort banner + improves generation grounding) and
+the merge to `main` (item 8 — outward-facing push). This file is the resume point.
 
 The full research + planning record (81 evaluated open-source projects, the 4-lens plan, the
 adopt/build ledger) lives outside the repo; this file is the condensed, actionable version.
@@ -101,7 +103,7 @@ adopt/build ledger) lives outside the repo; this file is the condensed, actionab
   slug/channel sanitized `^[a-z0-9][a-z0-9-]*$`, traversal-guarded, atomic, retired-string-guarded
   (422, no override — the repo facts-guard forbids retired strings repo-wide).
 
-**Phase 1b-2 — IN PROGRESS:**
+**Phase 1b-2 — all but the FACTS-gated cohort banner DONE:**
 - ✅ **Calendar** (`#/calendar`, committed `4651e7f`): month grid over `scheduledFor` with
   prev/next/today nav, today highlighted, overdue chips flagged, read-only detail popover.
 - ✅ **Stale-schedule warning** (client-side, in `#/board`): moving a card into scheduled/posted
@@ -109,15 +111,17 @@ adopt/build ledger) lives outside the repo; this file is the condensed, actionab
 - ✅ **"Blocked" dashboard panel** (committed `33cb572`): `GET /api/drafts` items now carry
   additive `needsInput`/`violations` flags; the dashboard's third ops panel lists drafts with
   unfilled `[[NEEDS]]` placeholders or brand-guard violations.
-- ⬜ **Schedule→stale cross-check (hard, server-side)**: block/flag the transition server-side,
-  reusing manifest staleness — scoped to KNOWN manifest assets so abstract ids/tests don't trip it.
-- ⬜ **Cohort banner**: live seat count + key date from FACTS — *gated on the FACTS.md cleanup
-  (Phase-0 tail item 7); until then it would surface placeholder rows.*
-- ⬜ **Live-model bridge** (opt-in): env-gated `STUDIO_MODEL_CMD`/`STUDIO_MODEL_URL` — spawn/fetch
-  only, never an SDK import; dormant (501) unless configured.
-
-*The four ⬜ items touch the server; do them as a verified workflow (server + tests + verify) on a
-future ultracode turn rather than ad-hoc.*
+- ✅ **Schedule→stale cross-check (hard, server-side)** (committed `24fcb44`): a new `allowStale`
+  flag (distinct from `override`); scheduling/posting a KNOWN absent/stale manifest asset → 409
+  `reason:'stale-export'` unless `allowStale:true`. Scoped to manifest assets so abstract test ids
+  are never gated. Board + status-badge branch the 409 on `body.reason`.
+- ✅ **Live-model bridge** (opt-in, committed `24fcb44`): `POST /api/generate/run` — dormant `501`
+  unless `STUDIO_MODEL_CMD` is set; else spawn (no shell, watchdog timeout) with the prompt on
+  stdin. Shares assembly with `/api/generate`. `#/generate` has a "run with local model" button.
+  *(URL-bridge variant, `STUDIO_MODEL_URL`, not implemented — CMD path covers the local case.)*
+- ⬜ **Cohort banner**: live seat count + key date from FACTS — *the only remaining 1b-2 item;
+  gated on the FACTS.md cleanup (Phase-0 tail item 7). Until FACTS is reconciled it would surface
+  placeholder rows, so it waits on the owner.*
 
 ## Phase 2 — Review + pipeline (content travels end-to-end)
 
