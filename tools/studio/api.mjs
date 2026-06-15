@@ -75,14 +75,19 @@ export const saveLaunchSlides = (slug, payload, override = false) =>
    live FACTS.md + the chosen prompts/ template + the operator's task fields
    into one SYSTEM+USER prompt a small model can run without inventing values.
    getGenTemplates() lists the templates as [{file, title}]. assemblePrompt()
-   posts {template, includeCheatsheet?, task?} and gets back {prompt, facts,
-   warnings} — `warnings` flags FACTS values that will surface as [[NEEDS]].
-   qaCheck(text) re-runs the repo guard + the QA checklist (emoji / forbidden
-   words / invented numbers) over pasted model output → {violations, checklist};
-   it writes nothing. Both endpoints are read-only — no override, no disk. */
+   posts {template, includeCheatsheet?, task?, sourceDraft?} and gets back
+   {prompt, facts, warnings} — `warnings` flags FACTS values that will surface
+   as [[NEEDS]]. sourceDraft is an OPTIONAL plain basename of an existing
+   drafts/*.md file; when present the server injects that draft's copy into the
+   assembled prompt (a SOURCE COPY TO REPURPOSE section) so the model rewrites
+   it for the chosen template/channel. When absent the prompt is byte-identical
+   to today. qaCheck(text) re-runs the repo guard + the QA checklist (emoji /
+   forbidden words / invented numbers) over pasted model output → {violations,
+   checklist}; it writes nothing. Both endpoints are read-only — no override,
+   no disk. */
 export const getGenTemplates = () => request('/api/generate/templates');
-export const assemblePrompt = ({ template, includeCheatsheet = false, task = {} } = {}) =>
-  post('/api/generate', { template, includeCheatsheet, task });
+export const assemblePrompt = ({ template, includeCheatsheet = false, task = {}, sourceDraft } = {}) =>
+  post('/api/generate', sourceDraft ? { template, includeCheatsheet, task, sourceDraft } : { template, includeCheatsheet, task });
 export const qaCheck = (text) => post('/api/qa/check', { text });
 
 /* runPrompt — the OPT-IN local-model bridge (read-only). POSTs the SAME inputs as
@@ -91,9 +96,11 @@ export const qaCheck = (text) => post('/api/qa/check', { text });
    process. On 200 returns {output, exitCode, timedOut, prompt}. It is DORMANT by
    default: with no STUDIO_MODEL_CMD the server answers 501, which `request`
    surfaces as a thrown error carrying .status (501) and .body.error — the caller
-   treats that as "not configured", not a failure. 400/500 throw the same way. */
-export const runPrompt = ({ template, includeCheatsheet = false, task = {} } = {}) =>
-  post('/api/generate/run', { template, includeCheatsheet, task });
+   treats that as "not configured", not a failure. 400/500 throw the same way.
+   It threads the SAME optional sourceDraft as assemblePrompt so a local-model
+   run repurposes the chosen source draft identically. */
+export const runPrompt = ({ template, includeCheatsheet = false, task = {}, sourceDraft } = {}) =>
+  post('/api/generate/run', sourceDraft ? { template, includeCheatsheet, task, sourceDraft } : { template, includeCheatsheet, task });
 
 /* drafts — the 7th (fixed, drafts-only) write surface. listDrafts() returns
    [{name, mtime, size}] for content-studio/drafts/*.md. saveDraft writes

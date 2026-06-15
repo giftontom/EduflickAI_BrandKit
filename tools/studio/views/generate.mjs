@@ -30,6 +30,14 @@ export function render(root) {
     el('option', { value: '' }, 'loading templates…'));
   const cheatsheet = el('input', { type: 'checkbox', id: 'gen-cheatsheet' });
 
+  /* optional source draft to repurpose — populated from the same getDrafts()
+     call that feeds stage 3. A blank default means none, in which case the
+     assembled prompt is byte-identical to today. When picked, its basename is
+     threaded to assemblePrompt + runPrompt as sourceDraft; the server reads
+     that draft and injects its copy as a SOURCE COPY TO REPURPOSE section. */
+  const sourceSelect = el('select', { class: 'pop-input gen-select', 'aria-label': 'source draft to repurpose' },
+    el('option', { value: '' }, '— none —'));
+
   const briefTa = el('textarea', {
     class: 'pop-input pop-notes gen-brief', 'aria-label': 'brief',
     placeholder: 'describe the post / visual / context (optional)',
@@ -95,6 +103,11 @@ export function render(root) {
       el('span', { class: 'mono-up section-label' }, '1 · prompt'),
       el('div', { class: 'gen-grid' },
         labeled('template', tplSelect),
+        labeled('source draft (to repurpose)',
+          el('div', { class: 'gen-source-wrap' },
+            sourceSelect,
+            el('span', { class: 'mono gen-source-hint' },
+              'pick a source + the repurpose template to rewrite existing copy for a channel'))),
         labeled('include brand cheatsheet',
           el('label', { class: 'gen-check-row', for: 'gen-cheatsheet' },
             cheatsheet, el('span', { class: 'mono' }, 'append BRAND_CHEATSHEET.md to the system message'))),
@@ -194,6 +207,7 @@ export function render(root) {
         template,
         includeCheatsheet: cheatsheet.checked,
         task: taskPayload(),
+        sourceDraft: sourceSelect.value || undefined,
       });
       if (disposed) return;
       renderPrompt(res);
@@ -218,6 +232,7 @@ export function render(root) {
         template,
         includeCheatsheet: cheatsheet.checked,
         task: taskPayload(),
+        sourceDraft: sourceSelect.value || undefined,
       });
       if (disposed) return;
       /* the server echoes the assembled prompt back — mirror the readonly box so
@@ -393,10 +408,24 @@ export function render(root) {
     }
   });
 
+  /* rebuild the source-draft picker from the same list that feeds stage 3,
+     preserving the current selection if that draft still exists. The server
+     re-validates the basename, so the option value is just the name. */
+  function syncSourcePicker(items) {
+    const prev = sourceSelect.value;
+    clear(sourceSelect).append(el('option', { value: '' }, '— none —'));
+    for (const d of items) {
+      const name = String(d.name || '');
+      if (name) sourceSelect.append(el('option', { value: name }, name));
+    }
+    sourceSelect.value = items.some((d) => String(d.name || '') === prev) ? prev : '';
+  }
+
   function loadDrafts() {
     getDrafts().then((list) => {
       if (disposed) return;
       const items = Array.isArray(list) ? list : [];
+      syncSourcePicker(items);
       clear(draftsHost);
       if (!items.length) {
         draftsHost.append(el('p', { class: 'mono meta-dim viol-clean' }, 'no drafts yet.'));

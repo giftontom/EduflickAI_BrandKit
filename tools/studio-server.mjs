@@ -43,16 +43,27 @@
 //   POST /api/launch-grid/slides   {slug, slides, ..., override?} → rewrite one carousel
 //   POST /api/export-zip           {files:[{src|text,name}], zipName?} → application/zip
 //   GET  /api/generate/templates   [{file, title}] — the prompts/ templates (read-only)
-//   POST /api/generate             {template, includeCheatsheet?, task?} → {prompt,
-//                                   facts, warnings}; assembles the SYSTEM+USER prompt
-//                                   from 00_SYSTEM_PROMPT.md + live FACTS.md + the
-//                                   chosen template. READ-ONLY — writes nothing.
-//   POST /api/generate/run         {template, includeCheatsheet?, task?} → the OPT-IN
-//                                   local-model bridge: assembles the SAME prompt as
-//                                   /api/generate, then runs it through a local model
-//                                   and returns {output, stderr, exitCode, timedOut,
-//                                   prompt}. DORMANT unless STUDIO_MODEL_CMD is set —
-//                                   501 otherwise (and nothing is spawned). READ-ONLY.
+//   POST /api/generate             {template, includeCheatsheet?, task?,
+//                                   sourceDraft?} → {prompt, facts, warnings};
+//                                   assembles the SYSTEM+USER prompt from
+//                                   00_SYSTEM_PROMPT.md + live FACTS.md + the chosen
+//                                   template. Optional sourceDraft (a plain
+//                                   ^[a-z0-9][a-z0-9-]+\.md$ basename of an existing
+//                                   drafts/<name>.md, traversal-guarded into
+//                                   DRAFTS_DIR; invalid/nonexistent → 400 {error})
+//                                   injects that draft's content as a "----- SOURCE
+//                                   COPY TO REPURPOSE -----" section AFTER the
+//                                   CURRENT FACTS block and BEFORE the TEMPLATE so
+//                                   the model repurposes it. ABSENT sourceDraft →
+//                                   byte-identical prompt to before. READ-ONLY.
+//   POST /api/generate/run         {template, includeCheatsheet?, task?,
+//                                   sourceDraft?} → the OPT-IN local-model bridge:
+//                                   assembles the SAME prompt as /api/generate
+//                                   (same optional sourceDraft repurpose section),
+//                                   then runs it through a local model and returns
+//                                   {output, stderr, exitCode, timedOut, prompt}.
+//                                   DORMANT unless STUDIO_MODEL_CMD is set — 501
+//                                   otherwise (and nothing is spawned). READ-ONLY.
 //   POST /api/qa/check             {text} → {violations, checklist} (read-only): the
 //                                   facts-guard violations + emoji / forbidden-word hits.
 //   GET  /api/drafts               [{name, mtime, size, needsInput, violations}] —
@@ -837,19 +848,69 @@ const FACTS_PREAMBLE =
   'Never invent a number, date, or link; if a needed value is missing or shows ' +
   '[[NOT SET]], output [[NEEDS: <what>]].';
 
+// The repurpose source-draft name rule: a plain basename of an EXISTING file
+// inside DRAFTS_DIR. Distinct from SLUG_RE (which validates the slug FRAGMENT of
+// a NEW draft, no extension) — this matches a whole filename and REQUIRES the
+// .md extension: ^[a-z0-9][a-z0-9-]+\.md$. Note the "+" (at least two leading
+// chars before .md) mirrors the contract exactly.
+const SOURCE_DRAFT_RE = /^[a-z0-9][a-z0-9-]+\.md$/;
+
+// Validate + read a sourceDraft for the repurpose flow. Returns a discriminated
+// result so assemblePromptText can surface a 400 without touching disk twice:
+//   { ok: true,  content }   → the file's text, ready to inject
+//   { ok: false, error }     → invalid name OR not an existing file in DRAFTS_DIR
+// Mirrors the POST /api/drafts traversal guard: name must match the rule, and the
+// resolved absolute path is asserted to stay inside DRAFTS_DIR (defence in depth
+// — the rule already forbids separators, but a future edit can't widen this).
+// READ-ONLY — it only reads an existing draft, never writes.
+function readSourceDraft(sourceDraft) {
+  if (typeof sourceDraft !== 'string' || !SOURCE_DRAFT_RE.test(sourceDraft)) {
+    return { ok: false, error: 'sourceDraft must match ^[a-z0-9][a-z0-9-]+\\.md$' };
+  }
+  const abs = path.normalize(path.resolve(DRAFTS_DIR, sourceDraft));
+  if (abs !== DRAFTS_DIR && !abs.startsWith(DRAFTS_DIR + path.sep)) {
+    return { ok: false, error: 'sourceDraft escapes content-studio/drafts/' };
+  }
+  const st = statOrNull(abs);
+  if (!st || !st.isFile()) {
+    return { ok: false, error: `unknown sourceDraft: ${sourceDraft}` };
+  }
+  const content = readOrNull(abs);
+  if (content == null) {
+    return { ok: false, error: `unknown sourceDraft: ${sourceDraft}` };
+  }
+  return { ok: true, content };
+}
+
 // The ONE assembler shared by POST /api/generate and POST /api/generate/run, so
 // the clipboard path and the local-model bridge produce a byte-identical prompt.
 // Validates the template exactly as /api/generate did. Returns a discriminated
 // result the handlers map to a response WITHOUT either duplicating the assembly:
-//   { ok: false, error }                         → 400 (bad/unknown template)
+//   { ok: false, error }                         → 400 (bad/unknown template OR
+//                                                   bad/nonexistent sourceDraft)
 //   { ok: true,  prompt, facts, warnings }        → the assembled SYSTEM+USER text
-function assemblePromptText(template, includeCheatsheet, task) {
+// `sourceDraft` (OPTIONAL): a plain basename of an existing drafts/<name>.md to
+// REPURPOSE. When present, its content is injected as a clearly-delimited
+// "----- SOURCE COPY TO REPURPOSE -----" section placed AFTER the CURRENT FACTS
+// block and BEFORE the TEMPLATE section. When ABSENT (null/undefined), the
+// assembled prompt is BYTE-IDENTICAL to before this feature — no separator, no
+// blank lines, nothing changes (a test asserts /api/generate output is unchanged).
+function assemblePromptText(template, includeCheatsheet, task, sourceDraft) {
   if (!isTemplateName(template)) {
     return { ok: false, error: 'template must be an own prompts/*.md basename (not the system prompt or README)' };
   }
   const tmplContent = readOrNull(path.join(PROMPTS_DIR, template));
   if (tmplContent == null) {
     return { ok: false, error: `unknown template: ${template}` };
+  }
+  // Optional repurpose source. Validated + read here (inside the shared
+  // assembler) so both endpoints behave identically; an absent sourceDraft skips
+  // this entirely and the prompt below is unchanged.
+  let sourceContent = null;
+  if (sourceDraft != null) {
+    const src = readSourceDraft(sourceDraft);
+    if (!src.ok) return { ok: false, error: src.error };
+    sourceContent = src.content;
   }
   // System message = first ```text box of 00_SYSTEM_PROMPT.md (whole file if
   // there is no fence), optionally + the cheat sheet.
@@ -863,6 +924,15 @@ function assemblePromptText(template, includeCheatsheet, task) {
   const templateBody = extractTextBox(tmplContent);
   const taskBlock = renderTaskBlock(task);
 
+  // The optional repurpose source sits BETWEEN the CURRENT FACTS block and the
+  // TEMPLATE section. When sourceContent is null this whole expression collapses
+  // to '' (string concatenation of the empty string), so the prompt is exactly
+  // what it was before sourceDraft existed — byte-identical, no stray newlines.
+  const sourceBlock =
+    sourceContent == null
+      ? ''
+      : '\n\n----- SOURCE COPY TO REPURPOSE -----\n' + sourceContent + '\n';
+
   let prompt =
     '===== SYSTEM =====\n' +
     systemBox +
@@ -870,6 +940,7 @@ function assemblePromptText(template, includeCheatsheet, task) {
     FACTS_PREAMBLE +
     '\n\n' +
     factsBlock +
+    sourceBlock +
     '\n\n----- TEMPLATE -----\n' +
     templateBody;
   if (taskBlock) {
@@ -881,8 +952,8 @@ function assemblePromptText(template, includeCheatsheet, task) {
 }
 
 function handleGenerate(body, res) {
-  const { template, includeCheatsheet, task } = body;
-  const assembled = assemblePromptText(template, includeCheatsheet, task);
+  const { template, includeCheatsheet, task, sourceDraft } = body;
+  const assembled = assemblePromptText(template, includeCheatsheet, task, sourceDraft);
   if (!assembled.ok) {
     return sendJSON(res, 400, { error: assembled.error });
   }
@@ -904,8 +975,8 @@ function handleGenerate(body, res) {
 // runner (STUDIO_ACTION_TIMEOUT_MS, SIGTERM then SIGKILL 5 s later).
 
 function handleGenerateRun(req, body, res) {
-  const { template, includeCheatsheet, task } = body;
-  const assembled = assemblePromptText(template, includeCheatsheet, task);
+  const { template, includeCheatsheet, task, sourceDraft } = body;
+  const assembled = assemblePromptText(template, includeCheatsheet, task, sourceDraft);
   if (!assembled.ok) {
     return sendJSON(res, 400, { error: assembled.error });
   }

@@ -197,6 +197,124 @@ after(async () => {
   removeContentSandbox(sandbox);
 });
 
+// --------------------------------------------------- sourceDraft (repurpose)
+//
+// CONTRACT: POST /api/generate and POST /api/generate/run gain an OPTIONAL
+// `sourceDraft` (basename) field. When present it must:
+//   - be a plain basename of an EXISTING file inside DRAFTS_DIR, matching
+//     ^[a-z0-9][a-z0-9-]+\.md$ and resolving to stay inside DRAFTS_DIR
+//     (traversal-guarded); a non-existent/invalid value → 400 {error}, nothing
+//     leaked;
+//   - inject the file's content into the assembled prompt as a clearly-delimited
+//     "----- SOURCE COPY TO REPURPOSE -----\n<content>\n" section, placed AFTER
+//     the CURRENT FACTS block and BEFORE the TEMPLATE section.
+// When ABSENT the assembled prompt is BYTE-IDENTICAL to today. READ-ONLY.
+//
+// The section marker the server emits (matched verbatim below).
+const SOURCE_MARKER = '----- SOURCE COPY TO REPURPOSE -----';
+// A distinctive sentinel baked into the seeded source draft; it must reappear in
+// the assembled prompt so we know the file's CONTENT (not just the marker) rode
+// through. Kept clean of any retired marketing literal so the /api/drafts seed
+// itself doesn't 422.
+const SOURCE_SENTINEL = 'studio-test-gen-source-sentinel-zephyr-7';
+// The fixture's basename — uses SLUG_PREFIX so teardown + the residue/isolation
+// assertions already cover it, and matches both SLUG_RE (write) and the
+// ^[a-z0-9][a-z0-9-]+\.md$ sourceDraft rule.
+const SOURCE_SLUG = `${SLUG_PREFIX}-src`;
+const SOURCE_DRAFT = `${SOURCE_SLUG}.md`;
+
+// Seed the source draft once, via the sanctioned write path, into the SANDBOX
+// drafts dir (never the real tree). Idempotent so re-runs / ordering don't fight.
+async function seedSourceDraft() {
+  const body = `repurpose me — ${SOURCE_SENTINEL} — original long-form copy about the program`;
+  const { status } = await apiJSON('/api/drafts', { json: { slug: SOURCE_SLUG, content: body } });
+  assert.ok(status === 200, `seed source draft landed (got ${status})`);
+  assert.ok(fs.existsSync(path.join(DRAFTS_DIR, SOURCE_DRAFT)), 'the seeded source draft exists in the sandbox');
+  return body;
+}
+
+test('POST /api/generate with sourceDraft injects the SOURCE COPY section + its content', async () => {
+  const srcBody = await seedSourceDraft();
+  const { status, body } = await apiJSON('/api/generate', {
+    json: { template: 'repurpose-batch.md', sourceDraft: SOURCE_DRAFT },
+  });
+  assert.equal(status, 200, JSON.stringify(body));
+  assert.equal(typeof body.prompt, 'string', 'prompt is a string');
+  // The section marker AND the distinctive source content both appear.
+  assert.ok(body.prompt.includes(SOURCE_MARKER), 'the SOURCE COPY TO REPURPOSE marker is in the prompt');
+  assert.ok(body.prompt.includes(SOURCE_SENTINEL), "the source draft's distinctive content is baked into the prompt");
+  assert.ok(body.prompt.includes(srcBody), 'the full seeded source body is injected');
+  // Placement: AFTER the CURRENT FACTS block, BEFORE the TEMPLATE section.
+  const iFacts = body.prompt.indexOf('CURRENT FACTS');
+  const iSource = body.prompt.indexOf(SOURCE_MARKER);
+  const iTemplate = body.prompt.indexOf('----- TEMPLATE -----');
+  assert.ok(iFacts !== -1 && iSource !== -1 && iTemplate !== -1, 'FACTS, SOURCE, and TEMPLATE markers all present');
+  assert.ok(iFacts < iSource, 'the SOURCE section comes AFTER the CURRENT FACTS block');
+  assert.ok(iSource < iTemplate, 'the SOURCE section comes BEFORE the TEMPLATE section');
+});
+
+test('POST /api/generate WITHOUT sourceDraft has NO SOURCE section (unchanged behavior)', async () => {
+  await seedSourceDraft(); // the file exists, but we do NOT reference it
+  // Byte-identical-to-today proof: with no sourceDraft the prompt must equal the
+  // prompt assembled for the same template with no sourceDraft at all, and must
+  // carry the FACTS + TEMPLATE sections but NEITHER the SOURCE marker nor sentinel.
+  const { status, body } = await apiJSON('/api/generate', { json: { template: 'repurpose-batch.md' } });
+  assert.equal(status, 200, JSON.stringify(body));
+  assert.ok(!body.prompt.includes(SOURCE_MARKER), 'no SOURCE marker when sourceDraft is absent');
+  assert.ok(!body.prompt.includes(SOURCE_SENTINEL), 'no source content leaks when sourceDraft is absent');
+  assert.ok(body.prompt.includes('CURRENT FACTS'), 'the CURRENT FACTS block is still present');
+  assert.ok(body.prompt.includes('----- TEMPLATE -----'), 'the TEMPLATE section is still present');
+  // An explicit null/undefined sourceDraft is treated as absent (no change).
+  const omitted = await apiJSON('/api/generate', { json: { template: 'repurpose-batch.md', sourceDraft: null } });
+  assert.equal(omitted.status, 200, JSON.stringify(omitted.body));
+  assert.equal(omitted.body.prompt, body.prompt, 'a null sourceDraft assembles byte-identically to omitting it');
+});
+
+test('POST /api/generate with a bad sourceDraft → 400, nothing leaked', async () => {
+  await seedSourceDraft();
+  // Each is a distinct rejection: traversal, non-existent basename, and a name
+  // that fails the ^[a-z0-9][a-z0-9-]+\.md$ shape (space). None may 200, none may
+  // leak any draft content or the marker.
+  const cases = [
+    { sourceDraft: '../FACTS.md', why: 'traversal out of drafts/' },
+    { sourceDraft: 'nope.md', why: 'non-existent draft' },
+    { sourceDraft: 'Bad Name.md', why: 'invalid basename shape (space + caps)' },
+    { sourceDraft: 'sub/inner.md', why: 'nested path is not a plain basename' },
+  ];
+  for (const c of cases) {
+    const { status, body } = await apiJSON('/api/generate', {
+      json: { template: 'repurpose-batch.md', sourceDraft: c.sourceDraft },
+    });
+    assert.equal(status, 400, `${c.why} → 400 (got ${status}: ${JSON.stringify(body)})`);
+    assert.ok(typeof body.error === 'string', `${c.why} returns an {error} string`);
+    // Nothing about the rejected target (or any source content) leaks in the body.
+    const blob = JSON.stringify(body);
+    assert.ok(!blob.includes(SOURCE_SENTINEL), `${c.why}: no source content leaked`);
+    assert.ok(!blob.includes('UXP Innovation Hub'), `${c.why}: no FACTS/assembled prompt leaked on rejection`);
+  }
+});
+
+test('POST /api/generate/run with sourceDraft (STUDIO_MODEL_CMD=cat) echoes the source content', async () => {
+  // Seed the source via the BRIDGE server (same sandbox content dir), then drive
+  // /api/generate/run with sourceDraft. `cat` echoes the assembled prompt, so the
+  // output must carry both the SOURCE marker and the distinctive source content —
+  // proving the bridge ran the SAME assembly with the injected source.
+  const srcBody = `repurpose me — ${SOURCE_SENTINEL} — original long-form copy about the program`;
+  const seed = await bridgeFetch('/api/drafts', { json: { slug: SOURCE_SLUG, content: srcBody } });
+  assert.ok(seed.status === 200, `bridge seed of source draft landed (got ${seed.status})`);
+
+  const { status, body } = await bridgeFetch('/api/generate/run', {
+    json: { template: 'repurpose-batch.md', sourceDraft: SOURCE_DRAFT },
+  });
+  assert.equal(status, 200, JSON.stringify(body));
+  assert.equal(typeof body.output, 'string', 'output is a string');
+  assert.ok(body.output.includes(SOURCE_MARKER), 'the echoed output carries the SOURCE COPY marker');
+  assert.ok(body.output.includes(SOURCE_SENTINEL), 'the echoed output carries the source content');
+  assert.ok(body.output.includes(srcBody), 'the full source body rode through the bridge');
+  // The bridge echoes the same prompt it sent; output must equal it byte-for-byte.
+  assert.equal(body.prompt, body.output, 'cat echoed exactly the assembled prompt (source-injected)');
+});
+
 // ----------------------------------------------------------- generate/templates
 
 test('GET /api/generate/templates → 200, the prompt templates with titles', async () => {

@@ -1403,6 +1403,10 @@ a.ops-id:hover { color: var(--fg1); text-decoration: underline; }
 .gen-check-row .mono { color: var(--fg2); font-size: 11.5px; }
 .gen-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .gen-note { font-size: 11px; color: var(--fg3); margin: 0; }
+/* source-draft picker — the select reuses .gen-select; the wrap stacks a
+   one-line hint under it explaining the repurpose flow. */
+.gen-source-wrap { display: flex; flex-direction: column; gap: 5px; }
+.gen-source-hint { font-size: 11px; color: var(--fg3); line-height: 1.45; }
 .gen-msg:empty { display: none; }
 .gen-stage-tag { font-size: 9.5px; color: var(--accent-soft); }
 
