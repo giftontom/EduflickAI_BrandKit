@@ -39,7 +39,7 @@ There are **two faces** to the brand: the consumer learning-feed *vision* and th
     **This is the source of truth** for nearly everything here.
   - `Eduflick_AI_Social_Media_Campaign_Plan.md` — voice/tone + go-to-market for the
     cohort program.
-  - `Eduflick_AI_Brochure.html`, `..._Leadership_Program_*`, `..._Full_Stack_AI_Engineer_Brochure.html`
+  - `Eduflick_AI_Brochure.html`, `..._Full_Stack_AI_Engineer_Brochure.html`
     — marketing collateral.
   - `assets/logo/` — canonical SVG marks, lockups, favicon; `social/` PNGs (avatars, banners, OG card).
 - No Figma or GitHub URL was provided.

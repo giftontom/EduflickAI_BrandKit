@@ -93,6 +93,14 @@ bump it here under **Added / Changed / Deprecated** when tokens or components ch
   tools/README.md, CONTRIBUTING.md, Makefile all cover the new toolbox, kits,
   agent team, and skill layer.
 
+### Removed
+
+- **AI Leadership Program collateral deleted** — the program was cancelled (board
+  decision); its prospectus, brochure revision, and A4 poster
+  (`brochures/Eduflick_AI_Leadership_Program_*`) are removed and de-linked from
+  `index.html` and the brochure / design-system READMEs. Full-Stack AI Engineer
+  remains the sole live launch.
+
 ### Fixed
 
 - CI `npm ci` no longer silently fails (missing committed lockfile).
