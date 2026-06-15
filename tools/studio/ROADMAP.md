@@ -10,7 +10,8 @@ QA runner, and the guarded `drafts/` write surface (the 7th write path). Phase 1
 panel, and the opt-in local-model bridge; the ONLY remaining 1b-2 item is the cohort banner, which
 is gated on the FACTS.md cleanup. Phase 2a (review gate + digest self-heal) is done, and Phase 2b is
 underway: `STUDIO_CONTENT_DIR` test isolation shipped (the suite is now provably isolated from live
-data). All green: **98 node:test cases + a 14-route Playwright smoke**, facts clean, zero-dep +
+data) + a 24-finding adversarial hardening pass + channel-variants repurpose. All green: **112
+node:test cases + a 14-route Playwright smoke**, facts clean, zero-dep +
 vendor-integrity hold.
 **Owner-gated items still pending:** FACTS.md content reconciliation (Phase-0 tail item 7 — brand
 truth, partly speculative; now also unblocks the cohort banner + improves generation grounding) and
@@ -151,9 +152,14 @@ adopt/build ledger) lives outside the repo; this file is the condensed, actionab
 - ⬜ Dirty-file warn-and-diff: the FACTS editor already shows a disk-vs-buffer LCS diff before save;
   remaining gap is *server-side* optimistic concurrency (reject a save whose `baseHash` no longer
   matches disk) + the same for EDITMODE. Lower priority (client diff already covers the common case).
-- ⬜ Channel variants: one approved draft → per-channel repurposed versions, each tracked. (Note:
-  the `repurpose-batch.md` template is already pickable in `#/generate`; this would add a one-click
-  "fan a source draft out to all channels" action.)
+- ✅ **Channel variants / repurpose** (committed `1f87f64`): `/api/generate` + `/api/generate/run`
+  accept an optional `sourceDraft` (an existing drafts/ file, validated + traversal-guarded) injected
+  into the prompt as a "SOURCE COPY TO REPURPOSE" section; `#/generate` has a source-draft picker.
+  Pick a source + the `repurpose-batch` template → the model rewrites it for a channel; save the
+  variant via the existing drafts endpoint. Byte-identical prompt when no source is picked.
+- ⬜ Full brief → generate → guard → render → QA → status pipeline (mostly wiring existing parts);
+  the remaining high-value piece is "apply an approved draft INTO an asset" (a launch-grid post
+  caption via /api/launch-grid/post, or an EDITMODE block) — closes generate→asset.
 
 ## Phase 3 — Multi-brand platform
 
