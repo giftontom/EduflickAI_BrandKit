@@ -157,9 +157,13 @@ adopt/build ledger) lives outside the repo; this file is the condensed, actionab
   into the prompt as a "SOURCE COPY TO REPURPOSE" section; `#/generate` has a source-draft picker.
   Pick a source + the `repurpose-batch` template → the model rewrites it for a channel; save the
   variant via the existing drafts endpoint. Byte-identical prompt when no source is picked.
-- ⬜ Full brief → generate → guard → render → QA → status pipeline (mostly wiring existing parts);
-  the remaining high-value piece is "apply an approved draft INTO an asset" (a launch-grid post
-  caption via /api/launch-grid/post, or an EDITMODE block) — closes generate→asset.
+- ✅ **generate→asset (IG caption)** (committed `f86d4c1`): `#/launch` caption editor has an "import
+  from draft" picker — `parseCaptionDraft` turns a generated draft into {hook,body,cta,hashtags} and
+  pre-fills the editor for review + save via the existing guarded write. Frontend-only, additive.
+- ⬜ generate→asset (EDITMODE): the same idea for a design-system HTML block (apply an approved
+  draft into an EDITMODE block) — the remaining half of the loop.
+- ⬜ Full brief → generate → guard → render → QA → status pipeline as one guided flow (the pieces
+  now all exist and interconnect; this would be a UX wrapper).
 
 ## Phase 3 — Multi-brand platform
 
