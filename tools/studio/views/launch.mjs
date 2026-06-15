@@ -8,6 +8,7 @@
    The Instagram showcase (views/instagram.mjs) renders what gets approved here. */
 
 import { el, clear, debounce, rootHref, copyBtn, fmtWhen, openModal, announce, downloadBlob } from '../dom.mjs';
+import { getDrafts, fetchText } from '../api.mjs';
 import { statusControl } from '../components/status-badge.mjs';
 import { createLogStream } from '../components/log-stream.mjs';
 
@@ -29,6 +30,83 @@ export function assembleCaption(caption) {
   const tags = (c.hashtags || []).join(' ');
   if (tags) parts.push(tags);
   return parts.join('\n\n');
+}
+
+/* ---- parse a generated caption draft into {hook, body, cta, hashtags[]} ----
+   Best-effort, never throws. Handles the instagram-caption template OUTPUT
+   format ("--- VARIANT 1 ---\nHook:\nBody:\nCTA:\nHashtags:") AND the markdown
+   draft style the studio actually saves ("**Hook:** …" inside a "## N ·" block,
+   sometimes blockquoted with "> "). We read only the FIRST recognizable block:
+     - if a "--- VARIANT … ---" marker exists, scope to the first variant;
+     - find the first Hook/Body/CTA/Hashtags labels (case-insensitive, tolerating
+       leading ">", markdown bold/italic "*"/"_" wrappers around the label);
+     - each field's value is the text after its label, plus any following lines
+       up to the next recognized label;
+     - Hashtags -> whitespace-split, keep only tokens starting with "#".
+   GRACEFUL FALLBACK: if no Hook/Body/CTA label is found, the whole trimmed text
+   becomes `body`, hook/cta empty, hashtags []. */
+export function parseCaptionDraft(text) {
+  const empty = { hook: '', body: '', cta: '', hashtags: [] };
+  const raw = String(text == null ? '' : text);
+  if (!raw.trim()) return { ...empty };
+
+  /* if variant markers exist, scope to the first variant block only */
+  let scope = raw;
+  const variantRe = /^\s*-{2,}\s*variant\b[^\n]*$/gim;
+  const marks = [...raw.matchAll(variantRe)];
+  if (marks.length) {
+    const start = marks[0].index + marks[0][0].length;
+    const end = marks.length > 1 ? marks[1].index : raw.length;
+    scope = raw.slice(start, end);
+  }
+
+  /* a line is a "Hook:"/"Body:"/"CTA:"/"Hashtags:" label when, after stripping a
+     leading blockquote ">" and markdown emphasis, it starts with that word + ":".
+     Returns {key, rest} or null. */
+  const labelOf = (line) => {
+    const bare = line
+      .replace(/^\s*>?\s*/, '')        // blockquote prefix
+      .replace(/^[*_]+/, '')           // opening md emphasis
+      .trimStart();
+    const m = bare.match(/^(hook|body|cta|hashtags)\b\s*[*_]*\s*:\s*(.*)$/i);
+    if (!m) return null;
+    return { key: m[1].toLowerCase(), rest: m[2] };
+  };
+
+  const fields = { hook: null, body: null, cta: null, hashtags: null };
+  const lines = scope.split(/\r?\n/);
+  let current = null;
+  let found = false;
+  for (const line of lines) {
+    const label = labelOf(line);
+    if (label) {
+      found = true;
+      current = label.key;
+      fields[current] = label.rest != null ? label.rest : '';
+      continue;
+    }
+    /* continuation line for the field in progress (skip stray blank lines so a
+       leading blank after a label does not pad the value) */
+    if (current && fields[current] != null) {
+      const piece = line.replace(/^\s*>\s?/, '');
+      if (fields[current] === '' && !piece.trim()) continue;
+      fields[current] += (fields[current] ? '\n' : '') + piece;
+    }
+  }
+
+  if (!found) return { hook: '', body: raw.trim(), cta: '', hashtags: [] };
+
+  /* strip trailing md emphasis the label-open strip left behind, trim edges */
+  const clean = (s) => String(s == null ? '' : s).replace(/[\s*_]+$/g, '').trim();
+  const hashtags = clean(fields.hashtags)
+    .split(/\s+/)
+    .filter((t) => t.startsWith('#'));
+  return {
+    hook: clean(fields.hook),
+    body: clean(fields.body),
+    cta: clean(fields.cta),
+    hashtags,
+  };
 }
 
 /* ---- caption lint (the brand + instagram rules) ---- */
@@ -638,6 +716,95 @@ export function render(root, ctx) {
     };
     renderTags();
 
+    /* -- import from draft (ADDITIVE) --
+       closes the generate -> draft -> caption loop: an operator generates +
+       saves a caption draft in #/generate, then here imports it to PRE-FILL the
+       caption fields for review. It only sets the working copy + visible inputs
+       and marks dirty; it NEVER auto-saves and writes nothing — the existing
+       "save caption" button (the guarded /api/launch-grid/post write) is the only
+       write path, unchanged. */
+    const applyImportedCaption = (parsed) => {
+      work.caption.hook = parsed.hook;
+      work.caption.body = parsed.body;
+      work.caption.cta = parsed.cta;
+      work.caption.hashtags = [...parsed.hashtags];
+      hookIn.value = parsed.hook;
+      bodyIn.value = parsed.body;
+      ctaIn.value = parsed.cta;
+      renderTags();
+      markDirty();          // enables save + refreshes lint (via lintDeb) + hookMeta
+      refreshLint();        // immediate (not debounced) so the operator sees it at once
+    };
+
+    const openImportPicker = () => {
+      const listHost = el('div', { class: 'lgm-import-list' });
+      const noteHost = el('div', { class: 'lgm-import-note', role: 'status', 'aria-live': 'polite', hidden: true });
+      const setNote = (kind, text) => {
+        clear(noteHost);
+        noteHost.hidden = false;
+        noteHost.className = `lgm-import-note lgm-import-${kind}`;
+        noteHost.append(el('span', null, text));
+      };
+      let close = null;
+      const choose = async (name, btn) => {
+        const restore = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'importing…';
+        try {
+          const text = await fetchText(`content-studio/drafts/${name}`);
+          const parsed = parseCaptionDraft(text);
+          applyImportedCaption(parsed);
+          if (close) close();
+          announce('caption imported from draft for review');
+          banner('ok', `imported from ${name} — review the fields + lint, then save`);
+        } catch (err) {
+          btn.disabled = false;
+          btn.textContent = restore;
+          setNote('err', `could not import ${name}: ${String((err && err.message) || err).toLowerCase()}`);
+        }
+      };
+      const renderList = (drafts) => {
+        clear(listHost);
+        if (!drafts.length) {
+          listHost.append(el('p', { class: 'mono lgm-hint' },
+            'no drafts yet — generate + save one on the generate tab first.'));
+          return;
+        }
+        for (const d of drafts) {
+          const name = String(d.name || '');
+          if (!name) continue;
+          const kb = Number.isFinite(d.size) ? `${Math.max(1, Math.round(d.size / 1024))}kb` : '';
+          const btn = el('button', { class: 'lgm-import-opt', type: 'button' },
+            el('span', { class: 'lgm-import-name' }, name),
+            el('span', { class: 'mono meta-dim lgm-import-meta' },
+              [kb, d.mtime ? fmtWhen(d.mtime) : ''].filter(Boolean).join(' · ')));
+          btn.addEventListener('click', () => choose(name, btn));
+          listHost.append(btn);
+        }
+      };
+      close = openModal(el('div', { class: 'modal-body lgm-import' },
+        el('div', { class: 'lgm-import-head' },
+          el('span', { class: 'mono-up' }, 'import from draft'),
+          el('p', { class: 'mono lgm-hint' },
+            'pre-fills the caption fields for review — does not auto-save. choose a draft:')),
+        listHost,
+        noteHost),
+      { hostClass: 'lgm-import-modal' });
+      listHost.append(el('p', { class: 'mono lgm-hint' }, 'loading drafts…'));
+      getDrafts()
+        .then((list) => renderList(Array.isArray(list) ? list : []))
+        .catch((err) => {
+          clear(listHost);
+          setNote('err', `drafts unreachable: ${String((err && err.message) || err).toLowerCase()}`);
+        });
+    };
+
+    const importBtn = el('button', {
+      class: 'btn-mini lgm-import-btn', type: 'button',
+      title: 'pre-fill the caption from a generated draft (review before saving)',
+      onclick: openImportPicker,
+    }, 'import from draft ▾');
+
     /* -- save caption -- */
     const saveBtn = el('button', { class: 'btn btn-primary btn-sm', type: 'button', disabled: true }, 'save caption');
     saveBtn.addEventListener('click', () => saveCaption(false));
@@ -847,7 +1014,9 @@ export function render(root, ctx) {
     panelHost.append(
       head, statusHost,
       el('section', { class: 'lgm-sec' },
-        el('span', { class: 'section-label' }, 'caption'),
+        el('div', { class: 'lgm-sec-head' },
+          el('span', { class: 'section-label' }, 'caption'),
+          importBtn),
         el('label', { class: 'pop-label' }, 'hook'), hookIn, hookFold,
         el('label', { class: 'pop-label' }, 'body'), bodyIn,
         el('label', { class: 'pop-label' }, 'cta'), ctaIn,

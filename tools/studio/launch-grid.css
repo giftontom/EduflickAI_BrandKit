@@ -243,3 +243,29 @@ a.lgm-slide-dl:hover { border-color: var(--accent); color: var(--fg1); }
 }
 .lgm-bulk-status.lgm-bulk-ok { color: var(--success, #3dbf6e); border-color: var(--success, #3dbf6e); }
 .lgm-bulk-status.lgm-bulk-err { color: var(--warn); border-color: var(--warn); }
+
+/* import from draft (additive) — the picker modal that pre-fills the caption
+   fields from a generated draft. The trigger reuses .btn-mini; this block styles
+   only the picker list + its inline note. */
+.lgm-import-btn { white-space: nowrap; flex: none; }
+.lgm-import-head { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+.lgm-import-list {
+  display: flex; flex-direction: column; gap: 6px;
+  max-height: min(50vh, 440px); overflow-y: auto; padding-right: 4px;
+}
+.lgm-import-opt {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; text-align: left; cursor: pointer;
+  padding: 9px 12px; border: 1px solid var(--hairline); border-radius: var(--radius-md, 10px);
+  background: var(--bg-card); color: var(--fg1); font-family: inherit;
+}
+.lgm-import-opt:hover { border-color: var(--hairline-strong); background: var(--accent-soft); }
+.lgm-import-opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.lgm-import-opt:disabled { opacity: 0.6; cursor: default; }
+.lgm-import-name { font-weight: 600; font-size: 12px; word-break: break-all; }
+.lgm-import-meta { font-size: 10px; white-space: nowrap; flex: none; }
+.lgm-import-note {
+  margin-top: 10px; font-size: 11px; line-height: 1.4; padding: 8px 11px;
+  border-radius: var(--radius-md, 10px); border: 1px solid var(--hairline);
+}
+.lgm-import-note.lgm-import-err { color: var(--warn); border-color: var(--warn); }
