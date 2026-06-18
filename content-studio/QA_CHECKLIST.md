@@ -17,7 +17,8 @@ A piece ships at **≥ 85** with **zero hard-fails**.
       gamechanger, claim reward, world-class, revolutionary, hurry, "limited time", "don't miss out".
 - [ ] **Sparks are earned**, never "unlocked/leveled/claimed."
 - [ ] **Factually correct** about the program: in-person · UXP Innovation Hub, Trivandrum · capped at
-      20 · 12 weeks · Pioneer ₹49K vs ₹70K · free masterclass is the top-of-funnel.
+      20 · 12 weeks · Pioneer ₹49K vs ₹70K · funnel is apply-direct (no masterclass; CTA = apply).
+      HARD-FAIL if copy asserts the retired lead-magnet offering (retired 2026-06-11) as top-of-funnel, or uses the retired /masterclass path on the domain.
 - [ ] **Right brand face** (program vs product) for the task.
 
 ## B. VOICE (target ≥ 35 / 40)
@@ -41,7 +42,8 @@ A piece ships at **≥ 85** with **zero hard-fails**.
 
 - [ ] Ladders to **one content pillar** (Build in Public / Get Hired / Learn Fast / The Cohort /
       Pioneer Urgency).
-- [ ] **One clear CTA**, matched to the funnel phase (awareness → register free; conversion → book seat).
+- [ ] **One clear CTA**, matched to the funnel phase (awareness → apply; conversion → book seat).
+      On Instagram: "apply — link in bio". On all other surfaces: "apply → eduflickai.com/apply".
 - [ ] **Hook in the first line** (it has to survive feed truncation).
 - [ ] If audience-facing: mirrors a real **audience pain** ("I know React but never built with LLMs," etc.).
 - [ ] Adds something — a proof, an angle, a number — not just a restated tagline.

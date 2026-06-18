@@ -4,6 +4,10 @@
 > (see `.claude/agents/`). Every number traces to `content-studio/FACTS.md`. Finalized facts honored:
 > venue **Trivandrum**, **no fixed close date**, domain **eduflickai.com**,
 > hashtags use **#TrivandrumTech**. RENDER-BEFORE-DONE is still owed on all visuals.
+>
+> **⚠️ Re-reconciled 2026-06-18:** masterclass retired 2026-06-11. All masterclass CTAs replaced
+> with apply-direct. Previous gate annotations below are superseded — pieces require a fresh
+> qa-fact-integrity + red-team pass before publish.
 
 Pillars in play: build in public · get hired · learn fast · the cohort · pioneer urgency.
 
@@ -24,18 +28,18 @@ Pillars in play: build in public · get hired · learn fast · the cohort · pio
    *a SaaS dashboard. a RAG chatbot. an agentic platform. all deployed. all yours.*
 6. `WEEK 12 · HIRE-READY` — end on an *interview*, not an exam.
    *mock technical interviews + recruiter networking with industry HR. you finish job-ready.*
-7. **CTA** — `20 SEATS · ₹49,000 (₹70,000 FROM COHORT 02)` — see it before you *commit*.
-   *build a small AI app, live, in our free technical masterclass.* **register free → eduflickai.com/masterclass**
+7. **CTA** — `20 SEATS · ₹49,000 (₹70,000 FROM COHORT 02)` — apply for pioneer cohort *01*.
+   *selective intake. 20 seats.* **apply — link in bio**
 
 **Caption:** three deployed AI projects in 12 weeks — not three certificates. you build a SaaS
 dashboard, a RAG chatbot, and an agentic platform on the stack companies hire for: next.js, claude,
-pinecone, langchain. starts with a free technical masterclass — build a small AI app, live. register
-→ eduflickai.com/masterclass
+pinecone, langchain. pioneer cohort 01 — 20 seats, ₹49,000. apply — link in bio.
 `#FullStackAI #AIEngineer #TrivandrumTech #BuildInPublic #RAG #CareerInAI`
 
-**Gate:** qa PASS · voice PASS · red-team PASS. **Confirm before publish:** the month→project mapping
-(M1 dashboard / M2 RAG / M3 agentic) is inferred from "3 deployed projects over 12 weeks" + their
-FACTS order — verify against the real syllabus.
+**Gate:** ~~qa PASS · voice PASS · red-team PASS~~ **SUPERSEDED — re-reconciled to apply-direct
+2026-06-18. Re-run qa-fact-integrity + red-team before publish.** Confirm before publish: the
+month→project mapping (M1 dashboard / M2 RAG / M3 agentic) is inferred from "3 deployed projects
+over 12 weeks" + their FACTS order — verify against the real syllabus.
 
 ---
 
@@ -54,14 +58,15 @@ FACTS order — verify against the real syllabus.
 6. `05 · n8n` — let it *act* on its own.
    *orchestrate agents and workflows. automation that ships.*
 7. **CTA** — `LEARN IT BY BUILDING · 20 SEATS` — stop collecting tutorials. *ship* instead.
-   *3 deployed projects in 12 weeks, in-person, Trivandrum.* **free masterclass → eduflickai.com/masterclass**
+   *3 deployed projects in 12 weeks, in-person, Trivandrum.* **apply — link in bio**
 
 **Caption:** the 2026 AI engineer stack in one place: cursor, next.js, claude/openai, pinecone,
 langchain, n8n. the tools companies hire for — and the exact stack you ship 3 real projects on in 12
-weeks. see it live in our free masterclass → eduflickai.com/masterclass
+weeks. pioneer cohort 01 · 20 seats · ₹49,000. apply — link in bio.
 `#AIEngineer #FullStackAI #NextJS #RAG #LangChain #TrivandrumTech`
 
-**Gate:** qa PASS · voice PASS · red-team PASS.
+**Gate:** ~~qa PASS · voice PASS · red-team PASS~~ **SUPERSEDED — re-reconciled to apply-direct
+2026-06-18. Re-run qa-fact-integrity + red-team before publish.**
 
 ---
 
@@ -74,7 +79,7 @@ weeks. see it live in our free masterclass → eduflickai.com/masterclass
 - **BEAT 1:** VO "week 8 in the cohort: a RAG chatbot, answering from real docs." | "RAG · pinecone · langchain" | hands in cursor → live app
 - **BEAT 2:** VO "deployed. on a domain. on your résumé." | "deployed ✓" *(graphic glyph, not emoji)* | vercel URL on a phone
 - **BEAT 3:** VO "three of these in 12 weeks. in-person, Trivandrum." | "3 projects · 12 weeks · 20 seats" | the UXP cohort room
-- **CTA (0:24–0:30):** VO "free masterclass first. link in bio." | "register free →" | wordmark | eduflickai.com/masterclass
+- **CTA (0:24–0:30):** VO "20 seats. apply — link in bio." | "apply →" | wordmark
 
 ### B · "what is RAG in 60 seconds" — IG Reel/Short ≤60s · Learn Fast
 
@@ -83,9 +88,10 @@ weeks. see it live in our free masterclass → eduflickai.com/masterclass
 - **BEAT 1:** VO "chop your documents, embed them, store the vectors." | "embed → pinecone"
 - **BEAT 2:** VO "a question retrieves the closest chunks." | "retrieve top-k"
 - **BEAT 3:** VO "feed them to the model as context — now it answers from your data." | "context → claude"
-- **CTA:** VO "build one yourself in our free masterclass." | "register free →" | eduflickai.com/masterclass
+- **CTA:** VO "build one in 12 weeks. in person, Trivandrum. apply — link in bio." | "apply →"
 
-**Gate:** qa PASS · voice PASS · red-team PASS (checkmarks/arrows are graphic glyphs, not emoji).
+**Gate:** ~~qa PASS · voice PASS · red-team PASS~~ **SUPERSEDED — re-reconciled to apply-direct
+2026-06-18. Re-run qa-fact-integrity + red-team before publish.** (checkmarks/arrows are graphic glyphs, not emoji).
 
 ---
 

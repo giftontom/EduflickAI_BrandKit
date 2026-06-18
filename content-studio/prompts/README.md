@@ -27,7 +27,7 @@ Read `../SMALL_MODELS_GUIDE.md` for why each step matters.
 | `instagram-carousel.md` | slide-by-slide carousel copy | Instagram Kit |
 | `reel-script.md` | Reel / YouTube Short scripts | shoot + story canvas |
 | `linkedin-post.md` | founder / credibility / hiring posts | native / Slides |
-| `whatsapp-sequence.md` | masterclass→booking nurture flow | send as text |
+| `whatsapp-sequence.md` | apply→booking nurture flow | send as text |
 | `ad-copy.md` | Meta/IG paid copy + variants | Instagram Kit (static) / video |
 | `repurpose-batch.md` | one source → many assets; a week in one pass | Content Calendar + kits |
 

@@ -7,8 +7,8 @@ Output is shootable: a hook, timed beats, voiceover, on-screen text, and shot no
 
 ```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
-- Masterclass date / cohort start / seats left: [[ ]]
-- Registration link / WhatsApp:                  [[ ]]
+- Cohort start / seats left:  [[ ]]
+- Apply CTA:                  [[link in bio only — no URL on IG]]
 - Price / venue:                                 [[₹49,000 / UXP Innovation Hub, Trivandrum]]
 
 TASK:
@@ -48,7 +48,7 @@ CAPTION: hook + 2 lines + CTA + 3–5 hashtags
 > **BEAT 1 (0:02–0:10):** VO: "this is week 8 in the cohort. a RAG chatbot. answers from real docs." | ON-SCREEN: "RAG · pinecone · langchain" | SHOT: hands typing in Cursor, then the live app answering
 > **BEAT 2 (0:10–0:18):** VO: "deployed. on a domain. on your résumé." | ON-SCREEN: "deployed ✔ (shown as a checkmark graphic, not emoji)" | SHOT: the vercel URL loading on a phone
 > **BEAT 3 (0:18–0:24):** VO: "three of these in 12 weeks. in-person, in Trivandrum." | ON-SCREEN: "3 projects · 12 weeks · 20 seats" | SHOT: the UXP cohort room
-> **CTA (0:24–0:30):** VO: "free masterclass first. link in bio." | ON-SCREEN: "register free →" | SHOT: cover frame + wordmark | link: [[link]]
-> **CAPTION:** you don't need another course — you need a deploy. week 8: a working RAG chatbot. 3 projects in 12 weeks, in-person in Trivandrum. free masterclass first → [[link]] #BuildInPublic #AIEngineer #TrivandrumTech #RAG
+> **CTA (0:24–0:30):** VO: "ready to apply. link in bio." | ON-SCREEN: "apply →" | SHOT: cover frame + wordmark | link: [[link in bio]]
+> **CAPTION:** you don't need another course — you need a deploy. week 8: a working RAG chatbot. 3 projects in 12 weeks, in-person in Trivandrum. apply — link in bio. #BuildInPublic #AIEngineer #TrivandrumTech #RAG
 
 *(Note: on-screen "checkmarks" and arrows are graphic glyphs in the Instagram Kit, not emoji.)*
