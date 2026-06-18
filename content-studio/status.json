@@ -23,7 +23,20 @@
     },
     "launch-grid/post-03-bl": {
       "status": "approved",
-      "updatedAt": "2026-06-10T23:50:23.122Z"
+      "updatedAt": "2026-06-14T13:41:29.220Z",
+      "history": [
+        {
+          "from": "approved",
+          "to": "scheduled",
+          "at": "2026-06-14T13:41:21.443Z"
+        },
+        {
+          "from": "scheduled",
+          "to": "approved",
+          "at": "2026-06-14T13:41:29.220Z",
+          "overridden": true
+        }
+      ]
     },
     "launch-grid/post-04-mr": {
       "status": "approved",
@@ -49,5 +62,72 @@
       "status": "approved",
       "updatedAt": "2026-06-11T01:10:39.954Z",
       "postedAt": "2026-06-11T01:10:33.065Z"
-    }  }
+    },
+    "posters/poster-program": {
+      "status": "retired",
+      "updatedAt": "2026-06-14T13:56:02.953Z",
+      "history": [
+        {
+          "from": null,
+          "to": "retired",
+          "at": "2026-06-14T13:56:02.953Z"
+        }
+      ]
+    },
+    "posters/poster-seats": {
+      "status": "retired",
+      "updatedAt": "2026-06-14T13:56:05.218Z",
+      "history": [
+        {
+          "from": null,
+          "to": "retired",
+          "at": "2026-06-14T13:56:05.218Z"
+        }
+      ]
+    },
+    "posters/poster-build": {
+      "status": "retired",
+      "updatedAt": "2026-06-14T13:56:10.431Z",
+      "history": [
+        {
+          "from": null,
+          "to": "retired",
+          "at": "2026-06-14T13:56:10.431Z"
+        }
+      ]
+    },
+    "posters/poster-why": {
+      "status": "retired",
+      "updatedAt": "2026-06-14T13:56:18.181Z",
+      "history": [
+        {
+          "from": null,
+          "to": "retired",
+          "at": "2026-06-14T13:56:18.181Z"
+        }
+      ]
+    },
+    "posters/poster-proof": {
+      "status": "retired",
+      "updatedAt": "2026-06-14T13:56:20.160Z",
+      "history": [
+        {
+          "from": null,
+          "to": "retired",
+          "at": "2026-06-14T13:56:20.160Z"
+        }
+      ]
+    },
+    "posters/poster-enquiry": {
+      "status": "retired",
+      "updatedAt": "2026-06-14T13:56:22.413Z",
+      "history": [
+        {
+          "from": null,
+          "to": "retired",
+          "at": "2026-06-14T13:56:22.413Z"
+        }
+      ]
+    }
+  }
 }
