@@ -19,8 +19,9 @@ const STYLE_ID = process.env.RECRAFT_STYLE_ID || '';
 const STYLE    = process.env.RECRAFT_STYLE || 'digital_illustration';
 
 // Eduflick indigo brand palette (token literals) → Recraft `controls`. Confirmed valid live.
-const COLORS = [{ rgb: [91, 91, 240] }, { rgb: [139, 151, 255] }];   // indigo #5B5BF0, light-indigo #8B97FF
-const BG     = { rgb: [11, 8, 34] };                                  // indigo-ink #0B0822
+// Exported so gen-vector.mjs shares ONE source for the brand RGBs (no drift).
+export const RECRAFT_COLORS = [{ rgb: [91, 91, 240] }, { rgb: [139, 151, 255] }];   // indigo #5B5BF0, light-indigo #8B97FF
+export const RECRAFT_BG     = { rgb: [11, 8, 34] };                                  // indigo-ink #0B0822
 
 // recraftv3 raster sizes (closest to each aspect we use). 4:5 ≈ 1024x1280.
 const SIZE_BY_ASPECT = {
@@ -49,7 +50,7 @@ export default {
       negative_prompt: negative || '',          // the brand NEGATIVE block is short and fixed
       size: sz,
       response_format: 'b64_json',
-      controls: { colors: COLORS, background_color: BG, artistic_level: 1, no_text: true },
+      controls: { colors: RECRAFT_COLORS, background_color: RECRAFT_BG, artistic_level: 1, no_text: true },
     };
     if (STYLE_ID) body.style_id = STYLE_ID; else body.style = STYLE;   // style_id replaces style
     let lastErr = 'recraft: no response';
