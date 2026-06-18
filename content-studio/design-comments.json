@@ -43,6 +43,49 @@
       "author": "studio",
       "createdAt": "2026-06-10T19:00:27.686Z",
       "updatedAt": "2026-06-10T19:00:27.686Z"
+    },
+    {
+      "assetRef": {
+        "assetId": "doc:brochures/Eduflick_AI_Brochure.html",
+        "kind": "iframe-brochure",
+        "source": "brochures/Eduflick_AI_Brochure.html",
+        "label": "eduflick ai brochure",
+        "anchor": {
+          "type": "normalized",
+          "page": 1,
+          "x": 1,
+          "y": 0.12094653812445223
+        }
+      },
+      "text": "Make it capital",
+      "id": "40888444-ce84-48be-99c6-8316b8751ac2",
+      "seq": 1,
+      "status": "open",
+      "overridden": false,
+      "author": "studio",
+      "createdAt": "2026-06-12T13:00:47.252Z",
+      "updatedAt": "2026-06-12T13:00:47.252Z"
+    },
+    {
+      "assetRef": {
+        "assetId": "posters/poster-program",
+        "kind": "image",
+        "source": "design-system/collateral/posters.html",
+        "label": "posters · poster-program",
+        "anchor": {
+          "type": "normalized",
+          "x": 0.4848040768905788,
+          "y": 0.43304057410401936
+        }
+      },
+      "text": "delete",
+      "id": "7005d50a-904a-4f90-8ab6-4d0228fee145",
+      "seq": 1,
+      "status": "open",
+      "overridden": false,
+      "author": "studio",
+      "createdAt": "2026-06-14T14:01:27.863Z",
+      "updatedAt": "2026-06-14T14:01:27.863Z"
     }
   ]
 }
