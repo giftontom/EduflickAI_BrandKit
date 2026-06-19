@@ -1,0 +1,114 @@
+/* ============================================================================
+   design-effects · brand-NEUTRAL cinematic CSS toolkit
+   ----------------------------------------------------------------------------
+   Load `tokens.css` (from the design-tokens skill) BEFORE this file so the
+   --accent / neutral vars are defined. The fallbacks below are a neutral indigo
+   so this file also previews standalone — your tokens.css overrides them.
+
+   Golden rule: light goes in a HALO *behind* a focal element, never as a filter
+   ON it. One hue (your --accent) + neutrals. Grain is texture, not a color.
+   ============================================================================ */
+
+:root {
+  /* palette (overridden by tokens.css) */
+  --accent: #6366F1;
+  --accent-light: #A5B4FC;
+  --accent-mid: #818CF8;
+  --accent-deep: #4338CA;
+  --accent-ink: #0B0A2A;
+  --paper: #F5F3EE;
+  --paper-2: #ECE8DE;
+  --ink: #0A0B10;
+  --ink-2: #11131C;
+  --muted: #7A7F90;
+  --line: rgba(245, 243, 238, 0.08);
+  --line-2: rgba(245, 243, 238, 0.16);
+
+  /* effect tunables (safe to override per-surface) */
+  --halo-1: rgba(165, 180, 252, 0.50);   /* inner halo glow  (≈ --accent-light) */
+  --halo-2: rgba(129, 140, 248, 0.18);   /* outer halo falloff (≈ --accent-mid) */
+  --vignette: rgba(7, 5, 22, 0.55);      /* edge darkening on dark surfaces */
+  --glow: rgba(99, 102, 241, 0.55);      /* drop-shadow glow (≈ --accent) */
+  --grid-dot: rgba(245, 243, 238, 0.06); /* dot/line grid on dark; on paper use rgba(10,11,16,.06) */
+
+  /* faint grayscale fractal noise (data URI — survives html2canvas/PDF export) */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* ── Canvas frame — build at TRUE pixels (S14) ──────────────────────────────
+   Use a size modifier; export tools clip these 1:1. */
+.canvas { position: relative; overflow: hidden; background: var(--ink); color: var(--paper); }
+.canvas--sq      { width: 1080px; height: 1080px; }  /* IG square 1:1 */
+.canvas--portrait{ width: 1080px; height: 1350px; }  /* IG portrait 4:5 */
+.canvas--story   { width: 1080px; height: 1920px; }  /* story / reel 9:16 */
+.canvas--slide   { width: 1920px; height: 1080px; }  /* deck 16:9 */
+.canvas--a4      { width: 794px;  min-height: 1123px; background: var(--paper); color: var(--ink); } /* print */
+
+/* ── Scale-to-fit preview wrapper (S13) — view a true-size canvas on screen ── */
+.preview { display: flex; justify-content: center; padding: 40px; background: #07080c; }
+.preview > * { transform: scale(0.5); transform-origin: top center; }
+
+/* ── Backgrounds & texture (S11) ───────────────────────────────────────────
+   Apply to a position:relative wrapper; the ::before sits behind content (z-index:0). */
+.dot-grid::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: radial-gradient(circle, var(--grid-dot) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.line-grid::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: 0.6;
+  background-image:
+    linear-gradient(var(--grid-dot) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-dot) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+/* accent hero gradient (flat, directional) */
+.hero { background: radial-gradient(140% 100% at 0% 0%, var(--accent) 0%, var(--accent-deep) 36%, var(--accent-ink) 100%); }
+
+/* ── Glow (S11) — for a mark / focal element. Drop-shadow, never on text. ──── */
+.glow { filter: drop-shadow(0 8px 48px var(--glow)); }
+
+/* ── Spotlight / halo (S15) — light BEHIND the focal element ────────────────
+   Put .halo as an absolutely-positioned sibling; the focal sits above (z-index:1). */
+.halo {
+  position: absolute; pointer-events: none; border-radius: 50%; filter: blur(8px);
+  background: radial-gradient(closest-side, var(--halo-1), var(--halo-2) 44%, transparent 72%);
+}
+.focal { position: relative; z-index: 1; }
+
+/* ── Film grain (S16) — faint grayscale noise on top of a surface ───────────
+   Add `.grain` to a position:relative surface; kills gradient banding, adds richness. */
+.grain::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: var(--grain), radial-gradient(circle, var(--grid-dot) 1px, transparent 1px);
+  background-size: 140px 140px, 46px 46px;
+}
+
+/* ── Cinematic surface (S17) — directional gradient + vignette ──────────────
+   Offset the hot-spot for directional light; vignette focuses the eye. */
+.cine      { background: radial-gradient(130% 160% at 50% 30%, var(--accent-mid), var(--accent-deep) 24%, var(--accent-ink) 56%, #000 100%); }
+.cine-ink  { background: radial-gradient(120% 130% at 82% 10%, var(--accent-ink), #15122f 32%, var(--ink) 64%); }
+.cine-paper{ background: radial-gradient(120% 150% at 24% 12%, var(--accent-50, #eef0ff), var(--paper) 44%, var(--paper-2) 100%); }
+.vignette::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(135% 125% at 50% 40%, transparent 48%, var(--vignette) 100%);
+}
+
+/* ── Glass card (S19) — translucent fill + hairline + inset highlight + glow ─ */
+.glass {
+  background: rgba(20, 18, 52, 0.45);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--line-2); border-radius: 18px;
+  box-shadow:
+    0 20px 50px -18px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 var(--line-2),
+    0 8px 32px -8px var(--glow);
+}
+
+/* ── Paper-theme overrides ──────────────────────────────────────────────────
+   Add `.on-paper` to a light surface to retune grid, grain and vignette for it. */
+.on-paper {
+  --grid-dot: rgba(10, 11, 16, 0.06);
+  --vignette: rgba(10, 11, 16, 0.07);
+}
+.on-paper.glass { background: rgba(255, 255, 255, 0.55); border-color: var(--line-ink-2, rgba(10,11,16,0.14)); }

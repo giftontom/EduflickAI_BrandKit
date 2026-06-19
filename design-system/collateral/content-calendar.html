@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eduflick AI · Content Calendar</title>
+<link rel="icon" type="image/svg+xml" href="../assets/logo/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+/* ============================================================
+   CONTENT CALENDAR — 6-week launch grid
+   ============================================================ */
+
+/* legend */
+.legend{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.leg-block{background:#fff;border:1px solid var(--rule-2);border-radius:var(--radius-lg);padding:22px 24px;}
+.leg-block .lh{font-family:var(--font-mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--i-500);margin-bottom:16px;}
+.leg-row{display:flex;align-items:center;gap:11px;padding:6px 0;}
+.leg-row .dot{width:11px;height:11px;border-radius:3px;flex-shrink:0;}
+.leg-row .nm{font-family:var(--font-display);font-weight:600;font-size:13px;color:var(--ink);text-transform:lowercase;}
+.leg-row .ds{font-family:var(--font-mono);font-size:9px;color:var(--slate-500);letter-spacing:0.04em;margin-left:auto;text-transform:uppercase;}
+
+/* pillar swatches */
+.pc-build{background:#5B5BF0;} .pc-hire{background:#3A2BB8;} .pc-learn{background:#8B97FF;}
+.pc-cohort{background:#0B0822;} .pc-urgency{background:#FF6E5A;}
+
+/* phase header band */
+.phase{margin-top:18px;}
+.phase-band{
+  display:flex;align-items:center;gap:22px;flex-wrap:wrap;
+  background:linear-gradient(150deg,var(--i-ink),var(--i-700));color:var(--paper);
+  border-radius:var(--radius-xl);padding:24px 30px;position:relative;overflow:hidden;margin-bottom:18px;
+}
+.phase-band::after{content:'';position:absolute;top:-40px;right:-30px;width:200px;height:200px;background:radial-gradient(circle,rgba(91,91,240,0.3),transparent 70%);border-radius:50%;}
+.phase-band>*{position:relative;z-index:1;}
+.phase-no{font-family:var(--font-serif);font-style:italic;font-size:52px;color:var(--i-200);line-height:0.8;letter-spacing:-0.03em;}
+.phase-meta .pk{font-family:var(--font-mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--i-200);margin-bottom:7px;}
+.phase-meta .pt{font-family:var(--font-display);font-weight:800;font-size:25px;letter-spacing:-0.03em;text-transform:lowercase;line-height:1;}
+.phase-meta .pt em{font-family:var(--font-serif);font-style:italic;font-weight:400;color:var(--i-200);}
+.phase-weeks{margin-left:auto;text-align:right;}
+.phase-weeks .w{font-family:var(--font-display);font-weight:800;font-size:20px;color:var(--paper);text-transform:lowercase;letter-spacing:-0.02em;}
+.phase-weeks .g{font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(245,242,234,0.6);margin-top:5px;max-width:30ch;}
+
+/* week grid — 7 day columns */
+.weekgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--rule-2);border:1px solid var(--rule-2);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:14px;}
+.day-h{background:var(--paper-2);padding:11px 13px;font-family:var(--font-mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--slate-500);}
+.cell{background:#fff;padding:13px 13px 15px;min-height:148px;display:flex;flex-direction:column;border-top:3px solid transparent;}
+.cell.b-build{border-top-color:#5B5BF0;} .cell.b-hire{border-top-color:#3A2BB8;}
+.cell.b-learn{border-top-color:#8B97FF;} .cell.b-cohort{border-top-color:#0B0822;}
+.cell.b-urgency{border-top-color:#FF6E5A;} .cell.b-empty{background:var(--paper);}
+.cell .plat{font-family:var(--font-mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--i-500);margin-bottom:9px;display:flex;align-items:center;gap:5px;}
+.cell .plat::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;}
+.cell .asset{font-family:var(--font-display);font-weight:700;font-size:12.5px;color:var(--ink);line-height:1.2;text-transform:lowercase;letter-spacing:-0.01em;}
+.cell .hook{font-family:var(--font-display);font-weight:500;font-size:10.5px;color:var(--fg-2);line-height:1.45;margin-top:6px;}
+.cell .flag{margin-top:auto;font-family:var(--font-mono);font-size:7.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate-500);padding-top:9px;}
+.cell .flag.hot{color:var(--warn);font-weight:500;}
+.cell .empty-dot{margin-top:auto;font-family:var(--font-mono);font-size:8px;color:var(--paper-dim);letter-spacing:0.1em;}
+
+/* themed activity grid for phases 2 & 3 */
+.act-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;}
+.act{background:#fff;border:1px solid var(--rule-2);border-radius:var(--radius-lg);padding:18px 20px;border-left:3px solid var(--i-500);}
+.act.urg{border-left-color:var(--warn);}
+.act.cohort{border-left-color:var(--i-ink);}
+.act .ah{font-family:var(--font-mono);font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--i-500);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
+.act.urg .ah{color:var(--warn);}
+.act .at{font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--ink);text-transform:lowercase;letter-spacing:-0.015em;line-height:1.2;}
+.act .at em{font-family:var(--font-serif);font-style:italic;font-weight:400;color:var(--i-500);}
+.act .ad{font-family:var(--font-display);font-weight:500;font-size:11px;color:var(--fg-2);line-height:1.5;margin-top:7px;}
+.act .cad{font-family:var(--font-mono);font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--slate-500);margin-top:11px;}
+
+/* cadence + targets */
+.cad-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+
+/* milestone callout (masterclass / close) */
+.ms-flag{display:flex;align-items:center;gap:16px;background:rgba(255,110,90,0.08);border:1px solid rgba(255,110,90,0.28);border-radius:var(--radius-lg);padding:16px 22px;margin-bottom:14px;}
+.ms-flag .ic{width:26px;height:26px;color:var(--warn);flex-shrink:0;}
+.ms-flag .t{font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--ink);text-transform:lowercase;letter-spacing:-0.01em;}
+.ms-flag .t em{font-family:var(--font-serif);font-style:italic;font-weight:400;color:#c4351f;}
+.ms-flag .d{font-family:var(--font-mono);font-size:9px;letter-spacing:0.06em;color:var(--slate-500);margin-top:3px;}
+.ms-flag .when{margin-left:auto;font-family:var(--font-mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--warn);text-align:right;}
+
+@media(max-width:1000px){
+  .legend{grid-template-columns:1fr;}
+  .weekgrid{grid-template-columns:1fr;}
+  .day-h{display:none;}
+  .cell{min-height:0;flex-direction:row;align-items:baseline;gap:14px;flex-wrap:wrap;}
+  .cell .plat{margin-bottom:0;min-width:120px;}
+  .act-grid,.cad-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- =================== MASTHEAD =================== -->
+<header class="masthead">
+  <div class="masthead-in">
+    <a class="mast-brand" href="#top">
+      <svg class="mk" viewBox="0 0 180 180" aria-hidden="true"><path class="mk-path" d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z"></path></svg>
+      <span class="mast-wm">eduflick<i>AI</i></span>
+    </a>
+    <div class="mast-sep"></div>
+    <span class="mast-kicker">brand collateral</span>
+    <nav class="mast-nav" style="margin-left:auto;">
+      <a href="brochure-kit.html">brochure</a>
+      <a href="instagram-kit.html">instagram</a>
+      <a class="here" href="content-calendar.html">calendar</a>
+    </nav>
+  </div>
+</header>
+
+<!-- =================== HERO =================== -->
+<section class="hero" id="top">
+  <div class="hero-in">
+    <div class="hero-top">
+      <div class="hero-eyebrow">launch calendar · v1.0</div>
+      <div class="hero-edition">brand collateral · 03 / 03<br><b>pioneer cohort 01</b></div>
+    </div>
+    <h1 class="hero-title">the 6-week <em>calendar.</em></h1>
+    <p class="hero-lead">A back-planned sprint from first post to sold-out — <em>fill 20 seats</em> through the free masterclass.</p>
+    <div class="hero-meta">
+      <div class="hm-item"><div class="hm-v">6 <em>wks</em></div><div class="hm-l">paid + organic</div></div>
+      <div class="hm-item"><div class="hm-v">3</div><div class="hm-l">phases</div></div>
+      <div class="hm-item"><div class="hm-v">5</div><div class="hm-l">content pillars</div></div>
+      <div class="hm-item"><div class="hm-v">20<em>/20</em></div><div class="hm-l">seats · the goal</div></div>
+    </div>
+  </div>
+</section>
+
+<main class="doc">
+
+  <!-- =================== 00 · LEGEND =================== -->
+  <section class="section" id="legend">
+    <div class="sec-head">
+      <div class="sec-num">00</div>
+      <div class="sh-main">
+        <h2 class="sec-title">how to <em>read</em> it</h2>
+        <p class="sec-sub">Every cell carries a <b>pillar</b> (the colour bar), a <b>platform</b>, and the post itself. Pull the matching template from the Instagram Kit.</p>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="leg-block">
+        <div class="lh">content pillars</div>
+        <div class="leg-row"><span class="dot pc-build"></span><span class="nm">build in public</span><span class="ds">p1</span></div>
+        <div class="leg-row"><span class="dot pc-hire"></span><span class="nm">get hired</span><span class="ds">p2</span></div>
+        <div class="leg-row"><span class="dot pc-learn"></span><span class="nm">learn fast</span><span class="ds">p3</span></div>
+        <div class="leg-row"><span class="dot pc-cohort"></span><span class="nm">the cohort</span><span class="ds">p4</span></div>
+        <div class="leg-row"><span class="dot pc-urgency"></span><span class="nm">pioneer urgency</span><span class="ds">p5</span></div>
+      </div>
+      <div class="leg-block">
+        <div class="lh">channels</div>
+        <div class="leg-row"><span class="nm">instagram</span><span class="ds">reach + brand</span></div>
+        <div class="leg-row"><span class="nm">linkedin</span><span class="ds">credibility</span></div>
+        <div class="leg-row"><span class="nm">whatsapp</span><span class="ds">conversion</span></div>
+        <div class="leg-row"><span class="nm">youtube shorts</span><span class="ds">proof</span></div>
+        <div class="leg-row"><span class="nm">meta ads</span><span class="ds">paid · geo</span></div>
+      </div>
+      <div class="leg-block">
+        <div class="lh">the funnel</div>
+        <div class="leg-row"><span class="nm">awareness</span><span class="ds">reels · ads</span></div>
+        <div class="leg-row"><span class="nm">consideration</span><span class="ds">masterclass</span></div>
+        <div class="leg-row"><span class="nm">conversion</span><span class="ds">seat booking</span></div>
+        <div class="leg-row"><span class="nm">close</span><span class="ds">₹15k fee</span></div>
+        <div class="leg-row"><span class="nm">→ enrolled</span><span class="ds">20 / 20</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== PHASE 1 =================== -->
+  <section class="section" id="phase1">
+    <div class="phase-band">
+      <span class="phase-no">01</span>
+      <div class="phase-meta"><div class="pk">weeks 1–2</div><div class="pt">awareness &amp; <em>list-building</em></div></div>
+      <div class="phase-weeks"><div class="w">build the audience</div><div class="g">collect masterclass registrations · geo-target central Trivandrum</div></div>
+    </div>
+
+    <div class="weekgrid">
+      <div class="day-h">mon</div><div class="day-h">tue</div><div class="day-h">wed</div><div class="day-h">thu</div><div class="day-h">fri</div><div class="day-h">sat</div><div class="day-h">sun</div>
+      <div class="cell b-build"><div class="plat">ig reel · shorts</div><div class="asset">"i built an AI chatbot in 8 weeks"</div><div class="hook">student POV, fast cuts</div><div class="flag">pillar · build</div></div>
+      <div class="cell b-cohort"><div class="plat">linkedin</div><div class="asset">founder post</div><div class="hook">"why we capped cohort 1 at 20"</div><div class="flag">pillar · cohort</div></div>
+      <div class="cell b-learn"><div class="plat">ig carousel</div><div class="asset">the 2026 AI engineer stack</div><div class="hook">cursor → next.js → RAG → agents</div><div class="flag">pillar · learn</div></div>
+      <div class="cell b-build"><div class="plat">ig reel</div><div class="asset">theory vs. shipping</div><div class="hook">course clichés vs. deployed work</div><div class="flag">pillar · build</div></div>
+      <div class="cell b-urgency"><div class="plat">all + whatsapp</div><div class="asset">masterclass announcement</div><div class="hook">free · live · limited spots</div><div class="flag hot">★ key drop</div></div>
+      <div class="cell b-cohort"><div class="plat">ig stories</div><div class="asset">countdown + poll</div><div class="hook">"can you build with LLMs?"</div><div class="flag">pillar · cohort</div></div>
+      <div class="cell b-hire"><div class="plat">linkedin</div><div class="asset">curriculum carousel</div><div class="hook">month 1 / 2 / 3 breakdown</div><div class="flag">pillar · hire</div></div>
+    </div>
+    <p class="mono-rule" style="text-align:center;margin:6px 0 0;">week 1 shown · week 2 repeats the rhythm with fresh hooks per pillar</p>
+  </section>
+
+  <!-- =================== PHASE 2 =================== -->
+  <section class="section" id="phase2">
+    <div class="phase-band">
+      <span class="phase-no">02</span>
+      <div class="phase-meta"><div class="pk">weeks 3–4</div><div class="pt">consideration &amp; <em>masterclass push</em></div></div>
+      <div class="phase-weeks"><div class="w">maximise attendance</div><div class="g">seed the pioneer offer · run the live masterclass</div></div>
+    </div>
+
+    <div class="ms-flag">
+      <svg class="ic" viewBox="0 0 24 24"><use href="../assets/icons/eduflick-icons.svg#ic-play"></use></svg>
+      <div><div class="t">run the <em>free technical masterclass</em></div><div class="d">~90 min live · build a tiny AI app on the spot · record → clip for phase 3</div></div>
+      <div class="when">mid-phase 2<br>the hinge</div>
+    </div>
+
+    <div class="act-grid">
+      <div class="act"><div class="ah"><span>daily · stories</span><span>p5</span></div><div class="at">masterclass <em>countdown</em></div><div class="ad">Every day with a registration-link sticker. Keep urgency visible.</div><div class="cad">cadence · daily</div></div>
+      <div class="act"><div class="ah"><span>ig reels</span><span>p1</span></div><div class="at">"what you'll build"</div><div class="ad">Week 4 / Week 8 / Week 11 — one reel per milestone.</div><div class="cad">cadence · 3× / wk</div></div>
+      <div class="act hire" style="border-left-color:#3A2BB8;"><div class="ah"><span>linkedin</span><span>p2</span></div><div class="at">industry hiring angle</div><div class="ad">"AI roles posted in Trivandrum this month" — screenshot real listings.</div><div class="cad">cadence · 2× / wk</div></div>
+      <div class="act cohort"><div class="ah"><span>ig reel</span><span>p4</span></div><div class="at">UXP venue tour</div><div class="ad">Guest-faculty spotlight + the in-person room. Credibility.</div><div class="cad">cadence · 1× / wk</div></div>
+      <div class="act"><div class="ah"><span>ig carousel</span><span>p5</span></div><div class="at">₹49k <em>vs</em> ₹70k</div><div class="ad">What the pioneer founding price actually means. Use the offer set.</div><div class="cad">cadence · 1× / wk</div></div>
+      <div class="act"><div class="ah"><span>whatsapp</span><span>—</span></div><div class="at">nurture sequence</div><div class="ad">Confirm → remind → attend between registration and masterclass.</div><div class="cad">cadence · drip</div></div>
+    </div>
+  </section>
+
+  <!-- =================== PHASE 3 =================== -->
+  <section class="section" id="phase3">
+    <div class="phase-band">
+      <span class="phase-no">03</span>
+      <div class="phase-meta"><div class="pk">weeks 5–6</div><div class="pt">conversion &amp; <em>scarcity close</em></div></div>
+      <div class="phase-weeks"><div class="w">sell out the cohort</div><div class="g">attendees → seat bookings · close 1–2 wks before start</div></div>
+    </div>
+
+    <div class="act-grid">
+      <div class="act urg"><div class="ah"><span>graphics · all</span><span>p5</span></div><div class="at">live <em>seat tracker</em></div><div class="ad">"only 7 of 20 left" — updated every 2–3 days. Use the story tracker template.</div><div class="cad">cadence · every 2–3d</div></div>
+      <div class="act"><div class="ah"><span>ig reels</span><span>p1</span></div><div class="at">masterclass highlights</div><div class="ad">Clips from the live session — proof the format works.</div><div class="cad">cadence · 2× / wk</div></div>
+      <div class="act"><div class="ah"><span>ig carousel</span><span>p2</span></div><div class="at">objection handlers</div><div class="ad">"is ₹49k worth it?" · "what if i'm not job-ready?" · "online vs in-person".</div><div class="cad">cadence · 3 sets</div></div>
+      <div class="act cohort"><div class="ah"><span>whatsapp</span><span>—</span></div><div class="at">1:1 closing</div><div class="ad">Every warm lead. Payment structure: ₹15k book + ₹17k + ₹17k.</div><div class="cad">cadence · per lead</div></div>
+      <div class="act urg"><div class="ah"><span>all + stories</span><span>p5</span></div><div class="at">final <em>48 hours</em></div><div class="ad">"seats closing" urgency across every channel + a stories countdown.</div><div class="cad">cadence · burst</div></div>
+      <div class="act urg"><div class="ah"><span>all channels</span><span>p5</span></div><div class="at">sold-out announcement</div><div class="ad">Becomes the cohort-2 waitlist bait. Close the loop publicly.</div><div class="cad">cadence · 1 drop</div></div>
+    </div>
+
+    <div class="ms-flag" style="margin-top:14px;margin-bottom:0;">
+      <svg class="ic" viewBox="0 0 24 24"><use href="../assets/icons/eduflick-icons.svg#ic-check"></use></svg>
+      <div><div class="t">close lands <em>1–2 weeks before</em> cohort start</div><div class="d">gives product &amp; ops confirmed numbers for UXP coordination</div></div>
+      <div class="when">target<br>20 / 20</div>
+    </div>
+  </section>
+
+  <!-- =================== 04 · CADENCE & TARGETS =================== -->
+  <section class="section" id="targets">
+    <div class="sec-head">
+      <div class="sec-num">04</div>
+      <div class="sh-main">
+        <h2 class="sec-title">cadence &amp; <em>targets</em></h2>
+        <p class="sec-sub">What "on track" looks like. Report weekly: reach, CPL, registrations, bookings, seats remaining.</p>
+      </div>
+    </div>
+    <div class="cad-grid">
+      <div class="spec-card"><div class="scl">registrations</div><div class="scv">150–200</div><div class="scd">to comfortably close 20 seats</div></div>
+      <div class="spec-card"><div class="scl">attendance rate</div><div class="scv">≥ 45<em>%</em></div><div class="scd">of masterclass registrants show up</div></div>
+      <div class="spec-card"><div class="scl">attendee → seat</div><div class="scv">≥ 20<em>%</em></div><div class="scd">convert to a booking</div></div>
+      <div class="spec-card"><div class="scl">seats filled</div><div class="scv">20<em>/20</em></div><div class="scd">the only number that closes the sprint</div></div>
+    </div>
+    <p class="mono-rule" style="margin-top:18px;">posting rhythm · phase 1 ≈ 1 post/day across channels · phase 2 front-loads stories + reels around the masterclass · phase 3 shifts spend to retargeting &amp; 1:1 close</p>
+  </section>
+
+</main>
+
+<!-- =================== FOOTER =================== -->
+<footer class="doc-foot">
+  <div class="foot-in">
+    <div class="foot-l"><b>eduflick</b>AI · content calendar v1.0<br>a tomatrix technologies venture · internal — marketing</div>
+    <nav class="mast-nav foot-links">
+      <a href="brochure-kit.html">brochure</a>
+      <a href="instagram-kit.html">instagram</a>
+      <a href="content-calendar.html" class="here">calendar</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>

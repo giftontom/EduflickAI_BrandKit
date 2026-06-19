@@ -1,0 +1,28 @@
+/* ============================================================================
+   img-layer.css — combine an IMAGE with TYPE + GRAPHICS the right way.
+   The image is the BOTTOM layer (mood only). Everything legible — headline,
+   numbers, logo — stays in HTML/SVG ON TOP. The treatment between them is the
+   design-effects toolkit (vignette + grain + halo), not hand-rolled scrims.
+
+   z-order:
+     0  .img-layer   — the generated/photographic image (cover)
+     1  .vignette    — design-effects: darken edges, focus the eye  (::after)
+     1  .grain       — design-effects: unify texture, kill banding   (::before)
+     2  .halo        — design-effects: light the focal from BEHIND
+     3  .content     — type, numbers, logo (HTML/SVG) — the message
+   ============================================================================ */
+
+.composite { position: relative; overflow: hidden; }
+
+/* layer 0 — the image (the only genuinely new CSS; the rest is design-effects) */
+.img-layer { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.img-layer img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* optional: tint the image toward your brand so it sits in one hue */
+.img-layer--tint::after {
+  content: ""; position: absolute; inset: 0;
+  background: var(--accent-ink, #0b0a2a); mix-blend-mode: color; opacity: 0.35;
+}
+
+/* layer 3 — the message. Put eyebrow / headline / proof / logo inside .content. */
+.content { position: relative; z-index: 3; }

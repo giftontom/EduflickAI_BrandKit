@@ -5,8 +5,9 @@ model** can run them with no other context.
 
 ## How to use
 
-1. **Once per session:** paste `00_SYSTEM_PROMPT.md` as the **system message**. It embeds the full
-   brand cheat sheet, so the model carries the voice for the whole session.
+1. **Once per session:** paste `00_SYSTEM_PROMPT.md` as the **system message**, then append the
+   full `../BRAND_CHEATSHEET.md` after it. The system prompt is a compact summary — it does NOT
+   embed the cheat sheet, and the cheat sheet is canonical if anything conflicts.
 2. **Per asset:** paste the matching task file below as the **first user message**. Each file has:
    - a **FACTS block** to fill with real numbers (the model may not invent any),
    - the **task + ranked constraints**,

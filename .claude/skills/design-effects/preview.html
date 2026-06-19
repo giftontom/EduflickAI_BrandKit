@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>design-effects · live demo</title>
+<link rel="stylesheet" href="effects.css">
+<style>
+  /* Demo theme. Change --accent here (or load a real tokens.css before effects.css)
+     and EVERY effect below re-themes — that's the whole point. e.g. try #F59E0B. */
+  :root { --font-d: 'Inter', system-ui, sans-serif; --font-m: ui-monospace, monospace; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* top-left aligned on purpose: an export canvas wider than the viewport must start at x:0,
+     or centering pushes its left edge into negative coords that the clip can't capture. */
+  body { background: #07080c; color: var(--paper); font-family: var(--font-d); padding: 48px; display: flex; flex-direction: column; gap: 48px; align-items: flex-start; }
+  .eyebrow { font-family: var(--font-m); font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-light); }
+  .display { font-size: 92px; line-height: 0.92; font-weight: 800; letter-spacing: -0.05em; }
+  .display em { font-style: italic; font-weight: 400; color: var(--accent-light); }
+  .foot { font-family: var(--font-m); font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  .note { font-family: var(--font-m); font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+</style>
+</head>
+<body>
+  <p class="note">design-effects preview · each block is a true-pixel [data-export] canvas (shoot with the web-to-image skill)</p>
+
+  <!-- ── 1 · Cinematic cover: cine + vignette + grain + dot-grid + halo behind focal ── -->
+  <div class="canvas canvas--portrait cine vignette grain dot-grid" data-export="effect-cover"
+       style="display:flex;flex-direction:column;justify-content:space-between;padding:96px;position:relative">
+    <span class="eyebrow" style="position:relative;z-index:2">Universal · cinematic surface</span>
+
+    <div style="position:relative;display:flex;flex-direction:column;gap:40px;z-index:2">
+      <!-- halo sits BEHIND the focal mark -->
+      <div style="position:relative;width:160px;height:160px">
+        <div class="halo" style="width:520px;height:520px;left:50%;top:50%;transform:translate(-50%,-50%)"></div>
+        <svg class="focal glow" viewBox="0 0 180 180" width="160" height="160" aria-hidden="true">
+          <path d="M20 20 L160 20 L160 90 L118 110 L160 130 L160 160 L20 160 Z" fill="var(--accent-light)"/>
+        </svg>
+      </div>
+      <h1 class="display focal">depth without<br><em>decoration</em></h1>
+    </div>
+
+    <div class="foot" style="position:relative;z-index:2">one hue · neutral · grain</div>
+  </div>
+
+  <!-- ── 2 · Slide: cine-ink + vignette + grain, with a glass card floating over it ── -->
+  <div class="canvas canvas--slide cine-ink vignette grain" data-export="effect-slide"
+       style="display:flex;align-items:center;padding:120px;position:relative">
+    <div class="glass" style="position:relative;z-index:2;max-width:1100px;padding:64px">
+      <span class="eyebrow">Glass card · backdrop blur</span>
+      <h2 class="display" style="font-size:72px;margin-top:20px">cards that <em>float</em> above the light</h2>
+    </div>
+    <!-- halo glow behind the card, lower-right -->
+    <div class="halo" style="width:900px;height:900px;right:-120px;bottom:-200px"></div>
+  </div>
+</body>
+</html>

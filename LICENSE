@@ -1,0 +1,21 @@
+Copyright (c) 2026 Tomatrix Technologies Pvt Ltd. All rights reserved.
+
+Eduflick AI and the Eduflick mark, wordmark, logo, color system, typography
+choices, and all brand collateral in this repository are proprietary assets of
+Tomatrix Technologies Pvt Ltd.
+
+No part of this repository — including but not limited to the design system,
+brand book, brochures, marketing copy, prompts, and exported imagery — may be
+reproduced, distributed, or used to represent any product or organization other
+than Eduflick AI without the prior written permission of Tomatrix Technologies
+Pvt Ltd.
+
+The accompanying build tooling (the contents of `tools/`) may be used and
+modified internally for the purpose of producing Eduflick AI assets.
+
+THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+
+----------------------------------------------------------------------------
+NOTE: This is a conservative default for proprietary brand assets. If you intend
+to publish the kit under an open license (e.g. CC BY 4.0 for docs + MIT for the
+tooling), replace this file accordingly.

@@ -1,5 +1,10 @@
 # Eduflick AI — Logo Assets
 
+> **⚠️ Mirror directory.** The canonical source is `../design-system/assets/logo/`.
+> This directory is kept for backward compatibility with `index.html` and external
+> references. If you update a logo file, update it in **both** locations.
+> `../design-system/assets/partners/` is the canonical partner-logos location.
+
 Canonical logo assets extracted from `Eduflick_Brand_Book_v4.html`. All files are vector SVG.
 
 ## Mark

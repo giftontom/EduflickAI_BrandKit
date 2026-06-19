@@ -1,0 +1,387 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../assets/logo/favicon.svg">
+<title>Eduflick AI · Full-Stack AI Engineer Program — presentation deck</title>
+<style>
+/* ============================================================
+   Tokens — verbatim subset of design-system/colors_and_type.css
+   (inlined so the deck is a single self-contained, portable file)
+   ============================================================ */
+:root{
+  --i-50:#EEF0FF; --i-100:#DCE0FF; --i-200:#B7C0FF; --i-300:#8B97FF; --i-400:#6E78F5;
+  --i-500:#5B5BF0; --i-600:#4B3FE0; --i-700:#3A2BB8; --i-800:#261A82; --i-900:#150D52; --i-ink:#0B0822;
+  --paper:#F5F2EA; --paper-2:#ECE7DA; --paper-dim:#C9C5BA; --slate-500:#7A7F90; --ink:#0A0B10;
+  --ink-2:#11131C; --ink-3:#181B28; --muted:#7A7F90;
+  --line:rgba(245,242,234,0.08); --line-2:rgba(245,242,234,0.16);
+  --warn:#FF6E5A; --success:#4ADE80;
+  --font-display:'Manrope',sans-serif; --font-serif:'Instrument Serif',serif; --font-mono:'JetBrains Mono',monospace;
+  --shadow-brand:0 8px 32px -8px rgba(91,91,240,0.35);
+}
+/* ---- slide scaffold (from slides/_slide.css) ---- */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#07080C;font-family:var(--font-display)}
+body{overflow-x:hidden}
+#deck{display:flex;flex-direction:column;align-items:center;gap:26px;padding:40px 0 96px;transform-origin:top center}
+.stage{width:1280px;height:720px;position:relative;overflow:hidden;flex-shrink:0;background:var(--ink);color:var(--paper);box-shadow:0 24px 70px rgba(0,0,0,0.55)}
+.grid-tex{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(245,242,234,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(245,242,234,0.04) 1px,transparent 1px);
+  background-size:48px 48px}
+.glow-tr{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(700px 460px at 82% 8%, rgba(91,91,240,0.22), transparent 62%)}
+.eyebrow{font-family:var(--font-mono);font-weight:500;font-size:15px;letter-spacing:0.28em;text-transform:uppercase;color:var(--i-300)}
+.serif{font-family:var(--font-serif);font-style:italic;font-weight:400;color:var(--i-300)}
+.foot{position:absolute;left:64px;right:64px;bottom:48px;display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--font-mono);font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted)}
+.wm{font-family:var(--font-display);font-weight:800;letter-spacing:-0.045em;display:inline-flex;align-items:baseline}
+.wm i{font-style:normal;margin-left:0.16em}
+/* ---- deck helpers ---- */
+.bar{position:absolute;left:64px;top:58px;right:64px;display:flex;justify-content:space-between;align-items:baseline}
+.wmsm{font-family:var(--font-display);font-weight:800;letter-spacing:-0.045em;font-size:16px;color:var(--paper)}
+.wmsm i{font-style:normal;color:var(--i-300);margin-left:0.12em}
+.hl{font-family:var(--font-display);font-weight:800;letter-spacing:-0.035em;line-height:1.02;text-transform:lowercase;color:var(--paper)}
+.lead{font-family:var(--font-serif);font-style:italic;line-height:1.4;color:rgba(245,242,234,0.8)}
+.card{background:var(--ink-2);border:1px solid var(--line);border-radius:18px;padding:26px}
+.cardI{background:linear-gradient(150deg,#3A2BB8,#0B0822);border:1px solid rgba(139,151,255,0.25)}
+.lab{font-family:var(--font-mono);font-weight:500;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)}
+.labI{color:var(--i-200)}
+.kpi{font-family:var(--font-display);font-weight:900;letter-spacing:-0.04em;color:var(--paper);line-height:1}
+.ctxt{font-family:var(--font-display);font-weight:500;font-size:15px;line-height:1.5;color:var(--paper-dim);margin-top:12px}
+.spec{display:flex;justify-content:space-between;align-items:baseline;gap:28px;padding:18px 0;border-top:1px dashed var(--line-2)}
+.spec .k{font-family:var(--font-mono);font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:var(--i-300);white-space:nowrap}
+.spec .v{font-family:var(--font-display);font-weight:500;font-size:18px;color:var(--paper-dim);text-align:right}
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:18px;color:#fff;background:var(--i-500);border-radius:999px;padding:16px 28px;box-shadow:var(--shadow-brand);text-decoration:none}
+.btn.ghost{background:transparent;color:var(--paper);border:1px solid var(--line-2);box-shadow:none}
+.flag{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-mono);font-weight:500;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--warn);border:1px solid rgba(255,110,90,0.45);border-radius:999px;padding:9px 16px}
+.flag .dot{width:7px;height:7px;border-radius:50%;background:var(--warn);display:inline-block}
+/* ---- floating Download-PDF control (never part of a .stage → never exported) ---- */
+.pdf-bar{position:fixed;right:22px;bottom:22px;z-index:50;display:flex;gap:12px;align-items:center}
+.pdf-bar .hint{font-family:var(--font-mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#6b7080}
+#downloadPdfBtn{font-family:var(--font-display);font-weight:700;font-size:14px;color:#fff;background:var(--i-500);border:0;border-radius:999px;padding:13px 22px;cursor:pointer;box-shadow:0 10px 30px -6px rgba(91,91,240,0.6)}
+#downloadPdfBtn:hover{background:var(--i-400)}
+#downloadPdfBtn:disabled{opacity:0.65;cursor:wait}
+/* ---- print fallback (Cmd+P → Save as PDF, landscape 16:9) ---- */
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{background:#0A0B10}
+  #deck{transform:none!important;gap:0;padding:0}
+  .stage{box-shadow:none;break-after:page;page-break-after:always}
+  .stage:last-child{break-after:auto;page-break-after:auto}
+  .pdf-bar{display:none!important}
+}
+</style></head>
+<body>
+<div id="deck">
+
+  <!-- ============ 01 · TITLE ============ -->
+  <section class="stage" style="background:var(--i-ink)">
+    <div class="grid-tex"></div><div class="glow-tr"></div>
+    <div style="position:absolute;left:64px;top:60px;display:flex;align-items:center;gap:12px">
+      <svg viewBox="0 0 180 180" width="30" height="30"><path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#F5F2EA"/></svg>
+      <span class="wm" style="font-size:24px;color:#F5F2EA">eduflick<i style="color:#8B97FF">AI</i></span>
+    </div>
+    <div style="position:absolute;left:64px;top:236px;right:64px">
+      <div class="eyebrow" style="margin-bottom:24px">pioneer cohort 01 · full-stack ai engineer program</div>
+      <h1 class="hl" style="font-weight:900;font-size:104px;letter-spacing:-0.055em;line-height:0.9;color:var(--paper)">
+        ship <span class="serif" style="color:var(--i-200);font-size:104px">ai&nbsp;products</span>,<br>not theory.</h1>
+      <p class="lead" style="font-size:26px;margin-top:30px;max-width:48ch">
+        12 weeks, in person, trivandrum — you leave with three deployed ai apps, not a video library.</p>
+    </div>
+    <div class="foot" style="color:var(--i-200)"><span>a tomatrix technologies venture</span><span>eduflickai.com</span></div>
+  </section>
+
+  <!-- ============ 02 · THE GAP ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">01 · the gap</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:120px;font-size:56px">
+      &ldquo;ai experience <span class="serif" style="font-size:56px">required</span>&rdquo;</h3>
+    <div style="position:absolute;left:64px;right:64px;top:262px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+      <div class="card"><div class="lab">you know react</div><div class="ctxt" style="font-size:17px;margin-top:14px">you ship clean interfaces — but you&rsquo;ve never built anything with an llm.</div></div>
+      <div class="card"><div class="lab">every job posting</div><div class="ctxt" style="font-size:17px;margin-top:14px">wants &ldquo;ai experience.&rdquo; your portfolio has not a single ai feature in it.</div></div>
+      <div class="card"><div class="lab">online courses</div><div class="ctxt" style="font-size:17px;margin-top:14px">the videos pile up. the skills don&rsquo;t. completion rates are brutal.</div></div>
+    </div>
+    <div style="position:absolute;left:64px;right:64px;top:512px"><div class="spec" style="border-color:var(--line-2)"><span class="k">the fix</span><span class="v">stop watching. start shipping — in a room, with mentors, in 12 weeks.</span></div></div>
+    <div class="foot"><span>a tomatrix technologies venture</span><span>02 / 12</span></div>
+  </section>
+
+  <!-- ============ 03 · THE WEDGE ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">02 · the wedge</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:120px;font-size:54px">
+      build it. don&rsquo;t <span class="serif" style="font-size:54px">watch</span> it.</h3>
+    <div style="position:absolute;left:64px;right:64px;top:256px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+      <div class="card"><div class="lab">build</div><div class="kpi" style="font-size:60px;margin-top:14px">3</div><div class="ctxt">deployed projects — not watched.</div></div>
+      <div class="card cardI"><div class="lab labI">in person</div><div class="kpi" style="font-size:60px;margin-top:14px">20</div><div class="ctxt" style="color:var(--i-200)">selective seats · one room, one cohort.</div></div>
+      <div class="card"><div class="lab">hire-ready</div><div class="kpi" style="font-size:60px;margin-top:14px">wk 12</div><div class="ctxt">mock interviews + recruiter intros.</div></div>
+      <div class="card"><div class="lab">real stack</div><div class="kpi" style="font-size:60px;margin-top:14px">6</div><div class="ctxt">industry tools you ship with, hands-on.</div></div>
+    </div>
+    <div style="position:absolute;left:64px;right:64px;top:540px"><div class="spec"><span class="k">the difference</span><span class="v">a cohort that ends in deployed software and an interview — not a certificate.</span></div></div>
+    <div class="foot"><span>a tomatrix technologies venture</span><span>03 / 12</span></div>
+  </section>
+
+  <!-- ============ 04 · SECTION — WHAT YOU BUILD ============ -->
+  <section class="stage" style="background:linear-gradient(150deg,#3A2BB8 0%,#0B0822 78%)">
+    <div class="grid-tex"></div>
+    <div style="position:absolute;right:-60px;bottom:-80px;opacity:0.08">
+      <svg viewBox="0 0 180 180" width="520" height="520"><path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#F5F2EA"/></svg>
+    </div>
+    <div style="position:absolute;left:64px;top:300px">
+      <div class="eyebrow" style="color:var(--i-200);margin-bottom:22px">03</div>
+      <h2 class="hl" style="font-weight:900;font-size:128px;letter-spacing:-0.05em;line-height:0.9">
+        what you <span class="serif" style="color:var(--i-200);font-size:128px">build</span></h2>
+      <div style="font-family:var(--font-mono);font-size:15px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(245,242,234,0.6);margin-top:18px">three deployed projects · weeks 1&ndash;12</div>
+    </div>
+    <div class="foot" style="color:var(--i-200)"><span class="wm" style="font-size:14px">eduflick<i style="color:#B7C0FF">AI</i></span><span>04 / 12</span></div>
+  </section>
+
+  <!-- ============ 05 · THE BUILD (3 projects) ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">03 · the build</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:120px;font-size:54px">
+      three <span class="serif" style="font-size:54px">deployed</span> projects</h3>
+    <div style="position:absolute;left:64px;right:64px;top:258px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+      <div class="card"><div class="lab">month 1</div><div class="hl" style="font-size:30px;margin:14px 0 10px">a saas dashboard</div><div class="ctxt" style="margin-top:0">foundations + your first real ship.</div><div class="lab" style="color:var(--i-300);margin-top:22px;letter-spacing:0.12em">cursor · next.js · claude/openai</div></div>
+      <div class="card"><div class="lab">month 2</div><div class="hl" style="font-size:30px;margin:14px 0 10px">a rag chatbot</div><div class="ctxt" style="margin-top:0">answers from real documents. deployed.</div><div class="lab" style="color:var(--i-300);margin-top:22px;letter-spacing:0.12em">pinecone · langchain · n8n</div></div>
+      <div class="card"><div class="lab">month 3</div><div class="hl" style="font-size:30px;margin:14px 0 10px">an agentic platform</div><div class="ctxt" style="margin-top:0">your capstone — an autonomous build.</div><div class="lab" style="color:var(--i-300);margin-top:22px;letter-spacing:0.12em">agents · tools · evals</div></div>
+    </div>
+    <div class="foot"><span>a tomatrix technologies venture</span><span>05 / 12</span></div>
+  </section>
+
+  <!-- ============ 06 · THE STACK ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">04 · the stack</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:120px;font-size:54px">
+      the tools companies <span class="serif" style="font-size:54px">actually</span> use</h3>
+    <div style="position:absolute;left:64px;right:64px;top:256px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+      <div class="card" style="padding:22px 24px"><div class="hl" style="font-size:26px">cursor</div><div class="lab" style="margin-top:8px">ai-native ide</div></div>
+      <div class="card" style="padding:22px 24px"><div class="hl" style="font-size:26px">next.js</div><div class="lab" style="margin-top:8px">full-stack react</div></div>
+      <div class="card" style="padding:22px 24px"><div class="hl" style="font-size:26px">claude / openai</div><div class="lab" style="margin-top:8px">the frontier models</div></div>
+      <div class="card" style="padding:22px 24px"><div class="hl" style="font-size:26px">pinecone</div><div class="lab" style="margin-top:8px">vector database</div></div>
+      <div class="card" style="padding:22px 24px"><div class="hl" style="font-size:26px">langchain</div><div class="lab" style="margin-top:8px">rag + chains</div></div>
+      <div class="card" style="padding:22px 24px"><div class="hl" style="font-size:26px">n8n</div><div class="lab" style="margin-top:8px">agent workflows</div></div>
+    </div>
+    <div style="position:absolute;left:64px;right:64px;top:556px"><div class="spec"><span class="k">why it matters</span><span class="v">the exact stack in real job postings — you&rsquo;ll have shipped with all of it.</span></div></div>
+    <div class="foot"><span>a tomatrix technologies venture</span><span>06 / 12</span></div>
+  </section>
+
+  <!-- ============ 07 · GET HIRED ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">05 · get hired</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:120px;font-size:56px">
+      week 12 is <span class="serif" style="font-size:56px">interviews</span></h3>
+    <p class="lead" style="position:absolute;left:64px;top:218px;right:64px;font-size:24px;max-width:40ch">we don&rsquo;t just teach it — we ship it, then help you land the job.</p>
+    <div style="position:absolute;left:64px;right:64px;top:340px">
+      <div class="spec"><span class="k">01 · mock interviews</span><span class="v">technical + behavioural rounds, with direct feedback.</span></div>
+      <div class="spec"><span class="k">02 · recruiter networking</span><span class="v">recruiter networking with industry hr.</span></div>
+      <div class="spec"><span class="k">03 · your evidence</span><span class="v">three deployed projects + a capstone to demo.</span></div>
+    </div>
+    <div class="foot"><span>a tomatrix technologies venture</span><span>07 / 12</span></div>
+  </section>
+
+  <!-- ============ 08 · QUOTE (core message) ============ -->
+  <section class="stage">
+    <div class="glow-tr" style="background:radial-gradient(680px 460px at 50% 0%, rgba(91,91,240,0.16), transparent 64%)"></div>
+    <div style="position:absolute;left:50%;top:96px;transform:translateX(-50%)">
+      <svg viewBox="0 0 180 180" width="44" height="44"><path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#5B5BF0"/></svg>
+    </div>
+    <div style="position:absolute;left:120px;right:120px;top:50%;transform:translateY(-50%);text-align:center">
+      <p style="font-family:var(--font-serif);font-style:italic;font-size:56px;line-height:1.2;color:var(--paper)">
+        &ldquo;stop learning ai theory.<br><span style="color:var(--i-300)">ship ai products.</span> get hired in 12 weeks.&rdquo;</p>
+      <div style="font-family:var(--font-mono);font-size:13px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);margin-top:40px">eduflick · the full-stack ai engineer program</div>
+    </div>
+    <div class="foot"><span class="wm" style="font-size:14px;color:var(--paper)">eduflick<i style="color:#8B97FF">AI</i></span><span>08 / 12</span></div>
+  </section>
+
+  <!-- ============ 09 · THE ROOM (price / seats / scarcity) ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">06 · the room</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:120px;font-size:54px">
+      twenty <span class="serif" style="font-size:54px">selective</span> seats</h3>
+    <div style="position:absolute;left:64px;right:64px;top:248px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+      <div class="card"><div class="lab">pioneer price</div><div class="kpi" style="font-size:48px;margin-top:14px">&#8377;49,000</div><div class="ctxt">&#8377;70,000 from cohort 2.</div></div>
+      <div class="card"><div class="lab">the room</div><div class="kpi" style="font-size:48px;margin-top:14px">20</div><div class="ctxt">selective seats · in person.</div></div>
+      <div class="card"><div class="lab">format</div><div class="kpi" style="font-size:48px;margin-top:14px">12 wks</div><div class="ctxt">in person · uxp innovation hub, trivandrum.</div></div>
+      <div class="card cardI"><div class="lab labI">deployed projects</div><div class="kpi" style="font-size:48px;margin-top:14px">3</div><div class="ctxt" style="color:var(--i-200)">saas · rag · agentic.</div></div>
+    </div>
+    <div style="position:absolute;left:64px;right:64px;top:500px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <span class="flag"><span class="dot"></span>20 selective intake · pioneer cohort 01</span>
+      <span style="font-family:var(--font-mono);font-size:13px;letter-spacing:0.12em;color:var(--muted)">payment · &#8377;15,000 seat booking + &#8377;17,000 + &#8377;17,000</span>
+    </div>
+    <div class="foot"><span>a tomatrix technologies venture</span><span>09 / 12</span></div>
+  </section>
+
+  <!-- ============ 10 · START FREE (masterclass) ============ -->
+  <section class="stage">
+    <div class="glow-tr"></div>
+    <div class="bar"><div class="eyebrow">07 · start free</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:188px;font-size:74px">
+      see it <span class="serif" style="font-size:74px">live</span> first</h3>
+    <p class="lead" style="position:absolute;left:64px;top:316px;right:120px;font-size:24px;max-width:42ch">
+      a free ~90-minute technical masterclass. we build a real ai app on the spot — you watch the exact workflow before you commit a rupee.</p>
+    <div style="position:absolute;left:64px;top:486px;display:flex;align-items:center;gap:18px">
+      <span class="flag" style="color:var(--i-300);border-color:rgba(139,151,255,0.4)"><span class="dot" style="background:var(--i-300)"></span>free · uxp innovation hub, trivandrum</span>
+    </div>
+    <div style="position:absolute;left:64px;top:548px"><span class="btn">register free &rarr; eduflickai.com/masterclass</span></div>
+    <div class="foot"><span>a tomatrix technologies venture</span><span>10 / 12</span></div>
+  </section>
+
+  <!-- ============ 11 · WHO IT'S FOR ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">08 · who it&rsquo;s for</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:120px;font-size:52px">
+      built for the <span class="serif" style="font-size:52px">ai-left-behind</span></h3>
+    <div style="position:absolute;left:64px;right:64px;top:262px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+      <div class="card"><div class="lab">b.tech grads</div><div class="ctxt" style="font-size:17px;margin-top:14px">2024&ndash;2026 — you code, but the ai wave feels like it passed you by.</div></div>
+      <div class="card"><div class="lab">junior devs</div><div class="ctxt" style="font-size:17px;margin-top:14px">0&ndash;2 years, around trivandrum, ready to specialise in ai.</div></div>
+      <div class="card"><div class="lab">ui builders</div><div class="ctxt" style="font-size:17px;margin-top:14px">you ship interfaces — but have never wired up an llm end to end.</div></div>
+    </div>
+    <div style="position:absolute;left:64px;right:64px;top:512px"><div class="spec"><span class="k">the turn</span><span class="v">&ldquo;i know react&rdquo; becomes &ldquo;i ship ai&rdquo; — in one cohort.</span></div></div>
+    <div class="foot"><span>a tomatrix technologies venture</span><span>11 / 12</span></div>
+  </section>
+
+  <!-- ============ 12 · CLOSING / CTA ============ -->
+  <section class="stage" style="background:linear-gradient(150deg,#3A2BB8 0%,#0B0822 80%)">
+    <div class="grid-tex"></div>
+    <div style="position:absolute;right:-50px;bottom:-70px;opacity:0.1">
+      <svg viewBox="0 0 180 180" width="460" height="460"><path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#F5F2EA"/></svg>
+    </div>
+    <div style="position:absolute;left:64px;top:90px;display:flex;align-items:center;gap:12px">
+      <svg viewBox="0 0 180 180" width="30" height="30"><path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#F5F2EA"/></svg>
+      <span class="wm" style="font-size:24px;color:#F5F2EA">eduflick<i style="color:#B7C0FF">AI</i></span>
+    </div>
+    <div style="position:absolute;left:64px;top:286px">
+      <h2 class="hl" style="font-weight:900;font-size:104px;letter-spacing:-0.05em;line-height:0.9">
+        ship <span class="serif" style="color:var(--i-200);font-size:104px">ai&nbsp;products</span>.</h2>
+      <div style="display:flex;gap:14px;margin-top:38px">
+        <span class="btn">register free &rarr; eduflickai.com/masterclass</span>
+        <span class="btn ghost">apply &rarr; eduflickai.com/apply</span>
+      </div>
+      <div style="margin-top:30px;font-family:var(--font-mono);font-size:14px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(245,242,234,0.78)">
+        20 selective intake · @eduflick.ai</div>
+    </div>
+    <div class="foot" style="color:var(--i-200)"><span>a tomatrix technologies venture</span><span>12 / 12</span></div>
+  </section>
+
+</div>
+
+<div class="pdf-bar"><span class="hint">16:9 · 12 slides</span><button id="downloadPdfBtn" type="button">Download PDF</button></div>
+
+<!-- PDF engine: html2canvas + jsPDF (UMD) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous"></script>
+<script>
+/* ============================================================================
+   PdfExport — client-side multi-page HTML → PDF.
+   Adapted from the web-to-pdf skill engine (itself generalized from the Eduflick
+   brochure exporter), with an added `orientation` option so a *landscape* deck
+   maps to wide pages instead of jsPDF swapping the format back to portrait.
+   Each .stage → one landscape PDF page. Inline assets only (no taint).
+   ============================================================================ */
+(function (global) {
+  "use strict";
+  function resolveVar(value, root){
+    if (typeof value !== "string" || value.indexOf("var(") !== 0) return value;
+    var inner = value.slice(4, -1).trim();
+    var resolved = getComputedStyle(root).getPropertyValue(inner).trim();
+    return resolved || "#000";
+  }
+  function resolveUseElements(container){
+    var root = document.documentElement;
+    container.querySelectorAll("use").forEach(function (use){
+      var href = use.getAttribute("href") || use.getAttribute("xlink:href");
+      if (!href || href.charAt(0) !== "#") return;
+      var symbol = document.getElementById(href.slice(1)); if (!symbol) return;
+      var svgNS = "http://www.w3.org/2000/svg";
+      var group = document.createElementNS(svgNS, "g");
+      var useFill = use.getAttribute("fill");
+      var fillColor = useFill ? resolveVar(useFill, root) : getComputedStyle(use).color;
+      if (!fillColor || fillColor === "rgb(0, 0, 0)") fillColor = getComputedStyle(use.parentElement).color;
+      var keepAttrs = ["x","y","width","height","transform","opacity","role","aria-label"];
+      for (var a=0;a<use.attributes.length;a++){var attr=use.attributes[a];
+        if (attr.name==="href"||attr.name==="xlink:href"||attr.name==="fill") continue;
+        if (keepAttrs.indexOf(attr.name)!==-1) group.setAttribute(attr.name, attr.value);}
+      var children = Array.prototype.slice.call(symbol.children);
+      for (var c=0;c<children.length;c++){var clone=children[c].cloneNode(true);
+        if (fillColor){ if (clone.getAttribute("fill")==="currentColor") clone.setAttribute("fill", fillColor);
+          var cur = clone.querySelectorAll ? clone.querySelectorAll('[fill="currentColor"]') : [];
+          for (var cc=0;cc<cur.length;cc++) cur[cc].setAttribute("fill", fillColor);} group.appendChild(clone);}
+      use.parentNode.replaceChild(group, use);
+    });
+    container.querySelectorAll("svg").forEach(function (svg){ svg.style.setProperty("filter","none","important"); });
+  }
+  async function download(opts){
+    opts = opts || {};
+    var sheetSelector = opts.sheetSelector || ".sheet";
+    var filename = opts.filename || "document.pdf";
+    var pageWidthPx = opts.pageWidthPx || 794, pageHeightPx = opts.pageHeightPx || 1123;
+    var pageWidthMm = opts.pageWidthMm || 210;
+    var orientation = opts.orientation || "portrait";
+    var quality = opts.quality == null ? 0.92 : opts.quality;
+    var background = opts.background || "#ffffff";
+    var onProgress = opts.onProgress || function(){};
+    if (typeof html2canvas === "undefined" || !global.jspdf) throw new Error("PDF libraries not loaded (need html2canvas + jsPDF).");
+    var sheets = document.querySelectorAll(sheetSelector);
+    if (!sheets.length) throw new Error("No sheets matched selector: " + sheetSelector);
+    if (document.fonts && document.fonts.ready){ try { await document.fonts.ready; } catch(e){} }
+    var jsPDF = global.jspdf.jsPDF, pdf = null;
+    var hidden = document.createElement("div");
+    hidden.style.cssText = "position:absolute;left:-9999px;top:0;width:" + pageWidthPx + "px;";
+    document.body.appendChild(hidden);
+    try {
+      for (var i=0;i<sheets.length;i++){
+        onProgress(i+1, sheets.length);
+        var clone = sheets[i].cloneNode(true);
+        hidden.innerHTML = ""; hidden.appendChild(clone);
+        clone.style.margin = "0"; clone.style.boxShadow = "none"; clone.style.transform = "none";
+        resolveUseElements(clone);
+        var canvas;
+        try {
+          canvas = await html2canvas(clone, { scale: opts.scale || 2, useCORS:true, backgroundColor:background, logging:false, allowTaint:true, width:pageWidthPx, height:pageHeightPx });
+        } catch(e){
+          canvas = await html2canvas(clone, { scale:1, useCORS:true, backgroundColor:background, logging:false, allowTaint:true, width:pageWidthPx, height:pageHeightPx });
+        }
+        var imgWidth = pageWidthMm, imgHeight = (canvas.height * imgWidth) / canvas.width;
+        if (i===0) pdf = new jsPDF({ unit:"mm", format:[imgWidth, imgHeight], orientation:orientation });
+        else pdf.addPage([imgWidth, imgHeight], orientation);
+        pdf.addImage(canvas.toDataURL("image/jpeg", quality), "JPEG", 0, 0, imgWidth, imgHeight);
+      }
+      pdf.save(filename);
+    } finally { document.body.removeChild(hidden); }
+  }
+  function attachButton(target, opts){
+    var btn = typeof target === "string" ? document.querySelector(target) : target;
+    if (!btn) throw new Error("PDF button not found: " + target);
+    btn.addEventListener("click", async function(){
+      if (typeof html2canvas === "undefined" || !global.jspdf){ alert("PDF libraries still loading. Please wait a moment and try again."); return; }
+      var originalHTML = btn.innerHTML; btn.disabled = true;
+      try { await download(Object.assign({}, opts, { onProgress:function(n,total){ btn.textContent = "Slide " + n + " of " + total + "…"; } })); }
+      catch(err){ console.error("PDF generation failed:", err); alert("PDF generation failed: " + err.message); }
+      btn.disabled = false; btn.innerHTML = originalHTML;
+    });
+  }
+  global.PdfExport = { download: download, attachButton: attachButton, resolveUseElements: resolveUseElements };
+})(window);
+
+PdfExport.attachButton('#downloadPdfBtn', {
+  sheetSelector: '.stage',
+  filename: 'Eduflick_Full_Stack_AI_Engineer_Program_Deck.pdf',
+  pageWidthPx: 1280, pageHeightPx: 720,
+  pageWidthMm: 338.67, orientation: 'landscape',
+  background: '#0A0B10', quality: 0.95, scale: 2
+});
+
+/* Screen-only: scale the whole deck to fit the viewport width (export is unaffected —
+   it clones each .stage out of #deck, so this transform never reaches the canvas). */
+function fitDeck(){
+  var d = document.getElementById('deck');
+  var k = Math.min(1, (window.innerWidth - 40) / 1280);
+  d.style.transform = 'scale(' + k + ')';
+  document.body.style.height = (d.scrollHeight * k + 40) + 'px';
+}
+window.addEventListener('resize', fitDeck);
+window.addEventListener('load', fitDeck);
+document.addEventListener('DOMContentLoaded', fitDeck);
+[80,300,800].forEach(function(t){ setTimeout(fitDeck, t); });
+</script>
+</body></html>

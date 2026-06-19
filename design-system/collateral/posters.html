@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eduflick AI — trial posters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* S0 · tokens */
+  :root{
+    --i-500:#5B5BF0; --i-400:#6E78F5; --i-300:#8B97FF; --i-700:#3A2BB8; --i-ink:#0B0822;
+    --paper:#F5F2EA; --paper-dim:#C9C5BA; --ink:#0A0B10; --ink-2:#11131C; --ink-3:#181B28;
+    --muted:#7A7F90; --warn:#FF6E5A;
+    --font-d:'Manrope',sans-serif; --font-s:'Instrument Serif',serif; --font-m:'JetBrains Mono',monospace;
+    /* S16 · film grain (faint, grayscale) */
+    --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-d);background:#07080C;color:var(--paper);-webkit-font-smoothing:antialiased;
+    display:flex;flex-wrap:wrap;gap:48px;justify-content:center;padding:48px}
+
+  /* theme-able surface vars (default = dark) */
+  .poster{--txt:#F5F2EA; --dim:#C9C5BA; --meta:#7A7F90; --line:rgba(245,242,234,0.14); --accent:#8B97FF;
+    position:relative;width:1080px;height:1350px;overflow:hidden;color:var(--txt);
+    display:flex;flex-direction:column;padding:96px}
+  .poster.paper{--txt:#0A0B10; --dim:#3A3D47; --meta:#55596A; --line:rgba(10,11,16,0.22); --accent:#3F33C9}
+
+  /* S17 · cinematic surfaces (directional gradient) */
+  .cine-indigo{background:radial-gradient(130% 160% at 50% 30%,#6E78F5,#4B3FE0 24%,#261A82 56%,#0B0822 100%)}
+  .cine-ink{background:radial-gradient(120% 130% at 82% 10%,#241E52,#15122F 32%,#0A0B10 64%)}
+  .cine-paper{background:radial-gradient(120% 150% at 24% 12%,#EFEAFE,#F2EEE5 44%,#ECE7DA 100%)}
+
+  /* S16 · grain layer (+ faint dot grid) */
+  .poster::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+    background-image:var(--grain),radial-gradient(circle,rgba(245,242,234,0.05) 1px,transparent 1px);
+    background-size:140px 140px,46px 46px}
+  .poster.paper::before{background-image:var(--grain),radial-gradient(circle,rgba(10,11,16,0.05) 1px,transparent 1px)}
+
+  /* S17 · vignette */
+  .poster::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:2;
+    background:radial-gradient(135% 125% at 50% 40%,transparent 48%,rgba(7,5,22,0.55) 100%)}
+  .poster.paper::after{background:radial-gradient(135% 125% at 50% 40%,transparent 52%,rgba(10,11,16,0.07) 100%)}
+
+  /* S15 · halo (light behind the focal headline) */
+  .halo{position:absolute;pointer-events:none;z-index:3;border-radius:50%;filter:blur(8px);
+    background:radial-gradient(closest-side,rgba(139,151,255,0.42),rgba(110,120,245,0.15) 44%,transparent 72%)}
+  .poster.paper .halo{background:radial-gradient(closest-side,rgba(91,91,240,0.22),rgba(139,151,255,0.10) 46%,transparent 72%)}
+
+  /* S20 · AI image backdrop (bottom layer — grain/vignette/halo/type all sit OVER it) */
+  .img-layer{position:absolute;inset:0;z-index:0;overflow:hidden}
+  .img-layer img{width:100%;height:100%;object-fit:cover;display:block}
+  /* legibility scrim — darkens the top (eyebrow) + bottom (specs/footer); headline zone stays open */
+  .scrim{position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:linear-gradient(180deg,rgba(7,5,22,0.46) 0%,rgba(7,5,22,0.05) 24%,rgba(7,5,22,0.04) 54%,rgba(7,5,22,0.72) 100%)}
+  .poster.paper .scrim{background:linear-gradient(180deg,rgba(245,242,234,0.58) 0%,rgba(245,242,234,0.08) 24%,rgba(245,242,234,0.06) 50%,rgba(245,242,234,0.8) 100%)}
+
+  /* content stack sits above every effect layer */
+  .stack{position:relative;z-index:4;display:flex;flex-direction:column;justify-content:space-between;height:100%}
+
+  /* S4 · eyebrow + index row */
+  .top{display:flex;justify-content:space-between;align-items:center}
+  .eyebrow{font-family:var(--font-m);font-size:13px;font-weight:500;letter-spacing:0.22em;
+    text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:14px}
+  .eyebrow .rule{width:26px;height:1px;background:var(--accent)}
+  .idx{font-family:var(--font-m);font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:var(--meta)}
+
+  /* S5 · headline + serif accent */
+  .hero{position:relative;margin-top:8px}
+  .headline{position:relative;z-index:1;font-family:var(--font-d);font-weight:900;font-size:118px;
+    line-height:0.9;letter-spacing:-0.045em;text-transform:lowercase;color:var(--txt);max-width:14ch}
+  .headline em{font-family:var(--font-s);font-style:italic;font-weight:400;color:var(--accent);letter-spacing:-0.02em}
+  .lead{font-family:var(--font-s);font-style:italic;font-size:30px;line-height:1.3;color:var(--txt);
+    margin-top:28px;max-width:24ch;opacity:0.92}
+  /* keep display type legible over the image backdrop (dark posters only) */
+  .poster:not(.paper) .headline{text-shadow:0 2px 22px rgba(7,5,22,0.45)}
+  .poster:not(.paper) .lead{text-shadow:0 1px 14px rgba(7,5,22,0.5)}
+  /* paper poster sits over a high-key photo — lift dark type + accent off the busy mids */
+  .poster.paper .headline{text-shadow:0 1px 3px rgba(245,242,234,0.7),0 2px 22px rgba(245,242,234,0.9)}
+  .poster.paper .lead{text-shadow:0 1px 14px rgba(245,242,234,0.95)}
+
+  /* coral scarcity flag (S10) — the one allowed exception */
+  .coral{display:inline-flex;align-items:center;align-self:flex-start;font-family:var(--font-m);font-size:14px;
+    font-weight:500;letter-spacing:0.12em;text-transform:uppercase;padding:9px 16px;border-radius:999px;
+    background:rgba(255,110,90,0.12);color:#FF6E5A;margin-top:30px}
+
+  /* S12 · dashed spec rows */
+  .specs{display:flex;flex-direction:column;margin-top:8px}
+  .row{display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:18px 0;
+    border-bottom:1px dashed var(--line)}
+  .row:first-child{border-top:1px dashed var(--line)}
+  .row .k{font-family:var(--font-m);font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--meta)}
+  .row .v{font-family:var(--font-d);font-weight:600;font-size:21px;letter-spacing:-0.01em;color:var(--txt);
+    text-align:right;text-transform:lowercase}
+
+  /* S7 · CTA pill */
+  .cta{display:inline-block;align-self:flex-start;font-family:var(--font-d);font-weight:700;font-size:21px;letter-spacing:-0.01em;
+    background:var(--i-500);color:#F5F2EA;border-radius:999px;padding:18px 32px;text-decoration:none;margin-top:38px;
+    box-shadow:0 8px 32px -8px rgba(91,91,240,0.45)}
+
+  /* footer lockup (S18 + S3 + S2) */
+  .foot{display:flex;align-items:center;gap:16px;margin-top:44px;color:var(--txt)}
+  .foot svg{opacity:0.92}
+  .wordmark{font-family:var(--font-d);font-weight:800;letter-spacing:-0.04em;text-transform:lowercase;font-size:30px}
+  .wordmark i{font-style:normal;margin-left:0.16em;color:var(--accent)}
+  .foot .handle{margin-left:auto;font-family:var(--font-m);font-size:14px;letter-spacing:0.16em;
+    text-transform:lowercase;color:var(--meta)}
+
+  /* the indigo field is bright — brighten labels + paper-fill the CTA so they stay legible */
+  .cine-indigo{--meta:#C9C5BA}
+  .cine-indigo .eyebrow{color:#F5F2EA}
+  .cine-indigo .eyebrow .rule{background:#F5F2EA}
+  .cine-indigo .idx{color:#C9C5BA}
+  .cine-indigo .cta{background:#F5F2EA;color:#0B0822;box-shadow:0 10px 34px -10px rgba(0,0,0,0.45)}
+
+  /* ───────── archetype components (learned from the references; S21–S24) ───────── */
+  /* caption line */
+  .cap{font-family:var(--font-d);font-weight:500;font-size:19px;line-height:1.5;color:var(--dim);max-width:32ch;margin-top:4px}
+  /* S21 · browser/app mockup (product-mockup archetype) — HTML-built UI, neutral window dots */
+  .mock{position:relative;border-radius:16px;overflow:hidden;background:var(--ink-2);border:1px solid rgba(245,242,234,0.10);
+    box-shadow:0 44px 96px -32px rgba(0,0,0,0.75),0 12px 44px -10px rgba(91,91,240,0.5)}
+  .mock-bar{display:flex;align-items:center;gap:8px;padding:15px 18px;background:var(--ink-3);border-bottom:1px solid rgba(245,242,234,0.08)}
+  .mock-bar .dot{width:12px;height:12px;border-radius:50%}
+  .mock-url{margin-left:14px;font-family:var(--font-m);font-size:13px;color:var(--muted)}
+  .mock-body{padding:30px 30px 34px}
+  .bars{height:170px;display:flex;align-items:flex-end;gap:16px;margin-top:22px}
+  .bars span{flex:1;background:linear-gradient(180deg,#8B97FF,#5B5BF0);border-radius:6px 6px 0 0}
+  .mock-tiles{display:flex;gap:16px;margin-top:20px}
+  .mock-tile{flex:1;background:rgba(245,242,234,0.04);border:1px solid rgba(245,242,234,0.08);border-radius:14px;padding:18px 20px}
+  .mock-tile b{display:block;font-family:var(--font-d);font-weight:900;font-size:32px;letter-spacing:-0.03em;color:var(--paper)}
+  .mock-tile span{font-family:var(--font-m);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted)}
+  /* S23 · feature point (explainer archetype) */
+  .feat{display:flex;gap:22px;align-items:flex-start;padding:20px 0;border-bottom:1px solid rgba(245,242,234,0.08)}
+  .feat-ic{width:54px;height:54px;border-radius:14px;background:rgba(139,151,255,0.12);border:1px solid rgba(139,151,255,0.24);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .feat b{font-family:var(--font-d);font-weight:800;font-size:24px;letter-spacing:-0.015em;color:var(--txt)}
+  .feat p{font-family:var(--font-d);font-weight:500;font-size:16px;line-height:1.5;color:var(--dim);margin-top:4px;max-width:34ch}
+  /* S22 · achievement badge + proof chips (outcome archetype) */
+  .badge{display:inline-flex;align-items:center;gap:10px;align-self:flex-start;font-family:var(--font-d);font-weight:900;
+    font-size:19px;letter-spacing:0.05em;text-transform:uppercase;color:#0A0B10;background:#8B97FF;border-radius:10px;
+    padding:11px 20px;box-shadow:0 12px 38px -12px rgba(91,91,240,0.6)}
+  .chips{display:flex;flex-wrap:wrap;gap:12px}
+  .chip{font-family:var(--font-m);font-size:14px;letter-spacing:0.06em;text-transform:lowercase;color:var(--txt);
+    border:1px solid rgba(245,242,234,0.20);border-radius:999px;padding:10px 20px}
+</style>
+</head>
+<body>
+
+  <!-- ░░ POSTER 1 · the program — HERO archetype · premium register (cinematic photo + accent headline) ░░ -->
+  <section class="poster cine-indigo" data-export="poster-program">
+    <div class="img-layer"><img src="assets/backdrops/poster-program.png" alt=""></div>
+    <div class="scrim"></div>
+    <div class="stack">
+      <div class="top">
+        <span class="eyebrow"><span class="rule"></span>full-stack ai engineer program</span>
+        <span class="idx">01 · program</span>
+      </div>
+
+      <div class="hero">
+        <div class="halo" style="width:760px;height:760px;left:-120px;top:-90px"></div>
+        <h1 class="headline">ship <em>ai products</em>, not theory.</h1>
+        <p class="lead">12 weeks. in person. you ship three real ones.</p>
+      </div>
+
+      <div>
+        <div class="specs">
+          <div class="row"><span class="k">duration</span><span class="v">12 weeks · in person</span></div>
+          <div class="row"><span class="k">venue</span><span class="v">uxp innovation hub, trivandrum</span></div>
+          <div class="row"><span class="k">you ship</span><span class="v">3 deployed ai projects</span></div>
+          <div class="row"><span class="k">price</span><span class="v">₹49,000 pioneer · ₹70,000 cohort 2</span></div>
+        </div>
+        <a class="cta" href="#">apply → eduflickai.com/apply</a>
+        <div class="foot">
+          <svg viewBox="0 0 180 180" width="40" height="40"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+          <span class="wordmark">eduflick<i>AI</i></span>
+          <span class="handle">@eduflick.ai</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ POSTER 2 · the room — SCARCITY/CTA archetype · premium register (number-hero + coral flag) ░░ -->
+  <section class="poster cine-ink" data-export="poster-seats">
+    <div class="img-layer"><img src="assets/backdrops/poster-seats.png" alt=""></div>
+    <div class="scrim"></div>
+    <div class="stack">
+      <div class="top">
+        <span class="eyebrow"><span class="rule"></span>pioneer cohort 01</span>
+        <span class="idx">02 · the room</span>
+      </div>
+
+      <div class="hero">
+        <div class="halo" style="width:720px;height:720px;left:-100px;top:-80px"></div>
+        <h1 class="headline">20 <em>selective</em> seats.</h1>
+        <span class="coral">capped at 20 · selective intake</span>
+        <p class="lead">one room. real ships. real review.</p>
+      </div>
+
+      <div>
+        <div class="specs">
+          <div class="row"><span class="k">format</span><span class="v">offline · trivandrum</span></div>
+          <div class="row"><span class="k">pioneer</span><span class="v">₹49,000</span></div>
+          <div class="row"><span class="k">from cohort 2</span><span class="v">₹70,000</span></div>
+          <div class="row"><span class="k">starts with</span><span class="v">a free masterclass</span></div>
+        </div>
+        <a class="cta" href="#">apply now → eduflickai.com/apply</a>
+        <div class="foot">
+          <svg viewBox="0 0 180 180" width="40" height="40"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+          <span class="wordmark">eduflick<i>AI</i></span>
+          <span class="handle">@eduflick.ai</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ POSTER 3 · the masterclass — MASTERCLASS-HOOK archetype · playful register (keyboard-glow backdrop) ░░ -->
+  <section class="poster cine-ink" data-export="poster-masterclass">
+    <div class="img-layer"><img src="assets/backdrops/poster-masterclass.png" alt=""></div>
+    <div class="scrim"></div>
+    <div class="stack">
+      <div class="top">
+        <span class="eyebrow"><span class="rule"></span>free technical masterclass · ~90 min</span>
+        <span class="idx">03 · start free</span>
+      </div>
+
+      <div class="hero">
+        <div class="halo" style="width:680px;height:680px;left:-90px;top:-70px"></div>
+        <h1 class="headline">see it built, <em>live</em>.</h1>
+        <p class="lead">we build a real ai app on the spot.</p>
+      </div>
+
+      <div>
+        <div class="specs">
+          <div class="row"><span class="k">format</span><span class="v">live · ~90 minutes</span></div>
+          <div class="row"><span class="k">bring</span><span class="v">a laptop</span></div>
+          <div class="row"><span class="k">cost</span><span class="v">free</span></div>
+          <div class="row"><span class="k">then</span><span class="v">the 12-week program</span></div>
+        </div>
+        <a class="cta" href="#">register free → eduflickai.com/masterclass</a>
+        <div class="foot">
+          <svg viewBox="0 0 180 180" width="40" height="40"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+          <span class="wordmark">eduflick<i>AI</i></span>
+          <span class="handle">@eduflick.ai</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ POSTER 4 · what you build — PRODUCT-MOCKUP archetype · playful register (S21 window mockup) ░░ -->
+  <section class="poster cine-indigo" data-export="poster-build">
+    <div class="img-layer"><img src="assets/backdrops/poster-build.png" alt=""></div>
+    <div class="scrim"></div>
+    <div class="stack">
+      <div class="top">
+        <span class="eyebrow"><span class="rule"></span>what you actually ship</span>
+        <span class="idx">04 · you build</span>
+      </div>
+
+      <div class="hero">
+        <h1 class="headline" style="font-size:92px">build a <em>real</em> saas.</h1>
+      </div>
+
+      <div class="mock" style="transform:rotate(-1.5deg)">
+        <div class="mock-bar">
+          <span class="dot" style="background:rgba(245,242,234,0.22)"></span>
+          <span class="dot" style="background:rgba(245,242,234,0.16)"></span>
+          <span class="dot" style="background:rgba(245,242,234,0.10)"></span>
+          <span class="mock-url">localhost:3000 — saas-dashboard</span>
+        </div>
+        <div class="mock-body">
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <span style="font-family:var(--font-d);font-weight:800;font-size:26px;letter-spacing:-0.02em;color:var(--paper)">revenue</span>
+            <span style="font-family:var(--font-m);font-size:13px;color:#8B97FF">+18.4% ↑</span>
+          </div>
+          <div class="bars">
+            <span style="height:46%"></span><span style="height:64%"></span><span style="height:38%"></span>
+            <span style="height:82%"></span><span style="height:70%"></span>
+            <span style="height:100%;background:linear-gradient(180deg,#F5F2EA,#8B97FF)"></span>
+          </div>
+          <div class="mock-tiles">
+            <div class="mock-tile"><b>2,481</b><span>users</span></div>
+            <div class="mock-tile"><b>99.9%</b><span>uptime</span></div>
+            <div class="mock-tile"><b>14 ms</b><span>p95 latency</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="cap" style="color:#EDEBFF;max-width:40ch">week 04 — the first of <b style="color:#fff;font-weight:800">three</b> real products you deploy.</p>
+        <a class="cta" href="#">see the build → eduflickai.com/apply</a>
+        <div class="foot">
+          <svg viewBox="0 0 180 180" width="40" height="40"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+          <span class="wordmark">eduflick<i>AI</i></span>
+          <span class="handle">@eduflick.ai</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ POSTER 5 · why it works — EXPLAINER/INFOGRAPHIC archetype · premium register (S23 feature points) ░░ -->
+  <section class="poster cine-ink" data-export="poster-why">
+    <div class="img-layer"><img src="assets/backdrops/poster-why.png" alt=""></div>
+    <div class="scrim"></div>
+    <div class="stack">
+      <div class="top">
+        <span class="eyebrow"><span class="rule"></span>why eduflick ai</span>
+        <span class="idx">05 · the difference</span>
+      </div>
+
+      <div>
+        <div class="hero" style="margin-bottom:34px">
+          <div class="halo" style="width:600px;height:600px;left:-130px;top:-130px"></div>
+          <h1 class="headline" style="font-size:84px">not a course. a <em>build sprint</em>.</h1>
+        </div>
+
+        <div class="feat">
+          <span class="feat-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B97FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+          <div><b>ship 3 deployed projects</b><p>a saas dashboard, a rag chatbot, an agentic platform — live, not slides.</p></div>
+        </div>
+        <div class="feat">
+          <span class="feat-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B97FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <div><b>in person · 20 seats</b><p>uxp innovation hub, trivandrum — one room, selective intake.</p></div>
+        </div>
+        <div class="feat">
+          <span class="feat-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B97FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1z"/></svg></span>
+          <div><b>the industry stack</b><p>cursor, next.js, claude/openai, pinecone, langchain, n8n.</p></div>
+        </div>
+        <div class="feat" style="border-bottom:0">
+          <span class="feat-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B97FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></span>
+          <div><b>week 12 · get hired</b><p>mock interviews + recruiter networking with industry hr.</p></div>
+        </div>
+      </div>
+
+      <div>
+        <a class="cta" href="#">see the curriculum → eduflickai.com</a>
+        <div class="foot">
+          <svg viewBox="0 0 180 180" width="40" height="40"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+          <span class="wordmark">eduflick<i>AI</i></span>
+          <span class="handle">@eduflick.ai</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ POSTER 6 · the outcome — OUTCOME/PROOF archetype · premium register (S22 badge; real facts only) ░░ -->
+  <section class="poster cine-ink" data-export="poster-proof">
+    <div class="img-layer"><img src="assets/backdrops/poster-proof.png" alt=""></div>
+    <div class="scrim"></div>
+    <div class="stack">
+      <div class="top">
+        <span class="eyebrow"><span class="rule"></span>the outcome</span>
+        <span class="idx">06 · proof</span>
+      </div>
+
+      <div class="hero">
+        <div class="halo" style="width:640px;height:640px;left:-130px;top:-110px"></div>
+        <span class="badge"><svg viewBox="0 0 180 180" width="18" height="18"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#0A0B10"/></svg> deployed</span>
+        <h1 class="headline" style="font-size:90px;margin-top:26px">you ship <em>three real</em> products.</h1>
+        <p class="lead">not slides. not toy demos. live ai apps.</p>
+      </div>
+
+      <div>
+        <div class="chips">
+          <span class="chip">saas dashboard</span><span class="chip">rag chatbot</span><span class="chip">agentic platform</span>
+        </div>
+        <div class="specs" style="margin-top:20px">
+          <div class="row"><span class="k">by week 12</span><span class="v">mock interviews + recruiter networking</span></div>
+          <div class="row"><span class="k">every build</span><span class="v">deployed live</span></div>
+        </div>
+        <a class="cta" href="#">apply → eduflickai.com/apply</a>
+        <div class="foot">
+          <svg viewBox="0 0 180 180" width="40" height="40"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+          <span class="wordmark">eduflick<i>AI</i></span>
+          <span class="handle">@eduflick.ai</span>
+        </div>
+      </div>
+    </div>
+    <!-- Testimonial variant lives in the snippet bin as S22 (render only with a real cohort member; no fabricated alumni). -->
+  </section>
+
+  <!-- ░░ POSTER 7 · enquire — MULTI-PLATFORM DETAILS archetype · premium register (one-tile summary: spec block + WhatsApp CTA) ░░ -->
+  <!-- The shareable "everything you need to enquire" tile. WhatsApp wa.me link is still unset in FACTS;
+       the face routes via the CTA + handle + site (all real FACTS values) so it stays shippable. -->
+  <section class="poster cine-ink" data-export="poster-enquiry">
+    <div class="img-layer"><img src="assets/backdrops/poster-enquiry.png" alt=""></div>
+    <div class="scrim"></div>
+    <div class="stack">
+      <div class="top">
+        <span class="eyebrow"><span class="rule"></span>full-stack ai engineer</span>
+        <span class="idx">pioneer cohort 01</span>
+      </div>
+
+      <div class="hero">
+        <div class="halo" style="width:620px;height:620px;left:-140px;top:-150px"></div>
+        <h1 class="headline" style="font-size:80px">become a <em>shipping</em> ai engineer.</h1>
+        <p class="lead">12 weeks, in person in trivandrum — you leave with three real, deployed ai products.</p>
+      </div>
+
+      <div>
+        <div class="specs">
+          <div class="row"><span class="k">duration</span><span class="v">12 weeks · in-person</span></div>
+          <div class="row"><span class="k">where</span><span class="v">uxp innovation hub, trivandrum</span></div>
+          <div class="row"><span class="k">you build</span><span class="v">saas · rag · agentic — 3 deployed</span></div>
+          <div class="row"><span class="k">seats</span><span class="v">20 · selective intake</span></div>
+          <div class="row"><span class="k">fee</span><span class="v">₹49,000 pioneer (₹70,000 later)</span></div>
+        </div>
+
+        <a class="cta" href="#">enquire on whatsapp →</a>
+        <p class="cap" style="margin-top:18px">free masterclass · book your seat · eduflickai.com/apply</p>
+
+        <div class="foot">
+          <svg viewBox="0 0 180 180" width="40" height="40"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+          <span class="wordmark">eduflick<i>AI</i></span>
+          <span class="handle">@eduflick.ai</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

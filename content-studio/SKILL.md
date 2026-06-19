@@ -16,6 +16,7 @@ logo, UI kits, HTML artifacts). Use them together: this skill writes the carouse
 the design skill renders the carousel.
 
 ## When to use this
+
 - "Write me 5 Instagram captions for the masterclass."
 - "Give me a 7-slide curriculum carousel."
 - "Draft the WhatsApp nurture sequence."
@@ -25,30 +26,39 @@ the design skill renders the carousel.
   or the **Eduflick consumer learning app** (the product vision).
 
 ## Read these first (in order)
+
 1. **`BRAND_CHEATSHEET.md`** — the entire brand compressed into one page. This is the context
    block you paste into *any* model. If you read nothing else, read this.
 2. **`SMALL_MODELS_GUIDE.md`** — how to get reliable, on-brand output from small models: the
    generate→check→fix loop, the FACTS block (anti-hallucination), output constraints, batching.
 3. **`CHANNELS.md`** — per-channel specs, cadence, and which design kit renders each asset.
-4. **`prompts/`** — copy-paste, slot-filled, few-shot prompt templates, one per content type.
-5. **`QA_CHECKLIST.md`** — the gate every piece must pass before it ships.
+4. **`INSTAGRAM_LAUNCH_PLAN.md`** + **`EDUFLICK_AI_PLAYBOOK.md`** — the launch is already written:
+   the 12-tile grid architecture, posting waves, safe zones, and finished copy for every post +
+   carousel slide. For launch tasks pull copy from here — don't reinvent it. (Rendered:
+   `../design-system/collateral/launch-grid.html`; exported via `../tools`.)
+5. **`prompts/`** — copy-paste, slot-filled, few-shot prompt templates, one per content type.
+6. **`QA_CHECKLIST.md`** — the gate every piece must pass before it ships.
 
 ## The core workflow (works for you OR a small model)
+
 1. **Pick the task** → open the matching file in `prompts/`.
-2. **Load context** → paste `prompts/00_SYSTEM_PROMPT.md` (which embeds `BRAND_CHEATSHEET.md`)
-   as the system/first message.
+2. **Load context** → paste `prompts/00_SYSTEM_PROMPT.md` as the system/first message, then
+   append `BRAND_CHEATSHEET.md` after it.
 3. **Fill the FACTS block** → real dates, prices, seat counts, links. Models must never invent these.
 4. **Generate** → small models do best one asset at a time, tightly constrained.
 5. **QA** → run `QA_CHECKLIST.md`. Regenerate only the parts that fail.
 6. **Render** → hand the approved copy to the `eduflick-design` skill / collateral kits for visuals.
 
 ## The non-negotiables (full detail in BRAND_CHEATSHEET.md)
+
 - **Voice:** confident, technical, no fluff. Talk like engineers, not marketers. Short declaratives.
 - **No emoji** in finished brand copy. **Numbers as proof** (`₹49K`, `20 seats`, `60s`, `12 weeks`).
 - **Own the word "flick."** Achievements are **Sparks you earn** — never "level up / unlock / claim."
 - **Casing:** lowercase display headlines; UPPERCASE mono labels; one *serif-italic* accent word.
 - **One hue:** indigo `#5B5BF0` + neutral (paper/ink). Coral `#FF6E5A` only for CTAs/scarcity.
 - **Never invent facts.** Dates, prices, seat counts, names, links come only from the FACTS block.
+- **Co-brand:** Eduflick AI is **a Tomatrix Technologies venture**; the legal name **"Tomatrix
+  Technologies Pvt Ltd"** is always proper-cased. In copy the wordmark is **"eduflick AI"**.
 
 If invoked with no other guidance: ask what they're making and for which channel, then drive the
 workflow above — produce the copy, run the QA checklist, and offer to render the visual.

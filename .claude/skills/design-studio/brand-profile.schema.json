@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://design-studio.skill/brand-profile.schema.json",
+  "title": "Brand profile",
+  "description": "Everything brand-specific the design skills need. The visual tokens live in a separate tokens.json (referenced by `tokens`); this file adds the design language: logo, type rules, voice, color policy, imagery stance.",
+  "type": "object",
+  "required": ["name", "tokens"],
+  "additionalProperties": false,
+  "properties": {
+    "name": { "type": "string", "description": "Brand / product name as it appears in copy." },
+    "tagline": { "type": "string" },
+    "tokens": {
+      "type": "string",
+      "description": "Path to the brand's tokens.json (the design-tokens source of truth). Compiled to tokens.css."
+    },
+    "defaultTheme": { "type": "string", "enum": ["dark", "light"], "default": "dark" },
+
+    "logo": {
+      "type": "object",
+      "description": "How the mark/wordmark is built and protected. Logo stays HTML/SVG on top of art — never baked into a generated image.",
+      "properties": {
+        "svgPath": { "type": "string", "description": "Inline SVG path data for the mark, on a stated viewBox." },
+        "viewBox": { "type": "string", "default": "0 0 180 180" },
+        "file": { "type": "string", "description": "Optional raster/SVG file path for a complex logo." },
+        "wordmark": { "type": "string", "description": "How to typeset the wordmark in HTML (which word, casing, accent)." },
+        "lockupRules": { "type": "array", "items": { "type": "string" }, "description": "Never-do rules: no rotate/skew/distort/recolor/bevel/glow, clear-space, co-brand order, etc." },
+        "fillOnDark": { "type": "string" },
+        "fillOnLight": { "type": "string" }
+      }
+    },
+
+    "type": {
+      "type": "object",
+      "description": "Typesetting rules. Roles (display/serif/mono) come from tokens; these are the casing/accent conventions.",
+      "properties": {
+        "headlineCase": { "type": "string", "enum": ["lowercase", "sentence", "uppercase", "title"], "default": "sentence" },
+        "labelCase": { "type": "string", "enum": ["uppercase", "lowercase", "sentence"], "default": "uppercase" },
+        "accentWord": { "type": "string", "description": "e.g. 'exactly one serif-italic accent word, tinted --accent-light' — or 'none'." },
+        "displayWeight": { "type": "string", "default": "800-900" },
+        "tracking": { "type": "string", "description": "e.g. 'display -0.03 to -0.05em; mono labels 0.22em'." }
+      }
+    },
+
+    "voice": {
+      "type": "object",
+      "properties": {
+        "do": { "type": "array", "items": { "type": "string" } },
+        "dont": { "type": "array", "items": { "type": "string" } },
+        "lexicon": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Preferred term → meaning, or banned term → replacement." }
+      }
+    },
+
+    "color": {
+      "type": "object",
+      "properties": {
+        "thirdHuePolicy": { "type": "string", "enum": ["forbidden", "allowed"], "default": "forbidden" },
+        "semantic": {
+          "type": "object",
+          "description": "Colors allowed ONLY as semantic flags, never decorative.",
+          "properties": {
+            "warn": { "type": "string" },
+            "success": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "imagery": {
+      "type": "object",
+      "properties": {
+        "stance": { "type": "string", "enum": ["abstract-monochrome", "photography", "none"], "default": "abstract-monochrome" },
+        "negatives": { "type": "array", "items": { "type": "string" }, "description": "Always-pass negative prompt items for generated imagery (no text, no people, no second hue, …)." }
+      }
+    }
+  }
+}

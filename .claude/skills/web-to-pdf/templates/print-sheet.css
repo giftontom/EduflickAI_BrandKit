@@ -1,0 +1,85 @@
+/* print-sheet.css — A4 multi-page document scaffold for web-to-pdf.
+   Brand-neutral: colors come from tokens.css vars (with safe fallbacks).
+   Each .sheet becomes one PDF page (794×1123px = A4 @96dpi). */
+
+@page { size: A4; margin: 0; }
+
+:root {
+  --paper: #ffffff;
+  --ink: #0a0b10;
+  --muted: #7a7f90;
+  --accent: #6366f1;
+  --line-ink: rgba(10, 11, 16, 0.08);
+  --font-display: 'Inter', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #2a2d38;            /* dark backdrop frames the white sheets on screen */
+  font-family: var(--font-display);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  padding: 32px 0;
+}
+
+/* One A4 page. Fixed pixel size = predictable export. */
+.sheet {
+  position: relative;
+  width: 794px;
+  height: 1123px;               /* exact A4; use min-height only if you accept variable page height */
+  margin: 0 auto 32px;
+  background: var(--paper);
+  color: var(--ink);
+  overflow: hidden;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);   /* stripped automatically during export */
+  padding: 72px;
+}
+
+.sheet__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.sheet__footer {
+  position: absolute;
+  left: 72px;
+  right: 72px;
+  bottom: 48px;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--line-ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Floating Download-PDF control (hidden in the exported pages — it isn't a .sheet). */
+.pdf-bar {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 50;
+}
+.pdf-bar button {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  color: #fff;
+  background: var(--accent);
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 24px;
+  cursor: pointer;
+  box-shadow: 0 8px 32px -8px rgba(99, 102, 241, 0.5);
+}
+.pdf-bar button:disabled { opacity: 0.7; cursor: default; }
+
+@media print { .pdf-bar { display: none; } body { background: #fff; padding: 0; } .sheet { box-shadow: none; margin: 0; } }
