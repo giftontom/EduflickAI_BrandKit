@@ -57,7 +57,7 @@ brand kit serves:
 - **12 weeks**, in-person at **UXP Innovation Hub, Trivandrum**
 - **20 selective seats** · **₹49,000** founding price (₹70,000 from Cohort 2)
 - **3 deployed projects** on a real stack (Cursor, Next.js, Claude/OpenAI, Pinecone, LangChain, n8n)
-- Top-of-funnel: a **free technical masterclass** → [eduflickai.com/masterclass](https://eduflickai.com/masterclass)
+- Top-of-funnel: direct applications → [eduflickai.com/apply](https://eduflickai.com/apply)
 
 The Instagram launch is fully planned — see [`content-studio/INSTAGRAM_LAUNCH_PLAN.md`](content-studio/INSTAGRAM_LAUNCH_PLAN.md)
 for the 12-tile mural grid, full copy, and posting waves.

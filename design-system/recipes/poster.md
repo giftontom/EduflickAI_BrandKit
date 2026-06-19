@@ -9,18 +9,18 @@ Brochure Kit).
 
 ```text
 FACTS (only source of live numbers; missing → [[NEEDS: …]]):
-- Event / headline subject:     [[e.g. Free Technical Masterclass]]
+- Event / headline subject:     [[e.g. Pioneer Cohort 01 — Full-Stack AI Engineer Program]]
 - Date / time / venue:          [[ ]]
 - Price / retail / seats left:  [[₹49,000 / ₹70,000 / __ of 20]]
-- Registration link / QR / handle: [[ ]]
+- Apply link / QR / handle: [[ ]]
 
 INPUTS:
 - Size: [[A4 portrait 794×1123 | IG-poster 1080×1350]]
 - Theme: [[dark | indigo gradient | paper]]
-- Eyebrow: [[UPPERCASE mono, e.g. FREE · LIVE · ~90 MIN]]
-- Headline (lowercase, one *serif* word): [[e.g. build an *ai app*, live]]
+- Eyebrow: [[UPPERCASE mono, e.g. PIONEER COHORT 01 · 20 SEATS]]
+- Headline (lowercase, one *serif* word): [[e.g. ship *ai products*, not theory]]
 - Supporting proof / what they get: [[2–4 short lines or a spec list]]
-- CTA: [[register free → / book your seat →]]
+- CTA: [[apply → eduflickai.com/apply / book your seat →]]
 
 BUILD RULES:
 1. One dominant headline (very large — fills the upper third). One serif accent word only.
@@ -38,12 +38,13 @@ OUTPUT: one ```html ... ``` block.
 
 ---
 
-## Worked example (abbreviated — masterclass announcement, dark)
+## Worked example (abbreviated — pioneer cohort announcement, dark)
 >
-> Eyebrow `FREE · LIVE · ~90 MIN`. Headline (72–96px) `build an *ai app*, live.` Then a left-aligned
-> stack: serif lead "the doom-scroll antidote, applied." → dashed spec rows (S12): `WHEN / [[date]]`,
-> `WHERE / [[venue]]`, `BRING / a laptop`, `COST / free`. Coral scarcity flag only if seats are the
-> hook. CTA pill `register free →`. Footer wordmark + paper mark + `[[handle]]`. Faint dot grid. One hue.
+> Eyebrow `PIONEER COHORT 01 · 20 SEATS`. Headline (72–96px) `ship *ai products*, not theory.` Then a
+> left-aligned stack: serif lead "stop watching. start shipping — in a room, with mentors." → dashed spec
+> rows (S12): `DURATION / 12 weeks`, `VENUE / UXP Innovation Hub, Trivandrum`, `PRICE / ₹49,000`,
+> `SEATS / 20 selective`. Coral scarcity flag if seats are the hook. CTA pill `apply →
+> eduflickai.com/apply`. Footer wordmark + paper mark + `[[handle]]`. Faint dot grid. One hue.
 
 **✗ Avoid:** centered flyer layout with clip-art, multiple colors, a big drop-shadow card, hype
 ("HURRY!! LIMITED!!"), a price/date not in FACTS, the mark stretched to fill a corner.

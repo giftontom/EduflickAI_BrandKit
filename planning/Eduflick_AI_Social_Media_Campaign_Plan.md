@@ -14,7 +14,7 @@
 | | |
 |---|---|
 | **Primary KPI** | Fill **20 Pioneer Cohort seats** (sold-out launch) |
-| **Funnel goal** | Drive registrations to the **Free Technical Masterclass** (top of funnel → seat bookings) |
+| **Funnel goal** | Drive applications to the **Pioneer Cohort** (apply-direct → seat bookings) |
 | **Offer** | Pioneer Cohort price **₹49,000** (vs. ₹70,000 retail from Cohort 2) — frame as a one-time founding-batch discount |
 | **Geography** | Geo-targeted: **10 km radius of Trivandrum** + Kerala-wide for organic |
 | **Window** | 6-week paid + organic sprint, running until all 20 seats are booked (no fixed close date) |
@@ -52,24 +52,24 @@
 |---|---|---|
 | **Instagram** | Primary — reach + brand | Reels (project demos, "day in the cohort"), carousels, Stories countdown |
 | **LinkedIn** | Primary — credibility + hiring narrative | Founder POV posts, curriculum breakdowns, industry placement angle |
-| **WhatsApp** | Conversion engine | Masterclass reminders, seat-booking nudges, 1:1 closing |
+| **WhatsApp** | Conversion engine | Application nudges, seat-booking follow-up, 1:1 closing |
 | **YouTube (Shorts)** | Proof | Capstone walkthroughs, student build clips, "what is RAG in 60s" |
-| **Meta/IG Ads** | Paid acceleration | Geo-targeted Masterclass lead-gen + retargeting |
+| **Meta/IG Ads** | Paid acceleration | Geo-targeted application lead-gen + retargeting |
 
 ---
 
 ## 4. The Funnel
 
 ```text
-   AWARENESS              CONSIDERATION           CONVERSION            CLOSE
-   Reels / Ads     →      Free Technical    →     Seat Booking    →     ₹15K booking fee
-   Carousels              Masterclass             page / WhatsApp        → enrolled
-   (geo-targeted)         (lead capture)          (urgency: X/20 left)
+   AWARENESS              APPLY                   CONVERSION            CLOSE
+   Reels / Ads     →      Apply                →  Seat Booking    →     ₹15K booking fee
+   Carousels              eduflickai.com/apply    page / WhatsApp        → enrolled
+   (geo-targeted)         (application)           (urgency: X/20 left)
 ```
 
 1. **Awareness** — Reels + geo ads push the pain/promise hook.
-2. **Lead capture** — Everything points to the **Free Technical Masterclass** (live, ~90 min, builds a tiny AI app on the spot).
-3. **Nurture** — WhatsApp + email sequence between registration and masterclass, then masterclass → booking.
+2. **Apply** — Everything points to **eduflickai.com/apply** (direct application, 20 selective seats).
+3. **Nurture** — WhatsApp + email sequence between application and seat-booking confirmation.
 4. **Close** — Live "X of 20 seats left" scarcity + ₹15,000 seat-booking fee to lock in.
 
 ---
@@ -78,7 +78,7 @@
 
 ### Phase 1 — Awareness & List-Building (Weeks 1–2)
 
-**Goal:** Build audience + collect Masterclass registrations.
+**Goal:** Build audience + drive applications to eduflickai.com/apply.
 
 | Day | Platform | Asset | Hook / Angle |
 |---|---|---|---|
@@ -86,27 +86,27 @@
 | Tue | LinkedIn | Founder post | "Why we capped Cohort 1 at 20 students" |
 | Wed | IG Carousel | "The 2026 AI engineer stack" | Cursor → Next.js → RAG → Agents |
 | Thu | IG Reel | "Theory vs. Shipping" | Course-video clichés vs. our deployed projects |
-| Fri | All + WhatsApp | **Masterclass announcement** | Free, live, limited spots |
+| Fri | All + WhatsApp | **Pioneer Cohort announcement** | 20 seats, apply direct |
 | Sat | IG Stories | Countdown + poll | "Can you build with LLMs? Yes / Not yet" |
 | Sun | LinkedIn | Curriculum carousel | Month 1/2/3 breakdown |
 
-### Phase 2 — Consideration & Masterclass Push (Weeks 3–4)
+### Phase 2 — Consideration & Application Push (Weeks 3–4)
 
-**Goal:** Maximize Masterclass attendance; seed the Pioneer offer.
+**Goal:** Maximize applications; seed the Pioneer offer.
 
-- **Daily Stories** countdown to Masterclass with registration link sticker.
+- **Daily Stories** application urgency with link-in-bio sticker.
 - **Reels:** "What you'll build in Week 4 / Week 8 / Week 11" (one per milestone).
 - **LinkedIn:** industry hiring angle — "AI roles posted in Trivandrum this month" (screenshot real listings).
 - **Testimonial/credibility:** guest-faculty spotlight, UXP venue tour Reel.
-- **Run the Free Technical Masterclass** (mid-Phase 2). Record it → clip for Phase 3.
+- **WhatsApp follow-up** for warm leads — answer questions, book a seat.
 - **Carousel:** "₹49,000 vs ₹70,000 — what Pioneer Cohort means."
 
 ### Phase 3 — Conversion & Scarcity Close (Weeks 5–6)
 
-**Goal:** Convert Masterclass attendees → seat bookings; sell out.
+**Goal:** Convert applicants → seat bookings; sell out.
 
 - **Live seat tracker:** "Only 7 of 20 seats left" graphics, updated every 2–3 days.
-- **Masterclass highlight Reels** (proof the format works).
+- **Cohort proof Reels** (day-in-the-life, stack walkthroughs, project previews).
 - **Objection-handler carousels:** "Is ₹49K worth it?", "What if I'm not job-ready?", "Online vs in-person."
 - **WhatsApp 1:1 closing** for every warm lead — payment structure (₹15K book + ₹17K + ₹17K).
 - **Final seats:** "X of 20 left" urgency across all channels + Stories seat tracker (no deadline — seats-remaining only).
@@ -128,12 +128,12 @@
 
 | | |
 |---|---|
-| **Campaign type** | Lead generation → Masterclass; Retargeting → Seat booking |
+| **Campaign type** | Lead generation → Apply; Retargeting → Seat booking |
 | **Targeting** | 10 km radius of central Trivandrum; age 21–28; interests: software dev, AI/ML, Next.js, coding, B.Tech, job-search |
-| **Lookalikes** | From Masterclass registrant list (Phase 2 onward) |
-| **Retargeting** | Video viewers (50%+), profile visitors, Masterclass no-shows |
+| **Lookalikes** | From applicant list (Phase 2 onward) |
+| **Retargeting** | Video viewers (50%+), profile visitors, drop-offs from apply page |
 | **Creative** | 3–4 Reel-style video ads (pain hook) + 2 static (offer/scarcity) |
-| **Primary CTA** | "Register Free →" (Masterclass) |
+| **Primary CTA** | "Apply →" (eduflickai.com/apply) |
 | **Budget guidance** | Front-load Phase 2; shift to retargeting in Phase 3 (cost-per-booking matters more than reach late) |
 
 > **Note for Marketing & Sales:** set the exact ad budget against your CAC target. At ₹49K/seat × 20, even a generous CAC keeps strong margin — bias toward spending enough to *guarantee* sell-out rather than under-spending and missing the cohort.
@@ -162,11 +162,11 @@ Pull all creative from the Eduflick Brand Book (`Eduflick_Brand_Book_v4.html`) a
 
 | Metric | Target |
 |---|---|
-| Masterclass registrations | 150–200 (to comfortably close 20) |
-| Masterclass attendance rate | ≥ 45% |
-| Masterclass → seat booking | ≥ 20% of attendees |
+| Applications received | 60–100 (to comfortably close 20 selective seats) |
+| Application → shortlist | ≥ 40% |
+| Shortlist → seat booking | ≥ 50% of shortlisted |
 | **Seats filled** | **20 / 20** |
-| Cost per registration | Track; optimize weekly |
+| Cost per application | Track; optimize weekly |
 | Cost per booking (CAC) | Track against ₹49K LTV |
 
 **Reporting cadence:** weekly dashboard (reach, CPL, registrations, bookings, seats remaining) shared with Product/Ops and Career Services so on-site readiness tracks sales pace.
@@ -177,8 +177,8 @@ Pull all creative from the Eduflick Brand Book (`Eduflick_Brand_Book_v4.html`) a
 
 - [ ] 6–8 Reel scripts + shot lists (per content pillars)
 - [ ] 4 ad-creative videos + 2 static offer/scarcity graphics
-- [ ] Masterclass registration landing page + WhatsApp link
-- [ ] WhatsApp nurture sequence (5–6 messages: confirm → remind → attend → offer → scarcity → close)
+- [ ] Application landing page (eduflickai.com/apply) + WhatsApp link
+- [ ] WhatsApp nurture sequence (5–6 messages: confirm → qualify → offer → scarcity → close)
 - [ ] "X of 20 seats left" scarcity graphic template (editable)
 - [ ] Curriculum carousel (Month 1/2/3)
 - [ ] ₹49K vs ₹70K offer carousel
@@ -191,11 +191,11 @@ Pull all creative from the Eduflick Brand Book (`Eduflick_Brand_Book_v4.html`) a
 
 | Need | Owner (per Ops Plan) |
 |---|---|
-| Masterclass tech setup + UXP venue B-roll | Product & Operations |
-| Live Masterclass demo content / curriculum accuracy | Technical Curriculum Team |
+| UXP venue B-roll + cohort onboarding setup | Product & Operations |
+| Curriculum accuracy + stack demo content | Technical Curriculum Team |
 | industry hiring proof / placement narrative | Career Services |
 | Ad spend, funnel, closing | **Marketing & Sales (this plan)** |
 
 ---
 
-*Next step: lock the Masterclass date, then back-plan the 6-week calendar from it. Phase 3 close must land 1–2 weeks before cohort start so Product/Ops has confirmed numbers for UXP coordination.*
+*Next step: confirm cohort start date, then back-plan the 6-week calendar from it. Phase 3 close must land 1–2 weeks before cohort start so Product/Ops has confirmed numbers for UXP coordination.*

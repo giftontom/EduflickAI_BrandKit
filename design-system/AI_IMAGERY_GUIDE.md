@@ -62,7 +62,7 @@ tell it's people building) but unmistakably Eduflick (one hue). The photo is sti
 | Surface | Mode | Why |
 | --- | --- | --- |
 | human / "hero" moments — the room, hands building, an in-person session | **B · photoreal duotone** | warmth + proof; shows the real thing |
-| free masterclass / "see it built live" | **B · photoreal duotone** | the live-build moment is human |
+| "see it built live" / live-build moment | **B · photoreal duotone** | the live-build moment is human |
 | number-is-the-hero ("20 seats"), spec-dense, pricing, curriculum | **A · abstract** | a photo competes with the number; keep it calm |
 | OG cards, dividers, atmospheric fills where no subject helps | **A · abstract** | mood only |
 

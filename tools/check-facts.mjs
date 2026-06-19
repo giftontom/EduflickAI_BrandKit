@@ -53,6 +53,13 @@ export const RETIRED = [
   { bad: 'careers.eduflick.ai', use: 'eduflickai.com (correct domain)' },
   { bad: 'eduflick.ai/engineer', use: 'eduflickai.com/apply (correct domain)' },
   { bad: 'eduflickai@gmail.com', use: 'info@eduflickai.com (official email)' },
+  // Masterclass retired 2026-06-11 — the funnel is apply-direct now. These guard
+  // the OFFERING strings only; the generic "masterclass / hook" DESIGN ARCHETYPE
+  // (a reusable poster/imagery pattern) is deliberately NOT matched (no bare word).
+  { bad: /free technical masterclass/i, label: 'Free Technical Masterclass (retired offering)', use: 'apply-direct funnel: "apply — link in bio" (IG) or eduflickai.com/apply (other surfaces)' },
+  { bad: /free masterclass/i, label: 'free masterclass (retired offering)', use: 'apply-direct funnel: "apply — link in bio" (IG) or eduflickai.com/apply (other surfaces)' },
+  { bad: 'eduflickai.com/masterclass', use: 'eduflickai.com/apply (masterclass URL retired 2026-06-11)' },
+  { bad: /register free/i, label: 'Register Free (retired masterclass CTA)', use: '"Apply →" or "apply — link in bio" on IG (masterclass CTA retired 2026-06-11)' },
 ];
 
 // ---- Active-HTML integrity checks (brochures/, design-system/, index.html) ----
