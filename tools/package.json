@@ -20,6 +20,7 @@
     "gen:ig-backdrops": "node gen-ig-backdrops.mjs",
     "fetch:stock": "node fetch-stock.mjs",
     "treat:stock": "node treat-stock.mjs",
+    "treat:image": "node treat-image.mjs",
     "export:avatar": "node export-pf-avatar.mjs",
     "serve": "node serve.mjs",
     "tokens": "node build-tokens.mjs",

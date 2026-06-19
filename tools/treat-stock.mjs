@@ -17,6 +17,7 @@ import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { RAMP, filterDef } from './_duotone.mjs';   // shared brand duotone (also used by treat-image.mjs)
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.resolve(__dirname, 'stock-sources');
@@ -32,23 +33,7 @@ const JOBS = [
   { name: 'poster-masterclass', src: 'masterclass.jpg', mode: 'dark', pos: '50% 62%', pre: 'contrast(1.2) brightness(1.04)' },
 ];
 
-const LUMA = '0.2126 0.7152 0.0722 0 0';   // Rec.709 grayscale row
-// 4-stop ramps (shadow → … → highlight) for richer, more cinematic gradation.
-// dark : ink #0A0B10 → indigo-ink #0B0822 → indigo #5B5BF0 → light-indigo #8B97FF
-// paper: indigo #5B5BF0 → light-indigo #8B97FF → warm paper #F5F2EA (high-key, kept for light surfaces)
-const RAMP = {
-  dark:  { r: '0.039 0.043 0.357 0.545', g: '0.043 0.031 0.357 0.592', b: '0.063 0.133 0.941 1.0' },
-  paper: { r: '0.357 0.545 0.961',       g: '0.357 0.592 0.949',       b: '0.941 1.0 0.918' },
-};
-const filterDef = (id, m) => `
-  <filter id="${id}" color-interpolation-filters="sRGB">
-    <feColorMatrix type="matrix" values="${LUMA} ${LUMA} ${LUMA} 0 0 0 0 1 0"/>
-    <feComponentTransfer>
-      <feFuncR type="table" tableValues="${m.r}"/>
-      <feFuncG type="table" tableValues="${m.g}"/>
-      <feFuncB type="table" tableValues="${m.b}"/>
-    </feComponentTransfer>
-  </filter>`;
+// LUMA / RAMP / filterDef now live in ./_duotone.mjs (shared with treat-image.mjs).
 
 const dataUri = (file) => {
   const buf = fs.readFileSync(file);
