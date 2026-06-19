@@ -17,6 +17,7 @@
     "gen:gemini": "PROVIDER=gemini node --env-file-if-exists=../.env.local gen-backdrops.mjs",
     "recraft:style": "node --env-file-if-exists=../.env.local recraft-create-style.mjs",
     "gen:vector": "node --env-file-if-exists=../.env.local gen-vector.mjs",
+    "recraft:finish": "node --env-file-if-exists=../.env.local recraft-finish.mjs",
     "gen:ig-backdrops": "node gen-ig-backdrops.mjs",
     "fetch:stock": "node fetch-stock.mjs",
     "treat:stock": "node treat-stock.mjs",

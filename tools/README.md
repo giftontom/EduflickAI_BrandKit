@@ -15,9 +15,14 @@ Everything that builds, checks, or exports the brand kit. One `npm install`
 | `npm run export:slides` | the program deck slides (landscape) | `exports/full-stack-ai-engineer/` |
 | `npm run export:pdf` | brochure → print-quality PDF (Chromium) | `brochures/*.pdf` (gitignored) |
 | `npm run export:avatar` | the gradient profile avatar | `assets/logo/social/` |
-| `npm run gen:backdrops` / `:proc` | poster backdrops — Gemini AI / procedural fallback | `design-system/collateral/assets/backdrops/` |
-| `npm run gen:ig-backdrops` | IG tile backdrops | same |
+| `npm run gen:backdrops` / `:proc` | poster backdrops — default provider / procedural fallback | `design-system/collateral/assets/backdrops/` |
+| `npm run gen:recraft` / `gen:gemini` | pick the backdrop engine (Recraft paid / Gemini) | same |
+| `npm run recraft:style` | bootstrap a brand `style_id` from approved backdrops | (prints UUID for `.env.local`) |
+| `npm run gen:vector` | native-vector (SVG) brand icons/glyphs — Recraft | `design-system/collateral/assets/vectors/` |
+| `npm run gen:ig-backdrops` | IG tile backdrops | `…/assets/backdrops/` |
 | `npm run fetch:stock` + `treat:stock` | photoreal indigo-duotone pipeline | same |
+| `npm run treat:image` | force ANY image onto the brand indigo duotone | in place / `OUT` |
+| `npm run recraft:finish` | `upscale` (crispUpscale) / `nobg` (removeBackground) | next to input |
 | `npm run serve` | static preview server | `http://localhost:8080` |
 | `node codemod-hex.mjs` | migrate hardcoded hex → `var(--token)` (dry-run first) | — |
 
@@ -81,17 +86,40 @@ circular crop). Re-run after changing the gradient or the mark.
 
 ## Also: poster backdrops (the AI-imagery layer)
 
+Backdrops are produced by a **provider** behind a fallback cascade. API keys live in the
+gitignored **`.env.local`** (repo root) and load automatically via `--env-file-if-exists`:
+
 ```bash
 cd tools
-GEMINI_API_KEY=…  npm run gen:backdrops        # Nano Banana 2 / gemini-3-pro-image → ../design-system/collateral/assets/backdrops/*.png
-npm run gen:backdrops:proc                      # procedural fallback (no API) — same filenames
-npm run export:posters                          # composite posters → ../exports/posters/*.png
+npm run gen:backdrops                  # default provider (Gemini) → procedural fallback
+npm run gen:recraft                    # paid Recraft (palette-locked; best with a brand style_id)
+npm run gen:gemini                     # Gemini cascade (needs a billing-enabled key; free tier 429s)
+PROVIDER=proc npm run gen:backdrops    # skip AI, render procedurally (no API)
+npm run export:posters                 # composite posters → ../exports/posters/*.png
 ```
 
-Generates the **abstract indigo backdrops** layered *behind* the type in `collateral/posters.html`
-(see `../design-system/AI_IMAGERY_GUIDE.md`). The AI path needs a **billing-enabled** Gemini key —
-image models return HTTP 429 (`limit: 0`) on the free tier. `gen:backdrops:proc` writes the same
-filenames with SVG-rendered textures, so switching to real AI later is a drop-in re-run.
+All providers write the same **abstract indigo backdrop** filenames in
+`../design-system/collateral/assets/backdrops/`, layered *behind* the type in
+`collateral/posters.html` (see `../design-system/AI_IMAGERY_GUIDE.md`). Whatever a provider can't
+produce falls back to the procedural generator, so every poster always gets a real PNG.
+
+**Recraft brand style** (campaign consistency): Recraft's stock styles inject a *subject*, so flat
+backdrops need a custom style trained on our own flat backdrops:
+
+```bash
+npm run recraft:style                  # → prints RECRAFT_STYLE_ID=<uuid> to paste into .env.local
+RECRAFT_STYLE_ID=<uuid> npm run gen:recraft
+```
+
+Recraft backdrops come out flat but a touch **bright** — run them through the brand duotone to land
+the restrained dark look (deterministic, free, no third hue survives):
+
+```bash
+PRE='brightness(0.4) contrast(1.3)' node treat-image.mjs backdrop.png out.png
+```
+
+**Native-vector icons** (`gen:vector`) and **finishing** (`recraft:finish upscale|nobg <file>`) round
+it out. The real logo/lockup is **never** AI-generated — `gen:vector` hard-rejects mark/logo concepts.
 
 ### Photoreal backdrops — real photos, forced on-brand (the hybrid path)
 
