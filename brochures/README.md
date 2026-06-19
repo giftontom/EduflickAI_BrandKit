@@ -10,17 +10,8 @@ This is the index: what each file is, which is canonical, and how PDFs are made.
 | `Eduflick_Full_Stack_AI_Engineer_Brochure.html` | **Canonical** full brochure (light/paper) | The default share — prospects, partners, print |
 | `Eduflick_Full_Stack_AI_Engineer_Brochure_Dark.html` | Dark Edition | Screen-first sharing, dark-context placements |
 | `Eduflick_Full_Stack_AI_Engineer_Brochure_v2.html` | Spec Edition (dark spec-sheet) | Technical audiences — stack/curriculum as a spec sheet |
-| `Eduflick_Full_Stack_AI_Engineer_Brochure_v3.html` | Platform Edition | Platform/outcome framing |
 | `Eduflick_Full_Stack_AI_Engineer_Enquiry.html` | Enquiry leaflet (dark, short) | Quick response to DMs/walk-in enquiries |
 | `Eduflick_Full_Stack_AI_Engineer_Program_Deck.html` | Presentation deck (landscape) | Talks, masterclass, counselling sessions |
-
-## Leadership Program (Cohort 02)
-
-| File | What |
-| --- | --- |
-| `Eduflick_AI_Leadership_Program_Brochure.html` | Prospectus edition |
-| `Eduflick_AI_Leadership_Program_Brochure_v2.html` | Brochure edition (later revision) |
-| `Eduflick_AI_Leadership_Program_Poster.html` | A4 poster |
 
 ## Brand / product
 

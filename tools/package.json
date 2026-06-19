@@ -9,6 +9,7 @@
     "export:pdf": "node export-pdf.mjs",
     "export:slides": "node export-slides.mjs",
     "export:posters": "node export-posters.mjs",
+    "export:wa": "node export-wa-poster.mjs",
     "export:stories": "node export-stories.mjs",
     "export:ig": "node export-ig.mjs",
     "gen:backdrops": "node gen-backdrops.mjs",
