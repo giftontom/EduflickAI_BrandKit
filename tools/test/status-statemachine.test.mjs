@@ -402,17 +402,18 @@ test('contract A scoping: an UNKNOWN abstract id set straight to posted (creatio
   assert.equal(body.status, 'posted');
 });
 
-test('contract A positive (absent): scheduling a KNOWN-but-absent asset → 409 stale-export; allowStale:true → 200', async () => {
-  // On this worktree exports are present, so MANUFACTURE an absent asset
-  // deterministically: pick a present manifest item, snapshot + delete its export
-  // PNG so the live manifest reports exists:false, then exercise the guard. The
-  // PNG (gitignored, a REAL-repo file OUTSIDE content-studio so it is not in the
-  // sandbox) is ALWAYS restored in finally, so the tree stays clean even if an
-  // assertion throws. This id's status.json entry lives in the THROWAWAY sandbox,
-  // so the post-test status restore below is belt-and-braces only — the sandbox is
-  // discarded wholesale in after().
+test('contract A positive (absent): scheduling a KNOWN-but-absent asset → 409 stale-export; allowStale:true → 200', async (t) => {
+  // MANUFACTURE an absent asset deterministically: pick a present manifest item,
+  // snapshot + delete its export PNG so the live manifest reports exists:false,
+  // then exercise the guard. The PNG (gitignored, a REAL-repo file OUTSIDE
+  // content-studio so it is not in the sandbox) is ALWAYS restored in finally, so
+  // the tree stays clean even if an assertion throws. This id's status.json entry
+  // lives in the THROWAWAY sandbox, so the post-test status restore below is
+  // belt-and-braces only — the sandbox is discarded wholesale in after().
+  // SKIP gracefully when exports/ is cold (fresh clone / CI before any export):
+  // with no present item there is nothing to manufacture-absent from.
   const present = await firstPresentItem();
-  assert.ok(present, 'expected at least one present manifest item to manufacture an absent one');
+  if (!present) { t.skip('no present export (cold exports/) — cannot manufacture an absent asset'); return; }
   const { id, pngAbs } = present;
 
   const pngBytes = fs.readFileSync(pngAbs); // snapshot the real export bytes
@@ -486,15 +487,16 @@ test('contract A positive (absent): scheduling a KNOWN-but-absent asset → 409 
   }
 });
 
-test('contract A positive (stale): scheduling a KNOWN-but-STALE asset → 409 stale-export; allowStale:true → 200', async () => {
+test('contract A positive (stale): scheduling a KNOWN-but-STALE asset → 409 stale-export; allowStale:true → 200', async (t) => {
   // The companion to the absent branch: the export EXISTS but is STALE (its source
   // is newer than the export). Manufacture it without touching bytes: age the
   // export PNG's mtime to be OLDER than its surface source file, so the manifest
   // computes stale=true (sourceStat.mtimeMs > exportStat.mtimeMs). The PNG is a
   // gitignored REAL-repo file OUTSIDE content-studio (so not in the sandbox); we
   // restore its original mtime in finally so the tree stays clean even on throw.
+  // SKIP gracefully when exports/ is cold (fresh clone / CI before any export).
   const present = await firstFreshPresentItemWithSource();
-  assert.ok(present, 'expected a present, non-stale manifest item whose source file exists');
+  if (!present) { t.skip('no present non-stale export (cold exports/) — cannot manufacture a stale asset'); return; }
   const { id, pngAbs, sourceAbs } = present;
 
   const pngStat = fs.statSync(pngAbs); // snapshot the export's real mtimes
