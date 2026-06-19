@@ -29,6 +29,9 @@ const ROOT = join(dirname(SELF), '..'); // tools/ -> repo root
 const SKIP_FILES = new Set([
   'content-studio/design-comments.json',
   'content-studio/DESIGN_FEEDBACK.md',
+  // The brand config stores retired strings as data (the source-of-truth for the
+  // guard itself). Scanning it would produce false positives on the "bad" values.
+  'brand.config.json',
 ]);
 
 // Never scanned: deps, generated output, legacy archive, the definitive Brand
@@ -38,7 +41,9 @@ const TEXT_EXT = new Set(['.md', '.html', '.css', '.mjs', '.js', '.json', '.txt'
 
 // Retired strings -> what to use instead. `bad` is a case-sensitive substring,
 // or a RegExp (tested per line; use `label` for the report).
-export const RETIRED = [
+// This hardcoded array is the canonical fallback when brand.config.json is
+// absent, malformed, or lacks facts.retiredStrings.
+const RETIRED_FALLBACK = [
   { bad: 'Enterprise Solutions', use: 'UXP Innovation Hub, Trivandrum (venue finalized)' },
   { bad: /technopark/i, label: 'Technopark (any case)', use: 'Trivandrum / industry (de-emphasized everywhere)' },
   { bad: '#TechparkTrivandrum', use: '#TrivandrumTech (hashtag finalized)' },
@@ -61,6 +66,32 @@ export const RETIRED = [
   { bad: 'eduflickai.com/masterclass', use: 'eduflickai.com/apply (masterclass URL retired 2026-06-11)' },
   { bad: /register free/i, label: 'Register Free (retired masterclass CTA)', use: '"Apply →" or "apply — link in bio" on IG (masterclass CTA retired 2026-06-11)' },
 ];
+
+// Load RETIRED from brand.config.json if present and well-formed; fall back to
+// RETIRED_FALLBACK so the scan is always functional even without the config.
+function loadRetiredFromConfig() {
+  try {
+    const raw = readFileSync(join(ROOT, 'brand.config.json'), 'utf8');
+    const cfg = JSON.parse(raw);
+    const entries = cfg && cfg.facts && Array.isArray(cfg.facts.retiredStrings)
+      ? cfg.facts.retiredStrings
+      : null;
+    if (!entries) return null;
+    return entries.map((e) => {
+      if (e.regex) {
+        // Rebuild the RegExp from its serialized source + flags.
+        const rebuilt = new RegExp(e.bad, e.flags || '');
+        return Object.assign({ bad: rebuilt }, e.label ? { label: e.label } : {}, { use: e.use });
+      }
+      return Object.assign({ bad: e.bad }, e.label ? { label: e.label } : {}, { use: e.use });
+    });
+  } catch {
+    // Config absent, unreadable, or invalid JSON — use fallback silently.
+    return null;
+  }
+}
+
+export const RETIRED = loadRetiredFromConfig() || RETIRED_FALLBACK;
 
 // ---- Active-HTML integrity checks (brochures/, design-system/, index.html) ----
 // Markdown is exempt from these: placeholders are policy in .md sources, but a

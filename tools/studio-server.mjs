@@ -97,6 +97,17 @@
 // SIGKILL) and lastRun persists across restarts in tools/.studio-state.json.
 // Port: STUDIO_PORT > PORT > 8090. Zero npm dependencies (built-ins).
 //
+// brand.config.json: the single declarative brand profile (repo root, read once
+// at load via node:fs). It supplies the brand identity, the run-action whitelist
+// (config.actions), the manifest SURFACE data array (config.surfaces, verbatim
+// values — the scan/staleness LOGIC stays in code), and the brand-specific paths
+// (config.paths.deck / brandBook / tokensSource). If the file is MISSING or
+// malformed the server falls back to the hardcoded values below and never
+// crashes; with the file present holding the current values, /api/manifest,
+// /api/actions, the action whitelist and /api/tokens/status are byte-identical
+// to the hardcoded behaviour. This is a refactor of WHERE the values live, not a
+// behaviour change. node:fs only — the JSON is a local file, never an npm dep.
+//
 // STUDIO_CONTENT_DIR: the directory every content-studio data path is read from
 // and written to (status.json, FACTS.md, design-comments.json, DESIGN_FEEDBACK.md,
 // launch-grid.json, BRAND_CHEATSHEET.md, prompts/, drafts/, and the
@@ -128,6 +139,73 @@ if (!['127.0.0.1', 'localhost', '::1'].includes(HOST)) {
   console.error(`refusing to start: HOST ${HOST} is not loopback (127.0.0.1 / localhost / ::1)`);
   process.exit(1);
 }
+
+// ---------------------------------------------------------- brand profile
+//
+// brand.config.json lives at the repo root and is the single declarative source
+// of the brand-specific knowledge the studio used to hardcode: identity, the
+// run-action whitelist, the manifest SURFACE data, and the brand-specific paths
+// (deck, brand book, tokens source). Read ONCE at load via node:fs (a plain
+// local file — never an npm dep). If it is missing, unreadable, or malformed we
+// fall back to the hardcoded defaults defined further below so the server never
+// crashes and behaviour is unchanged. The scan / staleness / spawn LOGIC stays
+// in code; only the DATA moves to config. Each consumer derives its value via
+// `cfgOr(...)` so a partially-present config still falls back field-by-field.
+const BRAND_CONFIG_FILE = path.join(ROOT, 'brand.config.json');
+
+function loadBrandConfig() {
+  let raw;
+  try {
+    raw = fs.readFileSync(BRAND_CONFIG_FILE, 'utf8');
+  } catch {
+    return null; // absent / unreadable → hardcoded fallback
+  }
+  try {
+    const cfg = JSON.parse(raw);
+    if (cfg && typeof cfg === 'object' && !Array.isArray(cfg)) return cfg;
+  } catch {
+    console.error(`brand.config.json is malformed — falling back to hardcoded brand values`);
+  }
+  return null; // malformed → hardcoded fallback
+}
+
+const BRAND_CONFIG = loadBrandConfig();
+
+// Read `path` (dot-free top-level key, or `a.b` two-level) from the loaded
+// config; return `fallback` when the config is absent or the key is missing.
+// Used so every brand value below degrades to its hardcoded default
+// independently (a partial config never wipes an unrelated field).
+function cfgOr(keyPath, fallback) {
+  if (!BRAND_CONFIG) return fallback;
+  const parts = keyPath.split('.');
+  let cur = BRAND_CONFIG;
+  for (const k of parts) {
+    if (cur == null || typeof cur !== 'object' || !Object.prototype.hasOwnProperty.call(cur, k)) {
+      return fallback;
+    }
+    cur = cur[k];
+  }
+  return cur === undefined ? fallback : cur;
+}
+
+// Coerce a config value to a usable path string: a non-empty string passes
+// through, anything else (null / non-string / empty) falls back. Keeps a
+// malformed `paths.*` entry from blanking a brand-specific path.
+function strOr(value, fallback) {
+  return typeof value === 'string' && value.length ? value : fallback;
+}
+
+// The brand's declarative identity, from config.brand with the current Eduflick
+// values as the hardcoded fallback. This is the single in-code home for the
+// brand id/name/operator that used to be implicit ('Eduflick' in comments and
+// asset names). It is NOT serialized into /api/manifest's `brand` object — that
+// object stays byte-identical (logos/partners/tokensFlat only) per the studio's
+// manifest contract — so adding identity here cannot change the API surface.
+const BRAND_IDENTITY = Object.freeze({
+  id: strOr(cfgOr('brand.id', null), 'eduflick'),
+  name: strOr(cfgOr('brand.name', null), 'Eduflick AI'),
+  operator: strOr(cfgOr('brand.operator', null), 'Tomatrix Technologies Pvt Ltd'),
+});
 
 // The directory all content-studio data is read from and written to. Defaults to
 // content-studio/ at the repo root; STUDIO_CONTENT_DIR overrides it (resolved to
@@ -1218,7 +1296,12 @@ function handleDraftSave(body, res) {
 
 // ---------------------------------------------------------------- manifest
 
-const SURFACES = [
+// Hardcoded SURFACE data — the fallback used when brand.config.json is absent or
+// its `surfaces` is not a non-empty array. The active list is SURFACES below; the
+// staleness/scan LOGIC (buildSurfaces, enumerateItems) is unconditionally in
+// code and only consumes these data fields ({id, label, source, exportDir,
+// script, aspect, enumerate}).
+const SURFACES_DEFAULT = [
   {
     id: 'instagram',
     label: 'instagram posts',
@@ -1266,6 +1349,13 @@ const SURFACES = [
   },
 ];
 
+// The active surface DATA: from config.surfaces when it is a non-empty array,
+// else the hardcoded default. Only the data moves — buildSurfaces still owns all
+// scan/staleness logic.
+const cfgSurfaces = cfgOr('surfaces', null);
+const SURFACES =
+  Array.isArray(cfgSurfaces) && cfgSurfaces.length ? cfgSurfaces : SURFACES_DEFAULT;
+
 const KIT_DOCS = [
   'instagram-kit',
   'brochure-kit',
@@ -1276,7 +1366,10 @@ const KIT_DOCS = [
   'instagram-posts',
 ].map((n) => `design-system/collateral/${n}.html`);
 
-const DECK_FILE = 'brochures/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html';
+// Brand-specific document paths — from config.paths.* with the current hardcoded
+// values as the fallback (a non-string config value also falls back).
+const DECK_FILE = strOr(cfgOr('paths.deck', null), 'brochures/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html');
+const BRAND_BOOK_FILE = strOr(cfgOr('paths.brandBook', null), 'brand-book/Eduflick_Brand_Book_v4.html');
 
 // Caption shape (content-studio/drafts/instagram-posts-captions.md):
 //   ## N · `ig-<slug>.png` — title
@@ -1392,7 +1485,7 @@ function buildDocuments(commentCounts) {
     const p = `brochures/${f}`;
     push(p, p === DECK_FILE ? 'deck' : 'brochure');
   }
-  push('brand-book/Eduflick_Brand_Book_v4.html', 'brand-book');
+  push(BRAND_BOOK_FILE, 'brand-book');
   for (const p of KIT_DOCS) push(p, 'kit');
   return docs;
 }
@@ -1536,7 +1629,10 @@ function assetHealth(id) {
 // ----------------------------------------------------------------- actions
 
 // Hardcoded whitelist — POST body must name an own key; spawn argv is constant
-// shape ('npm run <key>'), never interpolated from anything else, no shell.
+// shape ('npm run <key>'), never interpolated from anything else, no shell. This
+// literal is the FALLBACK used when brand.config.json is absent or its `actions`
+// is not a usable array; the active whitelist is ACTION_WHITELIST below. (Kept as
+// a literal so the README docs-drift test can parse the canonical action list.)
 const ACTIONS = Object.freeze({
   export: true,
   'export:ig': true,
@@ -1550,6 +1646,25 @@ const ACTIONS = Object.freeze({
   tokens: true,
   snippets: true,
 });
+
+// The active run-action whitelist. From config.actions when that is a non-empty
+// array of non-empty strings (built into a frozen {key:true} object so the
+// existing own-key membership test is unchanged), else the hardcoded ACTIONS
+// above. The POST /api/actions/run check still tests for an OWN key and the
+// spawn argv is still the constant 'npm run <key>' shape — only the SET of
+// permitted keys is now data. With the config holding today's values the set is
+// byte-identical to ACTIONS.
+const ACTION_WHITELIST = (() => {
+  const cfgActions = cfgOr('actions', null);
+  if (
+    Array.isArray(cfgActions) &&
+    cfgActions.length &&
+    cfgActions.every((a) => typeof a === 'string' && a.length)
+  ) {
+    return Object.freeze(Object.fromEntries(cfgActions.map((a) => [a, true])));
+  }
+  return ACTIONS;
+})();
 
 const MAX_LOG_LINES = 5000;
 const MAX_KEPT_RUNS = 5;
@@ -1728,10 +1843,15 @@ function runGuard() {
 // Source → generated-artifact pairs of the token pipeline. A pair is stale
 // when the artifact is missing or older than its source — mtime compare only
 // (cheap, no hashing); `npm run tokens` / `npm run snippets` regenerate.
+// TOKENS_SOURCE is the brand's design-token source of record (config.paths
+// .tokensSource, hardcoded fallback). The token→artifact pairs derive from it so
+// the tokens/status verdict tracks whichever file the brand profile names; the
+// snippets pair is a separate non-brand source and stays as-is.
+const TOKENS_SOURCE = strOr(cfgOr('paths.tokensSource', null), 'design-system/tokens/tokens.json');
 const TOKEN_PAIRS = [
-  { source: 'design-system/tokens/tokens.json', artifact: 'design-system/tokens/tokens.css' },
-  { source: 'design-system/tokens/tokens.json', artifact: 'design-system/tokens/tokens.flat.json' },
-  { source: 'design-system/tokens/tokens.json', artifact: 'tools/brand.tokens.mjs' },
+  { source: TOKENS_SOURCE, artifact: 'design-system/tokens/tokens.css' },
+  { source: TOKENS_SOURCE, artifact: 'design-system/tokens/tokens.flat.json' },
+  { source: TOKENS_SOURCE, artifact: 'tools/brand.tokens.mjs' },
   { source: 'design-system/recipes/snippets.src.md', artifact: 'design-system/recipes/snippets.md' },
 ];
 
@@ -2045,7 +2165,7 @@ async function handleApi(req, res, pathname) {
   if (pathname === '/api/actions/run' && req.method === 'POST') {
     const body = await readJSONBody(req);
     const action = body.action;
-    if (typeof action !== 'string' || !Object.prototype.hasOwnProperty.call(ACTIONS, action)) {
+    if (typeof action !== 'string' || !Object.prototype.hasOwnProperty.call(ACTION_WHITELIST, action)) {
       return sendJSON(res, 400, { error: 'unknown action' });
     }
     if (running) return sendJSON(res, 409, { error: 'busy' });
