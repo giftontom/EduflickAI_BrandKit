@@ -167,10 +167,14 @@ adopt/build ledger) lives outside the repo; this file is the condensed, actionab
 
 ## Phase 3 — Multi-brand platform
 
-- Extract `brand.config.json` (brand id, token source, FACTS path, surfaces, actions,
-  prompts, retired-string list) — the studio's only knowledge of "which brand".
-- Workspace mode: N brands, one process; every traversal guard re-derived per brand root
-  (hard test gate — cross-tenant write escape is the failure mode).
+- ✅ **Phase 3a keystone — `brand.config.json`** (committed `8b831bc`): the brand profile at repo
+  root (identity, the 11-action whitelist, 5 surfaces, paths, and `facts.retiredStrings` moved out
+  of check-facts.mjs). Both check-facts.mjs and studio-server.mjs read it with per-field fallback to
+  the old hardcoded values; **proven byte-identical when present, graceful fallback when absent**.
+  122 tests. This makes the brand truth declarative — the foundation for design-skills reuse.
+- ⬜ **Workspace mode: DEFERRED (YAGNI).** N brands in one process is only worth building when a
+  REAL second brand exists; every traversal guard would need re-deriving per brand root (hard test
+  gate — cross-tenant write escape). Do not build on spec.
 - Plugin-shaped views (the ROUTES array already is); server plugins = read-only routes +
   whitelisted actions only.
 - DTCG token migration (`$value`/`$type`, Style Dictionary native) + OKLCH; round-trip-review
