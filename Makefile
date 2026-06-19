@@ -1,4 +1,4 @@
-.PHONY: install tokens snippets build check-facts export export-1x export-ig export-posters export-stories export-slides export-pdf avatar serve clean lint format format-check open-grid all
+.PHONY: install tokens snippets build check-facts export export-1x export-ig export-posters export-stories export-slides export-pdf avatar serve studio clean lint format format-check open-grid all
 
 # Install tool dependencies (Playwright + Chromium + Style Dictionary)
 install:
@@ -54,6 +54,10 @@ avatar:
 # Start static server for in-browser preview + export
 serve:
 	cd tools && npm run serve
+
+# Start the brand studio (galleries, docs, status, guarded editing)
+studio:
+	cd tools && npm run studio
 
 # Remove generated exports (all regenerable)
 clean:

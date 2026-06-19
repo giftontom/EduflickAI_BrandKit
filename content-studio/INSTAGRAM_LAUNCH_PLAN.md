@@ -99,11 +99,11 @@ freshest thing a profile visitor sees.
 - Intake: **20 selective** seats · Duration: **12 weeks** · **3 deployed projects**
 - Venue: **UXP Innovation Hub, Trivandrum**
 - Stack: Cursor, Next.js, Claude/OpenAI, Pinecone, LangChain, n8n
-- Lead step: free technical masterclass (~90 min, live, builds a real AI app)
-- Web: **eduflickai.com** · Apply: **eduflickai.com/apply** · Masterclass:
-  **eduflickai.com/masterclass** · Email: **<info@eduflickai.com>** · Handle: **@eduflick.ai**
+- Funnel: **apply-direct** — Awareness → Apply → Seat booking → Close
+- Web: **eduflickai.com** · Apply: **eduflickai.com/apply** · Email: **<info@eduflickai.com>** · Handle: **@eduflick.ai**
+- IG CTA: **apply — link in bio** (no URL in post copy)
 
-**Fill before publishing:** exact masterclass date/time · cohort start date · live `[[seats left]]`
+**Fill before publishing:** cohort start date · live `[[seats left]]`
 count for the scarcity post.
 
 ---
@@ -252,9 +252,8 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
 > eyebrow on Post 10 — so a scroller understands what this is at a glance. The `eduflick AI`
 > wordmark is demoted to the footer/brand line, never the hero.
 >
-> **Funnel priority (this wave): apply-first.** The primary CTA across all three tiles is
-> `apply → eduflickai.com/apply`. The free masterclass is the *soft secondary* only (a muted
-> second line on the carousel CTA slide). Seat count is **FACTS-driven** — the coral pill reads
+> **Funnel priority (this wave): apply-direct.** The single CTA across all three tiles is
+> `apply — link in bio` (IG; no URL in post copy). Seat count is **FACTS-driven** — the coral pill reads
 > the live `Seats remaining` value from `FACTS.md` (currently `20 of 20`); update FACTS and
 > re-export as seats fill. Do **not** hand-type a number that isn't in FACTS.
 
@@ -267,11 +266,11 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
 - **On-image:** eyebrow `FULL-STACK AI ENGINEER · COHORT 01` *(names the program)* · ticket
   `12 weeks · uxp innovation hub, trivandrum` / `20 *selective* seats` · coral pill
   `20 of 20 seats open` *(live, from FACTS)* · sub `₹49,000 founding · ₹70,000 from cohort 2` ·
-  cta `apply → eduflickai.com/apply`
+  cta `apply →`
 - **Caption**
   - **Hook:** pioneer cohort 01: 20 *selective* seats. that's the whole room.
   - **Body:** the full-stack ai engineer program. 12 weeks, in person at uxp innovation hub, trivandrum. founding price ₹49,000 (₹70,000 from cohort 2). strictly capped at 20 seats — selective intake.
-  - **CTA:** apply now → eduflickai.com/apply
+  - **CTA:** apply — link in bio
   - **Hashtags:** #FullStackAI #AIEngineer #TrivandrumTech #TechJobsKerala
 
 #### Post 11 — TC · Day 4 · Carousel (major) · The Cohort / Consideration→Conversion
@@ -288,11 +287,11 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
   4. `03 · MONTH 2` / **rag + agents** / stack: `claude/openai · pinecone · langchain` → **shipped: rag chatbot** grounded in real docs.
   5. `04 · MONTH 3` / **agentic platform + hiring** / stack: `langchain · n8n` → **shipped: agentic platform**. week 12 — mock interviews + industry recruiter networking.
   6. `05 · THE ROOM` / **20 selective seats** / in person at uxp innovation hub, trivandrum. ₹49,000 founding (₹70,000 from cohort 2).
-  7. **CTA (apply-first)** — `APPLY · COHORT 01` / **claim your *seat*** / 20 selective seats. apply → eduflickai.com/apply · *(soft secondary)* not ready? free masterclass first → /masterclass
+  7. **CTA** — `APPLY · COHORT 01` / **claim your *seat*** / 20 selective seats. apply — link in bio.
 - **Caption**
   - **Hook:** 12 weeks. 3 *deployed* ai projects. one room of 20.
   - **Body:** the full-stack ai engineer program — in person at uxp innovation hub, trivandrum. real stack, real ships, week-12 mock interviews + industry recruiter networking. ₹49,000 founding price, 20 selective seats.
-  - **CTA:** apply now → eduflickai.com/apply
+  - **CTA:** apply — link in bio
   - **Hashtags:** #FullStackAI #AIEngineer #TrivandrumTech #BuildInPublic #CareerInAI
 
 #### Post 12 — TL · Day 4 · Single image · Program / Conversion (crescendo, newest tile)
@@ -301,11 +300,11 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
   (paper-fill) + the program name **`full-stack ai *engineer*`** as the hero headline + the apply CTA.
   The freshest thing every profile visitor sees, so the course name must read instantly.
 - **On-image:** eyebrow `PIONEER COHORT 01 · NOW OPEN` · hero `full-stack ai *engineer*` ·
-  sub `the 12-week program is live. apply now.` · cta `apply → eduflickai.com/apply`
+  sub `the 12-week program is live. apply now.` · cta `apply →`
 - **Caption**
   - **Hook:** it's live. the full-stack ai engineer program — pioneer cohort *01*.
-  - **Body:** 12 weeks offline at uxp innovation hub, trivandrum. 3 deployed projects, 20 selective seats, ₹49,000 founding price. apply now — or see it live first at a free masterclass.
-  - **CTA:** apply now → eduflickai.com/apply
+  - **Body:** 12 weeks offline at uxp innovation hub, trivandrum. 3 deployed projects, 20 selective seats, ₹49,000 founding price.
+  - **CTA:** apply — link in bio
   - **Hashtags:** #FullStackAI #AIEngineer #TrivandrumTech #TechJobsKerala #CareerInAI
 
 ---

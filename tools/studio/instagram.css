@@ -1,0 +1,115 @@
+/* instagram.css — styles for the instagram showcase view (.igs-*).
+   Loaded after studio.css; uses the same semantic vars (--fg1/--bg-card/--hairline…). */
+
+.igs-wrap { display: flex; justify-content: center; }
+
+/* ---- profile mock ---- */
+.igs-profile {
+  width: 100%; max-width: 620px;
+  background: var(--bg-card); border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg, 14px); overflow: hidden;
+}
+.igs-head { display: flex; align-items: center; gap: 14px; padding: 18px 18px 8px; }
+.igs-avatar {
+  width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #f5f2ea;
+  box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px var(--accent-soft), 0 0 0 5px var(--accent);
+}
+.igs-avatar-sm { width: 26px; height: 26px; box-shadow: 0 0 0 1px var(--hairline); }
+.igs-id { display: flex; flex-direction: column; gap: 4px; }
+.igs-handle { font-weight: 800; font-size: 17px; letter-spacing: -0.02em; color: var(--fg1); }
+.igs-stats { font-size: 11px; color: var(--fg3); }
+.igs-bio { display: flex; flex-direction: column; gap: 2px; padding: 4px 18px 16px; font-size: 13px; color: var(--fg2); }
+.igs-bio b { color: var(--fg1); }
+.igs-bio-link { color: var(--accent); text-decoration: none; }
+.igs-bio-link:hover { text-decoration: underline; }
+
+/* ---- profile grid ---- */
+.igs-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  background: var(--ink, #0a0b10); padding: 2px;
+}
+.igs-tile {
+  position: relative; display: block; width: 100%; padding: 0; border: 0;
+  background: var(--bg-raised, #14151c); cursor: pointer; overflow: hidden;
+  font-family: inherit; color: var(--fg1);
+}
+.igs-c34 .igs-tile { aspect-ratio: 3 / 4; }
+.igs-c45 .igs-tile { aspect-ratio: 4 / 5; }
+.igs-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.igs-tile:hover img { filter: brightness(1.07); }
+.igs-tile:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; z-index: 2; }
+.igs-tile.igs-scheduled { box-shadow: inset 0 0 0 2px var(--accent); }
+.igs-tile.igs-scheduled::after {
+  content: ''; position: absolute; inset: 0; border: 1px dashed var(--accent);
+  pointer-events: none; opacity: 0.7;
+}
+.igs-sched-tag {
+  position: absolute; bottom: 6px; left: 6px; z-index: 3; font-size: 8px;
+  letter-spacing: 0.14em; padding: 2px 7px; border-radius: 999px;
+  background: rgba(7, 8, 12, 0.72); color: var(--accent, #8b97ff); pointer-events: none;
+}
+.igs-car {
+  position: absolute; top: 8px; right: 8px; z-index: 3; width: 14px; height: 14px; pointer-events: none;
+}
+.igs-car::before, .igs-car::after {
+  content: ''; position: absolute; width: 9px; height: 9px;
+  border: 1.5px solid #f5f2ea; border-radius: 2px;
+}
+.igs-car::before { top: 0; right: 0; }
+.igs-car::after { bottom: 0; left: 0; background: rgba(7, 8, 12, 0.55); }
+.igs-cold {
+  position: absolute; inset: 0; display: flex; flex-direction: column; gap: 6px;
+  align-items: center; justify-content: center; padding: 10px; text-align: center;
+  color: var(--fg3); font-size: 11px; border: 1px dashed var(--hairline);
+}
+.igs-empty {
+  grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;
+  align-items: center; justify-content: center; min-height: 280px; text-align: center;
+  background: var(--bg-card);
+}
+
+/* ---- post preview modal ---- */
+#modal.igs-modal .modal-card { width: min(520px, 92vw); max-height: 92vh; overflow-y: auto; }
+.igs-post { display: flex; flex-direction: column; gap: 10px; }
+.igs-post-head { display: flex; align-items: center; gap: 8px; }
+.igs-handle-sm { font-weight: 700; font-size: 13px; color: var(--fg1); }
+.igs-media {
+  position: relative; width: 100%; aspect-ratio: 4 / 5;
+  background: var(--ink, #0a0b10); border-radius: var(--radius-md, 10px); overflow: hidden;
+}
+.igs-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.igs-media .igs-cold { border: 0; }
+.igs-nav {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+  width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--hairline-strong);
+  background: rgba(7, 8, 12, 0.65); color: #f5f2ea; font-size: 19px; line-height: 1; cursor: pointer;
+}
+.igs-prev { left: 8px; }
+.igs-next { right: 8px; }
+.igs-nav:hover { background: rgba(7, 8, 12, 0.9); }
+.igs-dots { display: flex; justify-content: center; gap: 5px; min-height: 6px; }
+.igs-dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--hairline-strong); }
+.igs-dots i.on { background: var(--accent); }
+.igs-caption { display: flex; flex-direction: column; gap: 6px; font-size: 13px; line-height: 1.5; color: var(--fg2); }
+.igs-caption p { margin: 0; }
+.igs-cap-hook { font-weight: 700; color: var(--fg1); }
+.igs-cap-tags { color: var(--accent); font-family: var(--font-mono, monospace); font-size: 11px; }
+.igs-post-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-top: 1px solid var(--hairline); padding-top: 10px; }
+
+/* ---- evergreen strip ---- */
+.igs-evergreen { margin-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+.igs-ever-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.igs-ever-card {
+  position: relative; display: flex; flex-direction: column; gap: 6px; padding: 8px;
+  background: var(--bg-card); border: 1px solid var(--hairline); border-radius: var(--radius-md, 10px);
+  cursor: pointer; font-family: inherit; color: var(--fg1); text-align: left;
+}
+.igs-ever-card:hover { border-color: var(--hairline-strong); }
+.igs-ever-card img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; display: block; }
+.igs-ever-card .igs-cold { position: static; aspect-ratio: 4 / 5; }
+.igs-ever-name { font-size: 10px; color: var(--fg3); }
+.igs-none { font-size: 11px; color: var(--fg3); }
+.igs-none a { color: var(--accent); }
+.igs-footnote { margin-top: 22px; font-size: 10px; color: var(--fg3); text-align: center; }

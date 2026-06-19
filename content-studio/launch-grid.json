@@ -1,0 +1,318 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-10T23:38:17.905Z",
+  "igRules": {
+    "hashtagMin": 3,
+    "hashtagMax": 5,
+    "pool": [
+      "#TrivandrumTech",
+      "#Trivandrum",
+      "#Kerala",
+      "#AIEngineer",
+      "#FullStackAI",
+      "#LearnAI",
+      "#RAG",
+      "#LLM",
+      "#NextJS",
+      "#BuildInPublic",
+      "#TechJobsKerala",
+      "#CareerInAI"
+    ],
+    "forbidden": [
+      "level up",
+      "leveling up",
+      "levelled up",
+      "unlock",
+      "boost",
+      "supercharge",
+      "gamechanger",
+      "claim reward",
+      "world-class",
+      "revolutionary",
+      "hurry",
+      "limited time",
+      "don't miss out"
+    ],
+    "linkInBio": true,
+    "note": "No website or apply URL is ever printed on Instagram — not on tiles, not in captions. The apply link lives only in the profile bio: conversion CTAs read 'apply → link in bio' / 'apply now → link in bio' (posts 10-12), awareness CTAs point at the handle '@eduflick.ai' (posts 1-9). The eduflickai.com domain is allowed on WhatsApp posters and brochures, never on Instagram. Per-caption rules: hook <=125 chars, exactly one CTA, 3-6 hashtags, exactly one *serif-accent* word, no emoji, no forbidden words; seat counts are FACTS-driven."
+  },
+  "posts": [
+    {
+      "id": "post-01-br",
+      "post": 1,
+      "pos": "BR",
+      "wave": 1,
+      "row": "ink",
+      "role": "a feed for thinking",
+      "carouselSlug": null,
+      "caption": {
+        "hook": "your screen already owns your attention. what if it actually *taught* you?",
+        "body": "eduflick ai turns any lecture, paper, or video into sequenced micro-flicks. ai sets the order — you decide what's next. a venture of tomatrix technologies.",
+        "cta": "something new is coming. follow to watch it build → @eduflick.ai",
+        "hashtags": [
+          "#LearnAI",
+          "#AIEngineer",
+          "#Kerala",
+          "#Trivandrum"
+        ]
+      },
+      "onImage": "Eyebrow EDUFLICK AI · headline 'a feed for *thinking*' · small eduflickAI wordmark · faint ghost mark in the darkest mural corner.",
+      "notes": "Posted first (grid fills newest-at-top-left, so upload order is reverse).",
+      "updatedAt": "2026-06-10T23:31:58.140Z"
+    },
+    {
+      "id": "post-02-bc",
+      "post": 2,
+      "pos": "BC",
+      "wave": 1,
+      "row": "ink",
+      "role": "one concept per flick",
+      "carouselSlug": null,
+      "caption": {
+        "hook": "one concept. one flick. that's the *whole* unit.",
+        "body": "we call it a flick. 1 flick = 1 core concept. stack enough of them and a feed becomes a syllabus — without the doom-scroll.",
+        "cta": "save this. your feed is about to get smarter → @eduflick.ai",
+        "hashtags": [
+          "#LearnAI",
+          "#AIEngineer",
+          "#Trivandrum",
+          "#Kerala"
+        ]
+      },
+      "onImage": "One flick card ('one flick · one concept / any source → a *flick* you finish') above headline 'one concept per *flick*'.",
+      "notes": "",
+      "updatedAt": "2026-06-10T22:40:27.896Z"
+    },
+    {
+      "id": "post-03-bl",
+      "post": 3,
+      "pos": "BL",
+      "wave": 1,
+      "row": "ink",
+      "role": "what is eduflick",
+      "carouselSlug": "bl",
+      "caption": {
+        "hook": "we kept everything addictive about your feed — and *deleted* the part that wastes you.",
+        "body": "eduflick ai cuts any source into bite-sized flicks. ai sets the sequence, you pick the path. learning that survives the scroll.",
+        "cta": "follow to see what we're building → @eduflick.ai",
+        "hashtags": [
+          "#LearnAI",
+          "#AIEngineer",
+          "#Trivandrum",
+          "#Kerala"
+        ]
+      },
+      "onImage": "Cover: stack of 3 sample flick cards (mitosis, π, vector) · headline 'what is *eduflick ai*?' · carousel marker (6).",
+      "notes": "Carousel, 6 slides (CARO.bl): cover → 01 the problem → 02 the idea → 03 the unit → 04 the payoff → CTA 'a feed for thinking, follow → @eduflick.ai'.",
+      "updatedAt": "2026-06-10T22:40:27.896Z"
+    },
+    {
+      "id": "post-04-mr",
+      "post": 4,
+      "pos": "MR",
+      "wave": 2,
+      "row": "indigo",
+      "role": "one shape, one notch",
+      "carouselSlug": "mr",
+      "caption": {
+        "hook": "same feed. same bite-sized hits. except you walk away *sharper*.",
+        "body": "eduflick ai sequences micro-lessons so curiosity compounds instead of evaporating. learning built for the way you already consume.",
+        "cta": "follow → @eduflick.ai",
+        "hashtags": [
+          "#LearnAI",
+          "#AIEngineer",
+          "#Kerala",
+          "#Trivandrum"
+        ]
+      },
+      "onImage": "Eyebrow 'the philosophy' · headline 'one shape, one *notch*.' · notch rule graphic · carousel marker (4).",
+      "notes": "Carousel, 4 slides (CARO.mr — the philosophy of the mark: shape → notch → CTA). DIVERGENCE: the plan doc still describes the older single-image 'the *doom-scroll* antidote' tile, so this verbatim caption predates the carousel rework — review caption before publishing.",
+      "updatedAt": "2026-06-10T22:40:27.896Z"
+    },
+    {
+      "id": "post-05-mc",
+      "post": 5,
+      "pos": "MC",
+      "wave": 2,
+      "row": "indigo",
+      "role": "the logo",
+      "carouselSlug": null,
+      "caption": {
+        "hook": "a square with a single *notch* bitten out. that's us.",
+        "body": "the notch is the play — the moment a lesson begins. one shape, one notch. our whole identity in a single geometry.",
+        "cta": "follow → @eduflick.ai",
+        "hashtags": [
+          "#LearnAI",
+          "#AIEngineer",
+          "#Trivandrum"
+        ]
+      },
+      "onImage": "Identity centerpiece: large paper-fill mark with indigo halo + concentric frames, 'eduflickAI' wordmark beneath (no headline).",
+      "notes": "Dead-center tile of the 3x3 brand mural. The doc's on-image headline 'one shape, one *notch*' moved to the MR carousel in the render; MC is now the pure logo tile. Caption still fits the notch theme.",
+      "updatedAt": "2026-06-10T22:40:27.896Z"
+    },
+    {
+      "id": "post-06-ml",
+      "post": 6,
+      "pos": "ML",
+      "wave": 2,
+      "row": "indigo",
+      "role": "how it works",
+      "carouselSlug": "ml",
+      "caption": {
+        "hook": "drop in a 2-hour lecture. get back micro-flicks you'll *actually* finish.",
+        "body": "ai cuts and sequences; you flick through in flow. one concept at a time, sparks for what sticks.",
+        "cta": "follow to try it first → @eduflick.ai",
+        "hashtags": [
+          "#LearnAI",
+          "#AIEngineer",
+          "#Kerala",
+          "#Trivandrum"
+        ]
+      },
+      "onImage": "Eyebrow 'how it works' · source→flick slicer strip · headline 'the *flick* is the unit' · carousel marker (6).",
+      "notes": "Carousel, 6 slides (CARO.ml). DIVERGENCE: render slides were reworked to 01 expert curation / 02 ai sequence / 03 practical tasks / 04 1:1 mentorship; the plan doc still lists the older cut/sequence/flow/sparks slides.",
+      "updatedAt": "2026-06-10T22:40:27.896Z"
+    },
+    {
+      "id": "post-07-ur",
+      "post": 7,
+      "pos": "UR",
+      "wave": 3,
+      "row": "paper",
+      "role": "backed by tomatrix",
+      "carouselSlug": "ur",
+      "caption": {
+        "hook": "what if the next hour of scrolling left you *better* at your job?",
+        "body": "that's the whole bet. eduflick ai swaps empty scroll for sequenced micro-lessons on things worth knowing.",
+        "cta": "follow → @eduflick.ai",
+        "hashtags": [
+          "#LearnAI",
+          "#AIEngineer",
+          "#CareerInAI",
+          "#Trivandrum"
+        ]
+      },
+      "onImage": "Eyebrow 'backed by' · co-brand lockup (eduflick mark + real Tomatrix logo, 1u divider) · sub 'eduflick ai is Tomatrix's flagship product.' · carousel marker (4).",
+      "notes": "Carousel, 4 slides (CARO.ur — Tomatrix Technologies Pvt Ltd parent story; logo never recoloured, legal name in proper case). DIVERGENCE: the plan doc still describes the older single-image 'your feed, but it makes you *smarter*' tile, so this verbatim caption predates the co-brand rework — review caption before publishing.",
+      "updatedAt": "2026-06-10T22:40:27.896Z"
+    },
+    {
+      "id": "post-08-uc",
+      "post": 8,
+      "pos": "UC",
+      "wave": 3,
+      "row": "paper",
+      "role": "why we built it",
+      "carouselSlug": "uc",
+      "caption": {
+        "hook": "we built eduflick because we were *tired* of courses nobody finishes.",
+        "body": "a venture of tomatrix technologies. learning rebuilt as an ai-sequenced feed — and an academy that trains engineers to build exactly this.",
+        "cta": "follow → something for builders drops next → @eduflick.ai",
+        "hashtags": [
+          "#LearnAI",
+          "#AIEngineer",
+          "#BuildInPublic",
+          "#Trivandrum"
+        ]
+      },
+      "onImage": "Eyebrow 'vision · mission' · videos-vs-flicks bar chart · headline 'why we *built* eduflick' · carousel marker (7).",
+      "notes": "Carousel, 7 slides in the render (CARO.uc: gap → shift → our mission → our vision → 'ai is the continuation' → CTA); the plan doc lists 6 slides (older version with 'and in person' slide).",
+      "updatedAt": "2026-06-10T22:40:27.896Z"
+    },
+    {
+      "id": "post-09-ul",
+      "post": 9,
+      "pos": "UL",
+      "wave": 3,
+      "row": "paper",
+      "role": "we ship it",
+      "carouselSlug": null,
+      "caption": {
+        "hook": "we don't just build ai products. we build the engineers who *ship* them.",
+        "body": "the same philosophy behind our app drives our academy: no wasted time, just applied learning. an offline, hands-on program in trivandrum that turns \"i know react\" into \"i ship ai.\"",
+        "cta": "follow — the reveal drops next → @eduflick.ai",
+        "hashtags": [
+          "#AIEngineer",
+          "#FullStackAI",
+          "#TrivandrumTech",
+          "#CareerInAI"
+        ]
+      },
+      "onImage": "Eyebrow 'next: the program' · ticket 'the academy / we *ship* it' · headline 'we don't just teach it'.",
+      "notes": "Bridge tile directly under the course row; leads the eye up into the launch.",
+      "updatedAt": "2026-06-10T22:40:27.896Z"
+    },
+    {
+      "id": "post-10-tr",
+      "post": 10,
+      "pos": "TR",
+      "wave": 4,
+      "row": "top",
+      "role": "20 seats / scarcity",
+      "carouselSlug": null,
+      "caption": {
+        "hook": "pioneer cohort 01: 20 *selective* seats. that's the whole room.",
+        "body": "the full-stack ai engineer program. 12 weeks, in person at uxp innovation hub, trivandrum. founding price ₹49,000 (₹70,000 from cohort 2). strictly capped at 20 seats — selective intake.",
+        "cta": "apply now → link in bio",
+        "hashtags": [
+          "#FullStackAI",
+          "#AIEngineer",
+          "#TrivandrumTech",
+          "#TechJobsKerala"
+        ]
+      },
+      "onImage": "Eyebrow 'full-stack ai engineer · cohort 01' · ticket '12 weeks · uxp innovation hub, trivandrum / 20 *selective* seats' · coral pill '20 of 20 seats open' · sub '₹49,000 founding · ₹70,000 from cohort 2' · cta 'apply → link in bio'.",
+      "notes": "Only tile where coral #FF6E5A is allowed. Seat pill is FACTS-driven (currently '20 of 20') — never hand-type a number not in FACTS.md.",
+      "updatedAt": "2026-06-10T23:38:17.905Z"
+    },
+    {
+      "id": "post-11-tc",
+      "post": 11,
+      "pos": "TC",
+      "wave": 4,
+      "row": "top",
+      "role": "the course",
+      "carouselSlug": "tc",
+      "caption": {
+        "hook": "12 weeks. 3 *deployed* ai projects. one room of 20.",
+        "body": "the full-stack ai engineer program — in person at uxp innovation hub, trivandrum. real stack, real ships, week-12 mock interviews + industry recruiter networking. ₹49,000 founding price, 20 selective seats.",
+        "cta": "apply now → link in bio",
+        "hashtags": [
+          "#FullStackAI",
+          "#AIEngineer",
+          "#TrivandrumTech",
+          "#BuildInPublic",
+          "#CareerInAI"
+        ]
+      },
+      "onImage": "Eyebrow 'pioneer cohort 01 · 12 weeks · trivandrum' · hero 'full-stack ai *engineer*' · sub 'ship ai products, not theory. a hands-on, in-person program.' · 3 product cards (saas dashboard, rag chatbot, agentic platform) · small wordmark · carousel marker (7).",
+      "notes": "Carousel, 7 slides (CARO.tc): cover → gap → months 1-3 each with tool-stack pills + 'shipped' tag → 20 selective seats → apply CTA slide 'claim your *seat* / apply → link in bio'. Course name is the hero; wordmark demoted to footer.",
+      "updatedAt": "2026-06-10T22:40:27.896Z"
+    },
+    {
+      "id": "post-12-tl",
+      "post": 12,
+      "pos": "TL",
+      "wave": 4,
+      "row": "top",
+      "role": "program / apply",
+      "carouselSlug": null,
+      "caption": {
+        "hook": "it's live. the full-stack ai engineer program — pioneer cohort *01*.",
+        "body": "12 weeks offline at uxp innovation hub, trivandrum. 3 deployed projects, 20 selective seats, ₹49,000 founding price. apply now.",
+        "cta": "apply now → link in bio",
+        "hashtags": [
+          "#FullStackAI",
+          "#AIEngineer",
+          "#TrivandrumTech",
+          "#TechJobsKerala",
+          "#CareerInAI"
+        ]
+      },
+      "onImage": "Eyebrow 'pioneer cohort 01 · now open' · glow mark · hero 'full-stack ai *engineer*' · sub 'the 12-week program is live. apply now.' · cta 'apply → link in bio'.",
+      "notes": "Launch crescendo; the newest tile (top-left) and the first thing every profile visitor sees — course name must read instantly.",
+      "updatedAt": "2026-06-10T22:40:27.896Z"
+    }
+  ]
+}

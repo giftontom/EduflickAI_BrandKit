@@ -91,7 +91,7 @@ With the editorial leading rule:
   .btn-ghost{background:transparent;color:{{paper}};border:1px solid rgba(245,242,234,0.16)}
   .btn-ghost:hover{transform:translateY(-2px);border-color:{{i-300}}}
 </style>
-<a class="btn btn-primary" href="#">register free →</a>
+<a class="btn btn-primary" href="#">apply →</a>
 <a class="btn btn-ghost" href="#">see the curriculum</a>
 ```
 

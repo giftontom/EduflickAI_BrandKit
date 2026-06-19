@@ -35,3 +35,6 @@ _ref/*.jpg
 # IDE (user-specific only — shared config is committed)
 .vscode/settings.local.json
 .idea/
+
+# Studio runtime state (persisted lastRun for /api/actions — never committed)
+tools/.studio-state.json

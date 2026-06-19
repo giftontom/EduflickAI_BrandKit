@@ -6,6 +6,69 @@ alongside it.
 
 ---
 
+## Unreleased — brand studio (branch `brand-studio`)
+
+### Added
+
+- **Launch-grid manager.** The 12-post Instagram launch plan is now a committed, machine-readable
+  store (`content-studio/launch-grid.json`: per-post captions, waves, roles, notes, IG rules) edited
+  in-studio through guarded endpoints (`GET /api/launch-grid`, `POST /api/launch-grid/post`,
+  `POST /api/launch-grid/slides`): every string is re-scanned server-side, `[[placeholders]]` are
+  hard-rejected (they brick the export pre-flight), and carousel slide copy is rewritten inside
+  `launch-grid.html`'s `caro-data` JSON island with injection guards. `#/instagram` simulates the
+  profile grid using only approved/scheduled/posted launch posts. `POST /api/export-zip` bundles
+  rendered PNGs + caption text files into one download (read-only, `exports/`-constrained), via a
+  new dependency-free `tools/lib/zip.mjs`.
+- **Server hardening (roadmap Phase 0).** Loopback asserted at boot and the port fails fast when
+  busy (`STUDIO_PORT` > `PORT` > 8090); every request must carry a loopback Host header and non-GET
+  `/api` calls with an Origin must be same-origin (DNS-rebinding + CSRF guards — no CORS headers are
+  ever set); atomic writes now fsync before rename; actions get a watchdog timeout
+  (`STUDIO_ACTION_TIMEOUT_MS`, default 15 min) and `lastRun` survives restarts in a gitignored
+  state file; new `GET /api/tokens/status` reports token/snippet artifact drift. Verified live:
+  all 11 routes render with zero console errors, security probes hold, facts guard green.
+- **Roadmap.** `tools/studio/ROADMAP.md` — the studio's phased development plan: what shipped,
+  what is pending before merge, and the future phases (operator loop, AI-assisted content,
+  multi-brand, distribution). Development is paused at a verified-working state; the roadmap is
+  the resume point.
+
+- **Design feedback that Claude Code can act on.** Annotate mode drops numbered pin comments on any
+  asset — instagram/poster/story PNGs and deck slides (normalized coordinates), brochure/deck pages
+  and the launch-grid mural (same-origin iframe element-selectors / per-page coordinates). Pins
+  persist to a committed `content-studio/design-comments.json` and are mirrored into a generated,
+  grouped-by-source-file `content-studio/DESIGN_FEEDBACK.md` digest: a separate Claude Code chat
+  opens that one file and implements each edit against the real source path + anchor + instruction.
+  Statuses (`open` / `resolved` / `won't fix`) flow from the pin popover or a new `#/feedback`
+  digest browser. New API: `GET/POST /api/comments`, `DELETE /api/comments/:id` (the 4th and only
+  other write surface — fixed paths, server-side text guard with override, atomic digest
+  regeneration), `gen:feedback` action. Comment text is exempt from the retired-string guard
+  (free-form review) via a `check-facts` `SKIP_FILES` exclusion scoped to exactly those two files.
+- **Launch grid, integrated.** `#/launch` renders the live launch-grid mural + carousels inside the
+  platform (no more external tab), with annotation and the export thumbnail grid below.
+- **Live document viewers.** Brochures (`#/brochures`) and the deck (`#/deck`) gain page/slide
+  navigation, fit/100/200 zoom, and annotation while preserving the collateral-kit edit host.
+- **Accessibility + UX.** Command palette (`Ctrl`/`Cmd-K`) over routes, docs, and actions; a focus
+  trap with opener-restore in the modal; an `aria-live` announcer; ARIA-labelled pin buttons; all
+  new motion gated behind `prefers-reduced-motion`. Manifest now carries per-asset comment counts.
+
+- **Brand studio** — a local platform to view and manage every asset in the kit:
+  `cd tools && npm run studio` → `http://localhost:8090/tools/studio/`. Galleries for
+  instagram/posters/stories/deck exports (lazy grids, lightbox, stale ribbons,
+  cold-state run-export buttons), live brochure/deck/brand-book/kit previews,
+  brand foundations (token swatches, type specimens, logo wall), a rendered
+  markdown viewer for all repo docs (FACTS.md pinned as source of truth, raw
+  toggle, search), launch-pipeline status tracking per asset
+  (draft/approved/scheduled/posted/retired → committed `content-studio/status.json`),
+  a whitelisted action runner with live SSE logs (exports, backdrops, guards,
+  token/snippet rebuilds), the host side of the collateral-kit edit panel
+  (persists tweaks to the EDITMODE block on disk, guard-checked), and a FACTS.md
+  editor with live guard validation, line diff, and explicit override.
+  Server: `tools/studio-server.mjs` (localhost-only, zero new dependencies, writes
+  limited to status.json, FACTS.md, and EDITMODE blocks). Static serving extracted
+  to `tools/lib/static.mjs` with a hardened path-traversal guard (also fixes
+  `serve.mjs`). Markdown rendering via vendored `marked` + `DOMPurify`
+  (`tools/studio/vendor/`, licenses recorded). `check-facts.mjs` now exports its
+  retired-string scanner for in-process validation; CLI behavior unchanged.
+
 ## Unreleased — full-project review fixes (branch `review-fixes`)
 
 ### Added
@@ -202,7 +265,7 @@ bump it here under **Added / Changed / Deprecated** when tokens or components ch
 - [ ] `POSTING_SCHEDULE.md` — day-by-day 6-week content calendar
 - [ ] CI/CD: lint Markdown, validate HTML, check broken links
 - [ ] `recipes/ai-image.md` + `recipes/composite-canvas.md` — wire AI imagery
-  into the assemble-don't-invent pipeline
+      into the assemble-don't-invent pipeline
 - [ ] WhatsApp sequence fleshed out to same rigor as Instagram prompts
 - [ ] Email nurture prompt template
 - [ ] Component library build step (assemble snippets into shareable HTML)

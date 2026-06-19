@@ -8,8 +8,8 @@ renders it.
 
 ```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
-- Today's date / masterclass date / cohort start: [[ ]]
-- Registration link / WhatsApp:                    [[ ]]
+- Today's date / cohort start: [[ ]]
+- Apply CTA:                   [[link in bio only — no URL on IG]]
 - Seats total / left:                              [[20 / __ ]]
 - Pioneer price / Retail:                          [[₹49,000 / ₹70,000]]
 - Booking structure:                               [[₹15,000 + ₹17,000 + ₹17,000]]
@@ -63,8 +63,8 @@ Hook / Body / CTA / Hashtags
 > **=== SLIDE 6 (CTA) ===**
 > Eyebrow: PIONEER COHORT 01
 > Headline: learn it *in-person* at uxp innovation hub
-> Support: capped at 20 seats. ₹49K founding price. free masterclass first.
-> CTA: register free → [[link]]
+> Support: capped at 20 seats. ₹49K founding price. apply-direct.
+> CTA: apply — link in bio.
 
 **✗ Avoid:** slides that are a bullet dump of 10 tools, Title Case headlines, "🔥 swipe to find
 out!", or a cover that buries the hook below a logo.

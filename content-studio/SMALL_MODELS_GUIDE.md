@@ -77,8 +77,7 @@ Copy this, fill it, paste it with the task:
 ```text
 FACTS (the ONLY source of live numbers — do not invent anything else):
 - Today's date:            [[e.g. 2026-06-02]]
-- Masterclass date/time:   [[e.g. Sat 21 Jun 2026, 5:00 PM IST]]   (or [[NOT SET]])
-- Masterclass format:      [[free, live, ~90 min, online/in-person]]
+- Apply link:              eduflickai.com/apply  (IG: link in bio — no URL in caption)
 - Registration link:       [[https://… ]]                          (or [[NEEDS LINK]])
 - Seats total / left:      [[20 total / 7 left]]
 - Pioneer price:           [[₹49,000]]   Retail (Cohort 2): [[₹70,000]]
@@ -145,7 +144,7 @@ Do **not** ask one prompt for "Mon–Sun of mixed content" — quality collapses
 3. **One QA pass per batch.** Score all 5 together; the off-brand one stands out next to siblings.
 4. **Render together** so visual rhythm matches (the Instagram Kit shows a 9-up launch grid).
 
-`repurpose-batch.md` automates "1 masterclass recording → 1 carousel + 3 reels + 2 captions + 1
+`repurpose-batch.md` automates "1 student demo recording → 1 carousel + 3 reels + 2 captions + 1
 LinkedIn post," which is the highest-leverage move in the 6-week sprint.
 
 ---

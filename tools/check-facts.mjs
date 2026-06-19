@@ -16,11 +16,23 @@
  * content-studio/FACTS.md.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, extname, relative, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join, extname, relative, dirname, sep } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const SELF = fileURLToPath(import.meta.url);
 const ROOT = join(dirname(SELF), '..'); // tools/ -> repo root
+
+// Free-form design feedback (the comment store + its generated digest) carries
+// arbitrary human instruction text — "cut the technopark line" is a legitimate
+// note ABOUT a retired string, not a usage of it. Never scan these for RETIRED;
+// the store is validated server-side at write time instead.
+const SKIP_FILES = new Set([
+  'content-studio/design-comments.json',
+  'content-studio/DESIGN_FEEDBACK.md',
+  // The brand config stores retired strings as data (the source-of-truth for the
+  // guard itself). Scanning it would produce false positives on the "bad" values.
+  'brand.config.json',
+]);
 
 // Never scanned: deps, generated output, legacy archive, the definitive Brand
 // Book (finalized facts override it — flag, don't enforce), and agent tooling.
@@ -29,7 +41,9 @@ const TEXT_EXT = new Set(['.md', '.html', '.css', '.mjs', '.js', '.json', '.txt'
 
 // Retired strings -> what to use instead. `bad` is a case-sensitive substring,
 // or a RegExp (tested per line; use `label` for the report).
-const RETIRED = [
+// This hardcoded array is the canonical fallback when brand.config.json is
+// absent, malformed, or lacks facts.retiredStrings.
+const RETIRED_FALLBACK = [
   { bad: 'Enterprise Solutions', use: 'UXP Innovation Hub, Trivandrum (venue finalized)' },
   { bad: /technopark/i, label: 'Technopark (any case)', use: 'Trivandrum / industry (de-emphasized everywhere)' },
   { bad: '#TechparkTrivandrum', use: '#TrivandrumTech (hashtag finalized)' },
@@ -44,7 +58,40 @@ const RETIRED = [
   { bad: 'careers.eduflick.ai', use: 'eduflickai.com (correct domain)' },
   { bad: 'eduflick.ai/engineer', use: 'eduflickai.com/apply (correct domain)' },
   { bad: 'eduflickai@gmail.com', use: 'info@eduflickai.com (official email)' },
+  // Masterclass retired 2026-06-11 — the funnel is apply-direct now. These guard
+  // the OFFERING strings only; the generic "masterclass / hook" DESIGN ARCHETYPE
+  // (a reusable poster/imagery pattern) is deliberately NOT matched (no bare word).
+  { bad: /free technical masterclass/i, label: 'Free Technical Masterclass (retired offering)', use: 'apply-direct funnel: "apply — link in bio" (IG) or eduflickai.com/apply (other surfaces)' },
+  { bad: /free masterclass/i, label: 'free masterclass (retired offering)', use: 'apply-direct funnel: "apply — link in bio" (IG) or eduflickai.com/apply (other surfaces)' },
+  { bad: 'eduflickai.com/masterclass', use: 'eduflickai.com/apply (masterclass URL retired 2026-06-11)' },
+  { bad: /register free/i, label: 'Register Free (retired masterclass CTA)', use: '"Apply →" or "apply — link in bio" on IG (masterclass CTA retired 2026-06-11)' },
 ];
+
+// Load RETIRED from brand.config.json if present and well-formed; fall back to
+// RETIRED_FALLBACK so the scan is always functional even without the config.
+function loadRetiredFromConfig() {
+  try {
+    const raw = readFileSync(join(ROOT, 'brand.config.json'), 'utf8');
+    const cfg = JSON.parse(raw);
+    const entries = cfg && cfg.facts && Array.isArray(cfg.facts.retiredStrings)
+      ? cfg.facts.retiredStrings
+      : null;
+    if (!entries) return null;
+    return entries.map((e) => {
+      if (e.regex) {
+        // Rebuild the RegExp from its serialized source + flags.
+        const rebuilt = new RegExp(e.bad, e.flags || '');
+        return Object.assign({ bad: rebuilt }, e.label ? { label: e.label } : {}, { use: e.use });
+      }
+      return Object.assign({ bad: e.bad }, e.label ? { label: e.label } : {}, { use: e.use });
+    });
+  } catch {
+    // Config absent, unreadable, or invalid JSON — use fallback silently.
+    return null;
+  }
+}
+
+export const RETIRED = loadRetiredFromConfig() || RETIRED_FALLBACK;
 
 // ---- Active-HTML integrity checks (brochures/, design-system/, index.html) ----
 // Markdown is exempt from these: placeholders are policy in .md sources, but a
@@ -65,25 +112,38 @@ function walk(dir, files = []) {
     const full = join(dir, name);
     if (statSync(full).isDirectory()) {
       if (!SKIP_DIRS.has(name)) walk(full, files);
-    } else if (TEXT_EXT.has(extname(name)) && full !== SELF) {
+    } else if (
+      TEXT_EXT.has(extname(name)) &&
+      full !== SELF &&
+      !SKIP_FILES.has(relative(ROOT, full).split(sep).join('/'))
+    ) {
       files.push(full);
     }
   }
   return files;
 }
 
+// Pure per-text scan — reused by the file walk below and by the studio server
+// (POST /api/facts/check) so there is a single pattern source, no drift.
+export function scanTextRetired(text) {
+  const hits = [];
+  text.split('\n').forEach((line, i) => {
+    for (const { bad, label, use } of RETIRED) {
+      const hit = bad instanceof RegExp ? bad.test(line) : line.includes(bad);
+      if (hit) {
+        hits.push({ line: i + 1, bad: label || String(bad), use });
+      }
+    }
+  });
+  return hits;
+}
+
 function scanRetired(files) {
   const hits = [];
   for (const file of files) {
-    const lines = readFileSync(file, 'utf8').split('\n');
-    lines.forEach((line, i) => {
-      for (const { bad, label, use } of RETIRED) {
-        const hit = bad instanceof RegExp ? bad.test(line) : line.includes(bad);
-        if (hit) {
-          hits.push({ file: relative(ROOT, file), line: i + 1, bad: label || bad, use });
-        }
-      }
-    });
+    for (const h of scanTextRetired(readFileSync(file, 'utf8'))) {
+      hits.push({ file: relative(ROOT, file), ...h });
+    }
   }
   return hits;
 }
@@ -143,6 +203,10 @@ async function checkLinks(urls) {
   return dead;
 }
 
+// ---- CLI (skipped when imported as a module, e.g. by the studio server) ----
+const IS_CLI = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (IS_CLI) {
 const files = walk(ROOT);
 let failed = false;
 
@@ -198,3 +262,4 @@ if (process.argv.includes('--links')) {
 }
 
 process.exit(failed ? 1 : 0);
+}

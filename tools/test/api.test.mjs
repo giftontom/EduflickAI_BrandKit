@@ -1,0 +1,801 @@
+// api.test.mjs — the studio server's automated test suite.
+//
+// node:test + node:assert + node:* builtins only (no npm packages). The harness
+// (helpers.mjs) spawns the real studio-server.mjs on port 8099.
+//
+// CONTENT SANDBOX: the server runs with STUDIO_CONTENT_DIR pointed at a throwaway
+// COPY of content-studio (makeContentSandbox), so every content-studio write
+// (status.json, FACTS.md, launch-grid.json, design-comments.json/DESIGN_FEEDBACK.md)
+// lands in the sandbox — never the user's LIVE files. Those assertions read the
+// SANDBOX paths. The NON-content-studio write surface (the launch-grid carousel
+// HTML under design-system/, the gitignored action-state file) is REAL-repo, so it
+// is still byte-snapshotted in before() and restored in after(); the editmode
+// fixtures are likewise real design-system files, written + removed here. The final
+// residue test asserts git status --porcelain shows nothing attributable to the
+// suite (now only the real-repo surface can leave residue at all).
+//
+// IMPORTANT (guard-bypass tests): never hard-code a retired marketing string in
+// test source — the facts CI scans the repo. We import the RETIRED list from
+// check-facts.mjs and build a violating string at RUNTIME.
+import { test, before, after } from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { execFileSync } from 'node:child_process';
+
+import { RETIRED, scanTextRetired } from '../check-facts.mjs';
+import zlib from 'node:zlib';
+
+import {
+  setPort,
+  getPort,
+  api,
+  apiJSON,
+  rawRequest,
+  rawGet,
+  traversalCorpus,
+  TRAVERSAL_LEAK_SENTINEL,
+  delay,
+  ROOT,
+  TOOLS,
+  startServer,
+  stopServer,
+  snapshot,
+  restoreSnapshot,
+  makeContentSandbox,
+  removeContentSandbox,
+  writeFixtures,
+  removeFixtures,
+  FIXTURE_ONE,
+  FIXTURE_TWO,
+  FIXTURE_TXT,
+  relFromRoot,
+} from './helpers.mjs';
+
+// This file owns port 8099 (comments.test.mjs uses 8097) so node:test can run
+// the files concurrently without a bind collision.
+setPort(8099);
+
+// A retired string built at runtime from the first literal-substring rule, so
+// no banned marketing literal ever appears in this source file. Asserted to
+// actually trip the scanner before any test relies on it.
+const firstLiteral = RETIRED.find((r) => typeof r.bad === 'string').bad;
+const RETIRED_TEXT = `studio test marker ${firstLiteral} end`;
+
+// The throwaway content sandbox + the content-studio files this suite asserts on,
+// INSIDE it. The real-repo (non-content-studio) surface is handled by snap.
+let sandbox;
+let snap;
+let STATUS_ABS;
+let FACTS_ABS;
+let LAUNCH_GRID_JSON_ABS;
+
+before(async () => {
+  // Sandbox content-studio so no content write touches the live tree; snapshot the
+  // REAL-repo write surface (launch-grid.html + action-state) so it restores clean.
+  sandbox = makeContentSandbox();
+  STATUS_ABS = path.join(sandbox, 'status.json');
+  FACTS_ABS = path.join(sandbox, 'FACTS.md');
+  LAUNCH_GRID_JSON_ABS = path.join(sandbox, 'launch-grid.json');
+  snap = snapshot();
+  writeFixtures();
+  assert.ok(scanTextRetired(RETIRED_TEXT).length > 0, 'runtime retired string must trip the scanner');
+  await startServer({ contentDir: sandbox });
+});
+
+after(async () => {
+  await stopServer();
+  removeFixtures();
+  restoreSnapshot(snap);
+  removeContentSandbox(sandbox);
+});
+
+// --------------------------------------------------------------- smoke / read
+
+test('GET /api/manifest returns the expected top-level shape', async () => {
+  const { status, body } = await apiJSON('/api/manifest');
+  assert.equal(status, 200);
+  for (const k of ['generatedAt', 'surfaces', 'documents', 'docs', 'brand', 'comments']) {
+    assert.ok(k in body, `manifest missing key: ${k}`);
+  }
+  assert.ok(Array.isArray(body.surfaces));
+});
+
+test('the API never sets Access-Control-Allow-Origin (no CORS)', async () => {
+  const res = await api('/api/manifest');
+  assert.equal(res.headers.get('access-control-allow-origin'), null);
+});
+
+test('STATIC responses never set Access-Control-Allow-Origin (CORS removed from lib/static.mjs)', async () => {
+  // The static handler previously emitted `Access-Control-Allow-Origin: *` on
+  // every 200; that header was removed. Mirror the /api/manifest assertion on
+  // BOTH static surfaces: (1) a repo-root file via the ROOT handler, and (2) a
+  // content-studio JSON file via the /content-studio reroute (its own handler
+  // instance). Neither may opt cross-origin reads in.
+  const indexRes = await fetch(`http://127.0.0.1:${getPort()}/tools/studio/index.html`);
+  assert.equal(indexRes.status, 200, 'the studio index.html is served 200');
+  await indexRes.text();
+  assert.equal(
+    indexRes.headers.get('access-control-allow-origin'),
+    null,
+    'GET /tools/studio/index.html must NOT carry a CORS header',
+  );
+
+  // launch-grid.json is a real file under CONTENT_DIR (the sandbox copy), served
+  // through the rerouted content-studio static handler.
+  const csRes = await fetch(`http://127.0.0.1:${getPort()}/content-studio/launch-grid.json`);
+  assert.equal(csRes.status, 200, 'a content-studio JSON file is served 200 via the reroute');
+  await csRes.text();
+  assert.equal(
+    csRes.headers.get('access-control-allow-origin'),
+    null,
+    'GET /content-studio/<json> must NOT carry a CORS header',
+  );
+});
+
+// ------------------------------------------------------------------ editmode
+
+test('editmode: 1 matching block rewrites and changes the bytes', async () => {
+  const before = fs.readFileSync(FIXTURE_ONE);
+  const { status, body } = await apiJSON('/api/editmode', {
+    json: { file: relFromRoot(FIXTURE_ONE), edits: { headline: 'after edit' } },
+  });
+  assert.equal(status, 200, JSON.stringify(body));
+  assert.equal(body.ok, true);
+  const after = fs.readFileSync(FIXTURE_ONE);
+  assert.notDeepEqual(after, before, 'bytes should change on a successful rewrite');
+  assert.ok(after.toString('utf8').includes('after edit'));
+});
+
+test('editmode: 0 blocks → 422, no write', async () => {
+  const noBlock = path.join(path.dirname(FIXTURE_ONE), '__studio_test_noblock__.html');
+  fs.writeFileSync(noBlock, '<!doctype html><html><body>no editmode here</body></html>\n');
+  try {
+    const before = fs.readFileSync(noBlock);
+    const { status, body } = await apiJSON('/api/editmode', {
+      json: { file: relFromRoot(noBlock), edits: { headline: 'x' } },
+    });
+    assert.equal(status, 422, JSON.stringify(body));
+    assert.deepEqual(fs.readFileSync(noBlock), before, 'no write when there is no block');
+  } finally {
+    fs.rmSync(noBlock, { force: true });
+  }
+});
+
+test('editmode: 2 matching blocks → 409 ambiguous, bytes UNCHANGED', async () => {
+  const before = fs.readFileSync(FIXTURE_TWO);
+  const { status, body } = await apiJSON('/api/editmode', {
+    json: { file: relFromRoot(FIXTURE_TWO), edits: { shared: 'c' } },
+  });
+  assert.equal(status, 409, JSON.stringify(body));
+  assert.match(body.error, /ambiguous/i);
+  assert.deepEqual(fs.readFileSync(FIXTURE_TWO), before, 'ambiguous edit must not write');
+});
+
+test('editmode: path outside design-system/ → 403', async () => {
+  const { status, body } = await apiJSON('/api/editmode', {
+    json: { file: 'content-studio/status.json', edits: { x: 1 } },
+  });
+  assert.equal(status, 403, JSON.stringify(body));
+});
+
+test('editmode: traversal escape out of design-system/ → 403', async () => {
+  const { status } = await apiJSON('/api/editmode', {
+    json: { file: 'design-system/../content-studio/FACTS.md', edits: { x: 1 } },
+  });
+  assert.equal(status, 403);
+});
+
+test('editmode: non-.html file → 400', async () => {
+  const { status, body } = await apiJSON('/api/editmode', {
+    json: { file: relFromRoot(FIXTURE_TXT), edits: { headline: 'x' } },
+  });
+  assert.equal(status, 400, JSON.stringify(body));
+  assert.match(body.error, /\.html/);
+});
+
+test('editmode: edit introducing a retired string → 422, bytes UNCHANGED', async () => {
+  const before = fs.readFileSync(FIXTURE_ONE);
+  const { status, body } = await apiJSON('/api/editmode', {
+    json: { file: relFromRoot(FIXTURE_ONE), edits: { headline: RETIRED_TEXT } },
+  });
+  assert.equal(status, 422, JSON.stringify(body));
+  assert.ok(Array.isArray(body.violations) && body.violations.length > 0);
+  assert.deepEqual(fs.readFileSync(FIXTURE_ONE), before, 'retired-string edit must not write');
+});
+
+test('editmode: edit introducing a double-square-bracket placeholder → 422, bytes UNCHANGED', async () => {
+  const before = fs.readFileSync(FIXTURE_ONE);
+  const placeholder = '[' + '[unfilled]' + ']';
+  const { status, body } = await apiJSON('/api/editmode', {
+    json: { file: relFromRoot(FIXTURE_ONE), edits: { headline: placeholder } },
+  });
+  assert.equal(status, 422, JSON.stringify(body));
+  assert.deepEqual(fs.readFileSync(FIXTURE_ONE), before, 'placeholder edit must not write');
+});
+
+test('editmode: missing/empty edits → 400', async () => {
+  const a = await apiJSON('/api/editmode', { json: { file: relFromRoot(FIXTURE_ONE), edits: {} } });
+  assert.equal(a.status, 400);
+  const b = await apiJSON('/api/editmode', { json: { file: relFromRoot(FIXTURE_ONE) } });
+  assert.equal(b.status, 400);
+});
+
+test('editmode: a reserved key in edits ("__proto__") → 400, bytes UNCHANGED', async () => {
+  // A `k in s.parsed` test would match __proto__/constructor/toString on EVERY
+  // object via the prototype chain, letting a bogus key be written. The handler
+  // must reject reserved keys outright (400) before any block match or write.
+  // JSON.parse sets __proto__ as an OWN property, so it really arrives as an edit
+  // key over the wire. The fixture file's bytes must not change.
+  const before = fs.readFileSync(FIXTURE_ONE);
+  // Build the body as a RAW JSON string: an object literal `{ __proto__: {...} }`
+  // sets the prototype (not an own key), and JSON.stringify would drop it — so the
+  // wire JSON must be written literally. JSON.parse server-side restores __proto__
+  // as an OWN property (Object.keys sees it), which is exactly the attack shape.
+  const rawBody =
+    '{"file":' + JSON.stringify(relFromRoot(FIXTURE_ONE)) + ',"edits":{"__proto__":{"polluted":true}}}';
+  const res = await api('/api/editmode', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: rawBody,
+  });
+  assert.equal(res.status, 400, 'a reserved edit key must be rejected 400');
+  const body = await res.json();
+  assert.match(body.error, /reserved key/i);
+  assert.deepEqual(fs.readFileSync(FIXTURE_ONE), before, 'reserved-key edit must not write a byte');
+});
+
+// ------------------------------------------------------------------ traversal
+// The static handler (lib/static.mjs) must never return a file outside ROOT.
+
+test('traversal corpus vs the static handler never escapes the repo root', async () => {
+  // Each request must NOT return 200 with an out-of-root file's bytes. We probe
+  // for the repo-parent's existence of a recognizable file via the .. ladders.
+  const repoName = path.basename(ROOT);
+  const cases = [
+    '/../../../../etc/hosts',
+    '/..%2f..%2f..%2f..%2fetc%2fhosts',
+    '/..%252f..%252fetc%252fhosts', // double-encoded
+    '/%2e%2e/%2e%2e/etc/passwd',
+    '/etc/passwd', // absolute-ish path joined under root
+    `/../${repoName}-evil/secret.txt`, // prefix-sibling: ROOT + '-evil'
+  ];
+  for (const url of cases) {
+    const res = await fetch(`http://127.0.0.1:${getPort()}${url}`);
+    assert.equal(res.status, 404, `expected 404 for ${url}, got ${res.status}`);
+    const text = await res.text();
+    assert.ok(
+      !/root:.*:0:0:/.test(text),
+      `traversal ${url} leaked /etc/passwd-like contents`,
+    );
+  }
+});
+
+test('traversal: NUL byte in path → 404', async () => {
+  // %00 decodes to a NUL byte, which the handler rejects before stat.
+  const res = await fetch(`http://127.0.0.1:${getPort()}/tools/studio/main.mjs%00.png`);
+  assert.equal(res.status, 404);
+});
+
+test('prefix-sibling directory cannot be read as if under root', async () => {
+  // Create a real sibling dir "<ROOT>-evil" with a file; the startsWith(ROOT)
+  // hole would have served it. lib/static.mjs requires ROOT + path.sep.
+  const evilDir = ROOT + '-evil__studiotest';
+  const evilFile = path.join(evilDir, 'secret.txt');
+  fs.mkdirSync(evilDir, { recursive: true });
+  fs.writeFileSync(evilFile, 'TOP SECRET SIBLING');
+  try {
+    const sib = path.basename(evilDir);
+    const res = await fetch(`http://127.0.0.1:${getPort()}/../${sib}/secret.txt`);
+    assert.equal(res.status, 404);
+    const text = await res.text();
+    assert.ok(!text.includes('TOP SECRET SIBLING'), 'prefix-sibling file must not be served');
+  } finally {
+    fs.rmSync(evilDir, { recursive: true, force: true });
+  }
+});
+
+test('traversal corpus vs the /content-studio reroute never escapes CONTENT_DIR', async () => {
+  // The reroute (contentStaticHandler rooted at CONTENT_DIR) must reject the SAME
+  // corpus as the ROOT handler, but under the /content-studio/ prefix. We try to
+  // exfiltrate /package.json (a repo-root file OUTSIDE CONTENT_DIR) plus /etc/passwd.
+  // Every case must be 4xx and never leak out-of-CONTENT_DIR bytes — this covers
+  // the encoded-slash reroute fix (a `%2f` fused to the prefix must not bypass the
+  // prefix check and reach the ROOT handler with the escape intact).
+  for (const url of traversalCorpus('/content-studio')) {
+    const { status, text } = await rawGet(url);
+    assert.ok(status >= 400 && status < 500, `expected 4xx for ${url}, got ${status}`);
+    assert.ok(
+      !text.includes(TRAVERSAL_LEAK_SENTINEL),
+      `reroute traversal ${url} leaked package.json (out-of-CONTENT_DIR) bytes`,
+    );
+    assert.ok(
+      !/root:.*:0:0:/.test(text),
+      `reroute traversal ${url} leaked /etc/passwd-like contents`,
+    );
+  }
+});
+
+// ------------------------------------------------------------- host / origin
+
+test('host/origin: POST with a cross-origin Origin → 403', async () => {
+  const { status, body } = await apiJSON('/api/status', {
+    method: 'POST',
+    headers: { Origin: 'http://evil.example', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: 'x', patch: {} }),
+  });
+  assert.equal(status, 403, JSON.stringify(body));
+  assert.match(body.error, /cross-origin/i);
+});
+
+test('host/origin: a non-loopback Host header → 403 (DNS-rebinding guard)', async () => {
+  // Node's fetch/undici forces the real authority into Host, so a forged Host
+  // can only be sent over a raw socket.
+  const res = await rawRequest({ method: 'GET', pathname: '/api/manifest', host: 'evil.example' });
+  assert.equal(res.status, 403, res.statusLine);
+  assert.match(res.body, /non-loopback Host/i);
+});
+
+test('host/origin: a loopback Host header passes the rebinding guard', async () => {
+  const res = await rawRequest({ method: 'GET', pathname: '/api/manifest', host: `127.0.0.1:${getPort()}` });
+  assert.equal(res.status, 200, res.statusLine);
+});
+
+test('host/origin: same-origin POST passes the guard (reaches the handler)', async () => {
+  // A same-origin POST with a deliberately bad body proves it got PAST the
+  // guard and into validation (400), not 403.
+  const { status } = await apiJSON('/api/status', { json: { id: '', patch: {} } });
+  assert.equal(status, 400);
+});
+
+test('host/origin: a POST with NO Origin header passes (non-browser client)', async () => {
+  // Browsers attach Origin cross-site; a curl/test client omits it. The guard
+  // only blocks when an Origin is present and cross-site.
+  const { status } = await apiJSON('/api/status', {
+    headers: { Origin: undefined },
+    json: { id: '', patch: {} },
+  });
+  assert.equal(status, 400, 'no-Origin POST should reach validation, not be 403');
+});
+
+// ----------------------------------------------------------- guard bypass
+
+test('facts/save: retired string without override → 422 + violations, FACTS.md unchanged', async () => {
+  const factsAbs = FACTS_ABS;
+  const before = fs.readFileSync(factsAbs);
+  const { status, body } = await apiJSON('/api/facts/save', { json: { content: RETIRED_TEXT } });
+  assert.equal(status, 422, JSON.stringify(body));
+  assert.ok(Array.isArray(body.violations) && body.violations.length > 0);
+  assert.deepEqual(fs.readFileSync(factsAbs), before, 'FACTS.md must not change on a 422');
+});
+
+test('facts/save: retired string WITH override → 200 written (sandbox FACTS.md, discarded in after)', async () => {
+  const factsAbs = FACTS_ABS;
+  const content = `${fs.readFileSync(factsAbs, 'utf8')}\n${RETIRED_TEXT}\n`;
+  const { status, body } = await apiJSON('/api/facts/save', { json: { content, override: true } });
+  assert.equal(status, 200, JSON.stringify(body));
+  assert.equal(body.ok, true);
+  assert.ok(fs.readFileSync(factsAbs, 'utf8').includes(firstLiteral), 'override write should land');
+});
+
+test('facts/check: a clean string reports no violations; retired reports some', async () => {
+  const clean = await apiJSON('/api/facts/check', { json: { content: 'a clean studio line' } });
+  assert.equal(clean.status, 200);
+  assert.equal(clean.body.violations.length, 0);
+  const dirty = await apiJSON('/api/facts/check', { json: { content: RETIRED_TEXT } });
+  assert.equal(dirty.status, 200);
+  assert.ok(dirty.body.violations.length > 0);
+});
+
+test('facts/save: non-string content → 400', async () => {
+  const { status } = await apiJSON('/api/facts/save', { json: { content: 123 } });
+  assert.equal(status, 400);
+});
+
+// ----------------------------------------------------------- launch-grid
+
+test('launch-grid: GET returns {plan, slides}', async () => {
+  const { status, body } = await apiJSON('/api/launch-grid');
+  assert.equal(status, 200);
+  assert.ok(body.plan && Array.isArray(body.plan.posts));
+  assert.ok(body.slides && typeof body.slides === 'object');
+});
+
+test('launch-grid/post: unknown id → 404', async () => {
+  const { status, body } = await apiJSON('/api/launch-grid/post', {
+    json: { id: 'post-nope-zz', patch: { notes: 'x' } },
+  });
+  assert.equal(status, 404, JSON.stringify(body));
+});
+
+test('launch-grid/post: unknown patch key → 400', async () => {
+  const { status, body } = await apiJSON('/api/launch-grid/post', {
+    json: { id: 'post-01-br', patch: { bogusKey: 'x' } },
+  });
+  assert.equal(status, 400, JSON.stringify(body));
+  assert.match(body.error, /unknown patch keys/i);
+});
+
+test('launch-grid/post: wave out of 1-4 → 400', async () => {
+  for (const wave of [0, 5, 1.5, -1]) {
+    const { status } = await apiJSON('/api/launch-grid/post', {
+      json: { id: 'post-01-br', patch: { wave } },
+    });
+    assert.equal(status, 400, `wave ${wave} should be 400`);
+  }
+});
+
+test('launch-grid/post: retired caption text without override → 422, plan unchanged', async () => {
+  const planAbs = LAUNCH_GRID_JSON_ABS;
+  const before = fs.readFileSync(planAbs);
+  const { status, body } = await apiJSON('/api/launch-grid/post', {
+    json: {
+      id: 'post-01-br',
+      patch: { caption: { hook: RETIRED_TEXT, body: 'b', cta: 'c', hashtags: ['#X'] } },
+    },
+  });
+  assert.equal(status, 422, JSON.stringify(body));
+  assert.ok(Array.isArray(body.violations) && body.violations.length > 0);
+  assert.deepEqual(fs.readFileSync(planAbs), before, 'plan must not change on a 422');
+});
+
+test('launch-grid/slides: a [[placeholder]] → 422 hard reject (no override path)', async () => {
+  const htmlAbs = path.join(ROOT, 'design-system', 'collateral', 'launch-grid.html');
+  const before = fs.readFileSync(htmlAbs);
+  const placeholder = '[' + '[seats]' + ']';
+  const { status, body } = await apiJSON('/api/launch-grid/slides', {
+    json: {
+      slug: 'bl',
+      slides: [{ eb: 'x', motif: 'y', hl: placeholder, sup: 'z' }],
+      override: true, // even with override, placeholders are a hard reject
+    },
+  });
+  assert.equal(status, 422, JSON.stringify(body));
+  assert.match(body.error, /placeholder/i);
+  assert.deepEqual(fs.readFileSync(htmlAbs), before, 'placeholder slides must not write');
+});
+
+test('launch-grid/slides: unknown slug → 404', async () => {
+  const { status } = await apiJSON('/api/launch-grid/slides', {
+    json: { slug: 'nope', slides: [{ eb: 'a', motif: 'b', hl: 'c', sup: 'd' }] },
+  });
+  assert.equal(status, 404);
+});
+
+test('launch-grid/slides: malformed slide shape → 400', async () => {
+  const { status } = await apiJSON('/api/launch-grid/slides', {
+    json: { slug: 'bl', slides: [{ eb: 'a' }] },
+  });
+  assert.equal(status, 400);
+});
+
+// ---------------------------------------------------------------- atomicity
+
+test('atomicity: no .tmp residue beside the write-path files after writes', async () => {
+  // Trigger a write (status patch) then assert no LEFTOVER tmp file in the sandbox
+  // content dir. writeAtomic is tmp→fsync→rename: a leaked tmp persists. This
+  // file's server owns its sandbox exclusively now, so a brief re-poll only ever
+  // catches THIS server mid-rename — a genuine leak never clears.
+  await apiJSON('/api/status', { json: { id: 'studio-test/atomic', patch: { status: 'draft' } } });
+  const statusDir = sandbox;
+  const scan = () => fs.readdirSync(statusDir).filter((n) => /^\.status\.json\.tmp-/.test(n));
+  let leftovers = scan();
+  for (let i = 0; i < 20 && leftovers.length; i++) {
+    await delay(50);
+    leftovers = scan();
+  }
+  assert.equal(leftovers.length, 0, `tmp residue: ${leftovers.join(', ')}`);
+});
+
+test('atomicity: garbage in status.json → GET /api/status sane empty; manifest still 200', async () => {
+  const statusAbs = STATUS_ABS;
+  const before = fs.readFileSync(statusAbs);
+  try {
+    fs.writeFileSync(statusAbs, '{ this is not valid json ');
+    const s = await apiJSON('/api/status');
+    assert.equal(s.status, 200);
+    assert.ok(s.body && typeof s.body.assets === 'object', 'corrupt store reads back as empty');
+    const m = await apiJSON('/api/manifest');
+    assert.equal(m.status, 200, 'manifest must survive a corrupt status.json');
+  } finally {
+    fs.writeFileSync(statusAbs, before);
+  }
+});
+
+// --------------------------------------------------------------- concurrency
+
+test('concurrency: 10 parallel status patches for 10 ids all land (serialized queue)', async () => {
+  const ids = Array.from({ length: 10 }, (_, i) => `studio-test/concurrent-${i}`);
+  await Promise.all(
+    ids.map((id) => apiJSON('/api/status', { json: { id, patch: { status: 'approved' } } })),
+  );
+  const { body } = await apiJSON('/api/status');
+  for (const id of ids) {
+    assert.equal(body.assets[id]?.status, 'approved', `lost write for ${id}`);
+  }
+});
+
+// -------------------------------------------------------------- action runner
+
+test('actions/run: unknown action → 400', async () => {
+  const { status, body } = await apiJSON('/api/actions/run', { json: { action: 'rm-rf-everything' } });
+  assert.equal(status, 400, JSON.stringify(body));
+});
+
+test('actions: run check:facts, second run is 409, lastRun reflects the exit', async () => {
+  const start = await apiJSON('/api/actions/run', { json: { action: 'check:facts' } });
+  assert.equal(start.status, 200, JSON.stringify(start.body));
+  const runId = start.body.id;
+  assert.ok(runId, 'run id returned');
+
+  // While in flight, a second run must be rejected single-flight (409).
+  const second = await apiJSON('/api/actions/run', { json: { action: 'check:facts' } });
+  assert.equal(second.status, 409, 'concurrent run should be busy');
+
+  // Consume the SSE stream until the exit event (server replays + lives).
+  const exitInfo = await readStreamUntilExit(runId);
+  assert.ok('code' in exitInfo, 'stream produced an exit event');
+
+  // After exit, GET /api/actions should report a lastRun for this action and
+  // no running job.
+  // Small settle so finishRun() has cleared `running`.
+  for (let i = 0; i < 40; i++) {
+    const a = await apiJSON('/api/actions');
+    if (!a.body.running && a.body.lastRun && a.body.lastRun.action === 'check:facts') {
+      assert.equal(a.body.lastRun.action, 'check:facts');
+      assert.ok('exitCode' in a.body.lastRun);
+      return;
+    }
+    await delay(100);
+  }
+  assert.fail('lastRun did not reflect check:facts after exit');
+});
+
+// Read an SSE stream to its exit event, returning the parsed {code, timedOut}.
+async function readStreamUntilExit(runId) {
+  const res = await api(`/api/actions/${runId}/stream`);
+  assert.equal(res.status, 200);
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buf = '';
+  const deadline = Date.now() + 60000;
+  for (;;) {
+    if (Date.now() > deadline) throw new Error('SSE stream did not emit exit within 60s');
+    const { value, done } = await reader.read();
+    if (value) buf += decoder.decode(value, { stream: true });
+    const idx = buf.indexOf('event: exit');
+    if (idx !== -1) {
+      const dataLine = buf.slice(idx).match(/data: (.+)/);
+      try {
+        await reader.cancel();
+      } catch {
+        /* already closing */
+      }
+      return dataLine ? JSON.parse(dataLine[1]) : {};
+    }
+    if (done) return {};
+  }
+}
+
+// ---------------------------------------------------------------- export-zip
+
+test('export-zip: missing files array → 400', async () => {
+  const { status } = await apiJSON('/api/export-zip', { json: {} });
+  assert.equal(status, 400);
+});
+
+test('export-zip: empty files array → 400', async () => {
+  const { status } = await apiJSON('/api/export-zip', { json: { files: [] } });
+  assert.equal(status, 400);
+});
+
+test('export-zip: a src escaping exports/ → 400', async () => {
+  const { status, body } = await apiJSON('/api/export-zip', {
+    json: { files: [{ src: '../content-studio/FACTS.md', name: 'leak.md' }] },
+  });
+  assert.equal(status, 400, JSON.stringify(body));
+  assert.match(body.error, /exports\//);
+});
+
+test('export-zip: an archive name with traversal → 400', async () => {
+  const { status } = await apiJSON('/api/export-zip', {
+    json: { files: [{ text: 'hi', name: '../escape.txt' }] },
+  });
+  assert.equal(status, 400);
+});
+
+test('export-zip: an inline text entry produces a structurally valid zip that round-trips', async () => {
+  const entryName = 'note.txt';
+  const entryText = 'hello from the studio export test';
+  const res = await api('/api/export-zip', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ files: [{ text: entryText, name: entryName }], zipName: 'studiotest' }),
+  });
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get('content-type'), 'application/zip');
+  const buf = Buffer.from(await res.arrayBuffer());
+
+  // (1) PK local-file-header magic.
+  assert.equal(buf.readUInt32LE(0), 0x04034b50, 'starts with a local file header signature');
+
+  // (2) The End-Of-Central-Directory record exists and reports exactly one entry.
+  const eocdSig = 0x06054b50;
+  let eocd = -1;
+  for (let i = buf.length - 22; i >= 0; i--) {
+    if (buf.readUInt32LE(i) === eocdSig) {
+      eocd = i;
+      break;
+    }
+  }
+  assert.ok(eocd !== -1, 'an End-Of-Central-Directory record is present');
+  assert.equal(buf.readUInt16LE(eocd + 10), 1, 'EOCD total-entries == 1');
+
+  // (3) Parse the local file header: STORE (method 0), filename bytes round-trip.
+  const method = buf.readUInt16LE(8);
+  assert.equal(method, 0, 'entry is STOREd (method 0), not deflated');
+  const compSize = buf.readUInt32LE(18);
+  const uncompSize = buf.readUInt32LE(22);
+  const nameLen = buf.readUInt16LE(26);
+  const extraLen = buf.readUInt16LE(28);
+  const nameBytes = buf.slice(30, 30 + nameLen).toString('utf8');
+  assert.equal(nameBytes, entryName, 'local-file-header name bytes match the requested entry name');
+
+  // (4) Content round-trips. STORE means the stored bytes ARE the content; if a
+  // future change switches to raw-deflate (method 8) inflate them instead.
+  const dataStart = 30 + nameLen + extraLen;
+  const stored = buf.slice(dataStart, dataStart + compSize);
+  const content =
+    method === 8 ? zlib.inflateRawSync(stored).toString('utf8') : stored.toString('utf8');
+  assert.equal(uncompSize, Buffer.byteLength(entryText), 'uncompressed-size field matches the text length');
+  assert.equal(content, entryText, 'the stored entry content round-trips byte-for-byte');
+});
+
+// ---------------------------------------------------------------- docs drift
+
+test('docs drift: action whitelist in server source == action list in README', async () => {
+  const serverSrc = fs.readFileSync(path.join(TOOLS, 'studio-server.mjs'), 'utf8');
+  // Parse the frozen ACTIONS object body.
+  const m = serverSrc.match(/const ACTIONS = Object\.freeze\(\{([\s\S]*?)\}\);/);
+  assert.ok(m, 'could not find the ACTIONS whitelist in server source');
+  const serverActions = new Set();
+  for (const km of m[1].matchAll(/(?:'([^']+)'|([A-Za-z][\w:]*))\s*:\s*true/g)) {
+    serverActions.add(km[1] || km[2]);
+  }
+  assert.ok(serverActions.size > 0, 'parsed no actions from server source');
+
+  const readme = fs.readFileSync(path.join(TOOLS, 'studio', 'README.md'), 'utf8');
+  // The README lists the whitelist inline as `export`, `export:ig`, … Pull the
+  // backtick-quoted tokens out of the "Action whitelist:" sentence.
+  const wlLine = readme.match(/Action whitelist:[\s\S]*?\n\n/);
+  assert.ok(wlLine, 'README has no "Action whitelist:" section');
+  const readmeActions = new Set(
+    [...wlLine[0].matchAll(/`([a-z][\w:]*)`/g)].map((x) => x[1]),
+  );
+
+  const onlyInServer = [...serverActions].filter((a) => !readmeActions.has(a));
+  const onlyInReadme = [...readmeActions].filter((a) => !serverActions.has(a));
+  assert.deepEqual(
+    { onlyInServer, onlyInReadme },
+    { onlyInServer: [], onlyInReadme: [] },
+    'action whitelist drifted between server source and README',
+  );
+});
+
+test('docs drift: README write-surface COUNT WORD matches the numbered write-path list', async () => {
+  // The README states "The studio can write exactly <word> paths" and then lists
+  // them as a numbered list. The spelled count word must equal the actual number
+  // of numbered items, so the prose can never drift from the enumerated surface.
+  // (G5: there are exactly SEVEN fixed guarded write paths.)
+  const readme = fs.readFileSync(path.join(TOOLS, 'studio', 'README.md'), 'utf8');
+
+  // Isolate the "## Write surface" section (up to the next H2).
+  const sectionMatch = readme.match(/## Write surface\n([\s\S]*?)(?:\n## |\n#[^#]|$)/);
+  assert.ok(sectionMatch, 'README has no "## Write surface" section');
+  const section = sectionMatch[1];
+
+  // The spelled count word in the lead sentence ("...write exactly seven paths...").
+  const wordMatch = section.match(/write exactly (\w+) paths/i);
+  assert.ok(wordMatch, 'the write-surface lead sentence must spell the path count');
+  const NUMBER_WORDS = {
+    one: 1, two: 2, three: 3, four: 4, five: 5, six: 6,
+    seven: 7, eight: 8, nine: 9, ten: 10,
+  };
+  const spelled = NUMBER_WORDS[wordMatch[1].toLowerCase()];
+  assert.ok(typeof spelled === 'number', `unrecognized count word: ${wordMatch[1]}`);
+
+  // Count the numbered list items ("1. ", "2. ", … at the start of a line).
+  const numbered = [...section.matchAll(/^(\d+)\.\s/gm)].map((x) => Number(x[1]));
+  // The list must be a clean 1..N run with no gaps/dupes.
+  const expected = Array.from({ length: numbered.length }, (_, i) => i + 1);
+  assert.deepEqual(numbered, expected, 'the numbered write-path list must be a clean 1..N run');
+  assert.equal(
+    spelled,
+    numbered.length,
+    `README write-surface count word "${wordMatch[1]}" (${spelled}) != ${numbered.length} numbered paths`,
+  );
+  // And cross-check against the invariant: exactly seven guarded write paths.
+  assert.equal(spelled, 7, 'the documented write-surface count must be seven (G5)');
+});
+
+test('docs drift: every live /api route is documented in the README API table', async () => {
+  const serverSrc = fs.readFileSync(path.join(TOOLS, 'studio-server.mjs'), 'utf8');
+
+  // Every literal `pathname === '/api/...'` route the server answers.
+  const liveRoutes = new Set(
+    [...serverSrc.matchAll(/pathname === '(\/api\/[^']*)'/g)].map((m) => m[1]),
+  );
+  assert.ok(liveRoutes.size > 0, 'parsed no /api routes from server source');
+
+  // The two parameterized regex routes, expressed in the README's `:id` template
+  // form. Detect them from the server's actual regexes so a renamed route is caught.
+  const paramRoutes = new Set();
+  if (/\/\^\\\/api\\\/actions\\\/\(\[0-9a-f-\]\+\)\\\/stream\$\//.test(serverSrc)) {
+    paramRoutes.add('/api/actions/:id/stream');
+  }
+  if (/\/\^\\\/api\\\/comments\\\/\(\[0-9a-f-\]\+\)\$\//.test(serverSrc)) {
+    paramRoutes.add('/api/comments/:id');
+  }
+  assert.equal(paramRoutes.size, 2, 'expected to detect both parameterized /api routes in server source');
+
+  const readme = fs.readFileSync(path.join(TOOLS, 'studio', 'README.md'), 'utf8');
+  // Every backtick-quoted /api token documented in the README.
+  const documented = new Set(
+    [...readme.matchAll(/`(\/api\/[^`]*)`/g)].map((m) => m[1]),
+  );
+
+  const wanted = [...liveRoutes, ...paramRoutes].sort();
+  const undocumented = wanted.filter((r) => !documented.has(r));
+  assert.deepEqual(
+    undocumented,
+    [],
+    `live /api routes missing from the README API table:\n${undocumented.join('\n')}`,
+  );
+});
+
+// ------------------------------------------------- residue / tree cleanliness
+//
+// Restore this file's REAL-repo write-surface snapshot + fixtures, then assert NO
+// residue attributable to THIS file remains. Because content-studio is sandboxed,
+// it can NEVER appear here — only the real-repo surface can. Three scopes:
+//   1) the unique fixture artifacts (__studio_test_*, the -evil sibling) — owned
+//      solely by this file, so they must never appear in porcelain.
+//   2) the one real-repo SHARED write-path file this file writes
+//      (design-system/collateral/launch-grid.html) — restored byte-for-byte here.
+//   3) the user's LIVE content-studio/ — must show NONE of this file's test ids,
+//      proving the sandbox kept every content write off the real tree.
+
+test('zz residue: this file leaves no git residue attributable to it', () => {
+  removeFixtures();
+  restoreSnapshot(snap);
+
+  const porcelain = execFileSync('git', ['status', '--porcelain'], { cwd: ROOT, encoding: 'utf8' });
+  const lines = porcelain.split('\n').filter(Boolean).map((l) => l.slice(3));
+
+  // (1) Unique-to-this-file artifacts must be gone entirely.
+  const fixtureResidue = lines.filter((p) =>
+    /design-system\/__studio_test_/.test(p) ||
+    /design-system\/__studio_test__\.txt/.test(p) ||
+    /-evil__studiotest/.test(p),
+  );
+  assert.deepEqual(fixtureResidue, [], `fixture residue left behind:\n${fixtureResidue.join('\n')}`);
+
+  // (2) The real-repo shared HTML file this file writes must be byte-restored.
+  const ownedShared = lines.filter((p) =>
+    /^design-system\/collateral\/launch-grid\.html$/.test(p),
+  );
+  for (const p of ownedShared) {
+    const after = fs.readFileSync(path.join(ROOT, p));
+    const want = snap[p];
+    if (want != null) {
+      assert.deepEqual(after, want, `restore failed for ${p} (bytes differ from snapshot)`);
+    }
+  }
+
+  // (3) The LIVE content-studio carries none of this file's test ids (it was
+  // sandboxed — the suite's status/FACTS/launch-grid writes never reached it).
+  const realStatus = fs.readFileSync(path.join(ROOT, 'content-studio', 'status.json'), 'utf8');
+  assert.ok(!realStatus.includes('studio-test/'), 'REAL status.json must not carry studio-test/ residue');
+  const realFacts = fs.readFileSync(path.join(ROOT, 'content-studio', 'FACTS.md'), 'utf8');
+  assert.ok(!realFacts.includes(firstLiteral), 'REAL FACTS.md must not carry the override-written retired marker');
+});

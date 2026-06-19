@@ -39,9 +39,10 @@
 
 | Fact | Value |
 | --- | --- |
-| Lead magnet | Free Technical Masterclass |
-| Masterclass format | Live, ~90 min, builds a real AI app on the spot |
-| Masterclass CTA | "Register Free →" |
+| Funnel | Apply-direct: Awareness → Apply → Seat booking → Close |
+| Primary CTA | apply (link in bio on IG; eduflickai.com/apply on all other surfaces) |
+
+<!-- owner note (speculative, NOT a confirmed fact): offline orientation under consideration -->
 
 ---
 
@@ -50,8 +51,8 @@
 | Fact | Value | Last set |
 | --- | --- | --- |
 | Today's date | 2026-06-10 | |
-| Masterclass date/time | [[NOT SET — e.g. Sat 21 Jun 2026, 5:00 PM IST]] | |
-| Masterclass registration link | eduflickai.com/masterclass | |
+| Masterclass date/time | [[RETIRED — masterclass retired 2026-06-11]] | |
+| Masterclass registration link | [[RETIRED — masterclass retired 2026-06-11]] | |
 | Cohort start date | [[NOT SET — e.g. 6 Jul 2026]] | |
 | Applications close | [[no close date]] | |
 | Seats remaining | [[20 of 20]] | |
@@ -65,7 +66,7 @@
 | --- | --- |
 | Website | eduflickai.com |
 | Apply | eduflickai.com/apply |
-| Masterclass registration | eduflickai.com/masterclass |
+| Masterclass registration | [[RETIRED — masterclass retired 2026-06-11]] |
 | Email | <info@eduflickai.com> |
 | Instagram handle | @eduflick.ai |
 | Instagram URL | <https://instagram.com/eduflick.ai> |

@@ -8,7 +8,7 @@ preview (S13). Render it, QA it, then recreate/export in `../collateral/instagra
 
 ```text
 FACTS (only source of live numbers — never typeset an invented value; missing → [[NEEDS: …]]):
-- Masterclass date / cohort start / seats left: [[ ]]
+- Cohort start / seats left:                     [[ ]]
 - Price / retail / venue:                        [[₹49,000 / ₹70,000 / Trivandrum]]
 - Handle / link in bio:                          [[ ]]
 
@@ -18,7 +18,7 @@ INPUTS:
 - Eyebrow (UPPERCASE mono): [[e.g. PIONEER COHORT 01]]
 - Headline (lowercase, mark ONE word with *asterisks* for the serif accent): [[e.g. ship *ai products*, not theory]]
 - Proof line (a number): [[e.g. 3 deployed projects · 12 weeks · 20 seats]]
-- CTA or scarcity flag: [[e.g. "register free →" | "7 of 20 seats left"]]
+- CTA or scarcity flag: [[e.g. "apply — link in bio" | "7 of 20 seats left"]]
 - Footer: wordmark + mark.
 
 BUILD RULES:
@@ -38,7 +38,7 @@ OUTPUT: one ```html ... ``` block.
 ## Worked example (what good looks like — abbreviated)
 >
 > Square, dark theme. Eyebrow `PIONEER COHORT 01`. Headline `ship *ai products*, not theory.`
-> Proof `3 deployed projects · 12 weeks · 20 seats`. CTA `register free →`. Footer wordmark + mark.
+> Proof `3 deployed projects · 12 weeks · 20 seats`. CTA `apply — link in bio`. Footer wordmark + mark.
 > → 1080² frame (S14) with faint dot grid (S11), 96px padding, content space-between: eyebrow top,
 > 76px lowercase headline with `ai products` in serif indigo mid, mono proof + pill CTA, wordmark
 > bottom-left and the paper-fill mark bottom-right. One hue. Wrapped in S13 at scale 0.5.

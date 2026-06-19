@@ -1,0 +1,139 @@
+{
+  "brand": {
+    "id": "eduflick",
+    "name": "Eduflick AI",
+    "operator": "Tomatrix Technologies Pvt Ltd"
+  },
+  "actions": [
+    "export",
+    "export:ig",
+    "export:posters",
+    "export:stories",
+    "export:slides",
+    "export:pdf",
+    "gen:backdrops:proc",
+    "check:facts",
+    "gen:feedback",
+    "tokens",
+    "snippets"
+  ],
+  "surfaces": [
+    {
+      "id": "instagram",
+      "label": "instagram posts",
+      "source": "design-system/collateral/instagram-posts.html",
+      "exportDir": "exports/instagram",
+      "script": "export:ig",
+      "aspect": "1080x1350",
+      "enumerate": "data-export"
+    },
+    {
+      "id": "posters",
+      "label": "posters",
+      "source": "design-system/collateral/posters.html",
+      "exportDir": "exports/posters",
+      "script": "export:posters",
+      "aspect": "1080x1350",
+      "enumerate": "data-export"
+    },
+    {
+      "id": "stories",
+      "label": "stories",
+      "source": "design-system/collateral/stories.html",
+      "exportDir": "exports/stories",
+      "script": "export:stories",
+      "aspect": "1080x1920",
+      "enumerate": "data-export"
+    },
+    {
+      "id": "deck",
+      "label": "program deck",
+      "source": "brochures/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html",
+      "exportDir": "exports/full-stack-ai-engineer",
+      "script": "export:slides",
+      "aspect": "1920x1080",
+      "enumerate": "stage"
+    },
+    {
+      "id": "launch-grid",
+      "label": "launch grid",
+      "source": "design-system/collateral/launch-grid.html",
+      "exportDir": "exports",
+      "script": "export",
+      "aspect": "1080x1350",
+      "enumerate": "dir"
+    }
+  ],
+  "paths": {
+    "deck": "brochures/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html",
+    "brandBook": "brand-book/Eduflick_Brand_Book_v4.html",
+    "tokensSource": "design-system/tokens/tokens.json"
+  },
+  "facts": {
+    "retiredStrings": [
+      {
+        "bad": "Enterprise Solutions",
+        "use": "UXP Innovation Hub, Trivandrum (venue finalized)"
+      },
+      {
+        "bad": "technopark",
+        "regex": true,
+        "flags": "i",
+        "label": "Technopark (any case)",
+        "use": "Trivandrum / industry (de-emphasized everywhere)"
+      },
+      {
+        "bad": "#TechparkTrivandrum",
+        "use": "#TrivandrumTech (hashtag finalized)"
+      },
+      {
+        "bad": "eduflick.com",
+        "use": "eduflickai.com (correct domain)"
+      },
+      {
+        "bad": "(https?:\\/\\/(?!instagram\\.com)|[A-Za-z0-9._%+-]+@)eduflick\\.ai",
+        "regex": true,
+        "flags": "",
+        "label": "eduflick.ai (as URL/email domain)",
+        "use": "eduflickai.com (correct domain; @eduflick.ai IG handle is fine)"
+      },
+      {
+        "bad": "careers.eduflick.ai",
+        "use": "eduflickai.com (correct domain)"
+      },
+      {
+        "bad": "eduflick.ai/engineer",
+        "use": "eduflickai.com/apply (correct domain)"
+      },
+      {
+        "bad": "eduflickai@gmail.com",
+        "use": "info@eduflickai.com (official email)"
+      },
+      {
+        "bad": "free technical masterclass",
+        "regex": true,
+        "flags": "i",
+        "label": "Free Technical Masterclass (retired offering)",
+        "use": "apply-direct funnel: \"apply — link in bio\" (IG) or eduflickai.com/apply (other surfaces)"
+      },
+      {
+        "bad": "free masterclass",
+        "regex": true,
+        "flags": "i",
+        "label": "free masterclass (retired offering)",
+        "use": "apply-direct funnel: \"apply — link in bio\" (IG) or eduflickai.com/apply (other surfaces)"
+      },
+      {
+        "bad": "eduflickai.com/masterclass",
+        "use": "eduflickai.com/apply (masterclass URL retired 2026-06-11)"
+      },
+      {
+        "bad": "register free",
+        "regex": true,
+        "flags": "i",
+        "label": "Register Free (retired masterclass CTA)",
+        "use": "\"Apply →\" or \"apply — link in bio\" on IG (masterclass CTA retired 2026-06-11)"
+      }
+    ]
+  }
+}

@@ -1,14 +1,15 @@
 {
-  "name": "eduflick-launch-grid-exporter",
+  "name": "eduflick-brand-studio",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Pixel-perfect PNG exporter for the Eduflick AI launch grid (posts + carousel slides).",
+  "description": "Eduflick AI Brand Studio — the local view/manage platform plus the pixel-perfect launch-grid exporter (posts + carousel slides).",
   "scripts": {
     "export": "node export-images.mjs",
     "export:pdf": "node export-pdf.mjs",
     "export:slides": "node export-slides.mjs",
     "export:posters": "node export-posters.mjs",
+    "export:wa": "node export-wa-poster.mjs",
     "export:stories": "node export-stories.mjs",
     "export:ig": "node export-ig.mjs",
     "gen:backdrops": "node gen-backdrops.mjs",
@@ -18,16 +19,20 @@
     "treat:stock": "node treat-stock.mjs",
     "export:avatar": "node export-pf-avatar.mjs",
     "serve": "node serve.mjs",
+    "studio": "node studio-server.mjs",
     "tokens": "node build-tokens.mjs",
     "snippets": "node build-snippets.mjs",
     "check:facts": "node check-facts.mjs",
+    "gen:feedback": "node gen-feedback.mjs",
+    "test": "node --test test/*.test.mjs",
+    "test:smoke": "node test/smoke.mjs",
     "postinstall": "playwright install chromium"
   },
   "engines": {
     "node": ">=18.0.0"
   },
   "devDependencies": {
-    "playwright": "^1.48.0",
-    "style-dictionary": "^4.4.0"
+    "playwright": "1.60.0",
+    "style-dictionary": "4.4.0"
   }
 }

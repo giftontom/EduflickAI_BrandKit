@@ -59,7 +59,7 @@ Both share one visual + verbal system. **If a task doesn't say which, assume the
 
 - **Display headlines & headings: all lowercase.** `learn anything in sixty seconds.`
 - **Mono labels / eyebrows / meta: UPPERCASE, wide tracking.** `LESSON 047 · 60 SECONDS`,
-  `PIONEER COHORT 01`, `FREE MASTERCLASS`.
+  `PIONEER COHORT 01`, `APPLY NOW`.
 - **Body copy: normal sentence case.**
 - **The wordmark: "eduflick AI"** — `eduflick` lowercase + a space + **uppercase `AI`** (the
   indigo accent; white on dark/indigo, indigo on paper). Prefer the spaced form in copy.
@@ -69,7 +69,7 @@ Both share one visual + verbal system. **If a task doesn't say which, assume the
 ## 4. THE PROGRAM — facts you may reference (verify live numbers in the FACTS block)
 
 > ⚠️ These are the *stable* facts from the brand/campaign material. **Anything time-sensitive
-> (exact dates, current seats-left, links, the masterclass time) MUST come from the FACTS block
+> (exact dates, current seats-left, links) MUST come from the FACTS block
 > you fill per task — never state a live number from memory.**
 
 - **Product:** Eduflick **Full-Stack AI Engineer Program**, **Pioneer Cohort 01**.
@@ -78,8 +78,8 @@ Both share one visual + verbal system. **If a task doesn't say which, assume the
   Payment structure: **₹15,000 seat-booking fee + ₹17,000 + ₹17,000**.
 - **Scarcity:** **capped at 20 seats** ("real cohort, real mentors").
 - **Duration / shape:** **12 weeks** (~3 months), in-person cohort.
-- **Top-of-funnel offer:** a **Free Technical Masterclass** (live, ~90 min, builds a real AI app
-  on the spot). *Everything points here first.*
+- **Funnel:** apply-direct — Awareness → Apply → Seat booking → Close. **Single primary CTA:**
+  apply (link in bio on Instagram; eduflickai.com/apply on all other surfaces).
 - **What you build (the differentiator):** **3 deployed projects** — a SaaS dashboard, a RAG
   chatbot, and an agentic platform.
 - **The real stack taught:** Cursor, Next.js, Claude / OpenAI, Pinecone, LangChain, n8n.
