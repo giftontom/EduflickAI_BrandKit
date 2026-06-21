@@ -135,8 +135,8 @@ async function handleSubmit(request, env, ctx, url) {
   const key = `app:${nowIso}:${crypto.randomUUID()}`;
   await env.APPLICATIONS.put(key, JSON.stringify(record), {
     expirationTtl: KV_TTL_SECONDS,
-    // Keep PII (email) OUT of metadata — metadata is returned by `kv key list`.
-    metadata: { role: record.role, ts: nowIso },
+    // Keep PII (email/name/phone) OUT of metadata — `kv key list` returns metadata.
+    metadata: { background: record.background, goal: record.goal, ts: nowIso },
   });
 
   // 5) Notify out-of-band — never blocks or fails the applicant's response.
