@@ -5,9 +5,12 @@
  * Default: no webhook configured -> no-op. KV is the system of record, and
  * applicants are routed into the cohort WhatsApp group from /apply/thanks.
  *
- * If NOTIFY_WEBHOOK_URL is set (Slack / Discord / Google Apps Script), a compact
- * summary is POSTed. The body carries both `text` (Slack) and `content` (Discord)
- * so either platform renders it.
+ * If NOTIFY_WEBHOOK_URL is set, the payload is sent so it works for ALL targets:
+ *   - Google Apps Script -> reads `record` and appends a Sheet row
+ *   - Slack              -> renders `text`
+ *   - Discord            -> renders `content`
+ * The shared-key auth for the Apps Script lives in the URL (…/exec?key=…), so the
+ * whole signed URL is the NOTIFY_WEBHOOK_URL secret.
  *
  * NOTE: posting directly INTO a WhatsApp group per submission is not supported by
  * official APIs/Cloudflare and would require an unofficial bridge — out of scope.
@@ -19,13 +22,13 @@ export async function notify(record, env) {
   const summary =
     `🎓 New Full-Stack AI Engineer application\n` +
     `${record.fullName} · ${record.email} · ${record.phone}\n` +
-    `background: ${record.role} · experience: ${record.yearsCoding || '—'} · goal: ${record.primaryGoal}`;
+    `background: ${record.background} · goal: ${record.goal}`;
 
   try {
     await fetch(hook, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ text: summary, content: summary }),
+      body: JSON.stringify({ type: 'application', record, text: summary, content: summary }),
     });
   } catch (err) {
     console.error('notify failed (non-fatal)', err);
