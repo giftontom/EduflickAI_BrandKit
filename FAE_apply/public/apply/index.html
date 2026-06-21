@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0B0822">
   <title>Apply — Full-Stack AI Engineer Program · Eduflick AI</title>
-  <meta name="description" content="Apply to the Full-Stack AI Engineer Program — 12 weeks, in person in Trivandrum. Ship 3 deployed AI products on the real production stack. Pioneer Cohort 01, 20 seats.">
+  <meta name="description" content="Apply to the Full-Stack AI Engineer Program — 12 weeks, in person in Trivandrum. Ship 3 deployed AI products. Pioneer Cohort 01, 20 seats. Takes 60 seconds.">
   <link rel="canonical" href="https://eduflickai.com/apply">
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://eduflickai.com/apply">
   <meta property="og:title" content="Apply — Full-Stack AI Engineer Program · Eduflick AI">
-  <meta property="og:description" content="12 weeks, in person in Trivandrum. Ship 3 deployed AI products. Pioneer Cohort 01 — 20 seats, selective.">
+  <meta property="og:description" content="12 weeks, in person in Trivandrum. Ship 3 deployed AI products. Pioneer Cohort 01 — 20 seats. Apply in 60 seconds.">
   <meta name="twitter:card" content="summary">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,257 +22,124 @@
   <link rel="apple-touch-icon" href="/assets/logo/favicon.svg">
 
   <link rel="stylesheet" href="/assets/css/colors_and_type.css">
-  <link rel="stylesheet" href="/assets/css/components.css">
   <link rel="stylesheet" href="/apply/apply.css">
 
   <!-- Spam protection: honeypot is always on. To ALSO enable Cloudflare Turnstile,
-       set this content to your real Turnstile site key (app.js then loads the widget)
+       set this content to your real Turnstile site key (app.js loads the widget)
        and set the TURNSTILE_SECRET_KEY worker secret. Empty = Turnstile off. -->
   <meta name="turnstile-sitekey" content="">
 </head>
 <body>
-  <header class="site-header">
+  <div class="ink-bg" aria-hidden="true"></div>
+
+  <header class="app-header">
     <a class="brand-lockup" href="https://eduflickai.com" aria-label="Eduflick AI home">
       <svg viewBox="0 0 180 180" aria-hidden="true"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
       <span class="wordmark">eduflick<i>AI</i></span>
     </a>
-    <span class="eyebrow header-tag">Pioneer Cohort 01</span>
+    <span class="step-count" id="step-count" aria-hidden="true">01&thinsp;/&thinsp;04</span>
   </header>
 
-  <main>
-    <!-- HERO -->
-    <section class="hero hero-indigo bg-dots">
-      <div class="hero-inner">
-        <span class="eyebrow">Pioneer Cohort 01 · Applications open</span>
-        <h1>apply to build <em>real ai products</em>.</h1>
-        <p class="lead">The Full-Stack AI Engineer Program is 12 weeks, in person in Trivandrum. You'll ship 3 deployed projects on the real production AI stack — and walk into week 12 with mock interviews and recruiter intros. 20 seats, selective.</p>
-        <div class="proof">
-          <span class="tag">12 weeks</span>
-          <span class="tag">in person · Trivandrum</span>
-          <span class="tag">3 deployed projects</span>
-          <span class="tag-scarcity">20 seats · capped</span>
-        </div>
+  <div class="progress" role="progressbar" aria-label="Application progress" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" id="progress">
+    <span class="progress-fill" id="progress-fill"></span>
+  </div>
+
+  <main class="wizard">
+    <form id="apply-form" method="POST" action="/apply/submit" novalidate>
+      <!-- honeypot: must stay empty (hidden from humans) -->
+      <div class="hp" aria-hidden="true">
+        <label>Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
       </div>
-    </section>
 
-    <!-- APPLY -->
-    <div class="apply-grid">
-      <!-- LEFT: the pitch -->
-      <aside class="pitch">
-        <h2>what you'll <em>actually</em> do</h2>
+      <!-- STEP 1 — contact -->
+      <section class="step" data-step="1" aria-label="Your details">
+        <p class="kicker">Pioneer Cohort 01 · apply in ~60s</p>
+        <h1 class="step-title">let's get you <em>in</em>.</h1>
+        <p class="step-sub">12 weeks, in person in Trivandrum. 3 deployed AI projects. 20 seats. Start with your details — we follow up on WhatsApp.</p>
 
-        <div class="feature">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#8B97FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-          <div>
-            <h3>ship 3 deployed projects</h3>
-            <p>a SaaS dashboard, a RAG chatbot, and an agentic platform — live, not slideware.</p>
-          </div>
+        <div class="field">
+          <label for="fullName">Full name</label>
+          <input id="fullName" name="fullName" type="text" autocomplete="name" maxlength="120" inputmode="text" placeholder="Your name" required aria-required="true" enterkeyhint="next">
+          <p class="field-error" id="err-fullName" role="alert"></p>
         </div>
-        <div class="feature">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#8B97FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-          <div>
-            <h3>the real production stack</h3>
-            <p>Cursor, Next.js, Claude / OpenAI, Pinecone, LangChain, n8n — the tools teams hire for.</p>
-          </div>
+        <div class="field">
+          <label for="phone">WhatsApp number</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel" maxlength="40" inputmode="tel" placeholder="+91…" required aria-required="true" enterkeyhint="next">
+          <p class="field-error" id="err-phone" role="alert"></p>
         </div>
-        <div class="feature">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#8B97FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-          <div>
-            <h3>in person, capped at 20</h3>
-            <p>real mentorship at UXP Innovation Hub, Trivandrum — not a video course you never finish.</p>
-          </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" maxlength="160" inputmode="email" placeholder="you@email.com" required aria-required="true" enterkeyhint="next">
+          <p class="field-error" id="err-email" role="alert"></p>
         </div>
-        <div class="feature">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#8B97FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-          <div>
-            <h3>week 12: get hired</h3>
-            <p>mock interviews and recruiter networking with industry HR to land the role.</p>
-          </div>
+      </section>
+
+      <!-- STEP 2 — background -->
+      <section class="step" data-step="2" aria-label="Your background">
+        <p class="kicker">about you</p>
+        <h1 class="step-title">what's your <em>background</em>?</h1>
+        <p class="step-sub">Pick the closest one — it helps us tailor the conversation.</p>
+        <div class="chips" role="radiogroup" aria-label="Your background" id="group-background">
+          <label class="chip"><input type="radio" name="background" value="btech-student"><span>B.Tech student</span></label>
+          <label class="chip"><input type="radio" name="background" value="btech-grad"><span>B.Tech graduate</span></label>
+          <label class="chip"><input type="radio" name="background" value="junior-dev"><span>Junior developer</span></label>
+          <label class="chip"><input type="radio" name="background" value="career-changer"><span>Career-changer</span></label>
+          <label class="chip"><input type="radio" name="background" value="other"><span>Something else</span></label>
         </div>
+        <p class="field-error" id="err-background" role="alert"></p>
+      </section>
 
-        <div class="price-row card">
-          <div class="spec-row"><span class="spec-key">Pioneer price</span><span>₹49,000</span></div>
-          <div class="spec-row"><span class="spec-key">Cohort 2+ price</span><span>₹70,000</span></div>
-          <div class="spec-row"><span class="spec-key">To reserve a seat</span><span>₹15,000 booking</span></div>
-          <p class="fine">Founding-batch pricing for the Pioneer Cohort. Payment: ₹15,000 booking + ₹17,000 + ₹17,000.</p>
+      <!-- STEP 3 — goal -->
+      <section class="step" data-step="3" aria-label="Your goal">
+        <p class="kicker">your why</p>
+        <h1 class="step-title">your main <em>goal</em>?</h1>
+        <p class="step-sub">No wrong answer — it just tells us what to focus on.</p>
+        <div class="chips" role="radiogroup" aria-label="Your main goal" id="group-goal">
+          <label class="chip"><input type="radio" name="goal" value="get-hired"><span>Get hired in an AI role</span></label>
+          <label class="chip"><input type="radio" name="goal" value="build-products"><span>Build my own AI products</span></label>
+          <label class="chip"><input type="radio" name="goal" value="level-up"><span>Level up at my current job</span></label>
+          <label class="chip"><input type="radio" name="goal" value="other"><span>Still figuring it out</span></label>
         </div>
+        <p class="field-error" id="err-goal" role="alert"></p>
+      </section>
 
-        <p class="who">Built for B.Tech graduates (2024–2026) and junior developers (0–2 yrs) in and around Trivandrum who can code but haven't shipped with LLMs yet.</p>
-      </aside>
+      <!-- STEP 4 — confirm -->
+      <section class="step" data-step="4" aria-label="Confirm and apply">
+        <p class="kicker">last step</p>
+        <h1 class="step-title">confirm &amp; <em>apply</em>.</h1>
+        <p class="step-sub">Quick check, then you're in the queue. We review every application personally.</p>
 
-      <!-- RIGHT: the application form -->
-      <div class="form-col">
-        <div class="card form-card">
-          <h2>your application</h2>
-          <p class="form-sub">Takes about 2 minutes. We review every application and follow up by email and WhatsApp.</p>
-          <noscript><p class="form-status">This form works best with JavaScript enabled. If it doesn't submit, email <a href="mailto:info@eduflickai.com">info@eduflickai.com</a> to apply.</p></noscript>
+        <dl class="review" id="review" aria-live="polite">
+          <div class="review-row"><dt>Name</dt><dd data-review="fullName">—</dd></div>
+          <div class="review-row"><dt>WhatsApp</dt><dd data-review="phone">—</dd></div>
+          <div class="review-row"><dt>Email</dt><dd data-review="email">—</dd></div>
+          <div class="review-row"><dt>Background</dt><dd data-review="background">—</dd></div>
+          <div class="review-row"><dt>Goal</dt><dd data-review="goal">—</dd></div>
+        </dl>
 
-          <form id="apply-form" method="POST" action="/apply/submit" novalidate>
-            <!-- honeypot: must stay empty (hidden from humans) -->
-            <div class="hp" aria-hidden="true">
-              <label>Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
-            </div>
+        <label class="consent" for="consent">
+          <input id="consent" name="consent" type="checkbox" value="yes" required aria-required="true">
+          <span>I can attend in person in Trivandrum and agree to Eduflick&nbsp;AI storing these details to process my application and contact me.</span>
+        </label>
+        <p class="field-error" id="err-consent" role="alert"></p>
+        <!-- Turnstile mounts here when a site key is configured (see &lt;head&gt;). -->
+        <div id="turnstile-slot"></div>
+      </section>
 
-            <div class="field">
-              <label for="fullName">Full name <span class="req" aria-hidden="true">*</span></label>
-              <input id="fullName" name="fullName" type="text" autocomplete="name" maxlength="120" required aria-required="true">
-              <p class="field-error" id="err-fullName" role="alert"></p>
-            </div>
-
-            <div class="field">
-              <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
-              <input id="email" name="email" type="email" autocomplete="email" maxlength="160" required aria-required="true">
-              <p class="field-error" id="err-email" role="alert"></p>
-            </div>
-
-            <div class="field">
-              <label for="phone">Phone / WhatsApp <span class="req" aria-hidden="true">*</span></label>
-              <input id="phone" name="phone" type="tel" autocomplete="tel" maxlength="40" required aria-required="true" placeholder="+91…">
-              <p class="field-error" id="err-phone" role="alert"></p>
-            </div>
-
-            <div class="field">
-              <label for="role">Current background <span class="req" aria-hidden="true">*</span></label>
-              <select id="role" name="role" required aria-required="true">
-                <option value="" disabled selected>Select…</option>
-                <option value="btech-student">B.Tech student</option>
-                <option value="btech-grad">B.Tech graduate (2024–2026)</option>
-                <option value="junior-dev">Junior developer (0–2 yrs)</option>
-                <option value="career-changer">Career-changer</option>
-                <option value="other">Other</option>
-              </select>
-              <p class="field-error" id="err-role" role="alert"></p>
-            </div>
-
-            <div class="field">
-              <label for="yearsCoding">Coding experience <span class="req" aria-hidden="true">*</span></label>
-              <select id="yearsCoding" name="yearsCoding" required aria-required="true">
-                <option value="" disabled selected>Select…</option>
-                <option value="0">Just starting (0)</option>
-                <option value="<1">Less than 1 year</option>
-                <option value="1-2">1–2 years</option>
-                <option value="3-5">3–5 years</option>
-                <option value="5+">5+ years</option>
-              </select>
-              <p class="field-error" id="err-yearsCoding" role="alert"></p>
-            </div>
-
-            <div class="field">
-              <label for="primaryLanguage">Primary language <span class="hint">(optional)</span></label>
-              <select id="primaryLanguage" name="primaryLanguage">
-                <option value="" selected>Select…</option>
-                <option value="python">Python</option>
-                <option value="js-ts">JavaScript / TypeScript</option>
-                <option value="java">Java</option>
-                <option value="go">Go</option>
-                <option value="c-cpp">C / C++</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <span class="field-label" id="label-builtWithLLMs">Built with LLMs before? <span class="hint">(optional)</span></span>
-              <div class="choice-group" role="radiogroup" aria-labelledby="label-builtWithLLMs">
-                <label class="choice"><input type="radio" name="builtWithLLMs" value="yes"> Yes</label>
-                <label class="choice"><input type="radio" name="builtWithLLMs" value="no"> No</label>
-              </div>
-            </div>
-
-            <div class="field">
-              <span class="field-label" id="label-stackFamiliarity">Comfortable with <span class="hint">(optional — pick any)</span></span>
-              <div class="choice-group" role="group" aria-labelledby="label-stackFamiliarity">
-                <label class="choice"><input type="checkbox" name="stackFamiliarity" value="react"> React</label>
-                <label class="choice"><input type="checkbox" name="stackFamiliarity" value="nextjs"> Next.js</label>
-                <label class="choice"><input type="checkbox" name="stackFamiliarity" value="backend"> Backend APIs</label>
-                <label class="choice"><input type="checkbox" name="stackFamiliarity" value="databases"> Databases</label>
-                <label class="choice"><input type="checkbox" name="stackFamiliarity" value="none"> None yet</label>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="primaryGoal">Primary goal <span class="req" aria-hidden="true">*</span></label>
-              <select id="primaryGoal" name="primaryGoal" required aria-required="true">
-                <option value="" disabled selected>Select…</option>
-                <option value="get-hired">Get hired in an AI role</option>
-                <option value="build-products">Build my own AI products</option>
-                <option value="level-up">Level up in my current job</option>
-                <option value="other">Other</option>
-              </select>
-              <p class="field-error" id="err-primaryGoal" role="alert"></p>
-            </div>
-
-            <div class="field">
-              <label for="linkedin">LinkedIn URL <span class="hint">(optional)</span></label>
-              <input id="linkedin" name="linkedin" type="url" maxlength="200" placeholder="https://linkedin.com/in/…">
-              <p class="field-error" id="err-linkedin" role="alert"></p>
-            </div>
-
-            <div class="field">
-              <label for="portfolio">Portfolio / GitHub <span class="hint">(optional)</span></label>
-              <input id="portfolio" name="portfolio" type="url" maxlength="200" placeholder="https://github.com/…">
-              <p class="field-error" id="err-portfolio" role="alert"></p>
-            </div>
-
-            <div class="field">
-              <label for="heardFrom">How did you hear about us? <span class="hint">(optional)</span></label>
-              <select id="heardFrom" name="heardFrom">
-                <option value="" selected>Select…</option>
-                <option value="instagram">Instagram</option>
-                <option value="linkedin">LinkedIn</option>
-                <option value="whatsapp">WhatsApp</option>
-                <option value="referral">Friend / referral</option>
-                <option value="search">Web search</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="toolsWanted">AI tools you want to learn <span class="hint">(optional)</span></label>
-              <textarea id="toolsWanted" name="toolsWanted" maxlength="600" rows="2"></textarea>
-            </div>
-
-            <div class="field">
-              <label for="notes">Anything else? <span class="hint">(optional)</span></label>
-              <textarea id="notes" name="notes" maxlength="1200" rows="3"></textarea>
-            </div>
-
-            <div class="consent">
-              <input id="availabilityConfirm" name="availabilityConfirm" type="checkbox" value="yes" required aria-required="true">
-              <label for="availabilityConfirm">I can attend all 12 weeks in person at UXP Innovation Hub, Trivandrum. <span class="req" aria-hidden="true">*</span></label>
-            </div>
-            <p class="field-error" id="err-availabilityConfirm" role="alert"></p>
-
-            <div class="consent">
-              <input id="consent" name="consent" type="checkbox" value="yes" required aria-required="true">
-              <label for="consent">I agree to Eduflick AI storing these details to process my application and contact me about the program. <span class="req" aria-hidden="true">*</span></label>
-            </div>
-            <p class="field-error" id="err-consent" role="alert"></p>
-
-            <!-- Turnstile mounts here when a site key is configured (see <head>). -->
-            <div id="turnstile-slot"></div>
-
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary">submit application →</button>
-            </div>
-            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
-            <p class="fine">We store your details for up to 180 days to process your application. Questions or removal: <a href="mailto:info@eduflickai.com">info@eduflickai.com</a>.</p>
-          </form>
-        </div>
-      </div>
-    </div>
+      <noscript>
+        <p class="form-status">This form works best with JavaScript enabled. If it doesn't submit, email <a href="mailto:info@eduflickai.com">info@eduflickai.com</a> to apply.</p>
+      </noscript>
+    </form>
   </main>
 
-  <footer class="site-footer">
-    <div class="brand-footer">
-      <svg viewBox="0 0 180 180" width="28" height="28" aria-hidden="true"><path class="mk-path" d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z"/></svg>
-      <span class="wordmark">eduflick<i>AI</i></span>
+  <footer class="actionbar">
+    <div class="actionbar-inner">
+      <button type="button" class="btn btn-ghost" id="btn-back">← back</button>
+      <button type="button" class="btn btn-primary" id="btn-next">continue →</button>
+      <button type="submit" form="apply-form" class="btn btn-primary" id="btn-submit">submit application →</button>
     </div>
-    <div class="links">
-      <a href="https://eduflickai.com">eduflickai.com</a>
-      <a href="mailto:info@eduflickai.com">info@eduflickai.com</a>
-      <a href="https://instagram.com/eduflick.ai" rel="noopener">@eduflick.ai</a>
-    </div>
-    <p class="micro">Full-Stack AI Engineer Program · a Tomatrix Technologies venture</p>
+    <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+    <p class="trust">🔒 We never share your details · <a href="https://instagram.com/eduflick.ai" rel="noopener">@eduflick.ai</a></p>
   </footer>
 
   <script src="/apply/app.js" defer></script>
