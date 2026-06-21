@@ -25,24 +25,25 @@
   //   wrangler kv namespace create APPLICATIONS
   // then paste the printed id below.
   "kv_namespaces": [
-    { "binding": "APPLICATIONS", "id": "REPLACE_WITH_KV_NAMESPACE_ID" }
+    { "binding": "APPLICATIONS", "id": "e50b343a745d4081940f36eeefb71cc0" }
   ],
 
-  // Path-based routes (most-specific wins). Both already exist on the account and
-  // point at script "apply"; restated here so a fresh deploy keeps them.
+  // Path-based routes — EXACTLY the two that already exist for script "apply".
+  // The deploy token lacks Workers Routes Edit, so wrangler can't change routes;
+  // keeping them identical means no route change is attempted and the existing
+  // "eduflickai.com/*" route (which catches every path) serves the new code.
   "routes": [
-    { "pattern": "eduflickai.com/apply*", "zone_name": "eduflickai.com" },
+    { "pattern": "eduflickai.com/apply", "zone_name": "eduflickai.com" },
     { "pattern": "eduflickai.com/*", "zone_name": "eduflickai.com" }
   ],
 
   "observability": { "enabled": true },
 
-  // Production-only flag: if the Turnstile secret is somehow missing at runtime,
-  // the Worker FAILS CLOSED instead of silently disabling spam protection.
-  // Named environments (e.g. staging) do NOT inherit this, so staging can run
-  // without a secret. `wrangler dev` uses these vars too — keep a (test) secret
-  // in .dev.vars for local runs.
-  "vars": { "REQUIRE_TURNSTILE": "true" },
+  // Spam protection is HONEYPOT-ONLY for now (no Turnstile widget yet). To enable
+  // Turnstile later: set meta[name=turnstile-sitekey] in public/apply/index.html,
+  // run `wrangler secret put TURNSTILE_SECRET_KEY`, and add this back so a missing
+  // secret fails closed instead of silently disabling protection:
+  //   "vars": { "REQUIRE_TURNSTILE": "true" },
 
   // Preview target: `wrangler deploy --env staging` publishes to
   // apply-staging.<your-subdomain>.workers.dev with NO production routes, so you
@@ -52,7 +53,7 @@
       "name": "apply-staging",
       "workers_dev": true,
       "kv_namespaces": [
-        { "binding": "APPLICATIONS", "id": "REPLACE_WITH_STAGING_KV_NAMESPACE_ID" }
+        { "binding": "APPLICATIONS", "id": "c57e85b397634c6dbac77664c721e136" }
       ]
     }
   }

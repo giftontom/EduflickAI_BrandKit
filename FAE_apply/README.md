@@ -65,17 +65,20 @@ export CLOUDFLARE_ACCOUNT_ID=f98755464d55e77891153daabbd9f850
 npx wrangler kv namespace create APPLICATIONS              # -> kv_namespaces[0].id
 npx wrangler kv namespace create APPLICATIONS --env staging   # -> env.staging.kv_namespaces[0].id
 
-# Turnstile widget for eduflickai.com -> SITE_KEY + SECRET_KEY
-#   SITE_KEY   goes in public/apply/index.html (data-sitekey)
-#   SECRET_KEY is a Worker secret:
-npx wrangler secret put TURNSTILE_SECRET_KEY
 # optional notifier:
 npx wrangler secret put NOTIFY_WEBHOOK_URL
 ```
 
-> **Turnstile test keys** (always pass) are baked in for local/staging:
-> site `1x00000000000000000000AA`, secret `1x0000000000000000000000000000000AA`.
-> Swap in the real keys before production.
+### Spam protection
+
+Production currently runs **honeypot-only** (the hidden `company` field + server
+validation + a 64 KB body cap). To ALSO enable **Cloudflare Turnstile**:
+
+1. Create a Turnstile widget for `eduflickai.com` in the dashboard → SITE_KEY + SECRET_KEY.
+2. Put the SITE_KEY in `public/apply/index.html` → `<meta name="turnstile-sitekey" content="…">` (app.js then loads the widget).
+3. `npx wrangler secret put TURNSTILE_SECRET_KEY` (use the real secret; test secret `1x0000000000000000000000000000000AA` always passes for local/staging).
+4. In `wrangler.jsonc`, re-add `"vars": { "REQUIRE_TURNSTILE": "true" }` so a missing secret fails closed.
+5. Redeploy.
 
 ## Local dev
 

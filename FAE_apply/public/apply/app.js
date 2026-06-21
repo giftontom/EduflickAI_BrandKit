@@ -7,6 +7,25 @@
 (function () {
   'use strict';
 
+  // Optionally mount Cloudflare Turnstile — only if a site key is configured in
+  // <head>. Empty = honeypot-only (no widget loaded).
+  (function bootstrapTurnstile() {
+    var meta = document.querySelector('meta[name="turnstile-sitekey"]');
+    var key = meta && meta.getAttribute('content');
+    if (!key) return;
+    var slot = document.getElementById('turnstile-slot');
+    if (slot) {
+      slot.className = 'cf-turnstile';
+      slot.setAttribute('data-sitekey', key);
+      slot.setAttribute('data-theme', 'dark');
+    }
+    var s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    s.async = true;
+    s.defer = true;
+    document.head.appendChild(s);
+  })();
+
   var form = document.getElementById('apply-form');
   if (!form) return;
   var statusEl = document.getElementById('form-status');

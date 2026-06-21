@@ -24,8 +24,10 @@
   <link rel="stylesheet" href="/assets/css/components.css">
   <link rel="stylesheet" href="/apply/apply.css">
 
-  <!-- Cloudflare Turnstile (spam protection). -->
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <!-- Spam protection: honeypot is always on. To ALSO enable Cloudflare Turnstile,
+       set this content to your real Turnstile site key (app.js then loads the widget)
+       and set the TURNSTILE_SECRET_KEY worker secret. Empty = Turnstile off. -->
+  <meta name="turnstile-sitekey" content="">
 </head>
 <body>
   <header class="site-header">
@@ -102,7 +104,7 @@
         <div class="card form-card">
           <h2>your application</h2>
           <p class="form-sub">Takes about 2 minutes. We review every application and follow up by email and WhatsApp.</p>
-          <noscript><p class="form-status">This form needs JavaScript for spam verification. Please enable it, or email <a href="mailto:info@eduflickai.com">info@eduflickai.com</a> to apply.</p></noscript>
+          <noscript><p class="form-status">This form works best with JavaScript enabled. If it doesn't submit, email <a href="mailto:info@eduflickai.com">info@eduflickai.com</a> to apply.</p></noscript>
 
           <form id="apply-form" method="POST" action="/apply/submit" novalidate>
             <!-- honeypot: must stay empty (hidden from humans) -->
@@ -245,9 +247,8 @@
             </div>
             <p class="field-error" id="err-consent" role="alert"></p>
 
-            <!-- Turnstile widget. Replace the TEST site key below with the real
-                 key for eduflickai.com before production (1x… = always-passes test key). -->
-            <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark"></div>
+            <!-- Turnstile mounts here when a site key is configured (see <head>). -->
+            <div id="turnstile-slot"></div>
 
             <div class="form-actions">
               <button type="submit" class="btn btn-primary">submit application →</button>
