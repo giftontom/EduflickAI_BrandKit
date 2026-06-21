@@ -153,7 +153,12 @@ function activeHtml(files) {
   return files.filter((f) => {
     if (extname(f) !== '.html') return false;
     const rel = relative(ROOT, f);
-    return rel === 'index.html' || rel.startsWith('brochures/') || rel.startsWith('design-system/');
+    return (
+      rel === 'index.html' ||
+      rel.startsWith('brochures/') ||
+      rel.startsWith('design-system/') ||
+      rel.startsWith('FAE_apply/public/')
+    );
   });
 }
 

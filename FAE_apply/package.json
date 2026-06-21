@@ -1,0 +1,22 @@
+{
+  "name": "fae-apply",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Full-Stack AI Engineer program application site — eduflickai.com/apply (Cloudflare Worker + Static Assets + KV).",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "sync:brand": "node scripts/sync-brand.mjs",
+    "dev": "npm run sync:brand && wrangler dev",
+    "deploy:dry": "npm run sync:brand && wrangler deploy --dry-run",
+    "deploy:staging": "npm run sync:brand && wrangler deploy --env staging",
+    "deploy": "npm run sync:brand && wrangler deploy",
+    "tail": "wrangler tail apply",
+    "kv:list": "wrangler kv key list --binding=APPLICATIONS"
+  },
+  "devDependencies": {
+    "wrangler": "^4.20.0"
+  }
+}
