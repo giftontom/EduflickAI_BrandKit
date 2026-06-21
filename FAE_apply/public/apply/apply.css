@@ -1,0 +1,249 @@
+/* ============================================================
+   FAE application site — page layout + form styling.
+   Foundations (tokens, type, components) come from the linked
+   design-system CSS. This file only adds page + form specifics.
+   ============================================================ */
+
+:root { color-scheme: dark; }
+html { scroll-behavior: smooth; }
+body { min-height: 100vh; background: var(--ink); }
+a { color: var(--accent-soft); }
+
+/* ---------------- header ---------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: rgba(10, 11, 16, 0.72);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.brand-lockup { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
+.brand-lockup svg { width: 30px; height: 30px; display: block; }
+.brand-lockup .wordmark { font-size: 22px; color: var(--paper); }
+.header-tag { color: var(--accent-soft); }
+
+/* ---------------- hero ---------------- */
+.hero { position: relative; overflow: hidden; padding: 76px 24px 60px; }
+.hero-inner { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; }
+.hero h1 { font-size: clamp(40px, 7vw, 72px); line-height: 0.92; max-width: 15ch; margin-top: 18px; color: var(--paper); }
+.hero h1 em { color: var(--accent-soft); }
+.hero .lead { margin-top: 22px; max-width: 60ch; color: var(--paper-dim); font-size: 17px; }
+.proof { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* ---------------- apply grid ---------------- */
+.apply-grid {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 36px;
+}
+@media (min-width: 900px) {
+  .apply-grid { grid-template-columns: 0.82fr 1.18fr; gap: 52px; align-items: start; }
+  .pitch { position: sticky; top: 86px; }
+}
+
+.pitch h2 { margin-bottom: 22px; font-size: 30px; }
+.feature { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 18px; }
+.feature .ic {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  background: rgba(139, 151, 255, 0.12);
+  border: 1px solid rgba(139, 151, 255, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.feature .ic svg { width: 20px; height: 20px; }
+.feature h3 { font-size: 18px; }
+.feature p { font-size: 14px; margin-top: 3px; }
+.price-row { margin-top: 26px; padding: 22px 24px; }
+.price-row .spec-row:last-of-type { border-bottom: 0; }
+.who { margin-top: 22px; font-size: 14px; color: var(--fg2); }
+
+/* ---------------- form ---------------- */
+.form-card h2 { margin-bottom: 6px; font-size: 28px; }
+.form-card .form-sub { font-size: 14px; color: var(--fg2); margin-bottom: 24px; }
+
+.field { margin-bottom: 18px; }
+.field > label,
+.field .field-label {
+  display: block;
+  margin-bottom: 7px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--fg1);
+  letter-spacing: -0.01em;
+}
+.field .req { color: var(--warn); margin-left: 2px; }
+.field .hint { font-weight: 400; color: var(--fg3); font-size: 12px; }
+
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="tel"],
+.field input[type="url"],
+.field select,
+.field textarea {
+  width: 100%;
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--fg1);
+  background: rgba(245, 242, 234, 0.04);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  transition:
+    border-color var(--dur-fast),
+    background var(--dur-fast);
+}
+.field textarea { resize: vertical; min-height: 78px; line-height: 1.5; }
+.field select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 38px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A7F90' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 1px;
+  border-color: var(--accent-soft);
+  background: rgba(245, 242, 234, 0.06);
+}
+
+/* Visible keyboard focus for buttons (the synced components.css has hover only). */
+.btn:focus-visible,
+.btn-whatsapp:focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 3px;
+}
+.choice input:focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 2px;
+}
+.field input::placeholder,
+.field textarea::placeholder { color: var(--fg3); }
+.field input[aria-invalid="true"],
+.field select[aria-invalid="true"],
+.field textarea[aria-invalid="true"] { border-color: var(--warn); }
+
+.field-error { color: var(--warn); font-size: 13px; margin-top: 6px; }
+.field-error:empty { display: none; }
+
+/* radio / checkbox pill groups */
+.choice-group { display: flex; flex-wrap: wrap; gap: 10px; }
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--fg2);
+  transition: border-color var(--dur-fast), background var(--dur-fast), color var(--dur-fast);
+}
+.choice input { accent-color: var(--i-500); }
+.choice:has(input:checked) {
+  border-color: var(--accent-soft);
+  color: var(--fg1);
+  background: rgba(139, 151, 255, 0.08);
+}
+.choice:focus-within { border-color: var(--accent-soft); }
+
+/* consent rows */
+.consent { display: flex; gap: 12px; align-items: flex-start; margin: 14px 0 4px; }
+.consent input {
+  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--i-500);
+  flex-shrink: 0;
+}
+.consent label { font-size: 14px; color: var(--fg2); line-height: 1.5; }
+
+/* honeypot — off-screen, never shown to humans */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* turnstile + submit */
+.cf-turnstile { margin: 20px 0 4px; }
+.form-actions { margin-top: 16px; }
+.form-actions .btn { width: 100%; text-align: center; font-size: 16px; padding: 16px; }
+.form-actions .btn[disabled] { opacity: 0.6; cursor: progress; }
+.form-status { margin-top: 14px; font-size: 14px; color: var(--warn); min-height: 1.2em; }
+.form-status.ok { color: var(--success); }
+.fine { font-size: 12px; color: var(--fg3); margin-top: 16px; line-height: 1.5; }
+.fine a { color: var(--fg2); }
+
+/* ---------------- footer ---------------- */
+.site-footer {
+  border-top: 1px solid var(--hairline);
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  text-align: center;
+}
+.site-footer .brand-footer { color: var(--paper); }
+.site-footer .brand-footer .wordmark { font-size: 22px; }
+.site-footer .links { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; font-family: var(--font-mono); font-size: 12px; }
+.site-footer .links a { color: var(--fg2); text-decoration: none; }
+.site-footer .links a:hover { color: var(--accent-soft); }
+.site-footer .micro {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg3);
+  letter-spacing: 0.04em;
+}
+
+/* ---------------- centered confirmation / 404 ---------------- */
+.center-stage {
+  position: relative;
+  overflow: hidden;
+  min-height: 78vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+}
+.center-stage .inner { position: relative; z-index: 1; max-width: 620px; text-align: center; }
+.center-stage h1 { font-size: clamp(36px, 6vw, 60px); color: var(--paper); }
+.center-stage h1 em { color: var(--accent-soft); }
+.center-stage p { margin: 18px auto 0; color: var(--paper-dim); max-width: 52ch; }
+.center-stage .cta-row { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+.btn-whatsapp { background: #25d366; color: #06251a; }
+.btn-whatsapp:hover { background: #2ee676; transform: translateY(-2px); }
+.steps {
+  margin: 30px auto 0;
+  max-width: 460px;
+  text-align: left;
+  display: grid;
+  gap: 12px;
+}
+.steps .step {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  font-size: 15px;
+  color: var(--fg2);
+}
+.steps .step b { color: var(--accent-soft); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}

@@ -1,0 +1,243 @@
+/* ============================================================
+   EDUFLICK AI · DESIGN SYSTEM · COMPONENTS
+   components.css
+   Reusable, token-based component classes. The production twin of the
+   recipes/snippets.md parts bin — same patterns, but referencing tokens
+   (var(--…)) instead of inline hex, so they can never drift from the source.
+
+   Load order:  tokens.css → colors_and_type.css → components.css
+   (colors_and_type.css already @imports tokens.css; importing it is enough.)
+
+   Theme-aware: components use the SEMANTIC ROLE vars (--bg-card, --fg1,
+   --hairline, --accent…) so they adapt to .theme-light automatically.
+   See COMPONENTS.md for the inventory, anatomy, and do/don't notes.
+   ============================================================ */
+
+/* ---------------- Buttons (S7) ---------------- */
+.btn {
+  font-family: var(--font-display);
+  font-weight: var(--w-heading);
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  border: 0;
+  border-radius: var(--radius-pill);
+  padding: 14px 26px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast),
+    background var(--dur-fast);
+}
+.btn-primary {
+  background: var(--i-500);
+  color: var(--paper);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background: var(--i-400);
+  box-shadow: var(--shadow-brand);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--fg1);
+  border: 1px solid var(--hairline-strong);
+}
+.btn-ghost:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-soft);
+}
+
+/* ---------------- Cards (S8) ---------------- */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+}
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-xl);
+  padding: 24px 28px;
+}
+.stat-card .stat-num {
+  font-family: var(--font-display);
+  font-weight: var(--w-display);
+  font-size: 48px;
+  letter-spacing: -0.04em;
+  color: var(--fg1);
+}
+.stat-card .stat-label {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg3);
+  margin-top: 4px;
+}
+
+/* ---------------- Flick / feed card (S9) ---------------- */
+.flick-card {
+  background: var(--bg-card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.subject-tile {
+  width: 44px;
+  height: 44px;
+  border-radius: 3px;
+  background: var(--i-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 24px;
+  color: var(--paper);
+}
+
+/* ---------------- Tags / pills (S10) ---------------- */
+.tag {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hairline-strong);
+  color: var(--fg2);
+}
+/* Coral is the ONE allowed exception — scarcity/CTA only, used sparingly. */
+.tag-scarcity {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 110, 90, 0.12);
+  color: var(--warn);
+}
+
+/* ---------------- Dashed spec / meta row (S12) ---------------- */
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--hairline-strong);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--fg2);
+}
+.spec-row .spec-key {
+  color: var(--fg3);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+/* ---------------- Backgrounds & texture (S11) ---------------- */
+/* Put on a position:relative wrapper. */
+.bg-dots::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(circle, rgba(245, 242, 234, 0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.bg-linegrid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.06;
+  background-image: linear-gradient(rgba(245, 242, 234, 1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245, 242, 234, 1) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.hero-indigo {
+  background: radial-gradient(140% 100% at 0% 0%, var(--i-500) 0%, var(--i-700) 36%, var(--i-ink) 100%);
+}
+
+/* ---------------- Cinematic depth (S15–S17, S19) ---------------- */
+/* Light goes in a halo BEHIND the focal element — never a filter on the mark. */
+.halo {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(139, 151, 255, 0.5),
+    rgba(110, 120, 245, 0.18) 44%,
+    transparent 72%
+  );
+  filter: blur(8px);
+}
+.focal {
+  position: relative;
+  z-index: 1;
+}
+/* Faint grayscale film grain (≤5%) — texture, not a hue; also kills banding. */
+.surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
+    radial-gradient(circle, rgba(245, 242, 234, 0.05) 1px, transparent 1px);
+  background-size: 140px 140px, 46px 46px;
+}
+.cine-indigo {
+  background: radial-gradient(130% 160% at 50% 30%, var(--i-400), var(--i-600) 24%, var(--i-800) 56%, var(--i-ink) 100%);
+}
+.cine-ink {
+  background: radial-gradient(120% 130% at 82% 10%, #241e52, #15122f 32%, var(--ink) 64%);
+}
+.cine-paper {
+  background: radial-gradient(120% 150% at 24% 12%, #efeafe, #f2eee5 44%, var(--paper-2) 100%);
+}
+.vignette::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(135% 125% at 50% 40%, transparent 48%, rgba(7, 5, 22, 0.55) 100%);
+}
+.glass {
+  background: rgba(20, 18, 52, 0.45);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 20px 50px -18px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(245, 242, 234, 0.16),
+    0 8px 32px -8px rgba(91, 91, 240, 0.45);
+}
+
+/* ---------------- Footer lockup (S18) ---------------- */
+.brand-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: var(--fg3);
+}
+.brand-footer .wordmark {
+  color: currentColor;
+}
+
+/* ---------------- The mark, reusable inline ---------------- */
+/* <svg class="mk" viewBox="0 0 180 180"><path class="mk-path" d="…"/></svg> */
+.mk-path {
+  fill: currentColor;
+}

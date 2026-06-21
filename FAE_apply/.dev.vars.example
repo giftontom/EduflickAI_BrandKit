@@ -1,0 +1,11 @@
+# Copy this file to `.dev.vars` for `wrangler dev` (NEVER commit `.dev.vars`).
+#
+# Turnstile server secret. The value below is Cloudflare's "always passes" TEST
+# secret, so `cp .dev.vars.example .dev.vars` gives a working local setup.
+# In production set the REAL secret with: wrangler secret put TURNSTILE_SECRET_KEY
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+
+# Optional. A Slack / Discord / Google-Apps-Script webhook URL to ping on each
+# new application. Leave blank to rely on KV + the WhatsApp-group join flow.
+# In production set with: wrangler secret put NOTIFY_WEBHOOK_URL
+NOTIFY_WEBHOOK_URL=

@@ -1,0 +1,63 @@
+{
+  // Worker "apply" — serves ./public via Static Assets + captures applications in KV.
+  // This OVERWRITES the existing auto-generated "apply" script (currently a broken
+  // redirect loop). It reuses the same script name, so the routes below are preserved.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "apply",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-06-20",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // Static Assets: serve the registration site from ./public.
+  // The Worker runs FIRST for every request (run_worker_first: true) and authors
+  // all routing itself — it serves pages via the ASSETS binding and redirects the
+  // bare root. html_handling is "none" because the Worker maps pretty URLs to
+  // files explicitly; unmatched paths fall back to 404.html.
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "html_handling": "none",
+    "not_found_handling": "404-page",
+    "run_worker_first": true
+  },
+
+  // Durable store for submissions. Create with:
+  //   wrangler kv namespace create APPLICATIONS
+  // then paste the printed id below.
+  "kv_namespaces": [
+    { "binding": "APPLICATIONS", "id": "REPLACE_WITH_KV_NAMESPACE_ID" }
+  ],
+
+  // Path-based routes (most-specific wins). Both already exist on the account and
+  // point at script "apply"; restated here so a fresh deploy keeps them.
+  "routes": [
+    { "pattern": "eduflickai.com/apply*", "zone_name": "eduflickai.com" },
+    { "pattern": "eduflickai.com/*", "zone_name": "eduflickai.com" }
+  ],
+
+  "observability": { "enabled": true },
+
+  // Production-only flag: if the Turnstile secret is somehow missing at runtime,
+  // the Worker FAILS CLOSED instead of silently disabling spam protection.
+  // Named environments (e.g. staging) do NOT inherit this, so staging can run
+  // without a secret. `wrangler dev` uses these vars too — keep a (test) secret
+  // in .dev.vars for local runs.
+  "vars": { "REQUIRE_TURNSTILE": "true" },
+
+  // Preview target: `wrangler deploy --env staging` publishes to
+  // apply-staging.<your-subdomain>.workers.dev with NO production routes, so you
+  // can verify everything before promoting to eduflickai.com.
+  "env": {
+    "staging": {
+      "name": "apply-staging",
+      "workers_dev": true,
+      "kv_namespaces": [
+        { "binding": "APPLICATIONS", "id": "REPLACE_WITH_STAGING_KV_NAMESPACE_ID" }
+      ]
+    }
+  }
+
+  // Secrets (NOT in this file — set with `wrangler secret put <NAME>`):
+  //   TURNSTILE_SECRET_KEY   — Turnstile server secret (required in production)
+  //   NOTIFY_WEBHOOK_URL     — optional Slack/Discord/Apps-Script webhook
+}

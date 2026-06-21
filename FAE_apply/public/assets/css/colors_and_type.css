@@ -1,0 +1,176 @@
+/* ============================================================
+   EDUFLICK AI · DESIGN SYSTEM · FOUNDATIONS
+   colors_and_type.css
+   Source of truth: design-system/tokens/tokens.json  (run `npm run tokens`)
+   Brand narrative:  brand-book/Eduflick_Brand_Book_v4.html
+   Fonts: Manrope · Instrument Serif · JetBrains Mono (all Google Fonts)
+   Load fonts with:
+   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+   This file imports the generated primitive tokens, then layers the SEMANTIC
+   ROLE aliases (which reference those primitives) + the brand text styles.
+   Edit primitives in tokens.json, not here.
+   ============================================================ */
+
+@import url("./tokens.css");
+
+:root{
+  /* ---- SEMANTIC SURFACE / FG ROLES (dark theme default) ---- */
+  --bg:var(--ink);
+  --bg-card:var(--ink-2);
+  --bg-raised:var(--ink-3);
+  --fg1:var(--paper);          /* primary text */
+  --fg2:var(--paper-dim);      /* body / secondary text */
+  --fg3:var(--muted);          /* meta / tertiary text */
+  --accent:var(--i-500);
+  --accent-soft:var(--i-300);
+  --hairline:var(--line);
+  --hairline-strong:var(--line-2);
+}
+
+/* ============================================================
+   LIGHT THEME — paper canvas. Add class="theme-light" on a wrapper.
+   ============================================================ */
+.theme-light{
+  --bg:var(--paper);
+  --bg-card:#FFFFFF;
+  --bg-raised:var(--paper-2);
+  --fg1:var(--ink);
+  --fg2:#3A3D47;
+  --fg3:var(--slate-500);
+  --hairline:var(--line-ink);
+  --hairline-strong:var(--line-ink-2);
+  --accent-soft:var(--i-500);
+  color:var(--fg1);
+  background:var(--bg);
+}
+
+/* ============================================================
+   SEMANTIC TEXT STYLES
+   Lowercase display headings are a brand signature; serif italic
+   accent words are wrapped in <em>.
+   ============================================================ */
+.display{
+  font-family:var(--font-display);
+  font-weight:var(--w-display);
+  font-size:var(--t-display);
+  letter-spacing:var(--track-display);
+  line-height:0.9;
+  text-transform:lowercase;
+  color:var(--fg1);
+}
+.display em,
+h1 em,h2 em,h3 em,h4 em,.editorial-accent{
+  font-family:var(--font-serif);
+  font-weight:400;
+  font-style:italic;
+  letter-spacing:-0.02em;
+  color:var(--accent-soft);
+}
+
+h1,.h1{
+  font-family:var(--font-display);
+  font-weight:var(--w-display);
+  font-size:var(--t-h1);
+  letter-spacing:-0.055em;
+  line-height:0.9;
+  text-transform:lowercase;
+  color:var(--fg1);
+  margin:0;
+}
+h2,.h2{
+  font-family:var(--font-display);
+  font-weight:var(--w-heading);
+  font-size:var(--t-h2);
+  letter-spacing:var(--track-heading);
+  line-height:1.05;
+  text-transform:lowercase;
+  color:var(--fg1);
+  margin:0;
+}
+h3,.h3{
+  font-family:var(--font-display);
+  font-weight:var(--w-heading);
+  font-size:var(--t-h3);
+  letter-spacing:-0.025em;
+  line-height:1.1;
+  color:var(--fg1);
+  margin:0;
+}
+h4,.h4{
+  font-family:var(--font-display);
+  font-weight:var(--w-heading);
+  font-size:var(--t-h4);
+  letter-spacing:-0.02em;
+  line-height:1.2;
+  color:var(--fg1);
+  margin:0;
+}
+
+/* Editorial — serif italic, for pull-quotes and leads */
+.editorial,.lead{
+  font-family:var(--font-serif);
+  font-style:italic;
+  font-weight:400;
+  font-size:var(--t-lead);
+  line-height:1.35;
+  color:var(--fg1);
+}
+
+/* Body */
+p,.body{
+  font-family:var(--font-display);
+  font-weight:var(--w-body);
+  font-size:var(--t-body);
+  line-height:1.6;
+  color:var(--fg2);
+  max-width:62ch;
+}
+.body-lg{font-size:var(--t-body-lg);line-height:1.55;}
+.small{font-size:var(--t-small);line-height:1.5;}
+
+/* Mono — labels, meta, code, numbers */
+.mono{
+  font-family:var(--font-mono);
+  font-weight:500;
+  font-size:var(--t-meta);
+  letter-spacing:var(--track-mono);
+  line-height:1.7;
+  color:var(--fg2);
+}
+.mono-up,.eyebrow,.label{
+  font-family:var(--font-mono);
+  font-weight:500;
+  font-size:var(--t-meta);
+  letter-spacing:var(--track-mono-up);
+  text-transform:uppercase;
+  color:var(--fg3);
+}
+.eyebrow{color:var(--accent-soft);}
+code,.code{
+  font-family:var(--font-mono);
+  font-weight:400;
+  font-size:13px;
+  letter-spacing:0.02em;
+  color:var(--accent-soft);
+}
+
+/* ============================================================
+   UTILITY — brand wordmark built in HTML (reliable across renderers)
+   <span class="wordmark">eduflick<i>AI</i></span>
+   ============================================================ */
+.wordmark{
+  font-family:var(--font-display);
+  font-weight:var(--w-heading);
+  letter-spacing:-0.045em;
+  line-height:1;
+  color:var(--fg1);
+  font-style:normal;
+  display:inline-flex;
+  align-items:baseline;
+}
+.wordmark i{
+  font-style:normal;
+  color:var(--accent-soft);
+  margin-left:0.16em;
+}
