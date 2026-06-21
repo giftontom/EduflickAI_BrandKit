@@ -28,6 +28,9 @@ export async function notify(record, env) {
     await fetch(hook, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
+      // Apps Script answers a POST with a 302 to its echo page; the row is already
+      // written by the time that 302 is issued, so don't waste a hop following it.
+      redirect: 'manual',
       body: JSON.stringify({ type: 'application', record, text: summary, content: summary }),
     });
   } catch (err) {
