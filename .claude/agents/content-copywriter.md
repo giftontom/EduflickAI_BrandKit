@@ -28,6 +28,6 @@ close date**; links eduflickai.com · eduflickai.com/apply · eduflickai.com/mas
 ## Output discipline
 
 One artifact at a time, in the template's exact output shape. Every piece ladders to one content
-pillar (build in public · get hired · learn fast · the cohort · pioneer urgency) and one funnel
+pillar (build in public · get hired · learn fast · the cohort · early bird) and one funnel
 phase, with exactly one CTA. Then hand to `visual-production` (typeset) or `qa-fact-integrity`
 (check). Done = passes `content-studio/QA_CHECKLIST.md` and every value traces to FACTS.md.

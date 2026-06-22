@@ -10,7 +10,7 @@ typing — not a broadcast. Casing relaxes here (it's a chat), but the voice sta
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
 - Masterclass date/time:   [[ ]]   Join link: [[ ]]
 - Cohort start:            [[ ]]   Seats left: [[ / 20]]
-- Pioneer price / retail:  [[₹49,000 / ₹70,000]]
+- Early Bird price / retail:  [[₹49,000 / ₹70,000]]
 - Booking structure:       [[₹15,000 to reserve, then ₹17,000 + ₹17,000]]
 - Booking / payment link:  [[ ]]
 - Sender name / who signs: [[e.g. "— Team Eduflick" or a real name]]
@@ -49,7 +49,7 @@ Note (send when):
 > Note (send when): immediately on registration.
 >
 > **=== MSG 4 · OFFER ===**
-> Text: {{first_name}}, glad you built one live today. the full program turns that into 3 deployed projects in 12 weeks, in-person in Trivandrum. pioneer price is ₹49K (it's ₹70K from cohort 2).
+> Text: {{first_name}}, glad you built one live today. the full program turns that into 3 deployed projects in 12 weeks, in-person in Trivandrum. early bird price is ₹49K (it's ₹70K from cohort 2).
 > Note (send when): within 2 hours after the masterclass ends.
 >
 > **=== MSG 6 · CLOSE ===**

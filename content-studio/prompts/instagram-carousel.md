@@ -11,12 +11,12 @@ FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]])
 - Today's date / masterclass date / cohort start: [[ ]]
 - Registration link / WhatsApp:                    [[ ]]
 - Seats total / left:                              [[20 / __ ]]
-- Pioneer price / Retail:                          [[₹49,000 / ₹70,000]]
+- Early Bird price / Retail:                          [[₹49,000 / ₹70,000]]
 - Booking structure:                               [[₹15,000 + ₹17,000 + ₹17,000]]
 - Venue:                                           [[UXP Innovation Hub, Trivandrum]]
 
 TASK:
-- Carousel topic: [[e.g. "the 2026 AI engineer stack" | "₹49K vs ₹70K — what Pioneer means"
+- Carousel topic: [[e.g. "the 2026 AI engineer stack" | "₹49K vs ₹70K — what Early Bird means"
   | "month 1/2/3 curriculum" | objection: "is ₹49K worth it?"]]
 - Slide count: [[6]] (range 5–8; slide 1 = hook cover, last = CTA)
 - Content pillar: [[ ]]    Funnel phase: [[ ]]
@@ -61,9 +61,9 @@ Hook / Body / CTA / Hashtags
 > Support: pinecone + langchain. you'll build a chatbot that answers from your own docs. deployed.
 >
 > **=== SLIDE 6 (CTA) ===**
-> Eyebrow: PIONEER COHORT 01
+> Eyebrow: COHORT 01
 > Headline: learn it *in-person* at uxp innovation hub
-> Support: capped at 20 seats. ₹49K founding price. free masterclass first.
+> Support: capped at 20 seats. ₹49K early bird price. free masterclass first.
 > CTA: register free → [[link]]
 
 **✗ Avoid:** slides that are a bullet dump of 10 tools, Title Case headlines, "🔥 swipe to find

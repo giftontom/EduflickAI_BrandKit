@@ -26,7 +26,7 @@ out of its right edge (the "play," the moment a lesson begins). One shape, one n
 | --- | --- | --- |
 | **Eduflick App** (consumer) | Mobile learning feed — flick cards, bottom nav, FAB, search, profile, the **Sparks** gamification system | `ui_kits/app/` |
 | **Eduflick Web** (educator / institution) | Dark dashboard + light marketing site — top nav, sidebar, stat cards, content library, analytics | `ui_kits/web/` |
-| **Full-Stack AI Engineer Program** | An active in-person cohort program run by Tomatrix (₹49K Pioneer Cohort, Trivandrum). Marketing-led, uses the same brand. | covered in `web` marketing components |
+| **Full-Stack AI Engineer Program** | An active in-person cohort program run by Tomatrix (₹49K Cohort 01, Trivandrum). Marketing-led, uses the same brand. | covered in `web` marketing components |
 
 There are **two faces** to the brand: the consumer learning-feed *vision* and the
 *active* AI-engineering cohort business. Both share one visual system.
@@ -210,7 +210,7 @@ Root files:
 | `AI_IMAGERY_GUIDE.md` | When/how to make on-brand backdrops and layer them *behind* the type + mark — abstract indigo (Nano Banana 2) **and** brand-treated representational photography (indigo duotone); the hybrid per-surface policy, image-prompt kit + imagery QA. |
 | `QA_CHECKLIST.md` | Visual pass/fail gate + scorecard run on any rendered artifact before export. |
 | `recipes/` | Assemble-don't-invent build kit: `00_SYSTEM_PROMPT.md`, `snippets.md` (HTML parts bin — incl. cinematic `S15–S19`; **generated** from `snippets.src.md` via `npm run snippets`), and recipes for instagram-post · poster · slide-deck · landing-section · brochure-page · **launch-grid**. |
-| `collateral/` | Ready-to-fill kits: **`launch-grid.html`** (the 12-tile cinematic IG launch mural + in-page carousel viewer + deck slides), **`posters.html`** (cinematic launch posters, 1080×1350, with an `assets/backdrops/` image layer), **`instagram-posts.html`** (backdrop-driven IG tiles → `export:ig`), **`stories.html`** (9:16 stories → `export:stories`), `instagram-kit.html` (the original mural-slice kit), `brochure-kit.html`, `content-calendar.html`. Backdrop PNGs live in `collateral/assets/backdrops/` (provenance: `SOURCES.md`). |
+| `collateral/` | Ready-to-fill kits: **`launch-grid.html`** (the 12-tile cinematic IG launch mural + in-page carousel viewer + deck slides), **`posters.html`** (cinematic launch posters, 1080×1350, 7 archetypes incl. an all-in-one WhatsApp share tile, each on an `assets/backdrops/` image layer), **`instagram-posts.html`** (backdrop-driven IG tiles → `export:ig`), **`stories.html`** (9:16 stories → `export:stories`), `instagram-kit.html` (the original mural-slice kit), `brochure-kit.html`, `content-calendar.html`. Backdrop PNGs live in `collateral/assets/backdrops/` (provenance: `SOURCES.md`). |
 | `assets/logo/` | Canonical marks (`mark*.svg`), lockups (`lockup-*.svg`), `favicon.svg`, `LOGO_README.md` |
 | `assets/logo/social/` | Avatars (indigo/ink/paper + the **gradient `avatar-pf-av-*`**, built by `../tools` `export:avatar`), LinkedIn/YouTube/Twitter banners, OG card |
 | `assets/partners/` | Partner/parent logos — `tomatrix-logo-light.png` (transparent) for the co-brand lockup |
@@ -219,7 +219,7 @@ Root files:
 | `ui_kits/app/` | Consumer mobile app UI kit (feed, flick player, search, profile, Sparks) |
 | `ui_kits/web/` | Educator/institution web UI kit (dashboard, library, analytics, marketing) |
 | `slides/` | Sample brand presentation slides (title, section, content, quote, closing) |
-| `../tools/` | **Pixel-perfect PNG exporter** (Playwright): `npm run export` (every post + carousel slide → 1080×1350), `export:posters` (the 3 launch posters), `gen:backdrops` (abstract AI backdrops + `:proc` fallback), `fetch:stock` + `treat:stock` (photoreal indigo-duotone backdrops), `export:avatar`, `serve`. See `../tools/README.md`. |
+| `../tools/` | **Pixel-perfect PNG exporter** (Playwright): `npm run export` (every post + carousel slide → 1080×1350), `export:posters` (the 7-archetype poster set), `export:whatsapp` (the forwardable WhatsApp share tile → PNG + JPEG), `gen:backdrops` (abstract AI backdrops + `:proc` fallback), `fetch:stock` + `treat:stock` (photoreal indigo-duotone backdrops), `export:avatar`, `serve`. See `../tools/README.md`. |
 
 **Start here:** import `colors_and_type.css`, load the three Google fonts, then compose
 with components from the relevant UI kit. Build wordmarks in HTML

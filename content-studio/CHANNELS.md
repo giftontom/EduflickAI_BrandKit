@@ -1,7 +1,7 @@
 # Channel reference
 
 Compact per-channel specs, cadence, and which design asset renders each. Cadence and phases come
-from `../planning/Eduflick_AI_Social_Media_Campaign_Plan.md` (the 6-week, 3-phase Pioneer Cohort
+from `../planning/Eduflick_AI_Social_Media_Campaign_Plan.md` (the 6-week, 3-phase Cohort 01
 sprint). The funnel: **Awareness → Free Masterclass (lead capture) → Seat booking → Close.**
 
 > Sizes are for the **design** step. The **copy** step is the same on every channel — it's the

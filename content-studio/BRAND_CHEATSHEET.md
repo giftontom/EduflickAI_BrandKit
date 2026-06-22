@@ -18,7 +18,7 @@ decides) so the learner stays in flow.
 | Face | What it is | When you're writing for it |
 | --- | --- | --- |
 | **The product (vision)** | The consumer **learning-feed app** — flick cards, the 60-second player, the **Sparks** gamification system. | Product marketing, app store, the "a feed for thinking" story. |
-| **The program (active business)** | The **Full-Stack AI Engineer Program** — an in-person, capped-at-20 cohort run in Trivandrum. This is what's being sold right now. | **Most marketing tasks.** The 6-week sprint to fill the Pioneer Cohort. |
+| **The program (active business)** | The **Full-Stack AI Engineer Program** — an in-person, capped-at-20 cohort run in Trivandrum. This is what's being sold right now. | **Most marketing tasks.** The 6-week sprint to fill Cohort 01. |
 
 Both share one visual + verbal system. **If a task doesn't say which, assume the program.**
 
@@ -59,7 +59,7 @@ Both share one visual + verbal system. **If a task doesn't say which, assume the
 
 - **Display headlines & headings: all lowercase.** `learn anything in sixty seconds.`
 - **Mono labels / eyebrows / meta: UPPERCASE, wide tracking.** `LESSON 047 · 60 SECONDS`,
-  `PIONEER COHORT 01`, `FREE MASTERCLASS`.
+  `COHORT 01`, `FREE MASTERCLASS`.
 - **Body copy: normal sentence case.**
 - **The wordmark: "eduflick AI"** — `eduflick` lowercase + a space + **uppercase `AI`** (the
   indigo accent; white on dark/indigo, indigo on paper). Prefer the spaced form in copy.
@@ -72,9 +72,9 @@ Both share one visual + verbal system. **If a task doesn't say which, assume the
 > (exact dates, current seats-left, links, the masterclass time) MUST come from the FACTS block
 > you fill per task — never state a live number from memory.**
 
-- **Product:** Eduflick **Full-Stack AI Engineer Program**, **Pioneer Cohort 01**.
+- **Product:** Eduflick **Full-Stack AI Engineer Program**, **Cohort 01**.
 - **Operator / venue:** Tomatrix Technologies Pvt Ltd · **UXP Innovation Hub, Trivandrum** · in-person.
-- **Price:** **₹49,000** Pioneer (founding-batch) price vs **₹70,000** retail from Cohort 2.
+- **Price:** **₹49,000** Early Bird price vs **₹70,000** retail from Cohort 2.
   Payment structure: **₹15,000 seat-booking fee + ₹17,000 + ₹17,000**.
 - **Scarcity:** **capped at 20 seats** ("real cohort, real mentors").
 - **Duration / shape:** **12 weeks** (~3 months), in-person cohort.
@@ -111,7 +111,7 @@ Their actual words (mirror these as hooks):
 2. **Get Hired** — Trivandrum tech jobs, placement, portfolio, mock interviews.
 3. **Learn Fast** — bite-size AI concepts (RAG, agents, vector DBs) in 60s.
 4. **The Cohort** — capped-at-20, in-person, UXP venue, community.
-5. **Pioneer Urgency** — founding batch, ₹49K offer, seats remaining.
+5. **Early Bird** — register early, ₹49K offer, seats remaining.
 
 *(The internal planning doc tags these with emoji as shorthand. Finished public copy uses none.)*
 
@@ -157,10 +157,10 @@ Their actual words (mirror these as hooks):
 | "Something went wrong! Please try again later or contact support." | "Lost connection. Pull down to retry." |
 | "🧠✨ Did you know mitosis is CRUCIAL?! Learn EVERYTHING! 💯 #science #STEM" | "Mitosis cuts a cell in half. Then it does it again. In 60 seconds, you'll understand why." |
 | "Join our AMAZING world-class AI bootcamp and supercharge your career!! 🚀" | "stop learning AI theory. ship *AI products*. 12 weeks, in-person, Trivandrum. 20 seats." |
-| "Don't miss this limited-time offer, hurry!!!" | "pioneer cohort: ₹49K, not ₹70K. only 7 of 20 seats left." |
+| "Don't miss this limited-time offer, hurry!!!" | "cohort 01: ₹49K, not ₹70K. only 7 of 20 seats left." |
 | "Level up and unlock your AI potential today!" | "build a RAG chatbot in week 8. deploy it. put it on your résumé." |
 
 ---
 
 *Eduflick AI · a Tomatrix Technologies venture · distilled from Brand Book v4.0 +
-the Pioneer Cohort campaign plan. When in doubt: shorter, more concrete, no emoji, one serif word.*
+the Cohort 01 campaign plan. When in doubt: shorter, more concrete, no emoji, one serif word.*

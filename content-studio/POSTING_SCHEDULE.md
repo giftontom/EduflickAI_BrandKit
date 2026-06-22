@@ -1,6 +1,6 @@
 # Posting Schedule — 6-Week Launch Sprint
 
-> Day-by-day content calendar for the Pioneer Cohort 01 launch. Anchored to the
+> Day-by-day content calendar for the Cohort 01 launch. Anchored to the
 > masterclass date. Fill the date column once the masterclass is locked.
 >
 > Derived from `../planning/Eduflick_AI_Social_Media_Campaign_Plan.md` and
@@ -50,7 +50,7 @@
 
 ## Phase 2 — Consideration & Masterclass Push (Weeks 3–4)
 
-**Goal:** Maximize masterclass attendance; seed the Pioneer offer.
+**Goal:** Maximize masterclass attendance; seed the Early Bird offer.
 **CTA:** "register for the free masterclass"
 
 ### Week 3
@@ -59,7 +59,7 @@
 | --- | --- | --- | --- | --- | --- |
 | Mon | [[ ]] | IG Reel | "What you'll build in Week 4" | Milestone preview — SaaS dashboard deployed | ⬜ |
 | Tue | [[ ]] | LinkedIn | Curriculum deep-dive | Month 1 breakdown: Foundations + first ship | ⬜ |
-| Wed | [[ ]] | IG Carousel | "₹49,000 vs ₹70,000" | Pioneer Cohort pricing explained | ⬜ |
+| Wed | [[ ]] | IG Carousel | "₹49,000 vs ₹70,000" | Cohort 01 pricing explained | ⬜ |
 | Thu | [[ ]] | IG Reel | Guest faculty spotlight | Credibility — who's teaching | ⬜ |
 | Fri | [[ ]] | All + WhatsApp | Masterclass reminder #2 | "This Saturday — what we'll build live" | ⬜ |
 | Sat | [[ ]] | IG Stories | Countdown sticker | "24h to masterclass" | ⬜ |
@@ -73,7 +73,7 @@
 | Tue | [[ ]] | LinkedIn | "What happened at the masterclass" | Attendance, energy, what was built | ⬜ |
 | Wed | [[ ]] | IG Reel | "What you'll build in Week 8" | RAG chatbot milestone preview | ⬜ |
 | Thu | [[ ]] | IG Carousel | Objection handler: "Is ₹49K worth it?" | ROI breakdown, career-track focus | ⬜ |
-| Fri | [[ ]] | IG + WhatsApp | Seat booking opens | "X of 20 seats booked — pioneer price live" (X = value from FACTS.md only) | ⬜ |
+| Fri | [[ ]] | IG + WhatsApp | Seat booking opens | "X of 20 seats booked — early bird price live" (X = value from FACTS.md only) | ⬜ |
 | Sat | [[ ]] | IG Stories | Poll + seat tracker | "Are you joining Cohort 01?" | ⬜ |
 | Sun | [[ ]] | LinkedIn | "From masterclass → cohort" | Attendee → enrollee journey post | ⬜ |
 
@@ -92,7 +92,7 @@
 | Tue | [[ ]] | LinkedIn | "3 projects. 12 weeks. Deployed." | Portfolio value, hiring angle | ⬜ |
 | Wed | [[ ]] | IG Carousel | Objection handler: "Online vs in-person" | Why the room matters — real mentors, real peers | ⬜ |
 | Thu | [[ ]] | IG Reel | "What you'll build in Week 11" | Capstone agentic platform preview | ⬜ |
-| Fri | [[ ]] | All + WhatsApp | Scarcity update | "X of 20 seats left — pioneer price ends when seats do" | ⬜ |
+| Fri | [[ ]] | All + WhatsApp | Scarcity update | "X of 20 seats left — early bird price ends when seats do" | ⬜ |
 | Sat | [[ ]] | IG Stories | Seat tracker graphic | Live count update | ⬜ |
 | Sun | [[ ]] | LinkedIn | "The industry placement angle" | Week 12 mock interviews + recruiter networking | ⬜ |
 

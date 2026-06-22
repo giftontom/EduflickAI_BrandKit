@@ -81,7 +81,7 @@ FACTS (the ONLY source of live numbers — do not invent anything else):
 - Masterclass format:      [[free, live, ~90 min, online/in-person]]
 - Registration link:       [[https://… ]]                          (or [[NEEDS LINK]])
 - Seats total / left:      [[20 total / 7 left]]
-- Pioneer price:           [[₹49,000]]   Retail (Cohort 2): [[₹70,000]]
+- Early Bird price:           [[₹49,000]]   Retail (Cohort 2): [[₹70,000]]
 - Booking fee:             [[₹15,000 to reserve; then ₹17,000 + ₹17,000]]
 - Cohort start date:       [[e.g. 6 Jul 2026]]   Duration: [[12 weeks]]
 - Venue:                   [[UXP Innovation Hub, Trivandrum]]

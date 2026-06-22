@@ -9,7 +9,7 @@ no hype words, one CTA, 3–6 hashtags, every fact from `FACTS.md`. Hashtag pool
 ## 1 · `ig-hook.png` — the pain hook
 
 **Hook:** you know react. but you've never shipped anything with an llm — and every job now wants it.
-**Body:** pioneer cohort 01 is built for exactly that gap. 12 weeks, in person in trivandrum, and you leave having shipped 3 deployed ai products — not another certificate.
+**Body:** cohort 01 is built for exactly that gap. 12 weeks, in person in trivandrum, and you leave having shipped 3 deployed ai products — not another certificate.
 **CTA:** see the program → eduflickai.com
 **Hashtags:** #AIEngineer #FullStackAI #TrivandrumTech #CareerInAI #LLM
 

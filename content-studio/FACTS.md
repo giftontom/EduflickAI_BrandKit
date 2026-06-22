@@ -4,7 +4,7 @@
 > visual typesetting must pull live values from here — not from memory, not from
 > a stale copy in a prompt template. Update this file first, then use its values.
 >
-> **Last updated:** 2026-06-10
+> **Last updated:** 2026-06-22
 
 ---
 
@@ -14,7 +14,7 @@
 | --- | --- |
 | Program name | Full-Stack AI Engineer Program |
 | ↳ Note | No certification claim — the program name never includes "Certified"; deliverable is the 3-project portfolio, not a certificate. |
-| Cohort | Pioneer Cohort 01 |
+| Cohort | Cohort 01 |
 | Format | In-person, offline |
 | Venue | UXP Innovation Hub, Trivandrum |
 | Duration | 12 weeks (~3 months) |
@@ -24,24 +24,26 @@
 | Week 12 | Mock interviews + recruiter networking with industry HR |
 | Operator | Tomatrix Technologies Pvt Ltd |
 
-## Pricing (stable for Pioneer Cohort)
+## Pricing (stable for Cohort 01)
 
 | Fact | Value |
 | --- | --- |
-| Pioneer price | ₹49,000 |
-| Retail price (Cohort 2+) | ₹70,000 |
-| Booking fee | ₹15,000 to reserve |
+| Early Bird price | ₹49,000 |
+| Early Bird Discount | ₹49,000 for the first 20 to register — saves ₹21,000 vs the ₹70,000 regular price |
+| Regular price (from Cohort 2) | ₹70,000 |
+| Reservation deposit | ₹5,000 to reserve a seat |
+| Booking (Payment 1) | ₹15,000 total — the ₹5,000 reservation + ₹10,000 joining |
 | Payment 2 | ₹17,000 |
 | Payment 3 | ₹17,000 |
-| Payment structure copy | ₹15,000 booking + ₹17,000 + ₹17,000 |
+| Payment structure copy | Reserve with ₹5,000 · ₹15,000 booking, then ₹17,000 + ₹17,000 (₹49,000 total) |
 
 ## Top of funnel
 
 | Fact | Value |
 | --- | --- |
-| Lead magnet | Free Technical Masterclass |
-| Masterclass format | Live, ~90 min, builds a real AI app on the spot |
-| Masterclass CTA | "Register Free →" |
+| Funnel | Apply-direct — every CTA points to eduflickai.com/apply |
+| Primary CTA | "Apply →" |
+| Note | The free masterclass was retired (2026-06-11). There is no masterclass step; do not reference "Register Free" or eduflickai.com/masterclass. |
 
 ---
 
@@ -49,9 +51,7 @@
 
 | Fact | Value | Last set |
 | --- | --- | --- |
-| Today's date | 2026-06-10 | |
-| Masterclass date/time | [[NOT SET — e.g. Sat 21 Jun 2026, 5:00 PM IST]] | |
-| Masterclass registration link | eduflickai.com/masterclass | |
+| Today's date | 2026-06-22 | |
 | Cohort start date | [[NOT SET — e.g. 6 Jul 2026]] | |
 | Applications close | [[no close date]] | |
 | Seats remaining | [[20 of 20]] | |
@@ -65,11 +65,11 @@
 | --- | --- |
 | Website | eduflickai.com |
 | Apply | eduflickai.com/apply |
-| Masterclass registration | eduflickai.com/masterclass |
+| Phone / WhatsApp | +91 92078 94926 |
+| WhatsApp link | wa.me/919207894926 |
 | Email | <info@eduflickai.com> |
 | Instagram handle | @eduflick.ai |
 | Instagram URL | <https://instagram.com/eduflick.ai> |
-| WhatsApp link | [[NEEDS — wa.me/…]] |
 
 ---
 

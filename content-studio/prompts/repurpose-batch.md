@@ -23,7 +23,7 @@ TASK — pick ONE mode:
 
 CONSTRAINTS (priority order):
 1. Every asset ladders to ONE pillar (Build in Public / Get Hired / Learn Fast / The Cohort /
-   Pioneer Urgency) and matches the funnel phase's CTA (awareness→register free; conversion→book seat).
+   Early Bird) and matches the funnel phase's CTA (awareness→register free; conversion→book seat).
 2. Don't repeat the same hook across assets — vary the angle (pain / proof / scarcity / how-it-works).
 3. Keep each asset's copy in its channel's shape (caption = hook+2-4 lines+CTA+tags; carousel =
    5-8 one-idea slides; reel = hook+beats+CTA; LinkedIn = hook+short paras+CTA).
@@ -55,7 +55,7 @@ no emoji: ✔/✗ | no forbidden words: ✔/✗ | no invented facts (all live nu
 > | 2 | Tue | LinkedIn | The Cohort | post | "we turned away revenue to cap cohort 1 at 20." | founder POV on in-person + accountability |
 > | 3 | Wed | IG | Learn Fast | carousel | "the 2026 AI engineer *stack*" | cursor → next.js → rag → agents, 6 slides |
 > | 4 | Thu | IG Reel | Get Hired | reel | "‘AI experience required.’ you have none." | theory vs shipping intercut |
-> | 5 | Fri | All + WhatsApp | Pioneer Urgency | announcement | "free technical masterclass — build an AI app live." | masterclass announce, register CTA |
+> | 5 | Fri | All + WhatsApp | Early Bird | announcement | "free technical masterclass — build an AI app live." | masterclass announce, register CTA |
 > | 6 | Sat | IG Stories | Learn Fast | poll | "can you build with LLMs? yes / not yet" | countdown + poll sticker |
 > | 7 | Sun | LinkedIn | Get Hired | carousel | "month 1 / 2 / 3, what you actually build" | curriculum breakdown |
 >

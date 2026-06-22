@@ -5,13 +5,13 @@
 > venue **Trivandrum**, **no fixed close date**, domain **eduflickai.com**,
 > hashtags use **#TrivandrumTech**. RENDER-BEFORE-DONE is still owed on all visuals.
 
-Pillars in play: build in public · get hired · learn fast · the cohort · pioneer urgency.
+Pillars in play: build in public · get hired · learn fast · the cohort · early bird.
 
 ---
 
 ## 1 · Curriculum carousel — "what you build in 12 weeks" (IG 4:5 · 7 slides)
 
-1. **cover** — `FULL-STACK AI ENGINEER · PIONEER COHORT 01`
+1. **cover** — `FULL-STACK AI ENGINEER · COHORT 01`
    from react dev to *shipped* ai engineer.
    *12 weeks. 3 deployed projects. in-person, Trivandrum.*
 2. `MONTH 01 · BUILD THE BASE` — ship a real *product*, not a tutorial.

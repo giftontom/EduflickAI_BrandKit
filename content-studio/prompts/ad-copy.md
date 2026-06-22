@@ -49,7 +49,7 @@ C) (scarcity angle)
 > **=== PRIMARY TEXT ===**
 > A) "AI experience required." you have none. that's the gap. in 12 weeks, in-person in Trivandrum, you ship 3 deployed AI projects — a SaaS dashboard, a RAG chatbot, an agentic platform. it starts with a free technical masterclass. build a small AI app, live. register free →
 > B) you know react. you've never shipped with an LLM. our cohort fixes that: 3 deployed projects, the real stack (next.js, claude, pinecone, langchain), capped at 20, in-person in Trivandrum. free masterclass first. register free →
-> C) 20 seats. in-person. Trivandrum. the pioneer cohort builds 3 real AI products in 12 weeks at ₹49K (₹70K from the next batch). see how it works in a free live masterclass. register free →
+> C) 20 seats. in-person. Trivandrum. Cohort 01 builds 3 real AI products in 12 weeks at ₹49K (₹70K from the next batch). see how it works in a free live masterclass. register free →
 >
 > **=== HEADLINES ===**
 >
@@ -61,7 +61,7 @@ C) (scarcity angle)
 > **=== DESCRIPTIONS ===**
 >
 > 1) capped at 20 · Trivandrum
-> 2) pioneer cohort · ₹49K
+> 2) cohort 01 · ₹49K
 >
 > **=== CTA BUTTON ===** Sign Up
 > **=== LINK ===** [[link]]

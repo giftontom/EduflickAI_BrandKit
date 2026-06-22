@@ -26,8 +26,8 @@ BUILD RULES:
    "live feed" mock using flick cards (S9) on the right at desktop.
 3. HOW-IT-WORKS: 3 cards (S8), each a mono step id ("01"), a lowercase title, one line. Equal grid.
 4. CURRICULUM/STACK: a grid of tags/pills (S10) or stat cards; mono labels; numbers as proof.
-5. PRICING/SCARCITY: two cards (Pioneer ₹49K vs retail ₹70K); the coral scarcity flag (S10) on the
-   Pioneer card only; dashed spec rows (S12) for the payment structure.
+5. PRICING/SCARCITY: two cards (Early Bird ₹49K vs retail ₹70K); the coral scarcity flag (S10) on the
+   Early Bird card only; dashed spec rows (S12) for the payment structure.
 6. CLOSING CTA: indigo gradient, headline + primary button + wordmark/mark.
 7. Hover states from S7 (lift + brand glow). One hue. Return ONE complete HTML file (section + the
    minimal page shell so it renders standalone).

@@ -1,6 +1,6 @@
 # Social Media Marketing Campaign Plan
 
-## Eduflick Full-Stack AI Engineer Program — Pioneer Cohort 1
+## Eduflick Full-Stack AI Engineer Program — Cohort 1
 
 **Operating Entity:** Tomatrix Technologies Pvt Ltd
 **Campaign Owner:** Marketing & Sales
@@ -13,9 +13,9 @@
 
 | | |
 |---|---|
-| **Primary KPI** | Fill **20 Pioneer Cohort seats** (sold-out launch) |
+| **Primary KPI** | Fill **20 Cohort 01 seats** (sold-out launch) |
 | **Funnel goal** | Drive registrations to the **Free Technical Masterclass** (top of funnel → seat bookings) |
-| **Offer** | Pioneer Cohort price **₹49,000** (vs. ₹70,000 retail from Cohort 2) — frame as a one-time founding-batch discount |
+| **Offer** | Cohort 01 price **₹49,000** (vs. ₹70,000 retail from Cohort 2) — frame as a one-time Early Bird Discount |
 | **Geography** | Geo-targeted: **10 km radius of Trivandrum** + Kerala-wide for organic |
 | **Window** | 6-week paid + organic sprint, running until all 20 seats are booked (no fixed close date) |
 
@@ -92,14 +92,14 @@
 
 ### Phase 2 — Consideration & Masterclass Push (Weeks 3–4)
 
-**Goal:** Maximize Masterclass attendance; seed the Pioneer offer.
+**Goal:** Maximize Masterclass attendance; seed the Early Bird offer.
 
 - **Daily Stories** countdown to Masterclass with registration link sticker.
 - **Reels:** "What you'll build in Week 4 / Week 8 / Week 11" (one per milestone).
 - **LinkedIn:** industry hiring angle — "AI roles posted in Trivandrum this month" (screenshot real listings).
 - **Testimonial/credibility:** guest-faculty spotlight, UXP venue tour Reel.
 - **Run the Free Technical Masterclass** (mid-Phase 2). Record it → clip for Phase 3.
-- **Carousel:** "₹49,000 vs ₹70,000 — what Pioneer Cohort means."
+- **Carousel:** "₹49,000 vs ₹70,000 — what Early Bird means."
 
 ### Phase 3 — Conversion & Scarcity Close (Weeks 5–6)
 
@@ -120,7 +120,7 @@
 2. **💼 Get Hired** — Trivandrum tech jobs, placement, portfolio, mock interviews.
 3. **🧠 Learn Fast** — bite-size AI concepts (RAG, agents, vector DBs) in 60s.
 4. **👥 The Cohort** — capped-at-20, in-person, UXP venue, community.
-5. **⏳ Pioneer Urgency** — founding batch, ₹49K offer, seats remaining.
+5. **⏳ Early Bird** — register early, ₹49K offer, seats remaining.
 
 ---
 

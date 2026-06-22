@@ -53,7 +53,7 @@ HASHTAGS (3–5):
 >
 > You can't do that at scale. So we didn't try.
 >
-> Pioneer pricing is ₹49,000 — about a third less than the ₹70,000 the next cohort pays. That's the founding-batch trade: smaller room, lower price, more of our time.
+> Early Bird pricing is ₹49,000 — about a third less than the ₹70,000 the next cohort pays. That's the early-bird trade: smaller room, lower price, more of our time.
 >
 > **CTA:** We run a free technical masterclass before booking opens — you build a small AI app live. Register: [[link]]
 >

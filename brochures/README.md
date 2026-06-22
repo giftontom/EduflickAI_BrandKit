@@ -3,7 +3,7 @@
 Self-contained HTML artifacts, each with an in-page **Download PDF** button.
 This is the index: what each file is, which is canonical, and how PDFs are made.
 
-## Full-Stack AI Engineer Program (Pioneer Cohort 01 — the live program)
+## Full-Stack AI Engineer Program (Cohort 01 — the live program)
 
 | File | Edition | Use it for |
 | --- | --- | --- |

@@ -8,8 +8,7 @@ This package is the **content + strategy layer** that sits on top of the design 
 design system tells you what the brand *looks like*; Content Studio tells you what it *says*,
 how to *produce it at volume*, and how to keep a **small model on-brand** while it does the work.
 
-It exists because of a real operating need: the **Full-Stack AI Engineer Program — Pioneer
-Cohort** has to fill 20 seats on a 6-week social sprint, and a small team (or a small model, or
+It exists because of a real operating need: the **Full-Stack AI Engineer Program — Cohort 01** has to fill 20 seats on a 6-week social sprint, and a small team (or a small model, or
 a VA) has to churn out captions, carousels, reels, DMs and ads every day without the brand drifting.
 
 ---

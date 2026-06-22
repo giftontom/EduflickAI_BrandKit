@@ -11,7 +11,7 @@ FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]])
 - Masterclass date/time: [[ ]]   Format: [[free, live, ~90 min, online/in-person]]
 - Registration link:     [[ ]]
 - Seats total / left:    [[20 / __ ]]
-- Pioneer price:         [[₹49,000]]   Retail: [[₹70,000]]
+- Early Bird price:         [[₹49,000]]   Retail: [[₹70,000]]
 - Cohort start:          [[ ]]   Duration: [[12 weeks]]
 - Venue:                 [[UXP Innovation Hub, Trivandrum]]
 - WhatsApp / link in bio: [[ ]]
@@ -19,7 +19,7 @@ FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]])
 TASK:
 - Write [[3]] Instagram caption variants for: [[describe the post / its visual]].
 - Hook angle: [[e.g. "I know React but never built with LLMs"]]
-- Content pillar: [[Build in Public | Get Hired | Learn Fast | The Cohort | Pioneer Urgency]]
+- Content pillar: [[Build in Public | Get Hired | Learn Fast | The Cohort | Early Bird]]
 - Funnel phase: [[Awareness | Consideration | Conversion]]
 - Goal / CTA intent: [[e.g. register for free masterclass | book a seat | save+follow]]
 
@@ -54,10 +54,10 @@ Hashtags:
 > **CTA:** free technical masterclass first. register → [[link]]
 > **Hashtags:** #AIEngineer #FullStackAI #TrivandrumTech #BuildInPublic #CareerInAI
 
-**✓ Good (Conversion · Pioneer Urgency):**
+**✓ Good (Conversion · Early Bird):**
 <!-- markdownlint-disable MD050 -->
-> **Hook:** pioneer cohort: ₹49K, not *₹70K*.
-> **Body:** founding-batch price for the first 20 seats. in-person, Trivandrum. 12 weeks to 3 deployed AI projects. [[__]] of 20 left.
+> **Hook:** cohort 01: ₹49K, not *₹70K*.
+> **Body:** early bird price for the first 20 seats. in-person, Trivandrum. 12 weeks to 3 deployed AI projects. [[__]] of 20 left.
 > **CTA:** book your seat — only [[__]] of 20 left. apply → eduflickai.com/apply
 > **Hashtags:** #FullStackAI #TrivandrumTech #AIEngineer #TechJobsKerala
 <!-- markdownlint-enable MD050 -->

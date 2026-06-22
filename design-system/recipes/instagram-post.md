@@ -15,7 +15,7 @@ FACTS (only source of live numbers — never typeset an invented value; missing 
 INPUTS:
 - Format: [[square 1080×1080 | portrait 1080×1350 | story 1080×1920]]
 - Theme:  [[dark | paper | indigo gradient]]
-- Eyebrow (UPPERCASE mono): [[e.g. PIONEER COHORT 01]]
+- Eyebrow (UPPERCASE mono): [[e.g. COHORT 01]]
 - Headline (lowercase, mark ONE word with *asterisks* for the serif accent): [[e.g. ship *ai products*, not theory]]
 - Proof line (a number): [[e.g. 3 deployed projects · 12 weeks · 20 seats]]
 - CTA or scarcity flag: [[e.g. "register free →" | "7 of 20 seats left"]]
@@ -37,7 +37,7 @@ OUTPUT: one ```html ... ``` block.
 
 ## Worked example (what good looks like — abbreviated)
 >
-> Square, dark theme. Eyebrow `PIONEER COHORT 01`. Headline `ship *ai products*, not theory.`
+> Square, dark theme. Eyebrow `COHORT 01`. Headline `ship *ai products*, not theory.`
 > Proof `3 deployed projects · 12 weeks · 20 seats`. CTA `register free →`. Footer wordmark + mark.
 > → 1080² frame (S14) with faint dot grid (S11), 96px padding, content space-between: eyebrow top,
 > 76px lowercase headline with `ai products` in serif indigo mid, mono proof + pill CTA, wordmark
