@@ -16,7 +16,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const HTML    = path.resolve(__dirname, '../brochures/Eduflick_Full_Stack_AI_Engineer_WhatsApp_Poster.html');
+const HTML    = path.resolve(__dirname, '../design-system/collateral/whatsapp-poster.html');
 const OUT_PNG = path.resolve(__dirname, '../exports/posters');
 const OUT_JPG = path.resolve(__dirname, '../exports/share');
 const SEL     = '[data-export="poster-wa"]';

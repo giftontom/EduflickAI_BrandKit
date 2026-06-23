@@ -1488,6 +1488,9 @@ function buildDocuments(commentCounts) {
     const p = `brochures/${f}`;
     push(p, p === DECK_FILE ? 'deck' : 'brochure');
   }
+  // The standalone WhatsApp share poster is a poster, not a brochure — it lives in
+  // the posters neighborhood (design-system/collateral/) so it is not mis-filed.
+  push('design-system/collateral/whatsapp-poster.html', 'poster');
   push(BRAND_BOOK_FILE, 'brand-book');
   for (const p of KIT_DOCS) push(p, 'kit');
   return docs;

@@ -7,10 +7,9 @@
 import { el, clear, rootHref } from '../dom.mjs';
 import { statusBadge } from '../components/status-badge.mjs';
 
-/* the FAE program's documents (its brochures + deck); excludes the standalone
-   WhatsApp poster file, which lives in the posters surface as poster-whatsapp. */
+/* the FAE program's documents (its brochures + deck). The standalone WhatsApp
+   share poster is discovered separately as kind 'poster' (see buildDocuments). */
 const FAE_DOC = /Full_Stack_AI_Engineer/;
-const IS_POSTER_DOC = /WhatsApp_Poster/;
 
 export function render(root, ctx) {
   const body = el('div', { class: 'program-room' });
@@ -77,10 +76,9 @@ export function render(root, ctx) {
     if (pItems.length) {
       const grid = el('div', { class: 'pr-posters' });
       for (const it of pItems) grid.append(posterCard(posters, it));
-      // The standalone WhatsApp share poster lives in brochures/ (data-export="poster-wa",
-      // rendered separately to exports/posters/poster-wa.png) — surface it as a poster here
-      // so it is no longer hidden/mis-filed as a "brochure".
-      const waDoc = docs.find((d) => IS_POSTER_DOC.test(d.path) && FAE_DOC.test(d.path));
+      // The standalone WhatsApp share poster (kind 'poster', rendered separately to
+      // exports/posters/poster-wa.png) — surface it here in the posters section.
+      const waDoc = docs.find((d) => d.kind === 'poster');
       if (waDoc) {
         grid.append(el('a', {
           class: 'pr-poster', href: rootHref(waDoc.path), target: '_blank', rel: 'noopener',
@@ -99,7 +97,7 @@ export function render(root, ctx) {
 
     /* brochures */
     const brochs = docs.filter((d) =>
-      d.kind === 'brochure' && FAE_DOC.test(d.path) && !IS_POSTER_DOC.test(d.path));
+      d.kind === 'brochure' && FAE_DOC.test(d.path));
     const withPdf = brochs.filter((d) => d.pdf).length;
     const bSec = el('section', { class: 'pr-section' },
       sectionHead('brochures', `${brochs.length} docs · ${withPdf} with PDF`, '#/brochures', 'open documents'));

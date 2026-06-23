@@ -5,7 +5,7 @@
 > rest is staged for execution. Decision points are marked ⚠️.
 
 ## 0 · Trigger: WhatsApp poster invisible in the studio — FIXED
-Root cause: the standalone WhatsApp poster (`brochures/…WhatsApp_Poster.html`,
+Root cause: the standalone WhatsApp poster (now `design-system/collateral/whatsapp-poster.html`,
 `data-export="poster-wa"`) lived in `brochures/`, so the studio auto-classified it as a
 **brochure**. It's a *different* design from the `poster-whatsapp` tile in `posters.html`.
 Interim fix shipped: rendered it (`export-wa-poster.mjs` → `exports/posters/poster-wa.png`)
@@ -65,6 +65,8 @@ only). Decide if both the standalone poster and the `poster-whatsapp` tile stay,
 
 ## 6 · Execution order (each step verified)
 - **Phase 1:** git consolidation §3.1–3.2 (main current) → doc currency sweep §4 → WhatsApp fix (done).
-- **Phase 2:** structure reorg §2 (moderate) + ref updates; re-run check:facts / exports / studio tests.
+- **Phase 2 (DONE):** structure reorg §2 (moderate) — WhatsApp poster + caption → `design-system/collateral/`
+  (discovered as kind `poster`, no longer mis-filed as a brochure); stale Leadership PDF confirmed gone; `posters.html`
+  kept in place (≈15 refs) to avoid churn. Verified: check:facts green (224), poster re-rendered, studio suite 120/0/2-skip.
 - **Phase 3:** new docs §4 + full studio alignment §5 + branch pruning §3.4.
 Verify each: `npm run check:facts`, export scripts, studio suite (122 tests) + screenshots, live apply curl.
