@@ -38,3 +38,7 @@ _ref/*.jpg
 
 # Studio runtime state (persisted lastRun for /api/actions — never committed)
 tools/.studio-state.json
+# Local secrets — API keys (Recraft, Gemini). NEVER commit.
+.env
+.env.*
+!.env.example

@@ -12,11 +12,17 @@
     "export:wa": "node export-wa-poster.mjs",
     "export:stories": "node export-stories.mjs",
     "export:ig": "node export-ig.mjs",
-    "gen:backdrops": "node gen-backdrops.mjs",
+    "gen:backdrops": "node --env-file-if-exists=../.env.local gen-backdrops.mjs",
     "gen:backdrops:proc": "node gen-backdrops-proc.mjs",
+    "gen:recraft": "PROVIDER=recraft node --env-file-if-exists=../.env.local gen-backdrops.mjs",
+    "gen:gemini": "PROVIDER=gemini node --env-file-if-exists=../.env.local gen-backdrops.mjs",
+    "recraft:style": "node --env-file-if-exists=../.env.local recraft-create-style.mjs",
+    "gen:vector": "node --env-file-if-exists=../.env.local gen-vector.mjs",
+    "recraft:finish": "node --env-file-if-exists=../.env.local recraft-finish.mjs",
     "gen:ig-backdrops": "node gen-ig-backdrops.mjs",
     "fetch:stock": "node fetch-stock.mjs",
     "treat:stock": "node treat-stock.mjs",
+    "treat:image": "node treat-image.mjs",
     "export:avatar": "node export-pf-avatar.mjs",
     "serve": "node serve.mjs",
     "studio": "node studio-server.mjs",
@@ -29,7 +35,7 @@
     "postinstall": "playwright install chromium"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.12.0"
   },
   "devDependencies": {
     "playwright": "1.60.0",

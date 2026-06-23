@@ -238,6 +238,34 @@ look to match: a good AI backdrop should be indistinguishable in palette and moo
 cinematic tiles when it sits beside them. *(The ref folder isn't created here — it's the first thing
 to make when you start generating.)*
 
+## 5b. Engines — Recraft (paid), Gemini, procedural · and the brand treatment
+
+`tools/gen-backdrops.mjs` is now **provider-agnostic** — pick the engine with `PROVIDER` and the §4
+prompt kit, the procedural floor, and the hard-block fallback are all shared. Keys live in the
+gitignored **`.env.local`** (loaded via `--env-file-if-exists`).
+
+| Asset | Engine | Why |
+| --- | --- | --- |
+| Abstract backdrop — signature restrained-dark | **procedural** (`_backdrop-art.mjs`) | deterministic, exact hex, structured (contour/dot/planes) |
+| Abstract backdrop — smooth glow | **Recraft** (`gen:recraft` + brand `style_id`) → **`treat-image`** | flat + subject-free via a custom style; duotone tames the glow |
+| Brand-treated photo | **`treat:stock`** duotone | exact hue, no generative drift |
+| Logo / icon / spot vector | **Recraft `gen:vector`** (native SVG) | true editable paths; never the real lockup |
+| Upscale / cutout finish | **`recraft:finish`** (`crispUpscale` / `removeBackground`) | sharpen / isolate without inventing hue |
+| Exploration / multi-ref edit | **Gemini** (billing-enabled) | widest aspect ratios + reference fusion; SynthID watermark → prefer Recraft for shipped art |
+
+**Recraft reality (validated live 2026-06):** stock styles always render a **subject**, so a flat
+backdrop needs a **custom `style_id`** trained on our own flat backdrops (`npm run recraft:style` →
+paste `RECRAFT_STYLE_ID` into `.env.local`). Even then Recraft skews **bright/saturated**, so for the
+restrained signature look run the output through the brand duotone:
+
+```bash
+PRE='brightness(0.4) contrast(1.3)' node tools/treat-image.mjs backdrop.png out.png   # → restrained dark indigo
+```
+
+`treat-image.mjs` and `treat-stock.mjs` share the ramp in `tools/_duotone.mjs` — a luminance →
+indigo-ramp map, so **no third hue survives** on any image you pass it. The pipeline:
+**generate (procedural / Recraft) → treat (duotone) → composite under the §3 HTML type stack.**
+
 ## 6. Imagery QA — the eyes-only gate
 
 Run this on the **generated image alone**, before you composite it. (This lives here; it does not
@@ -267,6 +295,12 @@ change `QA_CHECKLIST.md`.)
 is the only reliable check.
 
 ## 7. Where this goes next (what's built · what's next)
+
+> **Update (provider phases, 2026-06):** the generator described below is now a **provider
+> abstraction** — see **§5b**. Recraft is wired as a paid engine (with a brand `style_id`),
+> native-vector icons ship via `gen:vector`, finishing via `recraft:finish`, and any image can be
+> forced on-brand with `treat-image`. The Gemini-cascade description below still holds as the
+> default provider.
 
 **Built so far:** the **`S20` image-layer** snippet (`recipes/snippets.src.md`), the composite in
 `collateral/posters.html` (**all 7 posters carry a real backdrop** — every `[data-export]` has an

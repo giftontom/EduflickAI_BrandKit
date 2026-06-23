@@ -1,41 +1,52 @@
 // Eduflick AI — backdrop generator (the AI-imagery layer)
 // Builds the on-brand image prompt from AI_IMAGERY_GUIDE.md §4 (style preamble +
-// palette literals + a per-poster BRIEF + the negative block) and asks a Gemini image
-// model to produce ONE abstract indigo backdrop per poster. Text/mark/data are NEVER
-// in the image — they stay in HTML.
+// palette literals + a per-poster BRIEF + the negative block) and asks an image PROVIDER
+// to produce ONE abstract indigo backdrop per poster. Text/mark/data are NEVER in the
+// image — they stay in HTML.
 //
-// Robust by design:
-//   • tries a CASCADE of image models (gemini-3-pro-image → 2.5-flash-image →
-//     3.1-flash-image → imagen-4 predict) and uses the first that works;
-//   • on a transient 429 it backs off once and retries;
-//   • on a hard free-tier block (`limit: 0` / "only available on paid plans") it stops
-//     hammering the API and FALLS BACK to the procedural generator (tools/_backdrop-art.mjs)
-//     so every poster still gets a real, on-brand PNG now — swappable for true AI later.
+// Providers (choose with PROVIDER=…):
+//   • gemini   (default) — Gemini/Imagen model cascade. On a free-tier key the image
+//                          models hard-block, so this falls through to procedural.
+//   • recraft           — paid Recraft, palette-locked via `controls` + optional brand
+//                          RECRAFT_STYLE_ID. Best for smooth-glow backdrops / illustration.
+//   • proc | none       — skip AI entirely; render everything procedurally.
+// Whatever the provider doesn't produce falls back to the procedural generator
+// (_backdrop-art.mjs) so every poster always gets a real, on-brand PNG.
 //
 //   cd tools
-//   GEMINI_API_KEY=… npm run gen:backdrops                    # Mode-A set, AI→procedural
-//   MODEL=gemini-3-pro-image npm run gen:backdrops            # pin one model
-//   ONLY=poster-why,poster-proof npm run gen:backdrops        # a subset
-//   ALL=1 npm run gen:backdrops                               # also program + masterclass
-//   NO_GEMINI=1 npm run gen:backdrops                         # skip AI, go straight to procedural
+//   node --env-file=../.env.local gen-backdrops.mjs            # default (gemini → procedural)
+//   PROVIDER=recraft npm run gen:recraft                       # paid Recraft → procedural
+//   PROVIDER=proc    npm run gen:backdrops                     # straight to procedural
+//   RECRAFT_STYLE_ID=<uuid> npm run gen:recraft                # lock the brand style (Phase 2)
+//   MODEL=gemini-3-pro-image npm run gen:gemini                # pin one Gemini model
+//   ONLY=poster-why,poster-proof npm run gen:backdrops         # a subset
+//   ALL=1 npm run gen:backdrops                                # also program + masterclass
 //
-// The key is read from the environment only — never hardcode it.
+// Keys are read from the environment only (load via --env-file=.env.local) — never hardcode.
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderProcedural, MODE_A, ALL } from './_backdrop-art.mjs';
+import geminiProvider from './providers/gemini.mjs';
+import recraftProvider from './providers/recraft.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const OUT    = path.resolve(__dirname, '../design-system/collateral/assets/backdrops');
-const KEY    = process.env.GEMINI_API_KEY;
+const OUT    = process.env.OUT
+  ? path.resolve(process.env.OUT)                           // scratch dir for experiments
+  : path.resolve(__dirname, '../design-system/collateral/assets/backdrops');
 const ASPECT = process.env.ASPECT || '4:5';                 // imagen falls back to 3:4 (it rejects 4:5)
 
-// generateContent image models first, then imagen predict models as a last resort
-const CASCADE = process.env.MODEL
-  ? [process.env.MODEL]
-  : ['gemini-3-pro-image', 'gemini-2.5-flash-image', 'gemini-3.1-flash-image',
-     'imagen-4.0-fast-generate-001', 'imagen-4.0-generate-001'];
+// ── provider selection ──────────────────────────────────────────────────────────
+// 'proc'/'none' (or NO_AI, or legacy NO_GEMINI on the default provider) → skip AI.
+const PROVIDER_NAME = (process.env.PROVIDER || 'gemini').toLowerCase();
+const PROVIDERS = { gemini: geminiProvider, recraft: recraftProvider };
+const skipAI = PROVIDER_NAME === 'proc' || PROVIDER_NAME === 'none' || Boolean(process.env.NO_AI);
+const provider = skipAI ? null : PROVIDERS[PROVIDER_NAME];
+if (!skipAI && !provider) {
+  console.error(`Unknown PROVIDER "${PROVIDER_NAME}" — use one of: gemini | recraft | proc`);
+  process.exit(1);
+}
 
 const names = process.env.ONLY
   ? process.env.ONLY.split(',').map(s => s.trim()).filter(Boolean)
@@ -88,87 +99,55 @@ headline; the lower half is deep and calm so a five-row detail block reads on to
 lots of quiet.`,
 };
 
-const sleep = (ms) => new Promise(r => setTimeout(r, ms));
-const isImagen = (m) => m.startsWith('imagen');
-
-// Returns {ok:true, buf} | {hardBlock:true, msg} | {retryMs} | {err}
-async function callModel(model, prompt) {
-  try {
-    let url, body;
-    if (isImagen(model)) {
-      url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:predict?key=${KEY}`;
-      body = { instances: [{ prompt }], parameters: { sampleCount: 1, aspectRatio: '3:4' } };
-    } else {
-      url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${KEY}`;
-      body = { contents: [{ role: 'user', parts: [{ text: prompt }] }],
-               generationConfig: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio: ASPECT } } };
-    }
-    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-    const txt = await res.text();
-    if (!res.ok) {
-      const msg = txt.replace(/\s+/g, ' ').slice(0, 240);
-      // hard, non-retryable: free-tier zero quota or paid-only model
-      if (/limit:\s*0|only available on paid plans|check your plan and billing/i.test(txt))
-        return { hardBlock: true, msg };
-      // transient rate limit with a server-suggested delay
-      const m = txt.match(/retry in ([0-9.]+)s/i);
-      if (res.status === 429 && m) return { retryMs: Math.min(Math.ceil(parseFloat(m[1]) * 1000), 6000) };
-      return { err: `HTTP ${res.status}: ${msg}` };
-    }
-    const j = JSON.parse(txt);
-    const b64 = isImagen(model)
-      ? j?.predictions?.[0]?.bytesBase64Encoded
-      : (j?.candidates?.[0]?.content?.parts || []).find(p => p.inlineData?.data)?.inlineData?.data;
-    if (!b64) return { err: 'no image part in response' };
-    return { ok: true, buf: Buffer.from(b64, 'base64') };
-  } catch (e) {
-    return { err: e.message };
-  }
-}
-
-// state shared across posters so we don't hammer a key that's hard-blocked
+// state shared across posters so we don't hammer a provider that's hard-blocked
 let hardBlocked = false, blockMsg = '';
 
-async function tryGemini(name) {
-  const prompt = [PREAMBLE, PALETTE, BRIEFS[name] || '', NEGATIVE].join('\n\n');
-  for (const model of CASCADE) {
-    for (let attempt = 0; attempt < 2; attempt++) {
-      const r = await callModel(model, prompt);
-      if (r.ok) {
-        fs.writeFileSync(path.join(OUT, name + '.png'), r.buf);
-        console.log(`  ✓ ${name}.png  (${model}, ${(r.buf.length / 1024).toFixed(0)} KB)`);
-        return true;
-      }
-      if (r.hardBlock) { hardBlocked = true; blockMsg = r.msg; return false; }
-      if (r.retryMs && attempt === 0) { await sleep(r.retryMs); continue; }
-      break; // non-retryable for this model → try the next model in the cascade
-    }
+async function tryProvider(name) {
+  // Pass the raw prompt parts; each provider composes what it needs. Gemini takes long
+  // prompts (preamble+palette+brief+negative); Recraft caps at 1000 chars and gets palette
+  // via `controls` + negatives via `negative_prompt`, so it composes a compact prompt itself.
+  const parts = { preamble: PREAMBLE, palette: PALETTE, brief: BRIEFS[name] || '', negative: NEGATIVE, name };
+  const r = await provider.generate(parts, { aspect: ASPECT });
+  if (r.ok) {
+    fs.writeFileSync(path.join(OUT, name + '.png'), r.buf);
+    console.log(`  ✓ ${name}.png  (${r.via}, ${(r.buf.length / 1024).toFixed(0)} KB)`);
+    return true;
   }
+  if (r.hardBlock) { hardBlocked = true; blockMsg = r.msg; }
+  else if (r.err) console.log(`  · ${name}: ${r.err} → procedural`);
   return false;
 }
 
 console.log(`Backdrops → ${OUT}`);
-if (!KEY && !process.env.NO_GEMINI) console.log('! GEMINI_API_KEY not set — using the procedural generator.');
+console.log(`Provider: ${skipAI ? 'procedural only' : provider.name}`);
+if (provider && !provider.available())
+  console.log(`! ${provider.name} unavailable (no key, or explicitly disabled) — using the procedural generator.`);
 console.log(`Targets: ${names.join(', ')}\n`);
 
 const fellBack = [];
 for (const name of names) {
   if (!BRIEFS[name]) { console.log(`  ! no brief for ${name} — procedural`); fellBack.push(name); continue; }
   let ok = false;
-  if (KEY && !process.env.NO_GEMINI && !hardBlocked) ok = await tryGemini(name);
+  if (provider && provider.available() && !hardBlocked) ok = await tryProvider(name);
   if (!ok) fellBack.push(name);
 }
 
+let proceduralDone = [];
 if (fellBack.length) {
   if (hardBlocked) {
-    console.log(`\n⚠  Gemini image models are blocked on this key (free tier / no billing):`);
+    console.log(`\n⚠  ${provider.name} image models are blocked on this key:`);
     console.log(`   ${blockMsg}`);
-    console.log(`   → Enable billing on the key's Google Cloud project to get real AI images.`);
+    if (provider.name === 'gemini')
+      console.log(`   → Enable billing on the key's Google Cloud project to get real AI images.`);
   }
   console.log(`\nRendering ${fellBack.length} backdrop(s) procedurally (on-brand fallback)…`);
-  await renderProcedural(fellBack, OUT);
+  proceduralDone = await renderProcedural(fellBack, OUT);   // returns the names it actually rendered
 }
 
+// Reconcile: a target with neither a BRIEF nor procedural ART produces no PNG — surface it
+// instead of counting it as done, and exit non-zero so automation/CI notices.
 const viaAI = names.length - fellBack.length;
-console.log(`\nDone — ${names.length} backdrop(s): ${viaAI} via Gemini, ${fellBack.length} procedural.`);
-process.exit(0);
+const missing = fellBack.filter(n => !proceduralDone.includes(n));
+console.log(`\nDone — ${names.length - missing.length}/${names.length} backdrop(s): ${viaAI} via ${skipAI ? 'none' : provider.name}, ${proceduralDone.length} procedural.`);
+if (missing.length) console.log(`⚠  no backdrop produced for: ${missing.join(', ')} (no brief + no procedural art)`);
+process.exit(missing.length ? 1 : 0);
