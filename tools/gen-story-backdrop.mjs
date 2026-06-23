@@ -45,7 +45,7 @@ const FILTERS = `
   <filter id="fog"><feTurbulence type="fractalNoise" baseFrequency="0.009" numOctaves="3" seed="13" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
   <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>`;
 
-// ── story-fae · DARK cine-ink — one soft central bloom, dark lower two-thirds (UNCHANGED) ──
+// ── story-fae · DARK cine-ink — one soft central bloom, dark lower two-thirds ──
 const defsFae = `${FILTERS}
   <radialGradient id="vig" cx="50%" cy="26%" r="84%"><stop offset="0.46" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#06040f" stop-opacity="0.66"/></radialGradient>
   <linearGradient id="botfade" x1="0" y1="0" x2="0" y2="1"><stop offset="0.34" stop-color="#07050F" stop-opacity="0"/><stop offset="0.78" stop-color="#07050F" stop-opacity="0.5"/><stop offset="1" stop-color="#07050F" stop-opacity="0.82"/></linearGradient>
@@ -72,11 +72,12 @@ const defsProg = `${FILTERS}
 const svgProg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}"><defs>${defsProg}</defs>
   <rect width="${W}" height="${H}" fill="url(#bg)"/>
   <rect width="${W}" height="${H}" filter="url(#fog)" opacity="0.40" style="mix-blend-mode:overlay"/>
-  <ellipse cx="900" cy="250" rx="540" ry="470" fill="#9aa6ff" opacity="0.50" filter="url(#soft)"/>
-  <ellipse cx="910" cy="225" rx="175" ry="175" fill="#e7e9ff" opacity="0.30" filter="url(#soft)"/>
-  <ellipse cx="120" cy="780" rx="430" ry="430" fill="#160f48" opacity="0.42" filter="url(#soft)"/>
+  <ellipse cx="975" cy="210" rx="520" ry="450" fill="#9aa6ff" opacity="0.50" filter="url(#soft)"/>
+  <ellipse cx="985" cy="190" rx="170" ry="170" fill="#e7e9ff" opacity="0.30" filter="url(#soft)"/>
+  <ellipse cx="350" cy="470" rx="650" ry="380" fill="#181043" opacity="0.48" filter="url(#soft)"/>
+  <ellipse cx="120" cy="900" rx="430" ry="430" fill="#160f48" opacity="0.40" filter="url(#soft)"/>
   <ellipse cx="160" cy="1380" rx="560" ry="520" fill="#120c3c" opacity="0.6" filter="url(#soft)"/>
-  ${dots(150, 900, 250, 540, 1.7, '#cdd2ff', 0.22, 37)}
+  ${dots(150, 975, 210, 540, 1.7, '#cdd2ff', 0.22, 37)}
   ${planes([[470, -40, 3.6, 8, 0.16], [-90, 520, 4.4, -6, 0.12], [770, 980, 2.8, 16, 0.10]])}
   <rect width="${W}" height="${H}" fill="url(#botfade)"/>
   <rect width="${W}" height="${H}" fill="url(#vig)"/>
