@@ -1590,3 +1590,29 @@ a.ops-id:hover { color: var(--fg1); text-decoration: underline; }
 .review-warn-form .pop-title { color: var(--accent); }
 .review-gate-link { color: var(--accent); text-decoration: underline; }
 .review-gate-link:hover { color: var(--accent-light); }
+
+/* ---- program room (FAE: posters + brochures + deck, one place) ---- */
+.program-room { display: flex; flex-direction: column; gap: 30px; }
+.pr-section { display: flex; flex-direction: column; gap: 14px; }
+.pr-head { display: flex; align-items: baseline; gap: 12px; }
+.pr-h { font-family: var(--font-display); font-size: 19px; font-weight: 800; margin: 0; }
+.pr-meta { color: var(--fg3); font-size: 12px; }
+.pr-head .btn-mini { margin-left: auto; }
+.pr-posters { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+.pr-poster { display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: inherit; }
+.pr-poster-img { width: 100%; aspect-ratio: 1080 / 1350; object-fit: cover; border-radius: 10px;
+  border: 1px solid var(--hairline); background: var(--bg-raised); display: block;
+  transition: border-color var(--dur-fast) var(--ease-out); }
+.pr-poster:hover .pr-poster-img { border-color: var(--accent); }
+.pr-poster-img.pr-cold { display: flex; align-items: center; justify-content: center; color: var(--fg3); }
+.pr-poster-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.pr-poster-name { font-size: 12.5px; font-weight: 600; color: var(--fg2); }
+.pr-docs { display: flex; flex-direction: column; gap: 8px; }
+.pr-doc { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--hairline);
+  border-radius: 10px; background: var(--bg-card); }
+.pr-doc-id { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.pr-doc-label { font-weight: 700; font-size: 14px; }
+.pr-doc-path { color: var(--fg3); font-size: 11px; }
+.pr-doc-tools { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.pr-links { flex-direction: row; align-items: center; gap: 10px; }
+.pr-links-label { color: var(--fg3); margin-right: 4px; }

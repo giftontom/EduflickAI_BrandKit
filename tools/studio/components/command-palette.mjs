@@ -9,6 +9,7 @@ import { el, clear, openModal, announce } from '../dom.mjs';
    palette works before the manifest loads. */
 const ROUTE_ITEMS = [
   { label: 'dashboard', hint: 'overview', route: '/' },
+  { label: 'program room', hint: 'FAE · posters + brochures + deck', route: '/program' },
   { label: 'launch grid', hint: 'manager · plan, edit, approve, export', route: '/launch' },
   { label: 'instagram', hint: 'showcase · approved posts', route: '/instagram' },
   { label: 'instagram · evergreen gallery', hint: 'surface', route: '/social/instagram' },

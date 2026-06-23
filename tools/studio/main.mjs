@@ -11,6 +11,7 @@ import * as calendar from './views/calendar.mjs';
 import * as social from './views/social.mjs';
 import * as deck from './views/deck.mjs';
 import * as brochures from './views/brochures.mjs';
+import * as program from './views/program.mjs';
 import * as brand from './views/brand.mjs';
 import * as docs from './views/docs.mjs';
 import * as facts from './views/facts.mjs';
@@ -81,6 +82,7 @@ async function saveStatus(id, patch) {
 
 const ROUTES = [
   { pattern: /^\/?$/, view: dashboard },
+  { pattern: /^\/program\/?$/, view: program },
   { pattern: /^\/board\/?$/, view: board },
   { pattern: /^\/calendar\/?$/, view: calendar },
   { pattern: /^\/social\/([^/]+)\/?$/, view: social, params: (m) => ({ surfaceId: decodeURIComponent(m[1]) }) },

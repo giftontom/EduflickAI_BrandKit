@@ -1463,11 +1463,14 @@ function buildDocuments(commentCounts) {
     const content = readOrNull(path.join(ROOT, relPath));
     if (content == null) return;
     const counts = commentCounts.get(`doc:${relPath}`);
+    const pdfRel = relPath.replace(/\.html$/, '.pdf');
+    const hasPdf = pdfRel !== relPath && fs.existsSync(path.join(ROOT, pdfRel));
     docs.push({
       path: relPath,
       kind,
       label: labelFor(relPath),
       editable: content.includes('/*EDITMODE-BEGIN*/'),
+      pdf: hasPdf ? pdfRel : null,
       commentCount: counts ? counts.total : 0,
       openCount: counts ? counts.open : 0,
     });

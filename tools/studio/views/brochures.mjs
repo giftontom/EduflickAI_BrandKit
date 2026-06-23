@@ -72,6 +72,7 @@ export function render(root, ctx) {
         el('span', { class: 'ti-label' }, d.label),
         el('span', { class: 'mono ti-path' }, d.path),
         d.openCount > 0 ? el('span', { class: 'annot-count ti-tag' }, String(d.openCount)) : null,
+        d.pdf ? el('span', { class: 'badge ti-tag' }, 'pdf') : null,
         d.editable ? el('span', { class: 'badge s-approved ti-tag' }, 'editable') : null));
       }
     }
@@ -145,6 +146,7 @@ export function render(root, ctx) {
       el('span', { class: 'doc-title' }, d.label),
       el('span', { class: 'mono doc-path' }, d.path),
       el('span', { class: 'doc-tools' },
+        d.pdf ? el('a', { class: 'btn-mini', href: rootHref(d.pdf), target: '_blank', rel: 'noopener' }, 'PDF ↓') : null,
         el('a', { class: 'btn-mini', href: rootHref(d.path), target: '_blank', rel: 'noopener' }, 'open in tab')));
 
     if (d.editable) {
