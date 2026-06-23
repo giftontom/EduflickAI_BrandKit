@@ -32,7 +32,8 @@
     "gen:feedback": "node gen-feedback.mjs",
     "test": "node --test test/*.test.mjs",
     "test:smoke": "node test/smoke.mjs",
-    "postinstall": "playwright install chromium"
+    "postinstall": "playwright install chromium",
+    "gen:story-backdrop": "node gen-story-backdrop.mjs"
   },
   "engines": {
     "node": ">=20.12.0"

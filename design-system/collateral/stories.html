@@ -29,6 +29,13 @@
   .cine-indigo{background:radial-gradient(130% 110% at 50% 22%,#6E78F5,#4B3FE0 26%,#261A82 58%,#0B0822 100%)}
   .cine-ink{background:radial-gradient(120% 120% at 78% 8%,#241E52,#15122F 34%,#0A0B10 66%)}
 
+  /* S20 · image backdrop (cinematic twin of the WhatsApp poster) — bottom layer; grain/vignette/scrim/type all sit OVER it */
+  .img-layer{position:absolute;inset:0;z-index:0;overflow:hidden}
+  .img-layer img{width:100%;height:100%;object-fit:cover;display:block}
+  /* legibility scrim — darkens the top (eyebrow) + the lower half (chips/specs/cta/footer); the headline/glow band stays open */
+  .scrim{position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:linear-gradient(180deg,rgba(7,5,22,0.52) 0%,rgba(7,5,22,0.12) 15%,rgba(7,5,22,0.06) 33%,rgba(7,5,22,0.50) 62%,rgba(7,5,22,0.82) 100%)}
+
   /* S16 grain + faint dot grid */
   .story::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
     background-image:var(--grain),radial-gradient(circle,rgba(245,242,234,0.05) 1px,transparent 1px);
@@ -84,6 +91,25 @@
   .foot .handle{margin-left:auto;font-family:var(--font-m);font-size:17px;letter-spacing:0.16em;
     text-transform:lowercase;color:var(--meta)}
 
+  /* ───────── all-in-one story components (ported from posters.html, story-scaled) ───────── */
+  .top{display:flex;justify-content:space-between;align-items:center;gap:24px}
+  .idx{font-family:var(--font-m);font-size:14px;letter-spacing:0.18em;text-transform:uppercase;color:var(--meta);white-space:nowrap}
+  .hero{position:relative}
+  /* S22 · proof chips (the industry stack) */
+  .chips{display:flex;flex-wrap:wrap;gap:14px}
+  .chip{font-family:var(--font-m);font-size:21px;letter-spacing:0.03em;text-transform:lowercase;color:var(--txt);
+    background:rgba(245,242,234,0.05);border:1px solid rgba(245,242,234,0.26);border-radius:999px;padding:13px 26px}
+  /* S12 · dashed spec rows */
+  .specs{display:flex;flex-direction:column}
+  .row{display:flex;justify-content:space-between;align-items:baseline;gap:30px;padding:21px 0;
+    border-bottom:1px dashed var(--line)}
+  .row:first-child{border-top:1px dashed var(--line)}
+  .row .k{font-family:var(--font-m);font-size:16px;letter-spacing:0.18em;text-transform:uppercase;color:#A6A8C9;white-space:nowrap}
+  .row .v{font-family:var(--font-d);font-weight:600;font-size:25px;letter-spacing:-0.01em;color:var(--txt);
+    text-align:right;text-transform:lowercase}
+  /* caption line */
+  .cap{font-family:var(--font-d);font-weight:500;font-size:22px;line-height:1.5;color:var(--dim);max-width:40ch}
+
   /* bright indigo field → lighten the eyebrow + paper-fill the CTA */
   .cine-indigo{--meta:#C9C5BA}
   .cine-indigo .eyebrow{color:#F5F2EA}
@@ -115,34 +141,8 @@
     </div>
   </section>
 
-  <!-- ░░ STORY 2 · the masterclass — playful · poll → register ░░ -->
-  <section class="story cine-ink" data-export="story-masterclass">
-    <div class="stack">
-      <div>
-        <span class="eyebrow"><span class="rule"></span>free · live · ~90 min</span>
-        <div style="position:relative;margin-top:36px">
-          <div class="halo" style="width:680px;height:680px;left:-120px;top:-120px"></div>
-          <h1 class="headline">see it built, <em>live</em>.</h1>
-        </div>
-        <p class="lead">we build a real ai app on the spot — you follow along on your laptop.</p>
-      </div>
-      <div class="poll">
-        <div class="poll-q">your ai experience?</div>
-        <div class="poll-opts">
-          <div class="poll-opt">none yet</div>
-          <div class="poll-opt">i've shipped a bit</div>
-        </div>
-      </div>
-      <div>
-        <a class="cta" href="#">apply → eduflickai.com/apply</a>
-        <div class="foot" style="margin-top:34px">
-          <svg viewBox="0 0 180 180" width="46" height="46"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
-          <span class="wordmark">eduflick<i>AI</i></span>
-          <span class="handle">@eduflick.ai</span>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- STORY 2 (masterclass) removed 2026-06-23: the apply page was retired 2026-06-11 (see FACTS.md);
+       it referenced "Apply" + the dead eduflickai.com/apply URL. -->
 
   <!-- ░░ STORY 3 · the seats — premium · scarcity + quiz ░░ -->
   <section class="story cine-ink" data-export="story-seats">
@@ -163,8 +163,86 @@
         </div>
       </div>
       <div>
-        <a class="cta" href="#" style="background:#5B5BF0;color:#F5F2EA">apply → eduflickai.com/apply</a>
+        <a class="cta" href="#" style="background:#5B5BF0;color:#F5F2EA">apply → link in bio</a>
         <div class="foot" style="margin-top:34px">
+          <svg viewBox="0 0 180 180" width="46" height="46"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+          <span class="wordmark">eduflick<i>AI</i></span>
+          <span class="handle">@eduflick.ai</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ STORY 4 · the all-in-one — premium · same payload as the WhatsApp share poster (poster-whatsapp),
+       re-laid for 9:16 and IG-ruled: NO printed apply/website URL — the CTA reads "link in bio" (see ig-link-in-bio-rule). ░░ -->
+  <section class="story cine-ink" data-export="story-fae">
+    <div class="img-layer"><img src="assets/backdrops/story-fae.png" alt=""></div>
+    <div class="scrim"></div>
+    <div class="stack">
+      <div>
+        <div class="top" style="margin-top:30px">
+          <span class="eyebrow"><span class="rule"></span>full-stack ai engineer · cohort 01</span>
+          <span class="idx">in person · trivandrum</span>
+        </div>
+
+        <div class="hero" style="margin-top:54px">
+          <h1 class="headline" style="font-size:104px;text-shadow:0 2px 12px rgba(7,5,22,0.62),0 1px 44px rgba(7,5,22,0.5)">build <em>3 real</em><br>ai products.</h1>
+          <span class="coral">capped at 20 selective seats</span>
+          <p class="lead" style="max-width:27ch">12 weeks, in person in trivandrum — a saas dashboard, a rag chatbot, and an agentic platform. all deployed, not slides.</p>
+        </div>
+
+        <div class="chips" style="margin-top:50px">
+          <span class="chip">cursor</span><span class="chip">next.js</span><span class="chip">claude / openai</span><span class="chip">pinecone</span><span class="chip">langchain</span><span class="chip">n8n</span>
+        </div>
+
+        <div class="specs" style="margin-top:46px">
+          <div class="row"><span class="k">where</span><span class="v">uxp innovation hub, trivandrum</span></div>
+          <div class="row"><span class="k">week 12</span><span class="v">mock interviews + recruiter networking</span></div>
+          <div class="row"><span class="k">fee</span><span class="v">₹49,000 early bird · ₹70,000 cohort 2</span></div>
+          <div class="row"><span class="k">reserve</span><span class="v">₹5,000 now · ₹15,000 booking, then ₹17,000 + ₹17,000</span></div>
+        </div>
+      </div>
+
+      <div>
+        <a class="cta" href="#">apply → link in bio</a>
+        <p class="cap" style="margin-top:20px">a tomatrix technologies venture · info@eduflickai.com</p>
+        <div class="foot" style="margin-top:32px;border-top:1px dashed var(--line);padding-top:30px">
+          <svg viewBox="0 0 180 180" width="46" height="46"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
+          <span class="wordmark">eduflick<i>AI</i></span>
+          <span class="handle">@eduflick.ai</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ STORY · the program — HERO · cinematic twin of poster-program (bright cine-indigo register).
+       Single aspirational message + the four headline facts; IG-ruled (CTA "link in bio", no URL). ░░ -->
+  <section class="story cine-indigo" data-export="story-program">
+    <div class="img-layer"><img src="assets/backdrops/story-program.png" alt=""></div>
+    <div class="scrim"></div>
+    <div class="stack">
+      <div>
+        <div class="top" style="margin-top:30px">
+          <span class="eyebrow"><span class="rule"></span>full-stack ai engineer program</span>
+          <span class="idx">01 · program</span>
+        </div>
+
+        <div class="hero" style="margin-top:84px">
+          <h1 class="headline" style="font-size:104px;text-shadow:0 2px 14px rgba(7,5,22,0.6),0 1px 46px rgba(7,5,22,0.5)">ship <em>ai products</em>,<br>not theory.</h1>
+          <p class="lead" style="max-width:23ch">12 weeks. in person. you ship three real ones.</p>
+        </div>
+
+        <div class="specs" style="margin-top:78px">
+          <div class="row"><span class="k">duration</span><span class="v">12 weeks · in person</span></div>
+          <div class="row"><span class="k">venue</span><span class="v">uxp innovation hub, trivandrum</span></div>
+          <div class="row"><span class="k">you ship</span><span class="v">3 deployed ai projects</span></div>
+          <div class="row"><span class="k">price</span><span class="v">₹49,000 early bird · ₹70,000 cohort 2</span></div>
+        </div>
+      </div>
+
+      <div>
+        <a class="cta" href="#">apply → link in bio</a>
+        <div class="foot" style="margin-top:44px;border-top:1px dashed var(--line);padding-top:30px">
           <svg viewBox="0 0 180 180" width="46" height="46"><path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/></svg>
           <span class="wordmark">eduflick<i>AI</i></span>
           <span class="handle">@eduflick.ai</span>
