@@ -9,7 +9,7 @@
  *   - `radio`   -> a single choice rendered as tappable chips; server whitelists it
  *   - `consent` -> a single required checkbox, stored as boolean true
  */
-export const HONEYPOT = 'company';
+export const HONEYPOT = 'hp_token';
 export const TURNSTILE_FIELD = 'cf-turnstile-response';
 
 export const FIELDS = [
@@ -47,6 +47,6 @@ export const FIELDS = [
     type: 'consent',
     required: true,
     text:
-      'I can attend in person in Trivandrum and agree to Eduflick AI storing these details to process my application and contact me.',
+      'I can attend in person at UXP Innovation Hub, Trivandrum and agree to Eduflick AI storing these details to process my application and contact me.',
   },
 ];

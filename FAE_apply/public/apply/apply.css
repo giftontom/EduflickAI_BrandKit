@@ -1,26 +1,28 @@
 /* ============================================================
-   FAE application — mobile-first interactive wizard, ink-gradient
-   dark theme matching the Full-Stack AI Engineer brochure/poster.
-   Tokens (colors, fonts, type) come from the linked design-system CSS.
-   Accent on the ink surface is i-200 (#B7C0FF), per the brochure cover.
+   FAE application — TWO UIs from one form:
+   • Mobile (<960px): focused 4-step interactive wizard.
+   • Desktop (>=960px): split immersive — animated brand panel
+     (left) + the full application (right), all fields visible.
+   Ink-gradient dark theme; tokens from design-system CSS.
    ============================================================ */
 
 :root { color-scheme: dark; }
 * { box-sizing: border-box; }
+button, a, label, .chip, .consent, input, select { touch-action: manipulation; }
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
   font-family: var(--font-display);
   color: var(--paper);
   background: var(--i-ink);
   overflow-x: hidden;
 }
 a { color: var(--i-200); }
+.mobile-only { display: revert; }
+.desktop-only { display: none; }
 
-/* ---------- the ink backdrop (brochure "Lumen+" cover recipe) ---------- */
+/* ---------- ink backdrop ---------- */
 .ink-bg {
   position: fixed;
   inset: 0;
@@ -39,133 +41,79 @@ a { color: var(--i-200); }
   mask-image: linear-gradient(180deg, #000 0%, transparent 88%);
 }
 
-/* ---------- header ---------- */
-.app-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px calc(16px + env(safe-area-inset-top));
-  padding-top: max(16px, env(safe-area-inset-top));
-}
+/* ---------- shell (the form is the layout container) ---------- */
+.shell { display: flex; flex-direction: column; min-height: 100dvh; }
+.brand-panel { display: none; }
+
+/* shared lockup */
 .brand-lockup { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; }
 .brand-lockup svg { width: 26px; height: 26px; display: block; }
 .brand-lockup .wordmark { font-size: 19px; color: var(--paper); }
+
+/* ===================== MOBILE WIZARD (base) ===================== */
+.form-col { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
+/* header + progress stick together as one unit (notch-safe, no fragile pixel offset) */
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  padding-top: env(safe-area-inset-top);
+  background: rgba(10, 11, 16, 0.6); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(245, 242, 234, 0.06);
+}
+.app-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px;
+}
+.form-heading { font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--paper); }
 .step-count {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  color: rgba(245, 242, 234, 0.55);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; color: var(--i-200);
+  padding: 4px 10px; border: 1px solid rgba(139, 151, 255, 0.32); border-radius: 999px;
 }
 
-/* ---------- progress bar ---------- */
+/* full-bleed top progress bar, flush under the header (no side padding) */
 .progress {
-  height: 3px;
-  margin: 0 20px;
-  background: rgba(245, 242, 234, 0.12);
-  border-radius: 999px;
-  overflow: hidden;
+  height: 3px; margin: 0; background: rgba(245, 242, 234, 0.08); overflow: hidden;
 }
 .progress-fill {
-  display: block;
-  height: 100%;
-  width: 25%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--i-400), var(--i-200));
-  box-shadow: 0 0 18px rgba(139, 151, 255, 0.5);
-  transition: width 0.45s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+  display: block; height: 100%; width: 25%; border-radius: 0 3px 3px 0;
+  background: linear-gradient(90deg, var(--i-500), var(--i-300), var(--i-200));
+  box-shadow: 0 0 16px rgba(139, 151, 255, 0.6);
+  transition: width 0.5s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
-/* ---------- wizard / steps ---------- */
-.wizard {
-  flex: 1 1 auto;
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-  padding: 26px 20px 12px;
-}
+.wizard { flex: 1 1 auto; width: 100%; max-width: 520px; margin: 0 auto; padding: 26px 20px 12px; }
 .kicker {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--i-200);
-  margin: 0 0 16px;
+  display: flex; align-items: center; gap: 11px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--i-200); margin: 0 0 16px;
 }
-.kicker::before {
-  content: "";
-  width: 26px;
-  height: 1px;
-  background: var(--i-200);
-  flex-shrink: 0;
-}
+.kicker::before { content: ""; width: 26px; height: 1px; background: var(--i-200); flex-shrink: 0; }
 .step-title {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: clamp(34px, 9vw, 44px);
-  line-height: 0.98;
-  letter-spacing: -0.045em;
-  text-transform: lowercase;
-  color: var(--paper);
-  margin: 0 0 14px;
+  font-family: var(--font-display); font-weight: 900; font-size: clamp(34px, 9vw, 44px);
+  line-height: 0.98; letter-spacing: -0.045em; text-transform: lowercase; color: var(--paper); margin: 0 0 14px;
 }
-.step-title em {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  color: var(--i-200);
-}
-/* the heading is focused programmatically per step for screen readers — it's not
-   interactive, so suppress the visible focus ring (no box around the headline). */
+.step-title em { font-family: var(--font-serif); font-style: italic; font-weight: 400; letter-spacing: -0.02em; color: var(--i-200); }
 .step-title:focus { outline: none; }
-.step-sub {
-  font-size: 15px;
-  line-height: 1.55;
-  color: rgba(245, 242, 234, 0.66);
-  margin: 0 0 26px;
-  max-width: 42ch;
-}
+.step-sub { font-size: 15px; line-height: 1.55; color: rgba(245, 242, 234, 0.66); margin: 0 0 26px; max-width: 42ch; }
 
-/* progressive enhancement: no-JS shows all steps stacked, JS reveals one at a time */
+/* progressive enhancement: no-JS shows all steps stacked; JS reveals one step at a time (all breakpoints) */
 .step { margin-bottom: 40px; }
 .step + .step { border-top: 1px solid rgba(245, 242, 234, 0.1); padding-top: 34px; }
 .js .step { display: none; margin-bottom: 0; border-top: 0; padding-top: 0; }
 .js .step.active { display: block; animation: stepin 0.42s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)); }
-@keyframes stepin {
-  from { opacity: 0; transform: translateX(26px); }
-  to { opacity: 1; transform: translateX(0); }
-}
+@keyframes stepin { from { opacity: 0; transform: translateX(26px); } to { opacity: 1; transform: translateX(0); } }
 
-/* ---------- text fields ---------- */
+/* ---------- fields ---------- */
 .field { margin-bottom: 16px; }
-.field > label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 0.01em;
-  color: rgba(245, 242, 234, 0.82);
-}
+.field > label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; letter-spacing: 0.01em; color: rgba(245, 242, 234, 0.82); }
 .field input {
-  width: 100%;
-  font-family: var(--font-display);
-  font-size: 17px; /* >=16px: stops iOS zoom-on-focus */
-  color: var(--paper);
-  background: rgba(245, 242, 234, 0.05);
-  border: 1px solid rgba(245, 242, 234, 0.16);
-  border-radius: 14px;
-  padding: 15px 16px;
-  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  width: 100%; font-family: var(--font-display); font-size: 17px; color: var(--paper);
+  background: rgba(245, 242, 234, 0.05); border: 1px solid rgba(245, 242, 234, 0.16);
+  border-radius: 14px; padding: 15px 16px;
+  transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
 }
 .field input::placeholder { color: rgba(245, 242, 234, 0.32); }
 .field input:focus {
-  outline: none;
-  border-color: var(--i-300);
-  background: rgba(245, 242, 234, 0.08);
+  outline: none; border-color: var(--i-300); background: rgba(245, 242, 234, 0.08);
   box-shadow: 0 0 0 4px rgba(139, 151, 255, 0.16);
 }
 .field input[aria-invalid="true"] { border-color: var(--warn); }
@@ -175,226 +123,183 @@ a { color: var(--i-200); }
 /* ---------- choice chips ---------- */
 .chips { display: flex; flex-direction: column; gap: 11px; }
 .chip {
-  position: relative;
-  display: flex;
-  align-items: center;
-  min-height: 58px;
-  padding: 16px 18px;
-  border: 1px solid rgba(245, 242, 234, 0.16);
-  border-radius: 16px;
-  background: rgba(245, 242, 234, 0.04);
-  color: var(--paper);
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: border-color 0.16s, background 0.16s, transform 0.12s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+  position: relative; display: flex; align-items: center; min-height: 58px; padding: 14px 46px 14px 18px;
+  border: 1px solid rgba(245, 242, 234, 0.16); border-radius: 16px; background: rgba(245, 242, 234, 0.04);
+  color: var(--paper); font-size: 16px; font-weight: 600; line-height: 1.25; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.16s, background 0.16s, transform 0.14s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), box-shadow 0.16s;
 }
 .chip input { position: absolute; opacity: 0; pointer-events: none; }
 .chip span { position: relative; z-index: 1; }
 .chip::after {
-  content: "";
-  position: absolute;
-  right: 16px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(245, 242, 234, 0.28);
-  transition: border-color 0.16s, background 0.16s;
+  content: ""; position: absolute; right: 16px; width: 22px; height: 22px; border-radius: 50%;
+  border: 1.5px solid rgba(245, 242, 234, 0.28); transition: border-color 0.16s, background 0.16s, transform 0.16s;
 }
 .chip:active { transform: scale(0.985); }
-.chip:hover { border-color: rgba(139, 151, 255, 0.5); }
+.chip:hover { border-color: rgba(139, 151, 255, 0.5); transform: translateY(-1px); }
 .chip:has(input:checked) {
   border-color: var(--i-300);
   background: linear-gradient(180deg, rgba(139, 151, 255, 0.18), rgba(139, 151, 255, 0.07));
   box-shadow: 0 8px 30px -12px rgba(91, 91, 240, 0.6);
 }
 .chip:has(input:checked)::after {
-  border-color: var(--i-200);
+  border-color: var(--i-200); transform: scale(1.08);
   background: var(--i-300)
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23F5F2EA' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E")
     center / 12px no-repeat;
+  animation: pop 0.28s var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
 }
+@keyframes pop { 0% { transform: scale(0.6); } 60% { transform: scale(1.18); } 100% { transform: scale(1.08); } }
 .chip:focus-within { border-color: var(--i-300); box-shadow: 0 0 0 4px rgba(139, 151, 255, 0.16); }
 
-/* ---------- review + consent (step 4) ---------- */
-.review {
-  margin: 0 0 22px;
-  border: 1px solid rgba(245, 242, 234, 0.12);
-  border-radius: 16px;
-  background: rgba(245, 242, 234, 0.03);
-  overflow: hidden;
-}
-.review-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 13px 16px;
-}
+/* ---------- review + consent ---------- */
+.review { margin: 0 0 22px; border: 1px solid rgba(245, 242, 234, 0.12); border-radius: 16px; background: rgba(245, 242, 234, 0.03); overflow: hidden; }
+.review-row { display: flex; justify-content: space-between; gap: 16px; padding: 13px 16px; }
 .review-row + .review-row { border-top: 1px dashed rgba(245, 242, 234, 0.12); }
-.review-row dt {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(245, 242, 234, 0.5);
-}
+.review-row dt { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(245, 242, 234, 0.5); }
 .review-row dd { margin: 0; font-size: 15px; font-weight: 600; text-align: right; color: var(--paper); }
-
-.consent {
-  display: flex;
-  gap: 13px;
-  align-items: flex-start;
-  padding: 16px;
-  border: 1px solid rgba(245, 242, 234, 0.16);
-  border-radius: 16px;
-  background: rgba(245, 242, 234, 0.04);
-  cursor: pointer;
-}
-.consent input {
-  margin-top: 1px;
-  width: 22px;
-  height: 22px;
-  flex-shrink: 0;
-  accent-color: var(--i-500);
-}
+.consent { display: flex; gap: 13px; align-items: flex-start; padding: 16px; border: 1px solid rgba(245, 242, 234, 0.16); border-radius: 16px; background: rgba(245, 242, 234, 0.04); cursor: pointer; }
+.consent input { margin-top: 1px; width: 22px; height: 22px; flex-shrink: 0; accent-color: var(--i-500); }
 .consent span { font-size: 14px; line-height: 1.5; color: rgba(245, 242, 234, 0.78); }
-
 #turnstile-slot:not(:empty) { margin-top: 18px; }
-
-/* honeypot — off-screen */
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
-/* ---------- sticky action bar ---------- */
+/* ---------- action bar ---------- */
 .actionbar {
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
+  position: sticky; bottom: 0; z-index: 10; width: 100%; max-width: 520px; margin: 0 auto;
   padding: 14px 20px calc(16px + env(safe-area-inset-bottom));
   background: linear-gradient(180deg, rgba(11, 8, 34, 0) 0%, rgba(8, 5, 23, 0.92) 26%, #070417 100%);
 }
 .actionbar-inner { display: flex; gap: 12px; align-items: center; }
-.actionbar .btn {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 16px;
-  border: 0;
-  border-radius: 999px;
-  padding: 16px 24px;
-  cursor: pointer;
+.btn {
+  font-family: var(--font-display); font-weight: 700; font-size: 16px; border: 0; border-radius: 999px;
+  padding: 16px 24px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
   transition: transform 0.14s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), background 0.14s, box-shadow 0.14s, opacity 0.14s;
 }
-.actionbar .btn-primary {
-  flex: 1;
-  background: var(--i-500);
-  color: var(--paper);
-  box-shadow: 0 10px 34px -10px rgba(91, 91, 240, 0.7);
-}
-.actionbar .btn-primary:hover { background: var(--i-400); transform: translateY(-1px); }
-.actionbar .btn-primary:active { transform: translateY(0) scale(0.99); }
-.actionbar .btn-primary[disabled] { opacity: 0.55; cursor: progress; box-shadow: none; }
-.actionbar .btn-ghost {
-  background: rgba(245, 242, 234, 0.06);
-  color: var(--paper);
-  border: 1px solid rgba(245, 242, 234, 0.18);
-}
-.actionbar .btn-ghost:hover { border-color: var(--i-200); }
+.btn-primary { flex: 1; background: var(--i-500); color: var(--paper); box-shadow: 0 10px 34px -10px rgba(91, 91, 240, 0.7); }
+.btn-primary:hover { background: var(--i-400); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0) scale(0.99); }
+.btn-primary.is-busy, .btn-primary[disabled] { opacity: 0.6; pointer-events: none; }
+.btn-ghost { background: rgba(245, 242, 234, 0.06); color: var(--paper); border: 1px solid rgba(245, 242, 234, 0.18); }
+.btn-ghost:hover { border-color: var(--i-200); }
 .btn:focus-visible { outline: 2px solid var(--i-200); outline-offset: 3px; }
-
-/* button visibility: no-JS shows only Submit; JS reveals per step via .is-on */
+.btn-whatsapp { background: #25d366; color: #06251a; }
+.btn-whatsapp:hover { background: #2ee676; transform: translateY(-2px); }
+/* button visibility: no-JS shows only submit; JS reveals per step via .is-on */
 #btn-next, #btn-back { display: none; }
-#btn-submit { display: inline-flex; align-items: center; justify-content: center; }
+#btn-submit { display: inline-flex; }
 .js #btn-submit { display: none; }
-.js #btn-next.is-on,
-.js #btn-back.is-on { display: inline-flex; align-items: center; justify-content: center; }
-.js #btn-submit.is-on { display: inline-flex; align-items: center; justify-content: center; }
-
-.form-status { margin: 12px 2px 0; font-size: 14px; color: #ff9d8f; min-height: 0; }
+.js #btn-next.is-on, .js #btn-back.is-on, .js #btn-submit.is-on { display: inline-flex; }
+.form-status { margin: 12px 2px 0; font-size: 14px; color: #ff9d8f; }
 .form-status:empty { display: none; }
 .form-status.ok { color: var(--success); }
-.trust {
-  margin: 12px 0 0;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  color: rgba(245, 242, 234, 0.42);
-  text-align: center;
-}
+.trust { margin: 12px 0 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; color: rgba(245, 242, 234, 0.42); text-align: center; }
 .trust a { color: rgba(245, 242, 234, 0.6); text-decoration: none; }
 
-/* ---------- desktop: framed card, centered ---------- */
-@media (min-width: 720px) {
-  body { justify-content: flex-start; }
-  .app-header { max-width: 560px; margin: 0 auto; width: 100%; padding-top: 28px; }
-  .progress { max-width: 560px; margin: 4px auto 0; }
-  .wizard {
-    max-width: 560px;
-    margin: 22px auto 0;
-    padding: 38px 40px 16px;
-    background: rgba(245, 242, 234, 0.025);
-    border: 1px solid rgba(245, 242, 234, 0.1);
-    border-radius: 24px;
-    box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.7);
+/* ===================== DESKTOP: split step-by-step wizard ===================== */
+@media (min-width: 960px) {
+  body { overflow-y: auto; }
+  .mobile-only { display: none !important; }
+  .desktop-only { display: revert; }
+
+  /* the form shell becomes a full-height split: brand + tracker (left), active step (right) */
+  .shell { display: grid; grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr); min-height: 100vh; }
+
+  /* ---- LEFT: persistent brand + vertical step tracker ---- */
+  .brand-panel {
+    display: flex; flex-direction: column;
+    position: sticky; top: 0; height: 100vh; overflow: hidden;
+    padding: 46px 50px;
+    border-right: 1px solid rgba(245, 242, 234, 0.08);
+    background:
+      radial-gradient(680px 520px at 14% 6%, rgba(91, 91, 240, 0.32), transparent 62%),
+      linear-gradient(165deg, var(--i-800) 0%, var(--i-ink) 74%);
   }
-  .actionbar {
-    position: static;
-    max-width: 560px;
-    margin: -1px auto 40px;
-    background: none;
-    padding: 18px 40px 0;
+  .brand-panel .brand-lockup .wordmark { font-size: 21px; }
+  .brand-mid { position: relative; z-index: 2; flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 360px; }
+  .brand-title {
+    font-family: var(--font-display); font-weight: 900; font-size: clamp(34px, 3.3vw, 50px);
+    line-height: 0.97; letter-spacing: -0.05em; text-transform: lowercase; color: var(--paper); margin: 0 0 34px;
   }
-  .step-title { font-size: 46px; }
+  .brand-title em { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--i-200); }
+  .brand-lead { display: none; }
+
+  /* vertical step tracker — lights up as the wizard advances */
+  .steplist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .steplist li { position: relative; display: flex; align-items: center; gap: 15px; padding: 9px 0; font-size: 14px; font-weight: 600; color: rgba(245, 242, 234, 0.4); transition: color 0.3s; }
+  .steplist .sl-dot {
+    flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+    font-family: var(--font-mono); font-size: 12px; color: rgba(245, 242, 234, 0.5);
+    border: 1.5px solid rgba(245, 242, 234, 0.22); background: rgba(245, 242, 234, 0.03);
+    transition: all 0.32s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+  }
+  .steplist li:not(:last-child) .sl-dot::after { content: ""; position: absolute; left: 13.25px; top: 37px; width: 1.5px; height: 18px; background: rgba(245, 242, 234, 0.16); }
+  .steplist li.is-done { color: rgba(245, 242, 234, 0.72); }
+  .steplist li.is-done .sl-dot {
+    color: transparent; border-color: var(--i-400); background: var(--i-500)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23F5F2EA' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E")
+      center / 12px no-repeat;
+  }
+  .steplist li.is-done .sl-dot::after { background: rgba(139, 151, 255, 0.5); }
+  .steplist li.is-active { color: var(--paper); }
+  .steplist li.is-active .sl-dot { color: var(--paper); border-color: var(--i-300); background: rgba(139, 151, 255, 0.2); box-shadow: 0 0 0 5px rgba(139, 151, 255, 0.12); }
+
+  .brand-stats { display: flex; gap: 24px; margin-top: 36px; }
+  .bstat b { display: block; font-family: var(--font-display); font-weight: 900; font-size: 28px; letter-spacing: -0.04em; color: var(--i-200); line-height: 1; }
+  .bstat span { display: block; margin-top: 5px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(245, 242, 234, 0.5); }
+  .brand-foot { position: relative; z-index: 2; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: rgba(245, 242, 234, 0.4); margin: 0; }
+  .brand-foot a { color: rgba(245, 242, 234, 0.6); text-decoration: none; }
+
+  /* soft contained ambient glow (replaces the harsh full-screen rays) */
+  .brand-burst { position: absolute; left: 50%; bottom: -160px; transform: translateX(-50%); width: 560px; height: 560px; display: block; z-index: 1; pointer-events: none; }
+  .burst-rays { display: none; }
+  .burst-glow {
+    position: absolute; inset: 0; border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(91, 91, 240, 0.42), rgba(139, 151, 255, 0.14) 46%, transparent 72%);
+    filter: blur(28px); animation: glowPulse 9s ease-in-out infinite;
+  }
+  .burst-mark { display: none; }
+
+  /* ---- RIGHT: the active step ---- */
+  .form-col { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; max-width: none; margin: 0; padding: 64px clamp(48px, 6vw, 96px); }
+  .topbar { display: none; }
+  .progress { display: none; }
+  /* flex:none so the wizard is content-height — lets the form group centre on the Y axis
+     (without this it stretches to fill the column and shoves the buttons to the bottom) */
+  .wizard { flex: none; width: 100%; max-width: 500px; margin: 0; padding: 0; }
+
+  /* one step at a time, full desktop typography (left-aligned content) */
+  .step { margin-bottom: 0; }
+  .step-title { font-family: var(--font-display); font-weight: 900; font-size: clamp(32px, 3vw, 44px); line-height: 0.98; letter-spacing: -0.045em; margin: 0 0 14px; }
+  .step-sub { font-size: 16px; margin: 0 0 30px; }
+
+  .chips { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+  .chip { min-height: 54px; font-size: 14px; }
+
+  /* nav: per-step Back / Continue / Submit (same .is-on logic as mobile) */
+  .actionbar { position: static; width: 100%; max-width: 500px; margin: 0; padding: 0; background: none; }
+  .actionbar-inner { margin-top: 36px; }
+  .trust { text-align: left; margin-top: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
 }
 
 /* ---------- confirmation / 404 (centered) ---------- */
-.center-stage {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 22px calc(48px + env(safe-area-inset-bottom));
-}
-.center-stage .inner { max-width: 540px; text-align: center; }
-.center-stage h1 {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: clamp(36px, 10vw, 56px);
-  line-height: 0.98;
-  letter-spacing: -0.05em;
-  text-transform: lowercase;
-  color: var(--paper);
-  margin: 14px 0 0;
-}
+.center-stage { min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 48px 22px calc(48px + env(safe-area-inset-bottom)); }
+.center-stage .inner { max-width: 560px; text-align: center; }
+.center-stage h1 { font-family: var(--font-display); font-weight: 900; font-size: clamp(36px, 8vw, 60px); line-height: 0.98; letter-spacing: -0.05em; text-transform: lowercase; color: var(--paper); margin: 14px 0 0; }
 .center-stage h1 em { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--i-200); }
+.center-stage .kicker { justify-content: center; }
 .center-stage p { margin: 18px auto 0; color: rgba(245, 242, 234, 0.68); max-width: 46ch; line-height: 1.6; }
 .center-stage .cta-row { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
-.center-stage .btn {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 16px;
-  border: 0;
-  border-radius: 999px;
-  padding: 16px 26px;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  transition: transform 0.14s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), background 0.14s;
-}
-.btn-primary { background: var(--i-500); color: var(--paper); }
-.btn-primary:hover { background: var(--i-400); transform: translateY(-2px); }
-.btn-ghost { background: rgba(245, 242, 234, 0.06); color: var(--paper); border: 1px solid rgba(245, 242, 234, 0.18); }
-.btn-ghost:hover { border-color: var(--i-200); transform: translateY(-2px); }
-.btn-whatsapp { background: #25d366; color: #06251a; }
-.btn-whatsapp:hover { background: #2ee676; transform: translateY(-2px); }
+.center-stage .btn { flex: 0 0 auto; }
 .steps { margin: 30px auto 0; max-width: 440px; text-align: left; display: grid; gap: 12px; }
 .steps .step-item { display: flex; gap: 13px; align-items: baseline; font-size: 15px; color: rgba(245, 242, 234, 0.74); }
 .steps .step-item b { color: var(--i-200); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em; }
 .fine { font-size: 12px; color: rgba(245, 242, 234, 0.4); margin-top: 20px; }
 .fine a { color: rgba(245, 242, 234, 0.6); }
 
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes glowPulse { 0%, 100% { opacity: 0.55; transform: scale(1); } 50% { opacity: 1; transform: scale(1.07); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }

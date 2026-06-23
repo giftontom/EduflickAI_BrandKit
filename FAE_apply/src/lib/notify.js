@@ -19,21 +19,38 @@ export async function notify(record, env) {
   const hook = env && env.NOTIFY_WEBHOOK_URL;
   if (!hook) return;
 
+  // record fields are already formula-injection-sanitized in validate.js, so this
+  // interpolation can't forge Slack/Discord lines.
   const summary =
     `🎓 New Full-Stack AI Engineer application\n` +
     `${record.fullName} · ${record.email} · ${record.phone}\n` +
     `background: ${record.background} · goal: ${record.goal}`;
+  const body = JSON.stringify({ type: 'application', record, text: summary, content: summary });
 
-  try {
-    await fetch(hook, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      // Apps Script answers a POST with a 302 to its echo page; the row is already
-      // written by the time that 302 is issued, so don't waste a hop following it.
-      redirect: 'manual',
-      body: JSON.stringify({ type: 'application', record, text: summary, content: summary }),
-    });
-  } catch (err) {
-    console.error('notify failed (non-fatal)', err);
+  // Runs inside ctx.waitUntil — never blocks the applicant. Try twice; Apps Script
+  // returns HTTP 200 even on failure, so inspect the {ok} body, not just the status.
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const res = await fetch(hook, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body,
+        signal: AbortSignal.timeout(8000),
+      });
+      let payload = null;
+      try {
+        payload = await res.json();
+      } catch {
+        /* non-JSON (e.g. Slack/Discord) — status alone is the signal */
+      }
+      const delivered = res.ok && (!payload || payload.ok !== false);
+      if (delivered) {
+        console.log('notify delivered', res.status);
+        return;
+      }
+      console.error('notify not delivered', res.status, payload && payload.error);
+    } catch (err) {
+      console.error('notify attempt failed', attempt, (err && err.name) || err);
+    }
   }
 }
