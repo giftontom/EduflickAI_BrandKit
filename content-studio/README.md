@@ -8,8 +8,7 @@ This package is the **content + strategy layer** that sits on top of the design 
 design system tells you what the brand *looks like*; Content Studio tells you what it *says*,
 how to *produce it at volume*, and how to keep a **small model on-brand** while it does the work.
 
-It exists because of a real operating need: the **Full-Stack AI Engineer Program — Pioneer
-Cohort** has to fill 20 seats on a 6-week social sprint, and a small team (or a small model, or
+It exists because of a real operating need: the **Full-Stack AI Engineer Program — Cohort 01** has to fill 20 seats on a 6-week social sprint, and a small team (or a small model, or
 a VA) has to churn out captions, carousels, reels, DMs and ads every day without the brand drifting.
 
 ---
@@ -39,7 +38,7 @@ a VA) has to churn out captions, carousels, reels, DMs and ads every day without
 | `instagram-carousel.md` | Slide-by-slide carousel copy (curriculum, offer, objection-handler). |
 | `reel-script.md` | Reel / YouTube Short scripts: hook, beats, VO, on-screen text, shot notes. |
 | `linkedin-post.md` | Founder POV / credibility / hiring-narrative posts. |
-| `whatsapp-sequence.md` | The 5–6 message apply → booking nurture flow. |
+| `whatsapp-sequence.md` | The 5–6 message masterclass → booking nurture flow. |
 | `ad-copy.md` | Meta/IG paid: primary text, headlines, descriptions, variants. |
 | `repurpose-batch.md` | Turn one asset into many; batch a week of content in one pass. |
 
@@ -98,7 +97,7 @@ complete, self-contained brief — no need to learn the whole system.
 
 ## 4. The one rule that breaks everything if ignored
 
-**Models invent facts.** They will confidently make up the cohort start date, the price, the seat
+**Models invent facts.** They will confidently make up the masterclass date, the price, the seat
 count, the venue, and the registration link. Every prompt here forces real values through a
 **FACTS block** you fill in. If a fact isn't in the FACTS block, the copy must not state it —
 it should leave a `[[PLACEHOLDER]]` instead. See `SMALL_MODELS_GUIDE.md` § Anti-hallucination.

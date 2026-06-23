@@ -27,7 +27,7 @@ BUILD RULES:
    numbered list with mono indices. Generous whitespace; hairline dividers, not boxes-everywhere.
 3. Numbers as proof everywhere (weeks, projects, seats, price). Stack as tags/pills (S10).
 4. Running footer on every page: wordmark (S3) + page number (mono) + a thin hairline rule.
-5. CTA/pricing page: Pioneer ₹49K vs retail ₹70K, payment structure as spec rows; coral (S10) only
+5. CTA/pricing page: Early Bird ₹49K vs retail ₹70K, payment structure as spec rows; coral (S10) only
    on a single scarcity element if used at all.
 6. Cover: can be the dark/indigo spread — big headline, the mark, mono eyebrow, minimal.
 7. One hue. Return ONE complete HTML page. For multi-page, repeat and keep the footer identical.

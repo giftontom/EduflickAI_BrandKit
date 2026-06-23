@@ -252,8 +252,8 @@
       "role": "20 seats / scarcity",
       "carouselSlug": null,
       "caption": {
-        "hook": "pioneer cohort 01: 20 *selective* seats. that's the whole room.",
-        "body": "the full-stack ai engineer program. 12 weeks, in person at uxp innovation hub, trivandrum. founding price ₹49,000 (₹70,000 from cohort 2). strictly capped at 20 seats — selective intake.",
+        "hook": "cohort 01: 20 *selective* seats. that's the whole room.",
+        "body": "the full-stack ai engineer program. 12 weeks, in person at uxp innovation hub, trivandrum. early bird price ₹49,000 (₹70,000 from cohort 2). strictly capped at 20 seats — selective intake.",
         "cta": "apply now → link in bio",
         "hashtags": [
           "#FullStackAI",
@@ -262,7 +262,7 @@
           "#TechJobsKerala"
         ]
       },
-      "onImage": "Eyebrow 'full-stack ai engineer · cohort 01' · ticket '12 weeks · uxp innovation hub, trivandrum / 20 *selective* seats' · coral pill '20 of 20 seats open' · sub '₹49,000 founding · ₹70,000 from cohort 2' · cta 'apply → link in bio'.",
+      "onImage": "Eyebrow 'full-stack ai engineer · cohort 01' · ticket '12 weeks · uxp innovation hub, trivandrum / 20 *selective* seats' · coral pill '20 of 20 seats open' · sub '₹49,000 early bird · ₹70,000 from cohort 2' · cta 'apply → link in bio'.",
       "notes": "Only tile where coral #FF6E5A is allowed. Seat pill is FACTS-driven (currently '20 of 20') — never hand-type a number not in FACTS.md.",
       "updatedAt": "2026-06-10T23:38:17.905Z"
     },
@@ -276,7 +276,7 @@
       "carouselSlug": "tc",
       "caption": {
         "hook": "12 weeks. 3 *deployed* ai projects. one room of 20.",
-        "body": "the full-stack ai engineer program — in person at uxp innovation hub, trivandrum. real stack, real ships, week-12 mock interviews + industry recruiter networking. ₹49,000 founding price, 20 selective seats.",
+        "body": "the full-stack ai engineer program — in person at uxp innovation hub, trivandrum. real stack, real ships, week-12 mock interviews + industry recruiter networking. ₹49,000 early bird price, 20 selective seats.",
         "cta": "apply now → link in bio",
         "hashtags": [
           "#FullStackAI",
@@ -286,7 +286,7 @@
           "#CareerInAI"
         ]
       },
-      "onImage": "Eyebrow 'pioneer cohort 01 · 12 weeks · trivandrum' · hero 'full-stack ai *engineer*' · sub 'ship ai products, not theory. a hands-on, in-person program.' · 3 product cards (saas dashboard, rag chatbot, agentic platform) · small wordmark · carousel marker (7).",
+      "onImage": "Eyebrow 'cohort 01 · 12 weeks · trivandrum' · hero 'full-stack ai *engineer*' · sub 'ship ai products, not theory. a hands-on, in-person program.' · 3 product cards (saas dashboard, rag chatbot, agentic platform) · small wordmark · carousel marker (7).",
       "notes": "Carousel, 7 slides (CARO.tc): cover → gap → months 1-3 each with tool-stack pills + 'shipped' tag → 20 selective seats → apply CTA slide 'claim your *seat* / apply → link in bio'. Course name is the hero; wordmark demoted to footer.",
       "updatedAt": "2026-06-10T22:40:27.896Z"
     },
@@ -299,8 +299,8 @@
       "role": "program / apply",
       "carouselSlug": null,
       "caption": {
-        "hook": "it's live. the full-stack ai engineer program — pioneer cohort *01*.",
-        "body": "12 weeks offline at uxp innovation hub, trivandrum. 3 deployed projects, 20 selective seats, ₹49,000 founding price. apply now.",
+        "hook": "it's live. the full-stack ai engineer program — cohort 01 *01*.",
+        "body": "12 weeks offline at uxp innovation hub, trivandrum. 3 deployed projects, 20 selective seats, ₹49,000 early bird price. apply now.",
         "cta": "apply now → link in bio",
         "hashtags": [
           "#FullStackAI",
@@ -310,7 +310,7 @@
           "#CareerInAI"
         ]
       },
-      "onImage": "Eyebrow 'pioneer cohort 01 · now open' · glow mark · hero 'full-stack ai *engineer*' · sub 'the 12-week program is live. apply now.' · cta 'apply → link in bio'.",
+      "onImage": "Eyebrow 'cohort 01 · now open' · glow mark · hero 'full-stack ai *engineer*' · sub 'the 12-week program is live. apply now.' · cta 'apply → link in bio'.",
       "notes": "Launch crescendo; the newest tile (top-left) and the first thing every profile visitor sees — course name must read instantly.",
       "updatedAt": "2026-06-10T22:40:27.896Z"
     }

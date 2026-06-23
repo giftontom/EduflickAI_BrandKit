@@ -17,7 +17,7 @@ the design skill renders the carousel.
 
 ## When to use this
 
-- "Write me 5 Instagram captions for the pioneer cohort launch."
+- "Write me 5 Instagram captions for the Cohort 01 launch."
 - "Give me a 7-slide curriculum carousel."
 - "Draft the WhatsApp nurture sequence."
 - "Turn this reel idea into a script + on-screen text."

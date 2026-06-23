@@ -51,13 +51,13 @@ you (or a bigger model) QA and ship.
 
 ## The active business
 
-The **Full-Stack AI Engineer Program — Pioneer Cohort 01** is the live program this
+The **Full-Stack AI Engineer Program — Cohort 01** is the live program this
 brand kit serves:
 
 - **12 weeks**, in-person at **UXP Innovation Hub, Trivandrum**
-- **20 selective seats** · **₹49,000** founding price (₹70,000 from Cohort 2)
+- **20 selective seats** · **₹49,000** Early Bird price (₹70,000 from Cohort 2)
 - **3 deployed projects** on a real stack (Cursor, Next.js, Claude/OpenAI, Pinecone, LangChain, n8n)
-- Top-of-funnel: direct applications → [eduflickai.com/apply](https://eduflickai.com/apply)
+- Top-of-funnel: apply directly → [eduflickai.com/apply](https://eduflickai.com/apply)
 
 The Instagram launch is fully planned — see [`content-studio/INSTAGRAM_LAUNCH_PLAN.md`](content-studio/INSTAGRAM_LAUNCH_PLAN.md)
 for the 12-tile mural grid, full copy, and posting waves.
@@ -115,7 +115,8 @@ cd tools && npm install && npm run serve
 ```bash
 cd tools
 npm run export              # Launch-grid posts + carousel slides → ../exports/ (2x crisp)
-npm run export:ig           # Instagram tiles        npm run export:posters   # Posters
+npm run export:ig           # Instagram tiles        npm run export:posters   # Posters (7 archetypes)
+npm run export:whatsapp     # WhatsApp share tile → 2x PNG + a compressed share JPEG
 npm run export:stories      # Stories                npm run export:slides    # Program deck PDF
 npm run export:pdf          # Brochure PDFs          npm run export:avatar    # Profile avatar
 npm run check:facts         # Facts-integrity guard (run before shipping copy)

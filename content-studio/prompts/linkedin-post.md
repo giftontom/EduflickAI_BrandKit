@@ -8,8 +8,8 @@ but the same engineer voice: no hype, no emoji.
 
 ```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
-- Cohort start / seats left: [[ ]]
-- Apply link:                [[eduflickai.com/apply]]
+- Masterclass date / cohort start / seats left: [[ ]]
+- Registration link:                             [[ ]]
 - Price / retail / venue:                        [[₹49,000 / ₹70,000 / UXP Innovation Hub, Trivandrum]]
 - Any real proof to cite (job listings, count):  [[ ]]
 
@@ -25,8 +25,7 @@ CONSTRAINTS (priority order):
    A point of view or a number, not a greeting.
 2. Short paragraphs (1–3 lines each), generous line breaks. No walls of text.
 3. Lead with proof or POV; sell softly. The credibility IS the pitch.
-4. One CTA at the end, matched to phase (awareness/consideration → apply → eduflickai.com/apply;
-   conversion → book your seat → eduflickai.com/apply).
+4. One CTA at the end, matched to phase (usually: apply directly).
 5. Sentence case throughout (LinkedIn isn't a brand canvas — don't force lowercase headlines), but
    keep the voice: declarative, concrete, a number or two. Optional one *serif* word is fine in the
    opening line only if it reads naturally; otherwise skip it here.
@@ -54,9 +53,9 @@ HASHTAGS (3–5):
 >
 > You can't do that at scale. So we didn't try.
 >
-> Pioneer pricing is ₹49,000 — about a third less than the ₹70,000 the next cohort pays. That's the founding-batch trade: smaller room, lower price, more of our time.
+> Early Bird pricing is ₹49,000 — about a third less than the ₹70,000 the next cohort pays. That's the early-bird trade: smaller room, lower price, more of our time.
 >
-> **CTA:** Pioneer Cohort 01 is open for applications. 20 seats, in-person, Trivandrum. Apply: eduflickai.com/apply
+> **CTA:** We run applying directly before booking opens — you build a small AI app live. Register: [[link]]
 >
 > **HASHTAGS:** #AIEngineer #TrivandrumTech #CareerInAI #FullStackAI
 

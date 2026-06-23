@@ -53,7 +53,7 @@ body{font-family:var(--font-d);background:var(--ink);color:var(--paper);-webkit-
 ## S4 · Eyebrow / mono label (UPPERCASE)
 
 ```html
-<span style="font-family:'JetBrains Mono';font-size:11px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:{{i-300}}">PIONEER COHORT 01</span>
+<span style="font-family:'JetBrains Mono';font-size:11px;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;color:{{i-300}}">COHORT 01</span>
 ```
 
 With the editorial leading rule:
@@ -336,7 +336,7 @@ run. Use real outcomes; ship the testimonial as a labelled template until a real
 </span>
 <!-- the real outcome (FACTS) -->
 <p style="font-family:'Manrope';font-weight:700;font-size:24px;letter-spacing:-0.02em;color:{{paper}};margin-top:18px">by week 12 you ship <em style="font-family:'Instrument Serif';font-style:italic;font-weight:400;color:{{i-300}}">three real</em> ai products.</p>
-<!-- TESTIMONIAL TEMPLATE — fill ONLY with a real Pioneer Cohort member; until then leave the placeholders -->
+<!-- TESTIMONIAL TEMPLATE — fill ONLY with a real Cohort 01 member; until then leave the placeholders -->
 <figure style="display:flex;gap:18px;align-items:center;margin-top:26px">
   <div style="width:72px;height:72px;border-radius:50%;background:{{ink-2}};border:1px solid rgba(245,242,234,0.12);flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden">
     <!-- duotone photo cut-out goes here (treat-stock.mjs); placeholder = mark -->
@@ -344,7 +344,7 @@ run. Use real outcomes; ship the testimonial as a labelled template until a real
   </div>
   <figcaption>
     <p style="font-family:'Instrument Serif';font-style:italic;font-size:20px;line-height:1.3;color:{{paper}}">“[[QUOTE — real cohort member only]]”</p>
-    <p style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:{{slate-500}};margin-top:8px">[[STUDENT NAME]] · pioneer cohort 01</p>
+    <p style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:{{slate-500}};margin-top:8px">[[STUDENT NAME]] · cohort 01</p>
   </figcaption>
 </figure>
 ```

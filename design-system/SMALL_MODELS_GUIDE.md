@@ -108,7 +108,7 @@ odd one out.
 >
 > **System:** `recipes/00_SYSTEM_PROMPT.md` (+ the snippets it references)
 > **User:** `recipes/instagram-post.md`, FACTS filled + "Square 1:1, paper theme, headline:
-> 'ship *AI products*, not theory', eyebrow 'PIONEER COHORT 01', proof '20 seats · 12 weeks'."
+> 'ship *AI products*, not theory', eyebrow 'COHORT 01', proof '20 seats · 12 weeks'."
 > **Model →** one `.html` file.
 > **You →** save, open, screenshot. Run `QA_CHECKLIST.md`. Fix the one defect. Export PNG from the
 > Instagram Kit.

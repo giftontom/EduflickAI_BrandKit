@@ -1,23 +1,23 @@
 # Prompt — WhatsApp nurture sequence
 
-Load `00_SYSTEM_PROMPT.md` first. WhatsApp is the conversion engine: it moves an applicant from
-apply → seat booking → close. Messages are short, personal, one-ask-each, and sound like a human
+Load `00_SYSTEM_PROMPT.md` first. WhatsApp is the conversion engine: it moves a masterclass
+registrant to a booked seat. Messages are short, personal, one-ask-each, and sound like a human
 typing — not a broadcast. Casing relaxes here (it's a chat), but the voice stays calm and concrete.
 
 ---
 
 ```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
-- Apply link:              [[eduflickai.com/apply]]
+- Masterclass date/time:   [[ ]]   Join link: [[ ]]
 - Cohort start:            [[ ]]   Seats left: [[ / 20]]
-- Pioneer price / retail:  [[₹49,000 / ₹70,000]]
+- Early Bird price / retail:  [[₹49,000 / ₹70,000]]
 - Booking structure:       [[₹15,000 to reserve, then ₹17,000 + ₹17,000]]
 - Booking / payment link:  [[ ]]
 - Sender name / who signs: [[e.g. "— Team Eduflick" or a real name]]
 
 TASK:
-- Build the [[6]]-message sequence: confirm → follow-up → qualify → offer → scarcity → close.
-- Audience: [[applicant (applied, not booked) | warm lead (enquired, not applied) | no-response]]
+- Build the [[6]]-message sequence: confirm → remind → attend → offer → scarcity → close.
+- Audience: [[masterclass registrant | attended, not booked | no-show]]
 - Tone: [[warm-professional]]
 
 CONSTRAINTS (priority order):
@@ -45,12 +45,12 @@ Note (send when):
 ## Few-shot — three messages at the bar
 
 > **=== MSG 1 · CONFIRM ===**
-> Text: hey {{first_name}} — we got your application for Pioneer Cohort 01. 20 seats, in-person, Trivandrum. we'll reach out to qualify and answer questions. anything to ask right now?
-> Note (send when): within 1 hour of receiving the application.
+> Text: hey {{first_name}} — you're in for the apply page on [[date/time]]. you'll build a small AI app live, so come on a laptop. join link: [[link]]
+> Note (send when): immediately on registration.
 >
 > **=== MSG 4 · OFFER ===**
-> Text: {{first_name}}, the program is 12 weeks, in-person at UXP Innovation Hub, Trivandrum. you ship 3 deployed projects — a SaaS dashboard, a RAG chatbot, an agentic platform. pioneer price is ₹49K (₹70K from cohort 2).
-> Note (send when): after the qualification call / follow-up, for warm leads who haven't booked.
+> Text: {{first_name}}, glad you built one live today. the full program turns that into 3 deployed projects in 12 weeks, in-person in Trivandrum. early bird price is ₹49K (it's ₹70K from cohort 2).
+> Note (send when): within 2 hours after the masterclass ends.
 >
 > **=== MSG 6 · CLOSE ===**
 > Text: {{first_name}}, only [[__]] of 20 seats left — they go as they're booked. you can reserve yours with ₹15K (then ₹17K + ₹17K). want me to send the payment link?

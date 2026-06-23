@@ -43,7 +43,7 @@ Three Google Fonts, no substitution. Load this exact tag in `<head>`:
 - **Instrument Serif** — *italic only*, indigo-tinted (`#8B97FF`), for **one or two accent words**
   inside a headline (the editorial beat). Never the whole line.
 - **JetBrains Mono** — ALL labels, eyebrows, meta, numbers, code. **UPPERCASE, wide tracking**
-  (0.22em). e.g. `LESSON 047 · 60 SECONDS`, `PIONEER COHORT 01`.
+  (0.22em). e.g. `LESSON 047 · 60 SECONDS`, `COHORT 01`.
 - Scale (px): display 88 · h1 64 · h2 40 · h3 28 · h4 22 · lead(serif) 21 · body 16 · small 14 ·
   mono-meta 11 · micro 10.
 
@@ -157,7 +157,7 @@ Tomatrix logo to indigo · a glow/filter *on* the mark (light goes in a halo *be
   p{font-weight:500;font-size:16px;line-height:1.6;color:#C9C5BA;max-width:62ch}
 </style></head>
 <body>
-  <span class="eyebrow">PIONEER COHORT 01</span>
+  <span class="eyebrow">COHORT 01</span>
   <h1>stop learning ai theory. ship <em>ai products</em>.</h1>
   <p>12 weeks, in-person in Trivandrum. 3 deployed projects. 20 seats.</p>
 </body></html>
