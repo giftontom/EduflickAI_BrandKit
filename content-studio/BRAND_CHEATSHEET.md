@@ -69,7 +69,7 @@ Both share one visual + verbal system. **If a task doesn't say which, assume the
 ## 4. THE PROGRAM — facts you may reference (verify live numbers in the FACTS block)
 
 > ⚠️ These are the *stable* facts from the brand/campaign material. **Anything time-sensitive
-> (exact dates, current seats-left, links, the masterclass time) MUST come from the FACTS block
+> (exact dates, current seats-left, links) MUST come from the FACTS block
 > you fill per task — never state a live number from memory.**
 
 - **Product:** Eduflick **Full-Stack AI Engineer Program**, **Cohort 01**.

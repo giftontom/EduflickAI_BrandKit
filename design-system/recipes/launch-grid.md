@@ -31,7 +31,7 @@ exporting pixel-perfect PNGs with `../../tools`.
 
 ```text
 FACTS (only source of live numbers — never typeset an invented value; missing → [[NEEDS: …]]):
-- Handle / link / cohort + masterclass dates / seats / price: [[ pull from INSTAGRAM_LAUNCH_PLAN.md ]]
+- Handle / link / cohort start / seats / price: [[ pull from INSTAGRAM_LAUNCH_PLAN.md ]]
 
 INPUTS (per tile you're building/editing):
 - Tile id + grid position (e.g. post-08-uc, row 3): [[ ]]

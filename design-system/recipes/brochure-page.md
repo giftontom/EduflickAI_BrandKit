@@ -10,7 +10,7 @@ exported to PDF or assembled in `../collateral/brochure-kit.html` / `../brochure
 ```text
 FACTS (only source of live numbers; missing → [[NEEDS: …]]):
 - Program facts to print: [[price ₹49,000 / retail ₹70,000 / 20 seats / 12 weeks / venue /
-  payment ₹15K+₹17K+₹17K / cohort start / masterclass date]]
+  payment ₹15K+₹17K+₹17K / cohort start]]
 - Contact / link / QR:    [[ ]]
 
 INPUTS:

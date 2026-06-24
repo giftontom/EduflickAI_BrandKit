@@ -8,7 +8,7 @@ message, with the FACTS block filled and the TASK line set.
 ```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
 - Today's date:          [[ ]]
-- Masterclass date/time: [[ ]]   Format: [[free, live, ~90 min, online/in-person]]
+- Booking call date/time: [[ ]]   Format: [[scheduled per applicant]]
 - Registration link:     [[ ]]
 - Seats total / left:    [[20 / __ ]]
 - Early Bird price:         [[₹49,000]]   Retail: [[₹70,000]]

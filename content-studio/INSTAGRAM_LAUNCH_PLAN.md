@@ -100,10 +100,9 @@ freshest thing a profile visitor sees.
 - Venue: **UXP Innovation Hub, Trivandrum**
 - Stack: Cursor, Next.js, Claude/OpenAI, Pinecone, LangChain, n8n
 - Lead step: apply page (~90 min, live, builds a real AI app)
-- Web: **eduflickai.com** · Apply: **eduflickai.com/apply** · Masterclass:
-  **eduflickai.com/apply** · Email: **<info@eduflickai.com>** · Handle: **@eduflick.ai**
+- Web: **eduflickai.com** · Apply: **eduflickai.com/apply** · Email: **<info@eduflickai.com>** · Handle: **@eduflick.ai**
 
-**Fill before publishing:** exact masterclass date/time · cohort start date · live `[[seats left]]`
+**Fill before publishing:** exact cohort start date · live `[[seats left]]`
 count for the scarcity post.
 
 ---
@@ -288,7 +287,7 @@ Notation: `*word*` = the one Instrument-Serif italic accent word.
   4. `03 · MONTH 2` / **rag + agents** / stack: `claude/openai · pinecone · langchain` → **shipped: rag chatbot** grounded in real docs.
   5. `04 · MONTH 3` / **agentic platform + hiring** / stack: `langchain · n8n` → **shipped: agentic platform**. week 12 — mock interviews + industry recruiter networking.
   6. `05 · THE ROOM` / **20 selective seats** / in person at uxp innovation hub, trivandrum. ₹49,000 early bird (₹70,000 from cohort 2).
-  7. **CTA (apply-first)** — `APPLY · COHORT 01` / **claim your *seat*** / 20 selective seats. apply → eduflickai.com/apply · *(soft secondary)* not ready? apply page first → /masterclass
+  7. **CTA (apply-first)** — `APPLY · COHORT 01` / **claim your *seat*** / 20 selective seats. apply → eduflickai.com/apply · *(soft secondary)* not ready? apply page first → /apply
 - **Caption**
   - **Hook:** 12 weeks. 3 *deployed* ai projects. one room of 20.
   - **Body:** the full-stack ai engineer program — in person at uxp innovation hub, trivandrum. real stack, real ships, week-12 mock interviews + industry recruiter networking. ₹49,000 early bird price, 20 selective seats.

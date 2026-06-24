@@ -37,7 +37,7 @@ sprint). The funnel: **Awareness → Apply (lead capture) → Seat booking → C
 
 ## WhatsApp — conversion engine
 
-- **Roles:** masterclass reminders, seat-booking nudges, 1:1 closing. This is where leads convert.
+- **Roles:** apply-page follow-ups, booking-call nudges, 1:1 closing. This is where leads convert.
 - **Shape:** very short, personal, one ask per message, sent as a human would type. Mono labels
   and headline-casing are relaxed here — it's a chat, not a canvas — but the voice (calm, concrete,
   no hype, no emoji spam) holds. A single tasteful symbol is tolerable; keep it rare.
@@ -52,7 +52,7 @@ sprint). The funnel: **Awareness → Apply (lead capture) → Seat booking → C
 
 ## Meta / Instagram Ads — paid acceleration
 
-- **Roles:** lead-gen → Masterclass; retargeting → seat booking. Geo: 10 km of central Trivandrum, age
+- **Roles:** lead-gen → apply page; retargeting → seat booking. Geo: 10 km of central Trivandrum, age
   21–28, interests software dev / AI / Next.js / B.Tech / job-search.
 - **Shape:** primary text (pain hook → promise → proof → CTA), 3–5 short **headline** variants,
   1–2 **description** lines. Primary CTA: **"Apply →"** early; shift to
@@ -66,12 +66,12 @@ sprint). The funnel: **Awareness → Apply (lead capture) → Seat booking → C
 
 | Phase | Weeks | Goal | Content emphasis |
 | --- | --- | --- | --- |
-| **1 · Awareness & list-building** | 1–2 | Build audience + collect masterclass regs | Reels + carousels on the pain/promise; **masterclass announcement** Fri; LinkedIn founder + curriculum posts. |
-| **2 · Consideration & masterclass push** | 3–4 | Max masterclass attendance; seed the offer | Daily Stories countdown; "what you build in week 4/8/11" reels; industry hiring angle; **run the masterclass, record it**; ₹49K vs ₹70K carousel. |
-| **3 · Conversion & scarcity close** | 5–6 | Convert attendees → bookings; sell out | Live "X of 20 seats left" graphics; masterclass highlight reels; objection-handler carousels; WhatsApp 1:1 close; final-seats urgency; sold-out + Cohort 2 waitlist. |
+| **1 · Awareness & list-building** | 1–2 | Build audience + collect apply-page sign-ups | Reels + carousels on the pain/promise; **apply-page push** Fri; LinkedIn founder + curriculum posts. |
+| **2 · Consideration & apply push** | 3–4 | Max apply-page sign-ups; seed the offer | Daily Stories countdown; "what you build in week 4/8/11" reels; industry hiring angle; **drive applications, booking-call week**; ₹49K vs ₹70K carousel. |
+| **3 · Conversion & scarcity close** | 5–6 | Convert attendees → bookings; sell out | Live "X of 20 seats left" graphics; apply-page highlight reels; objection-handler carousels; WhatsApp 1:1 close; final-seats urgency; sold-out + Cohort 2 waitlist. |
 
 **Weekly default mix** (Phase 1 template from the plan): Mon Reel · Tue LinkedIn founder · Wed
-carousel ("2026 AI engineer stack") · Thu Reel ("theory vs shipping") · Fri masterclass announcement
+carousel ("2026 AI engineer stack") · Thu Reel ("theory vs shipping") · Fri apply-page push
 (all + WhatsApp) · Sat Stories poll/countdown · Sun LinkedIn curriculum carousel.
 
 **Match CTA to phase:** Awareness → "follow / save / apply." Consideration → "register for

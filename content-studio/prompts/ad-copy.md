@@ -8,14 +8,14 @@ variants, descriptions, and the CTA button — ready to paste into Ads Manager.
 
 ```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
-- Masterclass date / cohort start / seats left: [[ ]]
+- Cohort start / seats left: [[ ]]
 - Landing / registration link:                   [[ ]]
 - Price / retail / venue:                         [[₹49,000 / ₹70,000 / Trivandrum]]
 
 TASK:
 - Objective: [[Lead-gen → apply page | Retargeting → seat booking]]
 - Audience: [[cold: 10km of central Trivandrum, 21–28, software/AI/Next.js/B.Tech/job-search
-  | warm: 50%+ video viewers / profile visitors / masterclass no-shows]]
+  | warm: 50%+ video viewers / profile visitors / apply-page non-bookers]]
 - Pain hook to lead with: [[e.g. "AI experience required — you have none"]]
 - Funnel phase: [[ ]]   Number of variants: [[3 primary texts, 4 headlines, 2 descriptions]]
 
@@ -49,14 +49,14 @@ C) (scarcity angle)
 > **=== PRIMARY TEXT ===**
 > A) "AI experience required." you have none. that's the gap. in 12 weeks, in-person in Trivandrum, you ship 3 deployed AI projects — a SaaS dashboard, a RAG chatbot, an agentic platform. it starts with applying directly. build a small AI app, live. apply →
 > B) you know react. you've never shipped with an LLM. our cohort fixes that: 3 deployed projects, the real stack (next.js, claude, pinecone, langchain), capped at 20, in-person in Trivandrum. apply page first. apply →
-> C) 20 seats. in-person. Trivandrum. Cohort 01 builds 3 real AI products in 12 weeks at ₹49K (₹70K from the next batch). see how it works in a free live masterclass. apply →
+> C) 20 seats. in-person. Trivandrum. Cohort 01 builds 3 real AI products in 12 weeks at ₹49K (₹70K from the next batch). see how it works — apply, then we walk you through it on a call. apply →
 >
 > **=== HEADLINES ===**
 >
 > 1) ship AI products, not theory
 > 2) build 3 AI projects in 12 weeks
 > 3) the AI engineer stack, in-person
-> 4) free AI masterclass · Trivandrum
+> 4) apply direct · Trivandrum
 >
 > **=== DESCRIPTIONS ===**
 >

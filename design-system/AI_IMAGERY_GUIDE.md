@@ -68,7 +68,7 @@ tell it's people building) but unmistakably Eduflick (one hue). The photo is sti
 
 Rule of thumb unchanged: if removing the image changes the *meaning*, you're using it wrong — even
 in Mode B the photo is mood/proof, never the claim. (Shipped example: `collateral/posters.html` —
-`program` + `masterclass` are Mode B, `seats` is Mode A; the full 6-archetype poster system that
+`program` is Mode B (masterclass retired), `seats` is Mode A; the full 6-archetype poster system that
 governs which surfaces use imagery is in `recipes/poster.md`.)
 
 **Guardrails for Mode B (all must hold, or fall back to Mode A):**
@@ -319,7 +319,7 @@ shared with `tools/gen-backdrops-proc.mjs` (same filenames, so a billed key is a
 The **Mode B duotone pipeline** is also built: `tools/fetch-stock.mjs` (licensed sources — Pexels,
 or keyless Wikimedia Commons → `tools/stock-sources/`, with provenance in `backdrops/SOURCES.md`)
 and `tools/treat-stock.mjs` (`npm run treat:stock` → indigo duotone, §4 ramps), wired into
-`posters.html` so `program` + `masterclass` carry real treated photos (Mode B) while the other five
+`posters.html` so `program` + `masterclass` carries a real treated photo (Mode B) while the other six
 (`seats`, `build`, `why`, `proof`, `enquiry`) carry abstract Mode-A textures — the hybrid policy of
 §2, shipped across the whole set.
 

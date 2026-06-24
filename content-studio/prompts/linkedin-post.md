@@ -8,7 +8,7 @@ but the same engineer voice: no hype, no emoji.
 
 ```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
-- Masterclass date / cohort start / seats left: [[ ]]
+- Cohort start / seats left: [[ ]]
 - Registration link:                             [[ ]]
 - Price / retail / venue:                        [[₹49,000 / ₹70,000 / UXP Innovation Hub, Trivandrum]]
 - Any real proof to cite (job listings, count):  [[ ]]

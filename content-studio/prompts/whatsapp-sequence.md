@@ -1,14 +1,14 @@
 # Prompt — WhatsApp nurture sequence
 
-Load `00_SYSTEM_PROMPT.md` first. WhatsApp is the conversion engine: it moves a masterclass
-registrant to a booked seat. Messages are short, personal, one-ask-each, and sound like a human
+Load `00_SYSTEM_PROMPT.md` first. WhatsApp is the conversion engine: it moves an apply-page lead
+to a booked seat. Messages are short, personal, one-ask-each, and sound like a human
 typing — not a broadcast. Casing relaxes here (it's a chat), but the voice stays calm and concrete.
 
 ---
 
 ```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
-- Masterclass date/time:   [[ ]]   Join link: [[ ]]
+- Booking call date/time:   [[ ]]   Join link: [[ ]]
 - Cohort start:            [[ ]]   Seats left: [[ / 20]]
 - Early Bird price / retail:  [[₹49,000 / ₹70,000]]
 - Booking structure:       [[₹15,000 to reserve, then ₹17,000 + ₹17,000]]
@@ -17,7 +17,7 @@ FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]])
 
 TASK:
 - Build the [[6]]-message sequence: confirm → remind → attend → offer → scarcity → close.
-- Audience: [[masterclass registrant | attended, not booked | no-show]]
+- Audience: [[apply-page lead | booking call done, not booked | no-show]]
 - Tone: [[warm-professional]]
 
 CONSTRAINTS (priority order):
@@ -50,7 +50,7 @@ Note (send when):
 >
 > **=== MSG 4 · OFFER ===**
 > Text: {{first_name}}, glad you built one live today. the full program turns that into 3 deployed projects in 12 weeks, in-person in Trivandrum. early bird price is ₹49K (it's ₹70K from cohort 2).
-> Note (send when): within 2 hours after the masterclass ends.
+> Note (send when): within 2 hours after the booking call ends.
 >
 > **=== MSG 6 · CLOSE ===**
 > Text: {{first_name}}, only [[__]] of 20 seats left — they go as they're booked. you can reserve yours with ₹15K (then ₹17K + ₹17K). want me to send the payment link?

@@ -1,5 +1,12 @@
 # Social Media Marketing Campaign Plan
 
+> ⚠️ **Superseded — historical reference only (as of 2026-06-11).** This document is
+> *pre-apply-direct* launch planning, structured around a dated **masterclass** lead-magnet
+> that has since been **retired**. The funnel is now **apply-direct**: Awareness → Apply
+> (`eduflickai.com/apply`, always open) → booking call → close — there is no masterclass event.
+> Do not action the masterclass-anchored cadence below. **Current source of truth:
+> `content-studio/FACTS.md`.**
+
 ## Eduflick Full-Stack AI Engineer Program — Cohort 1
 
 **Operating Entity:** Tomatrix Technologies Pvt Ltd

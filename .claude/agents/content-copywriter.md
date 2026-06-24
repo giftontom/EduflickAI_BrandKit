@@ -22,7 +22,7 @@ world-class, don't miss out). Calm scarcity with a number, never "hurry!".
 
 Venue **UXP Innovation Hub, Trivandrum**; hashtags use **#TrivandrumTech** (NOT #TechparkTrivandrum);
 **"Technopark" is de-emphasized** — say Trivandrum / "industry"; there is **no fixed application
-close date**; links eduflickai.com · eduflickai.com/apply · eduflickai.com/masterclass; email
+close date**; links eduflickai.com · eduflickai.com/apply; email
 `info@eduflickai.com`; handle @eduflick.ai.
 
 ## Output discipline

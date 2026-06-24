@@ -1,7 +1,7 @@
 # Prompt — repurpose & batch (one source → many assets / a week in one pass)
 
 Load `00_SYSTEM_PROMPT.md` first. This is the highest-leverage prompt in the sprint: it turns one
-source (a masterclass recording, a student demo, a curriculum doc) into a coordinated set of
+source (a booking-call/build-demo recording, a student demo, a curriculum doc) into a coordinated set of
 assets, OR plans a full week. It produces a **brief + the copy for each asset** in one structured
 output. (For long individual assets, then run the dedicated prompt per item — see
 `SMALL_MODELS_GUIDE.md` §7 on batching by type.)
@@ -11,12 +11,12 @@ output. (For long individual assets, then run the dedicated prompt per item — 
 ```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
 - Today's date / current week of the 6-week sprint: [[ ]]   Funnel phase: [[1 Awareness | 2 Consideration | 3 Conversion]]
-- Masterclass date / cohort start / seats left:      [[ ]]
+- Cohort start / seats left:      [[ ]]
 - Registration link / WhatsApp:                       [[ ]]
 - Price / retail / venue:                              [[₹49,000 / ₹70,000 / Trivandrum]]
 
 TASK — pick ONE mode:
-- MODE A · REPURPOSE: source = [[e.g. "this masterclass recording" / paste notes / a demo]].
+- MODE A · REPURPOSE: source = [[e.g. "this booking-call recording" / paste notes / a demo]].
   Produce: [[1 carousel + 3 reels + 2 captions + 1 LinkedIn post]] from it.
 - MODE B · WEEK PLAN: plan [[7]] posts for week [[__]] (phase above). For each day, give platform,
   pillar, format, hook line, and a one-line brief. Then write the copy for the [[2]] highest-priority ones.
@@ -55,7 +55,7 @@ no emoji: ✔/✗ | no forbidden words: ✔/✗ | no invented facts (all live nu
 > | 2 | Tue | LinkedIn | The Cohort | post | "we turned away revenue to cap cohort 1 at 20." | founder POV on in-person + accountability |
 > | 3 | Wed | IG | Learn Fast | carousel | "the 2026 AI engineer *stack*" | cursor → next.js → rag → agents, 6 slides |
 > | 4 | Thu | IG Reel | Get Hired | reel | "‘AI experience required.’ you have none." | theory vs shipping intercut |
-> | 5 | Fri | All + WhatsApp | Early Bird | announcement | "apply page — build an AI app live." | masterclass announce, register CTA |
+> | 5 | Fri | All + WhatsApp | Early Bird | announcement | "apply page — build an AI app live." | apply-direct CTA |
 > | 6 | Sat | IG Stories | Learn Fast | poll | "can you build with LLMs? yes / not yet" | countdown + poll sticker |
 > | 7 | Sun | LinkedIn | Get Hired | carousel | "month 1 / 2 / 3, what you actually build" | curriculum breakdown |
 >

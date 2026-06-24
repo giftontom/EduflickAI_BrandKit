@@ -9,7 +9,7 @@
 
 ```text
 PROGRAM      = [[…]]
-MASTERCLASS  = [[date / link]]
+BOOKING_CALL = [[apply link: eduflickai.com/apply]]
 PRICE        = [[…]]
 SEATS        = [[… of …]]
 APPLY / LINK = [[…]]

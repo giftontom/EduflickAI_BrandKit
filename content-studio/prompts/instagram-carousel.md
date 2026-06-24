@@ -8,7 +8,7 @@ renders it.
 
 ```text
 FACTS (only source of live numbers — never invent; missing → [[NEEDS: …]]):
-- Today's date / masterclass date / cohort start: [[ ]]
+- Today's date / cohort start: [[ ]]
 - Registration link / WhatsApp:                    [[ ]]
 - Seats total / left:                              [[20 / __ ]]
 - Early Bird price / Retail:                          [[₹49,000 / ₹70,000]]

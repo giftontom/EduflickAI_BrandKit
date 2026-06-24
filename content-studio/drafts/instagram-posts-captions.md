@@ -41,7 +41,7 @@ no hype words, one CTA, 3–6 hashtags, every fact from `FACTS.md`. Hashtag pool
 **CTA:** apply → eduflickai.com/apply
 **Hashtags:** #TechJobsKerala #CareerInAI #AIEngineer #TrivandrumTech
 
-## 6 · `ig-masterclass.png` — the lead magnet
+## 6 · `ig-apply.png` — the apply page
 
 **Hook:** watch a real ai app get built, live — in about 90 minutes.
 **Body:** our apply page is the no-risk way to see how cohort 01 works. we build a real ai app on the spot — bring a laptop and follow along.

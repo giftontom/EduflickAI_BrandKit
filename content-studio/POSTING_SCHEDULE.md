@@ -1,5 +1,12 @@
 # Posting Schedule — 6-Week Launch Sprint
 
+> ⚠️ **Superseded — historical reference only (as of 2026-06-11).** This document is
+> *pre-apply-direct* launch planning, structured around a dated **masterclass** lead-magnet
+> that has since been **retired**. The funnel is now **apply-direct**: Awareness → Apply
+> (`eduflickai.com/apply`, always open) → booking call → close — there is no masterclass event.
+> Do not action the masterclass-anchored cadence below. **Current source of truth:
+> `content-studio/FACTS.md`.**
+
 > Day-by-day content calendar for the Cohort 01 launch. Anchored to the
 > masterclass date. Fill the date column once the masterclass is locked.
 >

@@ -116,18 +116,18 @@ filenames with SVG-rendered textures, so switching to real AI later is a drop-in
 cd tools
 npm run fetch:stock                       # keyless: Wikimedia Commons → tools/stock-sources/*.jpg
 PEXELS_API_KEY=… npm run fetch:stock      # preferred: modern Pexels stock (free commercial use)
-npm run treat:stock                       # indigo DUOTONE → backdrops/poster-program.png + poster-masterclass.png
+npm run treat:stock                       # indigo DUOTONE → backdrops/poster-program.png  (masterclass poster retired)
 npm run export:posters                    # composite the type/mark on top
 ```
 
 `treat:stock` recolors a real photo onto the indigo ramp (luminance → ink / indigo / light-indigo
 via an SVG `feComponentTransfer`), so the output stays strictly **one hue** and **no text or logo is
 ever added** — only the photo's own pixels are remapped. Per the **hybrid** policy in
-`AI_IMAGERY_GUIDE.md §2`: `program` + `masterclass` use photoreal duotone (the human / build
+`AI_IMAGERY_GUIDE.md §2`: `program` uses photoreal duotone (masterclass retired) (the human / build
 moments); `seats` keeps the abstract procedural spotlight (its hero is the number **20**).
 
-Sources: hand-drop your own `program.jpg` / `masterclass.jpg` in `tools/stock-sources/` (best taste
-control), or `fetch:stock`. Use `PICK_program=3 PICK_masterclass=2 npm run fetch:stock` to eye-pick a
+Sources: hand-drop your own `program.jpg` in `tools/stock-sources/` (best taste
+control), or `fetch:stock`. Use `PICK_program=3 npm run fetch:stock` to eye-pick a
 different candidate. Raw sources are **gitignored**; only the treated PNG ships, with provenance +
 license recorded in `backdrops/SOURCES.md` (Pexels & Commons CC both permit commercial use — keep
 attribution for CC-BY / CC-BY-SA).

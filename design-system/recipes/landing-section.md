@@ -9,7 +9,7 @@ Output is ONE responsive, self-contained HTML section (not a fixed canvas). Mirr
 
 ```text
 FACTS (only source of live numbers; missing → [[NEEDS: …]]):
-- Masterclass date / cohort start / seats left: [[ ]]
+- Cohort start / seats left: [[ ]]
 - Price / retail / venue:                        [[₹49,000 / ₹70,000 / Trivandrum]]
 - Registration link:                             [[ ]]
 
