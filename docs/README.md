@@ -8,6 +8,9 @@ One place to find everything. New here? Read in this order: this map →
 | You want to… | Go to |
 | --- | --- |
 | Understand the repo | [`../README.md`](../README.md) |
+| See how it fits together (data flow + the 2 live surfaces) | [`ARCHITECTURE.md`](ARCHITECTURE.md) |
+| Run the everyday loops (edit → export → evaluate) | [`WORKFLOW.md`](WORKFLOW.md) |
+| Set up from scratch (toolchain · studio · apply site) | [`SETUP.md`](SETUP.md) |
 | Contribute (rules, where things go) | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) |
 | Drive an AI agent | [`../AGENTS.md`](../AGENTS.md) |
 | Know the brand (the why) | [`../brand-book/Eduflick_Brand_Book_v4.html`](../brand-book/Eduflick_Brand_Book_v4.html) |
