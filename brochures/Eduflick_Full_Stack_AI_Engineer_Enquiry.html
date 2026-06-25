@@ -725,14 +725,14 @@ document.getElementById('downloadPdfBtn').addEventListener('click', async functi
       prepClone(clone);
       var canvas;
       try{
-        canvas = await html2canvas(clone, { scale:2, useCORS:true, backgroundColor:'#0A0B10', logging:false, allowTaint:true, width:794, height:1123 });
+        canvas = await html2canvas(clone, { scale:3, useCORS:true, backgroundColor:'#0A0B10', logging:false, allowTaint:true, width:794, height:1123 });
       }catch(e){
-        canvas = await html2canvas(clone, { scale:1, useCORS:true, backgroundColor:'#0A0B10', logging:false, allowTaint:true, width:794, height:1123 });
+        canvas = await html2canvas(clone, { scale:2, useCORS:true, backgroundColor:'#0A0B10', logging:false, allowTaint:true, width:794, height:1123 });
       }
       var imgWidth = 210; var imgHeight = (canvas.height * imgWidth) / canvas.width;
       if (i === 0){ pdf = new jsPDF({ unit:'mm', format:[imgWidth, imgHeight], orientation:'portrait' }); }
       else { pdf.addPage([imgWidth, imgHeight]); }
-      pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, imgWidth, imgHeight);
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
     }
     document.body.removeChild(hidden);
     pdf.save('Eduflick_Full_Stack_AI_Engineer_Enquiry.pdf');
