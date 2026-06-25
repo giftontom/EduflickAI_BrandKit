@@ -273,6 +273,18 @@ p.deck.on-dark{color:rgba(245,242,234,0.72)}
 .dark-lux--br{background:radial-gradient(380px 380px at 106% 112%, rgba(91,91,240,0.30), transparent 68%),
              linear-gradient(160deg, var(--i-800), var(--i-ink))}
 
+/* ─── html2canvas (Download-PDF) export mode ──────────────────────────────────
+   html2canvas renders any gradient with a `transparent` colour stop as a HARD
+   edge. The export clone (prepClone adds .h2c) drops the transparent-radial glow
+   layers + the decorative vignette/dot pseudo-elements, keeping the solid linear
+   bases — so the PDF gets clean flat panels while the browser keeps every effect. */
+.h2c.cover-sheet,.h2c .cta-page,.h2c .dark-lux,.h2c .dark-lux--br{
+  background:linear-gradient(160deg, var(--i-800), var(--i-ink)) !important}
+.h2c.cover-sheet::before,.h2c.cover-sheet::after,
+.h2c .cta-page::before,.h2c .cta-page::after,
+.h2c .dark-lux::before,.h2c .dark-lux::after,
+.h2c .halo::before{display:none !important}
+
 /* embossed material edge (price-hero) */
 .embossed{border-radius:18px;
   box-shadow:inset 0 1px 0 rgba(183,192,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.40), 0 24px 60px -28px rgba(11,8,34,0.80)}
@@ -690,6 +702,7 @@ p.deck.on-dark{color:rgba(245,242,234,0.72)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous"></script>
 <script>
 function prepClone(container){
+  container.classList.add('h2c');
   container.querySelectorAll('svg').forEach(function(svg){ svg.style.setProperty('filter','none','important'); });
 }
 document.getElementById('downloadPdfBtn').addEventListener('click', async function(){
