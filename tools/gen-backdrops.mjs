@@ -86,6 +86,10 @@ premium and understated.`,
   'poster-enquiry': `BRIEF: a DARK indigo field; a soft glow and two faint notched planes behind the upper-left
 headline; the lower half is deep and calm so a five-row detail block reads on top; informational, premium,
 lots of quiet.`,
+  'poster-whatsapp': `BRIEF: a DARK indigo field with ONE soft bright glow bloom centred in the upper third
+(behind a headline) and two faint notched planes drifting at the edges; the lower two-thirds falls into deep
+near-black indigo so a dense block of details and a button read clearly on top; one clear focal, bold simple
+shapes, generous quiet — built to survive heavy image compression when shared on WhatsApp.`,
 };
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));

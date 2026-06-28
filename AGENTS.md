@@ -53,8 +53,8 @@ cd tools && npm run tokens && npm run snippets
 - Paste-alone blocks (for models): `design-system/recipes/snippets.md` (generated from
   `snippets.src.md` — edit the `.src.md`, not the output).
 - Export pixel-perfect PNGs: `cd tools && npm run export` (see `tools/README.md` for the full
-  toolbox: `export:ig`, `export:posters`, `export:stories`, `export:slides`, `export:pdf`,
-  backdrop generation, stock treatment).
+  toolbox: `export:ig`, `export:posters`, `export:whatsapp`, `export:stories`, `export:slides`,
+  `export:pdf`, backdrop generation, stock treatment).
 - Before shipping anything with facts in it: `cd tools && npm run check:facts`.
 
 ## The agent team & the pre-publish gate

@@ -35,3 +35,8 @@ _ref/*.jpg
 # IDE (user-specific only — shared config is committed)
 .vscode/settings.local.json
 .idea/
+
+# Local secrets — API keys (Recraft, Gemini). NEVER commit.
+.env
+.env.*
+!.env.example

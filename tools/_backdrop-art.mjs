@@ -150,11 +150,27 @@ export const ART = {
     <rect width="${W}" height="${H}" fill="url(#botfade)"/>
     <rect width="${W}" height="${H}" fill="url(#vig)"/>
     <rect width="${W}" height="${H}" filter="url(#grain)" opacity="0.05"/>`),
+
+  // POSTER 8 · whatsapp — ALL-IN-ONE forwardable tile · DARK; ONE bright focal glow bloom behind
+  // the upper headline, two faint notched planes (mark as shape), a strong dark lower band so the
+  // dense chips + spec rows + CTA stay crisp through WhatsApp's JPEG re-encode. Deliberately simple
+  // + high-contrast (one focal, bold shapes, generous quiet) — the shape that survives compression.
+  'poster-whatsapp': svg(`
+    <radialGradient id="bg" cx="50%" cy="19%" r="122%"><stop offset="0" stop-color="#2D2664"/><stop offset="0.3" stop-color="#171339"/><stop offset="0.62" stop-color="#0B0A20"/><stop offset="1" stop-color="#08070F"/></radialGradient>
+    <rect width="${W}" height="${H}" fill="url(#bg)"/>
+    <rect width="${W}" height="${H}" filter="url(#fog)" opacity="0.32" style="mix-blend-mode:overlay"/>
+    <ellipse cx="540" cy="318" rx="540" ry="410" fill="#6E78F5" opacity="0.42" filter="url(#soft)"/>
+    <ellipse cx="540" cy="300" rx="178" ry="178" fill="#cdd2ff" opacity="0.30" filter="url(#soft)"/>
+    ${planes([[120, -60, 3.0, 9, 0.12], [780, 150, 2.2, -10, 0.10]])}
+    ${dots(150, 540, 312, 520, 1.7, '#8B97FF', 0.18, 37)}
+    <rect width="${W}" height="${H}" fill="url(#botfade)"/>
+    <rect width="${W}" height="${H}" fill="url(#vig)"/>
+    <rect width="${W}" height="${H}" filter="url(#grain)" opacity="0.05"/>`),
 };
 
 // The default Mode-A set the abstract pipeline owns. program + masterclass ship as Mode-B
 // treated photos (tools/treat-stock.mjs), so they are excluded unless ALL=1 is requested.
-export const MODE_A = ['poster-seats', 'poster-build', 'poster-why', 'poster-proof', 'poster-enquiry'];
+export const MODE_A = ['poster-seats', 'poster-build', 'poster-why', 'poster-proof', 'poster-enquiry', 'poster-whatsapp'];
 export const ALL = Object.keys(ART);
 
 // Rasterise the named backdrops to <outDir>/<name>.png via real Chromium.

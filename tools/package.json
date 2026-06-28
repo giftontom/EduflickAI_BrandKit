@@ -21,7 +21,8 @@
     "tokens": "node build-tokens.mjs",
     "snippets": "node build-snippets.mjs",
     "check:facts": "node check-facts.mjs",
-    "postinstall": "playwright install chromium"
+    "postinstall": "playwright install chromium",
+    "export:whatsapp": "node export-whatsapp.mjs"
   },
   "engines": {
     "node": ">=18.0.0"

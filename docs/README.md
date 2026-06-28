@@ -47,7 +47,7 @@ One place to find everything. New here? Read in this order: this map →
 | `npm run tokens` | tokens.json → tokens.css + flat json + brand.tokens.mjs |
 | `npm run snippets` | snippets.src.md + tokens → snippets.md |
 | `npm run check:facts` | facts-integrity guard (retired strings, optional `--links`) |
-| `npm run export` / `export:ig` / `export:posters` / `export:stories` | pixel-perfect PNGs per kit |
+| `npm run export` / `export:ig` / `export:posters` / `export:whatsapp` / `export:stories` | pixel-perfect PNGs per kit (incl. the WhatsApp share tile) |
 | `npm run export:slides` / `export:pdf` | deck + brochure PDFs |
 | `npm run gen:backdrops` (`:proc`) / `gen:ig-backdrops` | AI / procedural backdrop generation |
 | `npm run fetch:stock` + `treat:stock` | photoreal indigo-duotone backdrop pipeline |

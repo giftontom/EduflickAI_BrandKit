@@ -1,6 +1,6 @@
 ---
 name: poster-design
-description: Design a complete, on-brand POSTER SYSTEM — a set of high-impact 4:5 / A4 canvases (hero, product-mockup, explainer, outcome, scarcity, masterclass, enquiry) rather than one-off flyers. Use when asked to design posters, ad creatives, announcement/scarcity/event posters, or a poster campaign for any brand. Encodes a 6–7 archetype × 2 register system, the 7 fusion rules, the 3-layer depth model, and an AI image-backdrop pipeline (Gemini image model → procedural fallback) that puts a real, text-free image behind every poster while type/data/logo stay crisp in HTML on top. Composes design-effects, image-composite and web-to-image.
+description: Design a complete, on-brand POSTER SYSTEM — a set of high-impact 4:5 / A4 canvases (hero, scarcity, product-mockup, explainer, outcome, multi-detail, and an all-in-one WhatsApp-shareable tile) rather than one-off flyers. Use when asked to design posters, ad creatives, announcement/scarcity/event posters, or a poster campaign for any brand. Encodes a 7-archetype × 2 register system, the 7 fusion rules, the 3-layer depth model, and an AI image-backdrop pipeline (Gemini image model → procedural fallback) that puts a real, text-free image behind every poster while type/data/logo stay crisp in HTML on top. Composes design-effects, image-composite and web-to-image.
 user-invocable: true
 ---
 
@@ -20,17 +20,22 @@ The reference implementation is the Eduflick AI poster set: `design-system/colla
 Each poster fuses **text + colour + ONE hero device + proof + a course/product-detail infographic +
 ONE CTA**. Miss one and it reads thin; stack two hero devices and it reads busy.
 
-## The 6 archetypes × 2 registers
+## The 7 archetypes × 2 registers
 
 | Archetype | Register | Hero device | Eduflick export |
 | --- | --- | --- | --- |
 | hero / cinematic | premium | treated photo **or** cine surface + accent headline | `poster-program` |
+| scarcity / CTA | premium | number-hero + the one allowed accent flag | `poster-seats` |
 | product mockup | playful | browser/app window of a real artifact (`S21`) | `poster-build` |
 | explainer / infographic | premium | icon feature-points (`S23`) | `poster-why` |
 | outcome / proof | premium | achievement badge + chips (`S22`) — **real facts only** | `poster-proof` |
-| scarcity / CTA | premium | number-hero + the one allowed accent flag | `poster-seats` |
-| masterclass / hook | playful | photo or mark-burst (`S24`) | `poster-masterclass` |
-| (+ enquiry / details) | premium | one-tile spec block + contact CTA | `poster-enquiry` |
+| multi-detail / enquiry | premium | one-tile spec block + contact CTA | `poster-enquiry` |
+| all-in-one / share | premium | everything on one forwardable tile (hero + offer + proof + scarcity + CTA) | `poster-whatsapp` |
+
+> The **all-in-one / share** archetype is the deliberate exception to "one job per poster" — built to be
+> forwarded into chat/WhatsApp groups, so it must stand alone if its caption is stripped. It still obeys
+> one-focal / one-hue / coral-scarcity-only, and carries the load-bearing trust facts on the canvas.
+> A retired **masterclass / hook** tile used to sit here; the funnel is now apply-direct, so it's gone.
 
 - **premium** = restraint + negative space (the SOF / IIT look): one big headline, generous dark space.
 - **playful** = scale + a brighter accent field + a mockup or burst, bigger type.
@@ -55,7 +60,7 @@ stand-in. Two modes, one hue:
   notched planes. Used for number-hero / spec-dense / mockup / explainer surfaces.
 - **Mode B — brand-treated photography** (narrow exception): a real photo forced onto the accent ramp
   via an SVG duotone (`tools/treat-stock.mjs`). Backdrop-only, one hue, no readable text in source,
-  people = atmosphere not testimonial. Used for the hero / masterclass moments.
+  people = atmosphere not testimonial. Used for the hero moment.
 
 **The z-order that keeps it legible** (see `.img-layer` / `.scrim` / `.stack` in `posters.html`):
 `image (z0) → scrim gradient (z2, darkens the eyebrow + the dense lower band, leaves the headline zone
@@ -79,7 +84,7 @@ A robust pipeline that prefers real AI and degrades gracefully:
 cd tools
 GEMINI_API_KEY=… npm run gen:backdrops          # AI → procedural fallback (Mode-A set)
 ONLY=poster-why,poster-proof npm run gen:backdrops
-ALL=1 npm run gen:backdrops                       # also the hero/masterclass abstracts
+ALL=1 npm run gen:backdrops                       # also the program (Mode-B) backdrop
 NO_GEMINI=1 npm run gen:backdrops:proc            # procedural only, offline
 ```
 
@@ -92,7 +97,7 @@ NO_GEMINI=1 npm run gen:backdrops:proc            # procedural only, offline
 2. **Pick archetypes** — choose the set the campaign needs; assign a register to each.
 3. **Assemble** — one `[data-export]` section per poster from the recipe + effect classes; one hero device each.
 4. **Backdrops** — `npm run gen:backdrops` (AI or procedural); Mode B photos via `fetch:stock` → `treat:stock`.
-5. **Render + LOOK** — `npm run export:posters`, then *open every PNG*. A model will claim "legible" and ship mud — looking is the only real check. Adjust the scrim / backdrop dark-band, re-export.
+5. **Render + LOOK** — `npm run export:posters`, then *open every PNG*. A model will claim "legible" and ship mud — looking is the only real check. Adjust the scrim / backdrop dark-band, re-export. For a forwardable all-in-one share tile, `npm run export:whatsapp` also emits a compressed JPEG sized under the chat-app re-encode ceiling (~1600px / a clean Q86) so it isn't crushed on send.
 6. **QA** — one hue, one hero, one CTA; FACTS verbatim; mark has a quiet zone; nothing fabricated.
 
 ## The one rule that makes a poster look designed

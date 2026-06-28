@@ -6,6 +6,25 @@ alongside it.
 
 ---
 
+## Unreleased — WhatsApp share poster + docs alignment
+
+### Added
+
+- **WhatsApp share poster** — `poster-whatsapp`, an all-in-one *forwardable* archetype in
+  `design-system/collateral/posters.html` (hero + offer + proof + scarcity + apply CTA on one
+  1080×1350 canvas, on a procedural Mode-A backdrop). New exporter `tools/export-whatsapp.mjs`
+  (`npm run export:whatsapp`) emits a crisp 2× PNG **and** a ~134 KB share JPEG kept under WhatsApp's
+  ~1600px re-encode ceiling so it isn't crushed on send. Paired forward-message copy (peer caption +
+  college / dev-community / 1:1-DM variants) in `content-studio/drafts/whatsapp-share-poster.md`.
+
+### Changed
+
+- **Poster system docs aligned to 7 archetypes + the apply-direct funnel.** The `poster-masterclass`
+  tile is retired/removed; `recipes/poster.md`, `AI_IMAGERY_GUIDE.md`, `tools/README.md`, and the
+  `poster-design` skill now document the 7-archetype set (program · seats · build · why · proof ·
+  enquiry · whatsapp), Mode A = every surface except `program`, and route every CTA to
+  `eduflickai.com/apply` (no masterclass / "Register Free").
+
 ## Unreleased — full-project review fixes (branch `review-fixes`)
 
 ### Added

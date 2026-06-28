@@ -11,6 +11,7 @@ Everything that builds, checks, or exports the brand kit. One `npm install`
 | `npm run export` | launch-grid posts + carousel slides | `exports/*.png` |
 | `npm run export:ig` | Instagram tiles (`collateral/instagram-posts.html`) | `exports/instagram/` |
 | `npm run export:posters` | posters (`collateral/posters.html`) | `exports/posters/` |
+| `npm run export:whatsapp` | the all-in-one WhatsApp share tile → 2× PNG + a compressed share JPEG | `exports/posters/poster-whatsapp.png` + `exports/whatsapp/` |
 | `npm run export:stories` | stories (`collateral/stories.html`) | `exports/stories/` |
 | `npm run export:slides` | the program deck slides (landscape) | `exports/full-stack-ai-engineer/` |
 | `npm run export:pdf` | brochure → print-quality PDF (Chromium) | `brochures/*.pdf` (gitignored) |
@@ -99,19 +100,20 @@ filenames with SVG-rendered textures, so switching to real AI later is a drop-in
 cd tools
 npm run fetch:stock                       # keyless: Wikimedia Commons → tools/stock-sources/*.jpg
 PEXELS_API_KEY=… npm run fetch:stock      # preferred: modern Pexels stock (free commercial use)
-npm run treat:stock                       # indigo DUOTONE → backdrops/poster-program.png + poster-masterclass.png
+npm run treat:stock                       # indigo DUOTONE → backdrops/poster-program.png
 npm run export:posters                    # composite the type/mark on top
 ```
 
 `treat:stock` recolors a real photo onto the indigo ramp (luminance → ink / indigo / light-indigo
 via an SVG `feComponentTransfer`), so the output stays strictly **one hue** and **no text or logo is
 ever added** — only the photo's own pixels are remapped. Per the **hybrid** policy in
-`AI_IMAGERY_GUIDE.md §2`: `program` + `masterclass` use photoreal duotone (the human / build
-moments); `seats` keeps the abstract procedural spotlight (its hero is the number **20**).
+`AI_IMAGERY_GUIDE.md §2`: `program` is now the only photoreal-duotone surface (the human / build
+moment); every other poster — incl. `seats` and the all-in-one `whatsapp` tile — keeps the abstract
+procedural Mode-A spotlight (e.g. `seats`' hero is the number **20**). *(The masterclass surface was
+retired; `treat:stock` may still emit an unused `poster-masterclass.png` until that job is dropped.)*
 
-Sources: hand-drop your own `program.jpg` / `masterclass.jpg` in `tools/stock-sources/` (best taste
-control), or `fetch:stock`. Use `PICK_program=3 PICK_masterclass=2 npm run fetch:stock` to eye-pick a
-different candidate. Raw sources are **gitignored**; only the treated PNG ships, with provenance +
+Sources: hand-drop your own `program.jpg` in `tools/stock-sources/` (best taste control), or
+`fetch:stock`. Use `PICK_program=3 npm run fetch:stock` to eye-pick a different candidate. Raw sources are **gitignored**; only the treated PNG ships, with provenance +
 license recorded in `backdrops/SOURCES.md` (Pexels & Commons CC both permit commercial use — keep
 attribution for CC-BY / CC-BY-SA).
 
