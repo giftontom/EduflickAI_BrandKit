@@ -158,6 +158,9 @@ async function handleSubmit(request, env, ctx, url) {
   const record = {
     ...result.clean,
     cohort: 'Cohort 01',
+    // The form has no consent checkbox — agreement is implied by submitting (fine-print
+    // line on the review step), recorded here for the audit trail.
+    consent: true,
     consentTs: nowIso,
     ts: nowIso,
     ip: ip || null,

@@ -91,7 +91,7 @@
       var input = form.querySelector('[name="' + name + '"]');
       if (input) input.setAttribute('aria-invalid', msg ? 'true' : 'false');
     }
-    function clearErrors() { ['fullName', 'phone', 'email', 'city', 'background', 'experience', 'goal', 'consent'].forEach(function (n) { setError(n, ''); }); }
+    function clearErrors() { ['fullName', 'phone', 'email', 'city', 'background', 'experience', 'goal'].forEach(function (n) { setError(n, ''); }); }
     function val(name) { var el = form.querySelector('[name="' + name + '"]'); return el ? el.value.replace(/^\s+|\s+$/g, '') : ''; }
     function checkedVal(name) { var el = form.querySelector('[name="' + name + '"]:checked'); return el ? el.value : ''; }
 
@@ -106,8 +106,7 @@
       } else if (step === 2) { if (!checkedVal('background')) { setError('background', 'Pick the closest one.'); ok = false; } }
       else if (step === 3) { if (!checkedVal('experience')) { setError('experience', 'Pick the closest one.'); ok = false; } }
       else if (step === 4) { if (!checkedVal('goal')) { setError('goal', 'Pick the closest one.'); ok = false; } }
-      // step 5 = optional context (institution / gradYear / heardFrom) — nothing required
-      else if (step === 6) { var c = form.querySelector('[name="consent"]'); if (!c || !c.checked) { setError('consent', 'Please confirm to apply.'); ok = false; } }
+      // step 5 (optional context) and step 6 (review-only) have no required fields
       return ok;
     }
     function firstInvalidStep() { for (var s = 1; s <= TOTAL; s++) { if (!validateStep(s)) return s; } return 0; }

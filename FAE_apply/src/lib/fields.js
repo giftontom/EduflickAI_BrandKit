@@ -7,12 +7,13 @@
  * without blocking submit. Everything else happens in the WhatsApp conversation.
  * Copy is grounded in content-studio/FACTS.md.
  *
- * type: text | email | tel | radio | select | consent
+ * type: text | email | tel | radio | select
  *   - `radio`   -> a single choice rendered as tappable chips; server whitelists it
  *   - `select`  -> a single choice rendered as a native dropdown; server whitelists it
- *   - `consent` -> a single required checkbox, stored as boolean true
  * radio/select/text share the generic validate path — only the value whitelist from
  * `options` matters server-side, so the HTML control is free to differ.
+ * (Consent is no longer a field: the last step is review-only and agreement is
+ *  implied by submitting — the worker stamps consent:true + consentTs.)
  */
 export const HONEYPOT = 'hp_token';
 export const TURNSTILE_FIELD = 'cf-turnstile-response';
@@ -94,12 +95,7 @@ export const FIELDS = [
       { value: 'other', label: 'Somewhere else' },
     ],
   },
-  {
-    name: 'consent',
-    label: 'Consent',
-    type: 'consent',
-    required: true,
-    text:
-      'I can attend in person at UXP Innovation Hub, Trivandrum and agree to Eduflick AI storing these details to process my application, contact me, and measure our advertising with partners like Meta (using only hashed data).',
-  },
+  // No consent checkbox: the last step is review-only. Agreement is implied by
+  // submitting (see the fine-print line in index.html), and the worker records it
+  // as consent:true + consentTs at submit time.
 ];

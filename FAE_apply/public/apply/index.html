@@ -20,7 +20,7 @@
   <link rel="icon" type="image/svg+xml" href="/assets/logo/favicon.svg">
   <link rel="apple-touch-icon" href="/assets/logo/favicon.svg">
   <link rel="stylesheet" href="/assets/css/colors_and_type.css">
-  <link rel="stylesheet" href="/apply/apply.css?v=13">
+  <link rel="stylesheet" href="/apply/apply.css?v=14">
 
   <!-- Spam protection: honeypot is always on. To ALSO enable Cloudflare Turnstile,
        set this content to your real Turnstile site key + the TURNSTILE_SECRET_KEY secret. -->
@@ -198,10 +198,10 @@
           </div>
         </section>
 
-        <section class="step" data-step="6" aria-label="Confirm and apply">
+        <section class="step" data-step="6" aria-label="Review and apply">
           <p class="kicker">last step</p>
-          <h2 class="step-title">confirm &amp; <em>apply</em>.</h2>
-          <p class="step-sub">Quick check, then you're in the queue. We review every application personally.</p>
+          <h2 class="step-title">looks <em>right</em>?</h2>
+          <p class="step-sub">Check your details below — tap back to fix anything — then apply.</p>
           <dl class="review" id="review" aria-live="polite">
             <div class="review-row"><dt>Name</dt><dd data-review="fullName">—</dd></div>
             <div class="review-row"><dt>WhatsApp</dt><dd data-review="phone">—</dd></div>
@@ -214,11 +214,7 @@
             <div class="review-row" hidden><dt>Grad year</dt><dd data-review="gradYear">—</dd></div>
             <div class="review-row" hidden><dt>Heard via</dt><dd data-review="heardFrom">—</dd></div>
           </dl>
-          <label class="consent" for="consent">
-            <input id="consent" name="consent" type="checkbox" value="yes" required aria-required="true">
-            <span>I can attend in person at UXP Innovation Hub, Trivandrum and agree to Eduflick&nbsp;AI storing these details to process my application, contact me, and measure our advertising with partners like Meta (using only hashed data).</span>
-          </label>
-          <p class="field-error" id="err-consent" role="alert"></p>
+          <p class="consent-note">By applying, you agree to Eduflick&nbsp;AI using these details to process your application, contact you, and measure our advertising with partners like Meta (hashed data only).</p>
           <div id="turnstile-slot"></div>
         </section>
 
@@ -239,7 +235,7 @@
     </div>
   </form>
 
-  <script src="/apply/app.js?v=10" defer></script>
+  <script src="/apply/app.js?v=11" defer></script>
   <script src="/apply/meta-pixel.js?v=1" defer></script>
 </body>
 </html>
