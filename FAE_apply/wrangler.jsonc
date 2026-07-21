@@ -39,6 +39,14 @@
 
   "observability": { "enabled": true },
 
+  // Public (non-secret) vars. META_PIXEL_ID turns the Meta Pixel + Conversions API ON;
+  // leave "" to keep ad tracking OFF (no Pixel, no cookies, CAPI no-ops). It must match
+  // <meta name="meta-pixel-id"> in public/apply/*.html. NOTE: named environments below
+  // do NOT inherit top-level vars — repeat META_PIXEL_ID in each env that needs it.
+  "vars": {
+    "META_PIXEL_ID": ""
+  },
+
   // Spam protection is HONEYPOT-ONLY for now (no Turnstile widget yet). To enable
   // Turnstile later: set meta[name=turnstile-sitekey] in public/apply/index.html,
   // run `wrangler secret put TURNSTILE_SECRET_KEY`, and add this back so a missing
@@ -52,6 +60,9 @@
     "staging": {
       "name": "apply-staging",
       "workers_dev": true,
+      "vars": {
+        "META_PIXEL_ID": ""
+      },
       "kv_namespaces": [
         { "binding": "APPLICATIONS", "id": "c57e85b397634c6dbac77664c721e136" }
       ]
@@ -61,4 +72,6 @@
   // Secrets (NOT in this file — set with `wrangler secret put <NAME>`):
   //   TURNSTILE_SECRET_KEY   — Turnstile server secret (required in production)
   //   NOTIFY_WEBHOOK_URL     — optional Slack/Discord/Apps-Script webhook
+  //   META_CAPI_TOKEN        — Meta Conversions API access token (enables server Lead)
+  //   META_TEST_EVENT_CODE   — optional; Events Manager "Test events" code for staging
 }

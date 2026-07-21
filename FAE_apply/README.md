@@ -14,7 +14,7 @@ infinite redirect loop.
 ```
 GET  /              -> 308 redirect to /apply          (Worker)
 GET  /apply         -> public/apply/index.html         (Static Assets)
-POST /apply/submit  -> honeypot -> Turnstile -> validate -> KV put -> notify   (Worker)
+POST /apply/submit  -> honeypot -> Turnstile -> validate -> KV put -> notify + Meta CAPI   (Worker)
 GET  /apply/thanks  -> public/apply/thanks.html        (Static Assets)
 *                   -> public/404.html                 (Static Assets)
 ```
@@ -33,7 +33,8 @@ src/lib/fields.js      declarative form-field contract (server source of truth)
 src/lib/validate.js    server-side validation/normalization
 src/lib/turnstile.js   Turnstile siteverify (fail-closed)
 src/lib/notify.js      optional webhook ping (Slack/Discord/Apps Script)
-public/apply/          index.html · apply.css · app.js · thanks.html
+src/lib/meta-capi.js   Meta Conversions API "Lead" (hashed, dormant unless configured)
+public/apply/          index.html · apply.css · app.js · thanks.html · meta-pixel.js
 public/404.html        on-brand 404 (required by not_found_handling)
 public/assets/         brand CSS + logos — SYNCED, do not hand-edit
 scripts/sync-brand.mjs copies design-system CSS + logos into public/assets
@@ -79,6 +80,35 @@ validation + a 64 KB body cap). To ALSO enable **Cloudflare Turnstile**:
 3. `npx wrangler secret put TURNSTILE_SECRET_KEY` (use the real secret; test secret `1x0000000000000000000000000000000AA` always passes for local/staging).
 4. In `wrangler.jsonc`, re-add `"vars": { "REQUIRE_TURNSTILE": "true" }` so a missing secret fails closed.
 5. Redeploy.
+
+### Meta Ads tracking (Pixel + Conversions API)
+
+Each application fires a **`Lead`** event to Meta **twice** — once server-side via the
+Conversions API (`src/lib/meta-capi.js`, the source of truth) and once from the browser
+Pixel (`public/apply/meta-pixel.js`) — deduplicated by a shared `event_id` that the
+Worker passes to `/apply/thanks?ev=…`. This survives ad-blockers/iOS and unlocks Lead
+optimization + retargeting. It is **OFF until configured** (no Pixel, no cookies, CAPI
+no-ops), so nothing tracks until you set the id.
+
+To turn it on:
+
+1. In **Events Manager**, note your **Pixel/dataset id** and generate a **Conversions
+   API access token**. (Optionally grab a **Test events** code for staging.)
+2. Set the id in **both** thank-you + apply pages: `<meta name="meta-pixel-id" content="…">`
+   in `public/apply/index.html` and `public/apply/thanks.html`.
+3. Set the same id as the Worker var `META_PIXEL_ID` in `wrangler.jsonc` (repeat it under
+   `env.staging` too — named envs don't inherit vars).
+4. `npx wrangler secret put META_CAPI_TOKEN` (and `META_TEST_EVENT_CODE` for staging).
+5. Redeploy. Verify in Events Manager → **Test events** (staging) that ONE deduplicated
+   `Lead` appears per submit (server + browser collapsed), then set optimization to Leads.
+
+- **Privacy:** every identifier (email/phone/name/city/country) is **SHA-256 hashed**
+  before it leaves the Worker; only IP/User-Agent/`fbp`/`fbc` go in the clear (Meta's
+  spec). The consent checkbox discloses ad measurement — keep it in sync if you change
+  providers. `fbclid` is used only to build `fbc` and is **not** stored in KV/the Sheet.
+- **Next (not in this integration):** an offline **`Purchase`** CAPI event when a lead
+  pays the ₹5k booking, keyed by the same hashed email — the strongest optimization + a
+  lookalike seed.
 
 ## Local dev
 

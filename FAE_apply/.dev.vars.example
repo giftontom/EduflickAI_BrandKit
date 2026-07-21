@@ -9,3 +9,12 @@ TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
 # new application. Leave blank to rely on KV + the WhatsApp-group join flow.
 # In production set with: wrangler secret put NOTIFY_WEBHOOK_URL
 NOTIFY_WEBHOOK_URL=
+
+# Meta Conversions API — server-side "Lead" event. Leave blank to keep it OFF
+# (the CAPI call no-ops unless BOTH META_PIXEL_ID (in wrangler.jsonc vars) and this
+# token are set). In production: wrangler secret put META_CAPI_TOKEN
+META_CAPI_TOKEN=
+
+# Optional. Events Manager "Test events" code — routes events to the Test Events tab
+# so you can verify on staging WITHOUT polluting live data. Remove for production.
+META_TEST_EVENT_CODE=

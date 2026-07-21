@@ -12,6 +12,14 @@
   if (!form) return;
   var btnSubmit = document.getElementById('btn-submit');
 
+  // Capture the Meta ad click id (?fbclid) into a hidden field so the server can
+  // attribute the Lead even if the Pixel is blocked. The Pixel also sets the _fbc
+  // cookie itself — this is a belt-and-braces backup, and is a no-op without fbclid.
+  try {
+    var fbclid = new URLSearchParams(location.search).get('fbclid');
+    if (fbclid) { var fbEl = form.querySelector('[name="fbclid"]'); if (fbEl) fbEl.value = fbclid; }
+  } catch (e) { /* non-fatal */ }
+
   // optional Turnstile mount
   try {
     var meta = document.querySelector('meta[name="turnstile-sitekey"]');

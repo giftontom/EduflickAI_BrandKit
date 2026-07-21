@@ -100,6 +100,6 @@ export const FIELDS = [
     type: 'consent',
     required: true,
     text:
-      'I can attend in person at UXP Innovation Hub, Trivandrum and agree to Eduflick AI storing these details to process my application and contact me.',
+      'I can attend in person at UXP Innovation Hub, Trivandrum and agree to Eduflick AI storing these details to process my application, contact me, and measure our advertising with partners like Meta (using only hashed data).',
   },
 ];
