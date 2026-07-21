@@ -5,7 +5,7 @@
  * and handles the application POST. run_worker_first: true, so EVERY response is
  * authored here — which lets us add security headers + cache control to all of them.
  *
- *   POST /apply/submit  -> handleSubmit (honeypot -> rate-limit -> Turnstile -> validate -> KV -> notify)
+ *   POST /apply/submit  -> handleSubmit (honeypot -> rate-limit -> Turnstile -> validate -> KV -> notify + Meta CAPI)
  *   GET  /              -> 308 -> /apply
  *   GET  /apply         -> public/apply/index.html
  *   GET  /apply/thanks  -> public/apply/thanks.html
@@ -14,6 +14,7 @@
 import { validate, sanitizeCell } from './lib/validate.js';
 import { verifyTurnstile } from './lib/turnstile.js';
 import { notify } from './lib/notify.js';
+import { sendLead } from './lib/meta-capi.js';
 
 const KV_TTL_SECONDS = 60 * 60 * 24 * 180; // 180-day retention (DPDP-friendly)
 const MAX_BODY_BYTES = 64 * 1024;
@@ -24,11 +25,13 @@ const PAGES = { '/apply': '/apply/index.html', '/apply/thanks': '/apply/thanks.h
 const SECURITY_HEADERS = {
   'content-security-policy':
     "default-src 'self'; " +
-    "script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com; " +
+    // connect.facebook.net serves the Meta Pixel loader (fbevents.js).
+    "script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com https://connect.facebook.net; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
     "font-src 'self' https://fonts.gstatic.com; " +
-    "img-src 'self' data:; " +
-    "connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com; " +
+    // www.facebook.com receives Pixel event beacons (image GETs).
+    "img-src 'self' data: https://www.facebook.com; " +
+    "connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com https://www.facebook.com; " +
     "frame-src https://challenges.cloudflare.com; " +
     "frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
   'x-content-type-options': 'nosniff',
@@ -109,10 +112,15 @@ async function handleSubmit(request, env, ctx, url) {
   const wantsJson =
     (request.headers.get('accept') || '').includes('application/json') ||
     (request.headers.get('content-type') || '').includes('application/json');
-  const ok = (extra) =>
-    wantsJson
-      ? jsonResponse({ ok: true, redirect: '/apply/thanks', ...extra })
-      : Response.redirect(new URL('/apply/thanks', url.origin).toString(), 303);
+  // A real submission carries eventId -> /apply/thanks?ev=… so the browser Pixel can
+  // fire a Lead with the SAME id the Conversions API used (Meta dedupes the pair).
+  const ok = (extra) => {
+    const ev = extra && extra.eventId;
+    const dest = ev ? `/apply/thanks?ev=${encodeURIComponent(ev)}` : '/apply/thanks';
+    return wantsJson
+      ? jsonResponse({ ok: true, redirect: dest, ...extra })
+      : Response.redirect(new URL(dest, url.origin).toString(), 303);
+  };
   // Native (non-JSON) form posts must never see raw JSON — bounce back to the form.
   const fail = (status, code) =>
     wantsJson
@@ -150,6 +158,9 @@ async function handleSubmit(request, env, ctx, url) {
   const record = {
     ...result.clean,
     cohort: 'Cohort 01',
+    // The form has no consent checkbox — agreement is implied by submitting (fine-print
+    // line on the review step), recorded here for the audit trail.
+    consent: true,
     consentTs: nowIso,
     ts: nowIso,
     ip: ip || null,
@@ -164,11 +175,39 @@ async function handleSubmit(request, env, ctx, url) {
     metadata: { background: record.background, goal: record.goal, ts: nowIso },
   });
 
-  // 6) Deliver to the Google Sheet. AWAITED so delivery is guaranteed — a
-  //    fire-and-forget ctx.waitUntil was not reliably running the Sheet write.
-  //    notify has its own timeout + retry and swallows errors (KV is the record),
-  //    so this adds ~1-2s at most and never fails the applicant.
-  await notify(record, env);
+  // 6) Out-of-band delivery, run CONCURRENTLY so the applicant's redirect isn't
+  //    delayed by the sum of both calls:
+  //      • notify()   -> Google Sheet row
+  //      • sendLead() -> Meta Conversions API "Lead" (dormant unless configured)
+  //    Both are time-boxed, retry internally, and swallow errors (KV is the record),
+  //    so neither can fail or hang the applicant. AWAITED (not ctx.waitUntil) because
+  //    fire-and-forget was not reliably running the Sheet write.
+  const eventId = crypto.randomUUID();
+  const fbp = getCookie(request, '_fbp');
+  let fbc = getCookie(request, '_fbc');
+  // If the Pixel never set _fbc (blocked/first visit), rebuild it from the ad click id.
+  if (!fbc && typeof data.fbclid === 'string' && data.fbclid) {
+    fbc = `fb.1.${Date.now()}.${data.fbclid.replace(/[^\w.-]/g, '').slice(0, 400)}`;
+  }
+  await Promise.allSettled([
+    notify(record, env),
+    sendLead(record, env, {
+      eventId,
+      clientIp: ip || undefined,
+      userAgent: record.ua || undefined,
+      fbp: fbp || undefined,
+      fbc: fbc || undefined,
+      sourceUrl: new URL('/apply', url.origin).toString(),
+    }),
+  ]);
 
-  return ok();
+  return ok({ eventId });
+}
+
+// Read a single cookie value from the request's Cookie header (for _fbp / _fbc).
+function getCookie(request, name) {
+  const raw = request.headers.get('Cookie') || '';
+  const safe = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const m = raw.match(new RegExp('(?:^|;\\s*)' + safe + '=([^;]+)'));
+  return m ? decodeURIComponent(m[1]) : '';
 }

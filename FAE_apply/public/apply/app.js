@@ -12,6 +12,14 @@
   if (!form) return;
   var btnSubmit = document.getElementById('btn-submit');
 
+  // Capture the Meta ad click id (?fbclid) into a hidden field so the server can
+  // attribute the Lead even if the Pixel is blocked. The Pixel also sets the _fbc
+  // cookie itself — this is a belt-and-braces backup, and is a no-op without fbclid.
+  try {
+    var fbclid = new URLSearchParams(location.search).get('fbclid');
+    if (fbclid) { var fbEl = form.querySelector('[name="fbclid"]'); if (fbEl) fbEl.value = fbclid; }
+  } catch (e) { /* non-fatal */ }
+
   // optional Turnstile mount
   try {
     var meta = document.querySelector('meta[name="turnstile-sitekey"]');
@@ -83,7 +91,7 @@
       var input = form.querySelector('[name="' + name + '"]');
       if (input) input.setAttribute('aria-invalid', msg ? 'true' : 'false');
     }
-    function clearErrors() { ['fullName', 'phone', 'email', 'city', 'background', 'experience', 'goal', 'consent'].forEach(function (n) { setError(n, ''); }); }
+    function clearErrors() { ['fullName', 'phone', 'email', 'city', 'background', 'experience', 'goal'].forEach(function (n) { setError(n, ''); }); }
     function val(name) { var el = form.querySelector('[name="' + name + '"]'); return el ? el.value.replace(/^\s+|\s+$/g, '') : ''; }
     function checkedVal(name) { var el = form.querySelector('[name="' + name + '"]:checked'); return el ? el.value : ''; }
 
@@ -98,8 +106,7 @@
       } else if (step === 2) { if (!checkedVal('background')) { setError('background', 'Pick the closest one.'); ok = false; } }
       else if (step === 3) { if (!checkedVal('experience')) { setError('experience', 'Pick the closest one.'); ok = false; } }
       else if (step === 4) { if (!checkedVal('goal')) { setError('goal', 'Pick the closest one.'); ok = false; } }
-      // step 5 = optional context (institution / gradYear / heardFrom) — nothing required
-      else if (step === 6) { var c = form.querySelector('[name="consent"]'); if (!c || !c.checked) { setError('consent', 'Please confirm to apply.'); ok = false; } }
+      // step 5 (optional context) and step 6 (review-only) have no required fields
       return ok;
     }
     function firstInvalidStep() { for (var s = 1; s <= TOTAL; s++) { if (!validateStep(s)) return s; } return 0; }
