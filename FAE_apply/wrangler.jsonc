@@ -44,7 +44,7 @@
   // <meta name="meta-pixel-id"> in public/apply/*.html. NOTE: named environments below
   // do NOT inherit top-level vars — repeat META_PIXEL_ID in each env that needs it.
   "vars": {
-    "META_PIXEL_ID": ""
+    "META_PIXEL_ID": "770859829452275"
   },
 
   // Spam protection is HONEYPOT-ONLY for now (no Turnstile widget yet). To enable
@@ -61,7 +61,7 @@
       "name": "apply-staging",
       "workers_dev": true,
       "vars": {
-        "META_PIXEL_ID": ""
+        "META_PIXEL_ID": "770859829452275"
       },
       "kv_namespaces": [
         { "binding": "APPLICATIONS", "id": "c57e85b397634c6dbac77664c721e136" }
