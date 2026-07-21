@@ -20,7 +20,7 @@
   <link rel="icon" type="image/svg+xml" href="/assets/logo/favicon.svg">
   <link rel="apple-touch-icon" href="/assets/logo/favicon.svg">
   <link rel="stylesheet" href="/assets/css/colors_and_type.css">
-  <link rel="stylesheet" href="/apply/apply.css?v=12">
+  <link rel="stylesheet" href="/apply/apply.css?v=13">
 
   <!-- Spam protection: honeypot is always on. To ALSO enable Cloudflare Turnstile,
        set this content to your real Turnstile site key + the TURNSTILE_SECRET_KEY secret. -->
@@ -44,10 +44,12 @@
         <h1 class="brand-title">apply to build <em>real ai products</em>.</h1>
         <p class="brand-lead">12 weeks, in person at UXP Innovation Hub, Trivandrum. Ship 3 deployed AI projects on the real production stack — and finish week 12 with mock interviews + recruiter networking. ₹49,000 early bird (₹70,000 from Cohort 2); reserve with ₹5,000. 20 seats, selective.</p>
         <ol class="steplist" aria-hidden="true">
-          <li data-sl="1"><span class="sl-dot">1</span><span class="sl-label">Contact details</span></li>
+          <li data-sl="1"><span class="sl-dot">1</span><span class="sl-label">Contact &amp; city</span></li>
           <li data-sl="2"><span class="sl-dot">2</span><span class="sl-label">Your background</span></li>
-          <li data-sl="3"><span class="sl-dot">3</span><span class="sl-label">Your goal</span></li>
-          <li data-sl="4"><span class="sl-dot">4</span><span class="sl-label">Confirm &amp; apply</span></li>
+          <li data-sl="3"><span class="sl-dot">3</span><span class="sl-label">Your experience</span></li>
+          <li data-sl="4"><span class="sl-dot">4</span><span class="sl-label">Your goal</span></li>
+          <li data-sl="5"><span class="sl-dot">5</span><span class="sl-label">A little more</span></li>
+          <li data-sl="6"><span class="sl-dot">6</span><span class="sl-label">Confirm &amp; apply</span></li>
         </ol>
         <div class="brand-stats">
           <div class="bstat"><b data-count="12">12</b><span>weeks · in person</span></div>
@@ -72,9 +74,9 @@
             <span class="wordmark">eduflick<i>AI</i></span>
           </a>
           <span class="form-heading desktop-only">your application</span>
-          <span class="step-count" id="step-count" aria-hidden="true">01&thinsp;/&thinsp;04</span>
+          <span class="step-count" id="step-count" aria-hidden="true">01&thinsp;/&thinsp;06</span>
         </header>
-        <div class="progress" role="progressbar" aria-label="Application progress" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" id="progress">
+        <div class="progress" role="progressbar" aria-label="Application progress" aria-valuemin="1" aria-valuemax="6" aria-valuenow="1" id="progress">
           <span class="progress-fill" id="progress-fill"></span>
         </div>
       </div>
@@ -86,7 +88,7 @@
         </div>
 
         <section class="step" data-step="1" aria-label="Your details">
-          <p class="kicker">Cohort 01 · apply in ~60s</p>
+          <p class="kicker">Cohort 01 · apply in ~90s</p>
           <h2 class="step-title">let's get you <em>in</em>.</h2>
           <p class="step-sub">12 weeks, in person at UXP Innovation Hub, Trivandrum. 3 deployed AI projects. 20 seats. We follow up on WhatsApp.</p>
           <div class="field">
@@ -104,6 +106,11 @@
             <input id="email" name="email" type="email" autocomplete="email" maxlength="160" inputmode="email" placeholder="you@email.com" required aria-required="true" enterkeyhint="next">
             <p class="field-error" id="err-email" role="alert"></p>
           </div>
+          <div class="field">
+            <label for="city">City / town</label>
+            <input id="city" name="city" type="text" autocomplete="address-level2" maxlength="80" inputmode="text" placeholder="e.g. Trivandrum" required aria-required="true" enterkeyhint="next">
+            <p class="field-error" id="err-city" role="alert"></p>
+          </div>
         </section>
 
         <section class="step" data-step="2" aria-label="Your background">
@@ -120,7 +127,20 @@
           <p class="field-error" id="err-background" role="alert"></p>
         </section>
 
-        <section class="step" data-step="3" aria-label="Your goal">
+        <section class="step" data-step="3" aria-label="Your coding experience">
+          <p class="kicker">where you're at</p>
+          <h2 class="step-title">how much have you <em>coded</em>?</h2>
+          <p class="step-sub">Beginners are welcome — this just tells us where to start you.</p>
+          <div class="chips" role="radiogroup" aria-label="Your coding experience" id="group-experience">
+            <label class="chip"><input type="radio" name="experience" value="no-code"><span>Haven't coded yet</span></label>
+            <label class="chip"><input type="radio" name="experience" value="learning"><span>Learning the basics</span></label>
+            <label class="chip"><input type="radio" name="experience" value="some-projects"><span>Built a few projects</span></label>
+            <label class="chip"><input type="radio" name="experience" value="professional"><span>Coding professionally</span></label>
+          </div>
+          <p class="field-error" id="err-experience" role="alert"></p>
+        </section>
+
+        <section class="step" data-step="4" aria-label="Your goal">
           <p class="kicker">your why</p>
           <h2 class="step-title">your main <em>goal</em>?</h2>
           <p class="step-sub">No wrong answer — it just tells us what to focus on.</p>
@@ -133,7 +153,45 @@
           <p class="field-error" id="err-goal" role="alert"></p>
         </section>
 
-        <section class="step" data-step="4" aria-label="Confirm and apply">
+        <section class="step" data-step="5" aria-label="A little more (optional)">
+          <p class="kicker">optional</p>
+          <h2 class="step-title">a little <em>more</em>?</h2>
+          <p class="step-sub">All optional — it just helps us prepare for our chat. Skip anything you like.</p>
+          <div class="field">
+            <label for="institution">College or company</label>
+            <input id="institution" name="institution" type="text" autocomplete="organization" maxlength="120" inputmode="text" placeholder="e.g. College of Engineering Trivandrum" enterkeyhint="next">
+          </div>
+          <div class="field">
+            <label for="gradYear">Graduation year</label>
+            <select id="gradYear" name="gradYear">
+              <option value="">Choose…</option>
+              <option value="still-studying">Still studying</option>
+              <option value="2028">2028</option>
+              <option value="2027">2027</option>
+              <option value="2026">2026</option>
+              <option value="2025">2025</option>
+              <option value="2024">2024</option>
+              <option value="2023">2023</option>
+              <option value="2022">2022</option>
+              <option value="2021">2021</option>
+              <option value="before-2021">Before 2021</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="heardFrom">How did you hear about us?</label>
+            <select id="heardFrom" name="heardFrom">
+              <option value="">Choose…</option>
+              <option value="instagram">Instagram</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="friend">A friend</option>
+              <option value="google">Google search</option>
+              <option value="event">An event / college</option>
+              <option value="other">Somewhere else</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="step" data-step="6" aria-label="Confirm and apply">
           <p class="kicker">last step</p>
           <h2 class="step-title">confirm &amp; <em>apply</em>.</h2>
           <p class="step-sub">Quick check, then you're in the queue. We review every application personally.</p>
@@ -141,8 +199,13 @@
             <div class="review-row"><dt>Name</dt><dd data-review="fullName">—</dd></div>
             <div class="review-row"><dt>WhatsApp</dt><dd data-review="phone">—</dd></div>
             <div class="review-row"><dt>Email</dt><dd data-review="email">—</dd></div>
+            <div class="review-row"><dt>City</dt><dd data-review="city">—</dd></div>
             <div class="review-row"><dt>Background</dt><dd data-review="background">—</dd></div>
+            <div class="review-row"><dt>Experience</dt><dd data-review="experience">—</dd></div>
             <div class="review-row"><dt>Goal</dt><dd data-review="goal">—</dd></div>
+            <div class="review-row" hidden><dt>College / company</dt><dd data-review="institution">—</dd></div>
+            <div class="review-row" hidden><dt>Grad year</dt><dd data-review="gradYear">—</dd></div>
+            <div class="review-row" hidden><dt>Heard via</dt><dd data-review="heardFrom">—</dd></div>
           </dl>
           <label class="consent" for="consent">
             <input id="consent" name="consent" type="checkbox" value="yes" required aria-required="true">
@@ -164,11 +227,11 @@
           <button type="submit" class="btn btn-primary" id="btn-submit">submit application →</button>
         </div>
         <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
-        <p class="trust">🔒 We never share your details · <a href="https://www.instagram.com/eduflick.ai" rel="noopener" target="_blank">follow @eduflick.ai</a></p>
+        <p class="trust"><a href="https://www.instagram.com/eduflick.ai" rel="noopener" target="_blank">follow @eduflick.ai</a></p>
       </footer>
     </div>
   </form>
 
-  <script src="/apply/app.js?v=9" defer></script>
+  <script src="/apply/app.js?v=10" defer></script>
 </body>
 </html>
