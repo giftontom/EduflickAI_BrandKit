@@ -83,7 +83,7 @@
       var input = form.querySelector('[name="' + name + '"]');
       if (input) input.setAttribute('aria-invalid', msg ? 'true' : 'false');
     }
-    function clearErrors() { ['fullName', 'phone', 'email', 'background', 'goal', 'consent'].forEach(function (n) { setError(n, ''); }); }
+    function clearErrors() { ['fullName', 'phone', 'email', 'city', 'background', 'experience', 'goal', 'consent'].forEach(function (n) { setError(n, ''); }); }
     function val(name) { var el = form.querySelector('[name="' + name + '"]'); return el ? el.value.replace(/^\s+|\s+$/g, '') : ''; }
     function checkedVal(name) { var el = form.querySelector('[name="' + name + '"]:checked'); return el ? el.value : ''; }
 
@@ -94,9 +94,12 @@
         var ph = val('phone').replace(/\D/g, '');
         if (ph.length < 7 || ph.length > 15) { setError('phone', 'Enter a valid WhatsApp number.'); ok = false; }
         if (!EMAIL_RE.test(val('email'))) { setError('email', 'Enter a valid email address.'); ok = false; }
+        if (!val('city')) { setError('city', 'Which city are you in?'); ok = false; }
       } else if (step === 2) { if (!checkedVal('background')) { setError('background', 'Pick the closest one.'); ok = false; } }
-      else if (step === 3) { if (!checkedVal('goal')) { setError('goal', 'Pick the closest one.'); ok = false; } }
-      else if (step === 4) { var c = form.querySelector('[name="consent"]'); if (!c || !c.checked) { setError('consent', 'Please confirm to apply.'); ok = false; } }
+      else if (step === 3) { if (!checkedVal('experience')) { setError('experience', 'Pick the closest one.'); ok = false; } }
+      else if (step === 4) { if (!checkedVal('goal')) { setError('goal', 'Pick the closest one.'); ok = false; } }
+      // step 5 = optional context (institution / gradYear / heardFrom) — nothing required
+      else if (step === 6) { var c = form.querySelector('[name="consent"]'); if (!c || !c.checked) { setError('consent', 'Please confirm to apply.'); ok = false; } }
       return ok;
     }
     function firstInvalidStep() { for (var s = 1; s <= TOTAL; s++) { if (!validateStep(s)) return s; } return 0; }
@@ -107,10 +110,28 @@
       var span = el.closest && el.closest('.chip') && el.closest('.chip').querySelector('span');
       return span ? span.textContent : el.value;
     }
+    function selectText(name) {
+      var el = form.querySelector('select[name="' + name + '"]');
+      if (!el || el.selectedIndex < 0) return '';
+      var o = el.options[el.selectedIndex];
+      return o && o.value ? o.textContent : '';
+    }
     function setReview(name, text) { var dd = form.querySelector('[data-review="' + name + '"]'); if (dd) dd.textContent = text; }
+    // optional rows: fill + reveal when present, hide the whole row when empty
+    function setReviewRow(name, text) {
+      var dd = form.querySelector('[data-review="' + name + '"]');
+      if (!dd) return;
+      dd.textContent = text || '—';
+      var row = dd.closest ? dd.closest('.review-row') : null;
+      if (row) row.hidden = !text;
+    }
     function populateReview() {
       setReview('fullName', val('fullName') || '—'); setReview('phone', val('phone') || '—'); setReview('email', val('email') || '—');
-      setReview('background', chipLabel('background')); setReview('goal', chipLabel('goal'));
+      setReview('city', val('city') || '—');
+      setReview('background', chipLabel('background')); setReview('experience', chipLabel('experience')); setReview('goal', chipLabel('goal'));
+      setReviewRow('institution', val('institution'));
+      setReviewRow('gradYear', selectText('gradYear'));
+      setReviewRow('heardFrom', selectText('heardFrom'));
     }
     function setStatus(text, ok) { if (!statusEl) return; statusEl.textContent = text || ''; statusEl.classList.toggle('ok', !!ok); }
 
@@ -131,9 +152,9 @@
     if (btnNext) btnNext.addEventListener('click', function () { clearErrors(); if (validateStep(current)) goto(current + 1); });
     if (btnBack) btnBack.addEventListener('click', function () { goto(current - 1); });
 
-    // tap-to-advance for the single-choice steps (background / goal)
+    // tap-to-advance for the single-choice chip steps (background / experience / goal)
     form.addEventListener('change', function (e) {
-      if (e.target && e.target.type === 'radio' && (current === 2 || current === 3)) {
+      if (e.target && e.target.type === 'radio' && (current === 2 || current === 3 || current === 4)) {
         setError(e.target.name, '');
         var s = current;
         if (advanceTimer) clearTimeout(advanceTimer);

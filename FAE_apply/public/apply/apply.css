@@ -120,6 +120,25 @@ a { color: var(--i-200); }
 .field-error { color: #ff9d8f; font-size: 13px; margin: 8px 2px 0; }
 .field-error:empty { display: none; }
 
+/* native dropdowns (optional step) — matched to .field input, custom accent chevron.
+   The open option list is themed by the root color-scheme: dark (no per-option colors,
+   which would break one platform or the other). */
+.field select {
+  width: 100%; font-family: var(--font-display); font-size: 17px; color: var(--paper);
+  background-color: rgba(245, 242, 234, 0.05);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238B97FF' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 16px center;
+  border: 1px solid rgba(245, 242, 234, 0.16); border-radius: 14px;
+  padding: 15px 44px 15px 16px; appearance: none; -webkit-appearance: none;
+  transition: border-color 0.18s, background-color 0.18s, box-shadow 0.18s;
+}
+.field select:focus {
+  outline: none; border-color: var(--i-300); background-color: rgba(245, 242, 234, 0.08);
+  box-shadow: 0 0 0 4px rgba(139, 151, 255, 0.16);
+}
+/* dim the control while the empty "Choose…" placeholder is the current value */
+.field select:has(option[value=""]:checked) { color: rgba(245, 242, 234, 0.4); }
+
 /* ---------- choice chips ---------- */
 .chips { display: flex; flex-direction: column; gap: 11px; }
 .chip {

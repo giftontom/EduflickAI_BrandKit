@@ -25,6 +25,10 @@ var SHEET_ID = '';
 var HEADERS = [
   'received_at', 'name', 'whatsapp', 'email',
   'background', 'goal', 'consent', 'country', 'ip', 'user_agent', 'cf_ray', 'cohort',
+  // New fields are APPENDED at the end so existing rows/columns stay aligned. On an
+  // existing sheet the header row is NOT rewritten (headers are only written when the
+  // sheet is empty) — add these header cells manually (cols M–Q), or clear row 1 once.
+  'city', 'experience', 'institution', 'grad_year', 'heard_from',
 ];
 
 function ss_() {
@@ -60,6 +64,11 @@ function doPost(e) {
       safe_(r.ua),
       safe_(r.ray),
       safe_(r.cohort),
+      safe_(r.city),
+      safe_(r.experience),
+      safe_(r.institution),
+      safe_(r.gradYear),
+      safe_(r.heardFrom),
     ]);
     return json_({ ok: true });
   } catch (err) {
