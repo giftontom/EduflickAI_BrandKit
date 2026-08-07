@@ -855,7 +855,14 @@ document.getElementById('downloadPdfBtn').addEventListener('click', async functi
       var imgWidth = 210; var imgHeight = (canvas.height * imgWidth) / canvas.width;
       if (i === 0){ pdf = new jsPDF({ unit:'mm', format:[imgWidth, imgHeight], orientation:'portrait' }); }
       else { pdf.addPage([imgWidth, imgHeight]); }
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
+      // JPEG, not PNG. PNG cannot compress the full-bleed gradients, so
+      // scale-3 PNG produced a ~184 MB download. JPEG at 0.92 is 3.2 MB at
+      // the SAME scale-3 resolution — 57x smaller. Verified at 1:1 with
+      // smoothing off that the logo shows no ringing at this scale; the
+      // earlier JPEG->PNG switch (commit dff0124) was made at scale 2,
+      // where artifacts were visible. Do not raise quality above ~0.94 or
+      // the size advantage collapses.
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, imgWidth, imgHeight);
     }
     document.body.removeChild(hidden);
     pdf.save('Tomatrix_Corporate_AI_Training_Brochure.pdf');
