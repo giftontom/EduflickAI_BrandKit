@@ -21,29 +21,38 @@
      · Sentence-case headings, NOT all-lowercase
      · Flat corporate surfaces — no grain, vignette or dot grid
 
-   PALETTE PROVENANCE — sampled from the real logo files:
-     #019BE1  azure  — the chevron in assets/partners/tomatrix-logo-light.png
-     #54C5F8  sky    — the reversed mark in tomatrix-logo-dark.png
-   Both sit at hue ~199°, so the navy ramp is built on the same hue.
+   PALETTE - "Tata blue", the institutional register.
+     #486AAE  Tata Blue (PMS 7683 C) - accent: rules, chips, badges, CTA
+     #132A4D  deep navy field, built on the same hue
+   The whole ramp sits at hue 216-220 deg, anchored on Tata Blue's 220.
+   This deliberately REPLACES an earlier azure (#019BE1, hue 199, S 99%)
+   sampled from the Tomatrix logo: that cyan reads energetic/startup. The
+   royal blue is desaturated (S 41%) and that desaturation is what reads
+   as institutional and trustworthy.
+
+   KNOWN TENSION: the logo asset itself is still cyan, so the chevron is
+   the one cool note on the page. That is intentional - a logo is never
+   recoloured, and confining cyan to the mark makes it the single brand
+   signature while every system accent is Tata blue. All pairs pass WCAG AA.
    ============================================================ */
 *{box-sizing:border-box;margin:0;padding:0}
 
 :root{
   /* Tomatrix blue ramp — anchored on the two sampled brand colours */
-  --tx-950:#04121F; --tx-900:#07202F; --tx-850:#092A40; --tx-800:#0B3A57;
-  --tx-700:#0F4E75; --tx-600:#0A73AB; --tx-500:#019BE1; --tx-400:#2FB2EC;
-  --tx-300:#54C5F8; --tx-200:#A5DFFB; --tx-100:#D8F0FE; --tx-50:#EFF9FF;
+  --tx-950:#0A1628; --tx-900:#0E1F3A; --tx-850:#132A4D; --tx-800:#17335E;
+  --tx-700:#1E4176; --tx-600:#2B5391; --tx-500:#486AAE; --tx-400:#6683BE;
+  --tx-300:#8CA3D0; --tx-200:#B8C6E2; --tx-100:#DCE3F1; --tx-50:#F0F4FA;
   /* corporate neutrals */
-  --white:#FFFFFF; --surface:#F5F8FB; --surface-2:#EBF1F7;
-  --border:#D9E2EC; --border-2:#C2CFDC;
-  --text:#0E1B26; --text-2:#42576B; --muted:#7B8FA3;
+  --white:#FFFFFF; --surface:#F4F6FB; --surface-2:#E9EDF6;
+  --border:#D7DEEC; --border-2:#BFC9DE;
+  --text:#101A2B; --text-2:#44536B; --muted:#7C89A0;
   --on-dark:rgba(255,255,255,0.72); --on-dark-dim:rgba(255,255,255,0.52);
   --rule-dark:rgba(255,255,255,0.16);
 }
 
 body{
   font-family:'Inter',-apple-system,Segoe UI,sans-serif;
-  background:#B9C6D3;
+  background:#AFBACB;
   color:var(--text);
   font-size:13px;line-height:1.6;
   -webkit-print-color-adjust:exact;print-color-adjust:exact;
@@ -86,7 +95,7 @@ p.body{font-size:12.5px;line-height:1.62;color:var(--text-2)}
 .hdr .h-name{font-size:12px;font-weight:500;color:rgba(255,255,255,0.86);letter-spacing:0.01em}
 .hdr .h-pg{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;
   font-weight:500;color:var(--tx-300);letter-spacing:0.12em}
-.accent-rule{height:3px;flex-shrink:0;background:var(--tx-500)}
+.accent-rule{height:4px;flex-shrink:0;background:var(--tx-500)}
 
 /* ─── RUNNING FOOTER ─── */
 .ftr{
@@ -103,7 +112,7 @@ p.body{font-size:12.5px;line-height:1.62;color:var(--text-2)}
 /* ─── SECTION HEAD (number chip + title) ─── */
 .sec-head{display:flex;align-items:flex-start;gap:16px;margin-bottom:22px;flex-shrink:0}
 .sec-num{
-  width:38px;height:38px;flex-shrink:0;border-radius:4px;background:var(--tx-500);
+  width:38px;height:38px;flex-shrink:0;border-radius:3px;background:var(--tx-500);
   color:#fff;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;
   display:flex;align-items:center;justify-content:center;letter-spacing:0.02em;
 }
@@ -116,7 +125,7 @@ p.body{font-size:12.5px;line-height:1.62;color:var(--text-2)}
    is pushed below by margin-top:auto on the next block, which separates the
    "detail" zone from the "insight" zone. */
 .card-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:26px}
-.card{background:var(--white);border:1px solid var(--border);border-radius:5px;padding:19px 20px}
+.card{background:var(--white);border:1px solid var(--border);border-radius:3px;padding:19px 20px}
 .card--tint{background:var(--surface);border-color:var(--border)}
 .card--accent{border-top:3px solid var(--tx-500)}
 .card .c-n{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
@@ -124,7 +133,7 @@ p.body{font-size:12.5px;line-height:1.62;color:var(--text-2)}
 .card h3{margin-bottom:7px}
 
 /* ─── DATA TABLE (corporate spec rows) ─── */
-.dtable{border:1px solid var(--border);border-radius:5px;overflow:hidden}
+.dtable{border:1px solid var(--border);border-radius:3px;overflow:hidden}
 .drow{display:flex;justify-content:space-between;align-items:center;gap:16px;
   padding:10px 16px;font-size:12.5px;border-bottom:1px solid var(--border)}
 .drow:last-child{border-bottom:none}
@@ -134,7 +143,7 @@ p.body{font-size:12.5px;line-height:1.62;color:var(--text-2)}
 .drow .dv{font-weight:600;color:var(--text);text-align:right}
 
 /* ─── NAVY PANEL (the recurring "insight" block) ─── */
-.panel{background:var(--tx-850);color:#fff;border-radius:5px;padding:22px 24px;position:relative;overflow:hidden}
+.panel{background:var(--tx-850);color:#fff;border-radius:3px;padding:22px 24px;position:relative;overflow:hidden}
 .panel--deep{background:linear-gradient(135deg,var(--tx-850) 0%,var(--tx-950) 100%)}
 .panel .p-t{font-size:17px;font-weight:600;line-height:1.34;letter-spacing:-0.015em;color:#fff}
 .panel .p-d{font-size:12.5px;line-height:1.6;color:var(--on-dark)}
@@ -146,9 +155,9 @@ p.body{font-size:12.5px;line-height:1.62;color:var(--text-2)}
 
 /* ─── ROLE ROW (page 3) ─── */
 .role{display:flex;gap:16px;align-items:flex-start;padding:14px 18px;
-  border:1px solid var(--border);border-radius:5px;background:var(--white)}
+  border:1px solid var(--border);border-radius:3px;background:var(--white)}
 .role:nth-child(even){background:var(--surface)}
-.role .r-badge{width:34px;height:34px;flex-shrink:0;border-radius:4px;background:var(--tx-500);
+.role .r-badge{width:34px;height:34px;flex-shrink:0;border-radius:3px;background:var(--tx-500);
   color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center}
 .role .r-t{font-size:14.5px;font-weight:700;color:var(--text);letter-spacing:-0.012em;margin-bottom:3px}
 .role .r-d{font-size:12px;line-height:1.55;color:var(--text-2)}
@@ -207,7 +216,7 @@ h2.back-h{font-size:42px;font-weight:700;line-height:1.08;letter-spacing:-0.028e
 h2.back-h span{color:var(--tx-300)}
 .back-sub{font-size:16.5px;line-height:1.55;color:var(--on-dark);max-width:56ch;margin-bottom:34px}
 .why{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.why-c{border:1px solid rgba(255,255,255,0.16);border-radius:5px;padding:20px 22px;
+.why-c{border:1px solid rgba(255,255,255,0.16);border-radius:3px;padding:20px 22px;
   background:rgba(255,255,255,0.04)}
 .why-c .w-n{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
   color:var(--tx-300);letter-spacing:0.12em;margin-bottom:10px}
@@ -224,7 +233,7 @@ h2.back-h span{color:var(--tx-300)}
 .contact .c-v{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#fff;font-weight:400}
 .cta{display:inline-flex;align-items:center;justify-content:center;gap:9px;
   background:var(--tx-500);color:#fff;font-size:14px;font-weight:600;letter-spacing:-0.005em;
-  padding:15px 26px;border-radius:4px;text-decoration:none;white-space:nowrap}
+  padding:15px 26px;border-radius:3px;text-decoration:none;white-space:nowrap}
 .back-ftr{margin-top:24px;display:flex;justify-content:space-between;align-items:baseline;
   font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.13em;
   text-transform:uppercase;color:var(--on-dark-dim)}
@@ -239,9 +248,9 @@ h2.back-h span{color:var(--tx-300)}
 
 /* ─── PDF DOWNLOAD BUTTON ─── */
 .pdf-download-btn{position:fixed;top:24px;right:24px;z-index:9999;padding:12px 22px;border:none;
-  border-radius:4px;cursor:pointer;background:var(--tx-500);color:#fff;
+  border-radius:3px;cursor:pointer;background:var(--tx-500);color:#fff;
   font-family:'Inter',sans-serif;font-weight:600;font-size:13px;
-  box-shadow:0 4px 20px rgba(1,155,225,0.42);display:flex;align-items:center;gap:8px}
+  box-shadow:0 4px 20px rgba(43,83,145,0.34);display:flex;align-items:center;gap:8px}
 .pdf-download-btn:hover{background:var(--tx-400)}
 .pdf-download-btn:disabled{opacity:0.6;cursor:wait}
 

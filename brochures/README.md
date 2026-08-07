@@ -18,17 +18,28 @@ This is the index: what each file is, which is canonical, and how PDFs are made.
 
 | File | Edition | What |
 | --- | --- | --- |
-| `Tomatrix_Corporate_AI_Training_Brochure_v2.html` | **Corporate Edition** — Tomatrix's own identity | Deep navy + Tomatrix azure, Inter + IBM Plex Mono, sentence case, flat corporate surfaces. The default share for company buyers. |
+| `Tomatrix_Corporate_AI_Training_Brochure_v2.html` | **Corporate Edition** — Tomatrix's own identity | Deep navy + **Tata blue**, Inter + IBM Plex Mono, sentence case, flat corporate surfaces. The default share for company buyers. |
 | `Tomatrix_Corporate_AI_Training_Brochure.html` | Editorial Edition — Eduflick house style | Cream + indigo, Manrope + Instrument Serif, all-lowercase headlines. Consistent with the Full-Stack AI Engineer set. |
 
 Same 6-page content in both; only the visual system differs.
 
-**v2 palette provenance** — sampled from the real logo files rather than invented:
-`#019BE1` azure (the chevron in `assets/partners/tomatrix-logo-light.png`) and `#54C5F8`
-sky (the reversed mark in `tomatrix-logo-dark.png`). Both sit at hue ~199°, so the navy
-ramp (`#092A40` → `#04121F`) is built on the same hue. v2 deliberately does **not** follow
-the Eduflick token set — it is a separate corporate identity, so `design-system/` tokens
-and the lowercase/serif-accent rules do not apply to it.
+**v2 palette — the institutional register.** Accent is **Tata blue `#486AAE`**
+(PMS 7683 C), on a deep navy field `#132A4D` → `#0A1628`. The whole ramp sits at hue
+216–220°, anchored on Tata blue's 220°.
+
+This replaced a first attempt that sampled the logo directly — `#019BE1` azure and
+`#54C5F8` sky. That palette was *accurate* but wrong in feel: at hue 199° and **99%
+saturation** it read energetic and startup-ish. Tata blue is 220° at **41% saturation**,
+and that desaturation is what reads as institutional and trustworthy. Keep this in mind
+before "correcting" the accent back toward the logo cyan.
+
+**Known tension:** the logo asset is still cyan, so the chevron is the one cool note on
+the page. That is deliberate — a logo is never recoloured, and confining cyan to the mark
+makes it the single brand signature while every system accent is Tata blue. All
+foreground/background pairs pass WCAG AA (lowest is white-on-`#486AAE` at 5.32:1).
+
+v2 deliberately does **not** follow the Eduflick token set — it is a separate corporate
+identity, so `design-system/` tokens and the lowercase/serif-accent rules do not apply.
 
 **Co-brand exception:** this is the one artifact where **Tomatrix leads** the cover
 lockup and the Eduflick mark is credited as the training & academy arm in the running
