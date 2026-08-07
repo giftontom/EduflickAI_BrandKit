@@ -93,7 +93,9 @@
 
 > A **separate offering from the Full-Stack AI Engineer Program.** This one is sold to
 > companies, led by the **Tomatrix Technologies** brand, with Eduflick AI credited as the
-> training & academy arm. Artifact: `brochures/Tomatrix_Corporate_AI_Training_Brochure.html`.
+> training & academy arm. Two artifacts share this content, differing only in visual system:
+> `..._Brochure_v2.html` (Corporate Edition — Tomatrix deep-navy identity, the default share)
+> and `..._Brochure.html` (Editorial Edition — Eduflick house style). See `brochures/README.md`.
 >
 > ⚠️ Do not describe this offering with the retired "Enterprise&nbsp;Solutions" wording
 > (see `brand.config.json → facts.retiredStrings`) — `check-facts.mjs` fails CI on it.

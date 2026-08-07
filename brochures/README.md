@@ -16,9 +16,19 @@ This is the index: what each file is, which is canonical, and how PDFs are made.
 
 ## Corporate / B2B
 
-| File | What |
-| --- | --- |
-| `Tomatrix_Corporate_AI_Training_Brochure.html` | 6-page capability brochure for **Corporate AI Training** — live, custom-built training sold to companies |
+| File | Edition | What |
+| --- | --- | --- |
+| `Tomatrix_Corporate_AI_Training_Brochure_v2.html` | **Corporate Edition** — Tomatrix's own identity | Deep navy + Tomatrix azure, Inter + IBM Plex Mono, sentence case, flat corporate surfaces. The default share for company buyers. |
+| `Tomatrix_Corporate_AI_Training_Brochure.html` | Editorial Edition — Eduflick house style | Cream + indigo, Manrope + Instrument Serif, all-lowercase headlines. Consistent with the Full-Stack AI Engineer set. |
+
+Same 6-page content in both; only the visual system differs.
+
+**v2 palette provenance** — sampled from the real logo files rather than invented:
+`#019BE1` azure (the chevron in `assets/partners/tomatrix-logo-light.png`) and `#54C5F8`
+sky (the reversed mark in `tomatrix-logo-dark.png`). Both sit at hue ~199°, so the navy
+ramp (`#092A40` → `#04121F`) is built on the same hue. v2 deliberately does **not** follow
+the Eduflick token set — it is a separate corporate identity, so `design-system/` tokens
+and the lowercase/serif-accent rules do not apply to it.
 
 **Co-brand exception:** this is the one artifact where **Tomatrix leads** the cover
 lockup and the Eduflick mark is credited as the training & academy arm in the running
