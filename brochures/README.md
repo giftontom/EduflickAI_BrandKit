@@ -18,33 +18,45 @@ This is the index: what each file is, which is canonical, and how PDFs are made.
 
 | File | Edition | What |
 | --- | --- | --- |
-| `Tomatrix_Corporate_AI_Training_Brochure_v2.html` | **Corporate Edition** — Tomatrix's own identity | Deep navy + **Tata blue**, Inter + IBM Plex Mono, sentence case, flat corporate surfaces. The default share for company buyers. |
+| `Tomatrix_Corporate_AI_Training_Brochure_v2.html` | **Corporate Edition** — Tomatrix's own identity | Royal blue + **aqua accent**, Inter + IBM Plex Mono, sentence case, flat corporate surfaces. The default share for company buyers. |
 | `Tomatrix_Corporate_AI_Training_Brochure.html` | Editorial Edition — Eduflick house style | Cream + indigo, Manrope + Instrument Serif, all-lowercase headlines. Consistent with the Full-Stack AI Engineer set. |
 
 Same 6-page content in both; only the visual system differs.
 
-**v2 palette — premium institutional.** Accent is **Tata blue `#486AAE`** (PMS 7683 C)
-on a deep navy field `#132540` → `#070D18`, with **antique brass `#7F6238`** as the
-premium detail note (section numerals, hairlines, small marks — never a large field) and
-**warm ivory `#FAF8F3`** paper. The ivory is the single biggest premium lever: cool
-grey-white reads generic, warm ivory reads print. Brass on ivory must use the *dark*
-brass (`#7F6238`, 5.34:1); `#B08D57` is decorative only and fails as text.
+**v2 palette — sampled from a client-supplied reference brochure**, not chosen by eye:
+
+| Token | Hex | Role |
+| --- | --- | --- |
+| royal blue | `#2E4096` | field + big section numerals (hue 230 / S 53%) |
+| azure | `#336EB2` | the lighter end of the cover gradient (hue 212) |
+| aqua-mint | `#8ACCD8` | accent — hairlines, timeline nodes, on-dark highlights, CTA |
+| white | `#FFFFFF` | paper, with `#F4F6FA` panels |
+
+**No gold or brass** — an antique-brass accent was tried and rejected by the client; the
+aqua replaced it. Do not reintroduce a warm metallic.
+
+Two earlier palettes were also replaced, both for *feel* rather than accuracy — worth
+knowing before "correcting" this back:
+
+- `#019BE1` azure sampled from the logo. Accurate, but hue 199 at **99% saturation** read
+  energetic and startup-ish.
+- `#486AAE` Tata blue (PMS 7683 C). Institutional, but flatter and less premium than the
+  reference, which is more saturated and more violet.
+
+The CTA is aqua with dark text on purpose: as `blue-500` it sat at **1.36:1 against the
+blue field** — legible text, but invisible as a button. It is now 5.11:1.
+
+**Known tension:** the logo is cyan `#54C5F8` (hue 199). It sits between the royal blue
+and the aqua accent, so the lockup reads better here than it did against brass. A logo is
+never recoloured.
 
 **Each inner page has its own structure, deliberately.** A repeated "three cards + two
 columns" skeleton on every page reads cheap, so: `02` contrast device (their way vs
 ours) · `03` hairline role register · `04` horizontal process timeline · `05` comparison
 matrix.
 
-This replaced a first attempt that sampled the logo directly — `#019BE1` azure and
-`#54C5F8` sky. That palette was *accurate* but wrong in feel: at hue 199° and **99%
-saturation** it read energetic and startup-ish. Tata blue is 220° at **41% saturation**,
-and that desaturation is what reads as institutional and trustworthy. Keep this in mind
-before "correcting" the accent back toward the logo cyan.
-
-**Known tension:** the logo asset is still cyan, so the chevron is the one cool note on
-the page. That is deliberate — a logo is never recoloured, and confining cyan to the mark
-makes it the single brand signature while every system accent is Tata blue. All
-foreground/background pairs pass WCAG AA (lowest is white-on-`#486AAE` at 5.32:1).
+All foreground/background pairs pass WCAG AA — lowest is `blue-300` on the `blue-800`
+field at 4.53:1.
 
 v2 deliberately does **not** follow the Eduflick token set — it is a separate corporate
 identity, so `design-system/` tokens and the lowercase/serif-accent rules do not apply.
