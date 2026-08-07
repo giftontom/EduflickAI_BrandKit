@@ -89,6 +89,49 @@
 
 ---
 
+## Corporate AI training (Tomatrix) — B2B offering
+
+> A **separate offering from the Full-Stack AI Engineer Program.** This one is sold to
+> companies, led by the **Tomatrix Technologies** brand, with Eduflick AI credited as the
+> training & academy arm. Artifact: `brochures/Tomatrix_Corporate_AI_Training_Brochure.html`.
+>
+> ⚠️ Do not describe this offering with the retired "Enterprise&nbsp;Solutions" wording
+> (see `brand.config.json → facts.retiredStrings`) — `check-facts.mjs` fails CI on it.
+> Use "Corporate AI Training".
+
+| Fact | Value |
+| --- | --- |
+| Offering name | Corporate AI Training |
+| Lead brand | Tomatrix Technologies Pvt Ltd |
+| Delivery | Live, person-to-person — on-site at the client or virtual |
+| Curriculum | Custom-built per client; no pre-recorded modules |
+| Mentors | Active AI engineers who build client software |
+| Cohort size | Any scale |
+| Pricing | Not published — consultative; the brochure carries no price |
+| Primary CTA | "book a discovery call →" |
+
+**Role tracks (5):** Human Resources & Admin · Sales & Marketing · Finance & Operations ·
+Software & Engineering · C-Suite & Management
+
+**Customization process (3 steps):** Deep-Dive Requirement Gathering → Custom Curriculum
+Engineering → Live Training & Active Mentoring
+
+**Engagement models (3):** Sprint Workshops (half-day → multi-day) · Weekly Mentorship
+Cycles (multi-week) · Continuous Enablement (ongoing support)
+
+### Corporate contact — pending
+
+The brochure currently typesets the canonical Eduflick contacts below as a stand-in.
+Replace all three in one edit once Tomatrix-specific details are confirmed.
+
+| Fact | Value in the brochure today | Target |
+| --- | --- | --- |
+| Email | <info@eduflickai.com> | [[NEEDS: Tomatrix corporate enquiry email]] |
+| Phone | +91 92078 94926 | [[NEEDS: Tomatrix corporate phone]] |
+| Website | eduflickai.com | [[NEEDS: Tomatrix corporate domain]] |
+
+---
+
 ## Hashtag pool (stable)
 
 3–6 per post, mix geo + topic + intent:
