@@ -23,9 +23,17 @@ This is the index: what each file is, which is canonical, and how PDFs are made.
 
 Same 6-page content in both; only the visual system differs.
 
-**v2 palette — the institutional register.** Accent is **Tata blue `#486AAE`**
-(PMS 7683 C), on a deep navy field `#132A4D` → `#0A1628`. The whole ramp sits at hue
-216–220°, anchored on Tata blue's 220°.
+**v2 palette — premium institutional.** Accent is **Tata blue `#486AAE`** (PMS 7683 C)
+on a deep navy field `#132540` → `#070D18`, with **antique brass `#7F6238`** as the
+premium detail note (section numerals, hairlines, small marks — never a large field) and
+**warm ivory `#FAF8F3`** paper. The ivory is the single biggest premium lever: cool
+grey-white reads generic, warm ivory reads print. Brass on ivory must use the *dark*
+brass (`#7F6238`, 5.34:1); `#B08D57` is decorative only and fails as text.
+
+**Each inner page has its own structure, deliberately.** A repeated "three cards + two
+columns" skeleton on every page reads cheap, so: `02` contrast device (their way vs
+ours) · `03` hairline role register · `04` horizontal process timeline · `05` comparison
+matrix.
 
 This replaced a first attempt that sampled the logo directly — `#019BE1` azure and
 `#54C5F8` sky. That palette was *accurate* but wrong in feel: at hue 199° and **99%
