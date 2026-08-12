@@ -4,7 +4,7 @@
 > visual typesetting must pull live values from here — not from memory, not from
 > a stale copy in a prompt template. Update this file first, then use its values.
 >
-> **Last updated:** 2026-06-22
+> **Last updated:** 2026-08-13
 
 ---
 
@@ -36,6 +36,22 @@
 | Payment 2 | ₹17,000 |
 | Payment 3 | ₹17,000 |
 | Payment structure copy | Reserve with ₹5,000 · ₹15,000 booking, then ₹17,000 + ₹17,000 (₹49,000 total) |
+
+## Registration & payment collection (post-interview close)
+
+| Fact | Value |
+| --- | --- |
+| Offer policy | The final offer (total fee + payment plan) is personalised — discussed one-to-one on WhatsApp after the candidate clears the interview |
+| ↳ Rule | Docs shared 1:1 at this stage must NOT state any fee amount — no course fee, no booking figure. The public pricing above still applies to public posters/brochures. |
+| Collection method | Direct bank transfer / UPI to the operator account (Tomatrix Technologies Pvt Ltd) — no payment gateway |
+| Account name | [[NEEDS ACCOUNT NAME]] |
+| Bank & branch | [[NEEDS BANK NAME & BRANCH]] |
+| Account number | [[NEEDS ACCOUNT NUMBER]] |
+| IFSC | [[NEEDS IFSC]] |
+| UPI ID | [[NEEDS UPI ID]] |
+| Proof of payment | Applicant WhatsApps the payment screenshot / UTR number to +91 92078 94926; seat confirmed on verification |
+| Cohort WhatsApp group | <https://chat.whatsapp.com/Buk7ZJMuFlh05g0G3zvfxx> |
+| 1:1 share docs | `brochures/Eduflick_Full_Stack_AI_Engineer_Curriculum.html` (detailed curriculum, zero fee content) · `brochures/Eduflick_FAE_Payment_Details.html` (bank details, zero amounts) |
 
 ## Top of funnel
 
