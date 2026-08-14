@@ -48,7 +48,7 @@
     {
       "id": "deck",
       "label": "program deck",
-      "source": "brochures/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html",
+      "source": "brochures/fae-offline/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html",
       "exportDir": "exports/full-stack-ai-engineer",
       "script": "export:slides",
       "aspect": "1920x1080",
@@ -65,7 +65,7 @@
     }
   ],
   "paths": {
-    "deck": "brochures/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html",
+    "deck": "brochures/fae-offline/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html",
     "brandBook": "brand-book/Eduflick_Brand_Book_v4.html",
     "tokensSource": "design-system/tokens/tokens.json"
   },

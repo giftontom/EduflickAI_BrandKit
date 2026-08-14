@@ -1,0 +1,560 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="../assets/logo/favicon.svg">
+<title>Eduflick AI · Project Presentation — Agentic AI for Educational Video Generation &amp; Adaptive Programming Tutoring</title>
+<style>
+/* ============================================================
+   Tokens — verbatim subset of design-system/colors_and_type.css
+   (inlined so the deck is a single self-contained, portable file)
+   ============================================================ */
+:root{
+  --i-50:#EEF0FF; --i-100:#DCE0FF; --i-200:#B7C0FF; --i-300:#8B97FF; --i-400:#6E78F5;
+  --i-500:#5B5BF0; --i-600:#4B3FE0; --i-700:#3A2BB8; --i-800:#261A82; --i-900:#150D52; --i-ink:#0B0822;
+  --paper:#F5F2EA; --paper-2:#ECE7DA; --paper-dim:#C9C5BA; --slate-500:#7A7F90; --ink:#0A0B10;
+  --ink-2:#11131C; --ink-3:#181B28; --muted:#7A7F90;
+  --line:rgba(245,242,234,0.08); --line-2:rgba(245,242,234,0.16);
+  --warn:#FF6E5A; --success:#4ADE80;
+  --font-display:'Manrope',sans-serif; --font-serif:'Instrument Serif',serif; --font-mono:'JetBrains Mono',monospace;
+  --shadow-brand:0 8px 32px -8px rgba(91,91,240,0.35);
+}
+/* ---- slide scaffold (from slides/_slide.css) ---- */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#07080C;font-family:var(--font-display)}
+body{overflow-x:hidden}
+#deck{display:flex;flex-direction:column;align-items:center;gap:26px;padding:40px 0 96px;transform-origin:top center}
+.stage{width:1280px;height:720px;position:relative;overflow:hidden;flex-shrink:0;background:var(--ink);color:var(--paper);box-shadow:0 24px 70px rgba(0,0,0,0.55)}
+.grid-tex{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(245,242,234,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(245,242,234,0.04) 1px,transparent 1px);
+  background-size:48px 48px}
+.glow-tr{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(700px 460px at 82% 8%, rgba(91,91,240,0.22), transparent 62%)}
+.eyebrow{font-family:var(--font-mono);font-weight:500;font-size:15px;letter-spacing:0.28em;text-transform:uppercase;color:var(--i-300)}
+.serif{font-family:var(--font-serif);font-style:italic;font-weight:400;color:var(--i-300)}
+.foot{position:absolute;left:64px;right:64px;bottom:48px;display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--font-mono);font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted)}
+.wm{font-family:var(--font-display);font-weight:800;letter-spacing:-0.045em;display:inline-flex;align-items:baseline}
+.wm i{font-style:normal;margin-left:0.16em}
+/* ---- deck helpers ---- */
+.bar{position:absolute;left:64px;top:58px;right:64px;display:flex;justify-content:space-between;align-items:baseline}
+.wmsm{font-family:var(--font-display);font-weight:800;letter-spacing:-0.045em;font-size:16px;color:var(--paper)}
+.wmsm i{font-style:normal;color:var(--i-300);margin-left:0.12em}
+.hl{font-family:var(--font-display);font-weight:800;letter-spacing:-0.035em;line-height:1.02;text-transform:lowercase;color:var(--paper)}
+.lead{font-family:var(--font-serif);font-style:italic;line-height:1.4;color:rgba(245,242,234,0.8)}
+.card{background:var(--ink-2);border:1px solid var(--line);border-radius:18px;padding:26px}
+.cardI{background:linear-gradient(150deg,#3A2BB8,#0B0822);border:1px solid rgba(139,151,255,0.25)}
+.lab{font-family:var(--font-mono);font-weight:500;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)}
+.labI{color:var(--i-200)}
+.kpi{font-family:var(--font-display);font-weight:900;letter-spacing:-0.04em;color:var(--paper);line-height:1}
+.ctxt{font-family:var(--font-display);font-weight:500;font-size:15px;line-height:1.5;color:var(--paper-dim);margin-top:12px}
+.spec{display:flex;justify-content:space-between;align-items:baseline;gap:28px;padding:18px 0;border-top:1px dashed var(--line-2)}
+.spec .k{font-family:var(--font-mono);font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:var(--i-300);white-space:nowrap}
+.spec .v{font-family:var(--font-display);font-weight:500;font-size:18px;color:var(--paper-dim);text-align:right}
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:18px;color:#fff;background:var(--i-500);border-radius:999px;padding:16px 28px;box-shadow:var(--shadow-brand);text-decoration:none}
+.flag{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-mono);font-weight:500;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--i-300);border:1px solid rgba(139,151,255,0.4);border-radius:999px;padding:9px 16px}
+.flag .dot{width:7px;height:7px;border-radius:50%;background:var(--i-300);display:inline-block}
+/* ---- academic-deck additions ---- */
+.blist{margin-top:15px;display:flex;flex-direction:column;gap:9px}
+.bitem{position:relative;padding-left:18px;font-family:var(--font-display);font-weight:500;font-size:14px;line-height:1.42;color:var(--paper-dim)}
+.bitem::before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--i-400)}
+.bitem.bI::before{background:var(--i-200)}
+.flow{display:flex;align-items:stretch;gap:9px}
+.pill{flex:1;background:var(--ink-2);border:1px solid var(--line-2);border-radius:14px;padding:12px 10px;display:flex;flex-direction:column;justify-content:center;gap:6px;text-align:center;min-height:80px}
+.pill .pn{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--i-300)}
+.pill .pt{font-family:var(--font-display);font-weight:700;font-size:14.5px;line-height:1.14;color:var(--paper)}
+.pillI{background:linear-gradient(150deg,#3A2BB8,#120C4A);border-color:rgba(139,151,255,0.32)}
+.pillO{background:rgba(91,91,240,0.10);border-color:rgba(139,151,255,0.28)}
+.arw{display:flex;align-items:center;font-family:var(--font-mono);font-size:17px;color:var(--i-300)}
+.gantt{display:flex;gap:7px;height:104px}
+.seg{display:flex;flex-direction:column;justify-content:center;gap:7px;padding:0 18px;border-radius:13px;border:1px solid rgba(139,151,255,0.28)}
+.seg .sn{font-family:var(--font-display);font-weight:700;font-size:16px;line-height:1.1;color:var(--paper)}
+.seg .sw{font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;color:var(--i-200)}
+.chk{display:flex;align-items:flex-start;gap:15px;padding:16px 0;border-top:1px dashed var(--line-2)}
+.chk .cb{flex-shrink:0;width:24px;height:24px;border-radius:7px;background:rgba(91,91,240,0.18);border:1px solid var(--i-500);display:flex;align-items:center;justify-content:center;color:var(--i-200);font-size:13px;font-weight:700;margin-top:2px}
+.chk .ct{font-family:var(--font-display);font-weight:600;font-size:19px;line-height:1.35;color:var(--paper-dim)}
+/* ---- floating Download-PDF control (never part of a .stage → never exported) ---- */
+.pdf-bar{position:fixed;right:22px;bottom:22px;z-index:50;display:flex;gap:12px;align-items:center}
+.pdf-bar .hint{font-family:var(--font-mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#6b7080}
+#downloadPdfBtn{font-family:var(--font-display);font-weight:700;font-size:14px;color:#fff;background:var(--i-500);border:0;border-radius:999px;padding:13px 22px;cursor:pointer;box-shadow:0 10px 30px -6px rgba(91,91,240,0.6)}
+#downloadPdfBtn:hover{background:var(--i-400)}
+#downloadPdfBtn:disabled{opacity:0.65;cursor:wait}
+/* ---- print fallback (Cmd+P → Save as PDF, landscape 16:9) ---- */
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{background:#0A0B10}
+  #deck{transform:none!important;gap:0;padding:0}
+  .stage{box-shadow:none;break-after:page;page-break-after:always}
+  .stage:last-child{break-after:auto;page-break-after:auto}
+  .pdf-bar{display:none!important}
+}
+</style></head>
+<body>
+<div id="deck">
+
+  <!-- ============ 01 · TITLE ============ -->
+  <section class="stage" style="background:var(--i-ink)">
+    <div class="grid-tex"></div><div class="glow-tr"></div>
+    <div style="position:absolute;left:64px;top:56px;display:flex;align-items:center;gap:12px">
+      <svg viewBox="0 0 180 180" width="30" height="30"><path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#F5F2EA"/></svg>
+      <span class="wm" style="font-size:24px;color:#F5F2EA">eduflick<i style="color:#8B97FF">AI</i></span>
+    </div>
+    <div style="position:absolute;left:64px;top:150px;right:64px">
+      <div class="eyebrow" style="margin-bottom:22px">final year project · department of computer science &amp; engineering</div>
+      <h1 class="hl" style="font-weight:900;font-size:110px;letter-spacing:-0.055em;line-height:0.9;color:var(--paper)">
+        eduflick <span class="serif" style="color:var(--i-200);font-size:110px">ai</span></h1>
+      <p class="lead" style="font-size:25px;margin-top:26px;max-width:62ch">
+        an agentic ai-driven platform for interactive educational video generation &amp; adaptive programming tutoring.</p>
+    </div>
+    <div style="position:absolute;left:64px;right:64px;top:496px;display:grid;grid-template-columns:1.5fr 1fr;gap:44px">
+      <div>
+        <div class="lab" style="color:var(--i-300);margin-bottom:16px">presented by</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 40px">
+          <div><div style="font-family:var(--font-display);font-weight:700;font-size:19px;color:var(--paper)">Nijin Noushad</div><div style="font-family:var(--font-mono);font-size:12px;color:var(--muted);margin-top:3px">LST12ECS065</div></div>
+          <div><div style="font-family:var(--font-display);font-weight:700;font-size:19px;color:var(--paper)">Abhijith A</div></div>
+          <div><div style="font-family:var(--font-display);font-weight:700;font-size:19px;color:var(--paper)">Akul E R</div></div>
+          <div><div style="font-family:var(--font-display);font-weight:700;font-size:19px;color:var(--paper)">Gifton Tom Biju</div></div>
+        </div>
+      </div>
+      <div style="border-left:1px solid var(--line-2);padding-left:40px">
+        <div class="lab" style="color:var(--i-300);margin-bottom:16px">project guide</div>
+        <div style="font-family:var(--font-display);font-weight:700;font-size:19px;color:var(--paper)">Asha Liza</div>
+        <div style="font-family:var(--font-display);font-weight:500;font-size:14px;color:var(--paper-dim);margin-top:6px">Dept. of Computer Science &amp; Engineering</div>
+      </div>
+    </div>
+    <div class="foot" style="color:var(--i-200)"><span>st thomas institute of science and technology</span><span>academic project review</span></div>
+  </section>
+
+  <!-- ============ 02 · INTRODUCTION ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">01 · introduction</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:118px;font-size:52px">
+      online learning is <span class="serif" style="font-size:52px">booming</span> — content can&rsquo;t keep up</h3>
+    <div style="position:absolute;left:64px;right:64px;top:244px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+      <div class="card"><div class="lab">surging demand</div><div class="ctxt" style="font-size:15px">the rapid growth of online education is driving demand for engaging, interactive learning resources.</div></div>
+      <div class="card"><div class="lab">costly to make</div><div class="ctxt" style="font-size:15px">manual video creation needs time, effort and technical skill — production stays slow and expensive.</div></div>
+      <div class="card"><div class="lab">beginners struggle</div><div class="ctxt" style="font-size:15px">new programmers can&rsquo;t understand concepts or resolve errors without personalized guidance.</div></div>
+      <div class="card"><div class="lab">silent compilers</div><div class="ctxt" style="font-size:15px">traditional compilers just report errors — with no explanation and no personalized learning support.</div></div>
+    </div>
+    <div style="position:absolute;left:64px;right:64px;top:472px"><div class="spec" style="border-top:1px solid var(--line-2)"><span class="k">the opening</span><span class="v">advances in AI, LLMs &amp; agentic systems let us automate content <em style="font-style:normal;color:var(--i-200)">and</em> personalize learning — Eduflick AI unites both.</span></div></div>
+    <div class="foot"><span>st thomas institute · cse dept</span><span>02 / 15</span></div>
+  </section>
+
+  <!-- ============ 03 · PROBLEM STATEMENT ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">02 · problem statement</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:118px;font-size:54px">
+      five gaps in learning <span class="serif" style="font-size:54px">tech</span></h3>
+    <div style="position:absolute;left:64px;right:64px;top:216px">
+      <div class="spec"><span class="k">01 · costly content</span><span class="v">producing high-quality educational video is time-consuming, expensive and manual.</span></div>
+      <div class="spec"><span class="k">02 · unhelpful errors</span><span class="v">programming environments report syntax, logical &amp; runtime errors — with no explanation or support.</span></div>
+      <div class="spec"><span class="k">03 · beginners adrift</span><span class="v">without personalized guidance and immediate feedback, concepts stay hard to grasp.</span></div>
+      <div class="spec"><span class="k">04 · fragmented tools</span><span class="v">platforms do content creation <em style="font-style:normal;color:var(--i-200)">or</em> coding help — rarely both in one intelligent system.</span></div>
+      <div class="spec"><span class="k">05 · unscalable mentoring</span><span class="v">faculty struggle to track every student and give individual support in large classrooms.</span></div>
+    </div>
+    <div class="foot"><span>st thomas institute · cse dept</span><span>03 / 15</span></div>
+  </section>
+
+  <!-- ============ 04 · OBJECTIVE ============ -->
+  <section class="stage">
+    <div class="glow-tr" style="background:radial-gradient(640px 440px at 88% 6%, rgba(91,91,240,0.18), transparent 62%)"></div>
+    <div class="bar"><div class="eyebrow">03 · objective</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:118px;font-size:54px">
+      our <span class="serif" style="font-size:54px">aim</span></h3>
+    <div style="position:absolute;left:64px;top:210px;right:64px;display:grid;grid-template-columns:1.35fr 1fr;gap:22px;align-items:stretch">
+      <div class="card cardI" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="lab labI">primary objective</div>
+        <p style="font-family:var(--font-display);font-weight:600;font-size:24px;line-height:1.42;color:var(--paper);margin-top:16px">
+          Build an AI-powered educational platform that <span style="color:var(--i-200)">automates educational video generation</span> and provides <span style="color:var(--i-200)">personalized programming tutoring</span> — using Agentic AI and Large Language Models.</p>
+        <p class="lead" style="font-size:16px;margin-top:18px;color:rgba(245,242,234,0.72)">Uniting Agentic AI, LLMs &amp; Machine Learning into one intelligent learning environment.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card" style="padding:20px 22px"><div class="lab">focus 01</div><div class="hl" style="font-size:22px;margin-top:9px">learning efficiency</div><div class="ctxt" style="font-size:14px;margin-top:8px">smarter, faster, more effective study.</div></div>
+        <div class="card" style="padding:20px 22px"><div class="lab">focus 02</div><div class="hl" style="font-size:22px;margin-top:9px">instructor workload &darr;</div><div class="ctxt" style="font-size:14px;margin-top:8px">less time spent producing content.</div></div>
+        <div class="card" style="padding:20px 22px"><div class="lab">focus 03</div><div class="hl" style="font-size:22px;margin-top:9px">programming skills &uarr;</div><div class="ctxt" style="font-size:14px;margin-top:8px">adaptive, AI-based feedback that sticks.</div></div>
+      </div>
+    </div>
+    <div class="foot"><span>st thomas institute · cse dept</span><span>04 / 15</span></div>
+  </section>
+
+  <!-- ============ 05 · SPECIFIC OBJECTIVES ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">04 · specific objectives</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:118px;font-size:54px">
+      seven things it must <span class="serif" style="font-size:54px">do</span></h3>
+    <div style="position:absolute;left:64px;right:64px;top:206px">
+      <div class="spec" style="padding:13px 0"><span class="k">01 · agent pipeline</span><span class="v">a multi-agent AI system that automates research, script writing and video generation.</span></div>
+      <div class="spec" style="padding:13px 0"><span class="k">02 · adaptive tutor</span><span class="v">an AI programming tutor supporting C, C++, Java and Python.</span></div>
+      <div class="spec" style="padding:13px 0"><span class="k">03 · error classification</span><span class="v">classify syntax, logical &amp; runtime errors — hint-based feedback, not direct solutions.</span></div>
+      <div class="spec" style="padding:13px 0"><span class="k">04 · personalized practice</span><span class="v">recommend coding exercises from each student&rsquo;s performance and history.</span></div>
+      <div class="spec" style="padding:13px 0"><span class="k">05 · faculty dashboard</span><span class="v">monitor student progress, coding performance and class analytics.</span></div>
+      <div class="spec" style="padding:13px 0"><span class="k">06 · less content effort</span><span class="v">cut the time and effort required for educational content creation.</span></div>
+      <div class="spec" style="padding:13px 0"><span class="k">07 · better outcomes</span><span class="v">lift engagement, programming skill and overall learning through personalized AI.</span></div>
+    </div>
+    <div class="foot"><span>st thomas institute · cse dept</span><span>05 / 15</span></div>
+  </section>
+
+  <!-- ============ 06 · PROPOSED SOLUTION ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">05 · proposed solution</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:114px;font-size:50px">
+      two modules, one <span class="serif" style="font-size:50px">platform</span></h3>
+    <p class="lead" style="position:absolute;left:64px;top:186px;right:64px;font-size:18px;max-width:96ch">Eduflick AI integrates Agentic AI, LLMs &amp; Machine Learning to automate content creation and personalize programming tutoring.</p>
+    <div style="position:absolute;left:64px;right:64px;top:250px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+      <div class="card">
+        <div class="lab">module 01</div>
+        <div class="hl" style="font-size:24px;margin-top:9px">ai video generation</div>
+        <div class="blist">
+          <div class="bitem">AI agents collect &amp; analyze educational content.</div>
+          <div class="bitem">generate structured teaching scripts automatically.</div>
+          <div class="bitem">render to video with text-to-speech, animation &amp; multimedia.</div>
+          <div class="bitem">slash the time &amp; effort of manual video creation.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="lab">module 02</div>
+        <div class="hl" style="font-size:24px;margin-top:9px">adaptive programming tutor</div>
+        <div class="blist">
+          <div class="bitem">online coding environment for C, C++, Java &amp; Python.</div>
+          <div class="bitem">LLM analyzes syntax, logical &amp; runtime errors.</div>
+          <div class="bitem">hint-based feedback instead of revealing the answer.</div>
+          <div class="bitem">recommends practice by skill level &amp; history.</div>
+        </div>
+      </div>
+      <div class="card cardI">
+        <div class="lab labI">supporting layer</div>
+        <div class="hl" style="font-size:24px;margin-top:9px">faculty dashboard</div>
+        <div class="blist">
+          <div class="bitem bI">tracks student performance &amp; coding progress.</div>
+          <div class="bitem bI">generates reports and learning analytics.</div>
+          <div class="bitem bI">flags students who need additional support.</div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>st thomas institute · cse dept</span><span>06 / 15</span></div>
+  </section>
+
+  <!-- ============ 07 · SYSTEM WORKFLOW ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">06 · system workflow</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:114px;font-size:50px">
+      content in, <span class="serif" style="font-size:50px">mastery</span> out</h3>
+
+    <div style="position:absolute;left:64px;right:64px;top:196px">
+      <div class="lab" style="color:var(--i-300);margin-bottom:12px">content pipeline · agentic</div>
+      <div class="flow">
+        <div class="pill"><div class="pn">input</div><div class="pt">Learning Content</div></div>
+        <div class="arw">&rarr;</div>
+        <div class="pill pillI"><div class="pn">agent</div><div class="pt">Research AI Agent</div></div>
+        <div class="arw">&rarr;</div>
+        <div class="pill pillI"><div class="pn">agent</div><div class="pt">Script Generation Agent</div></div>
+        <div class="arw">&rarr;</div>
+        <div class="pill pillI"><div class="pn">agent</div><div class="pt">Video Generation Agent</div></div>
+        <div class="arw">&rarr;</div>
+        <div class="pill pillO"><div class="pn">output</div><div class="pt">Educational Videos</div></div>
+      </div>
+    </div>
+
+    <div style="position:absolute;left:50%;top:322px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px">
+      <span style="font-family:var(--font-mono);font-size:19px;color:var(--i-300)">&darr;</span>
+      <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted)">served to the learner</span>
+    </div>
+
+    <div style="position:absolute;left:64px;right:64px;top:388px">
+      <div class="lab" style="color:var(--i-300);margin-bottom:12px">learning pipeline · adaptive</div>
+      <div class="flow">
+        <div class="pill"><div class="pn">portal</div><div class="pt">Student Learning Portal</div></div>
+        <div class="arw">&rarr;</div>
+        <div class="pill"><div class="pn">ide</div><div class="pt">Coding Interface</div></div>
+        <div class="arw">&rarr;</div>
+        <div class="pill pillI"><div class="pn">llm</div><div class="pt">LLM Error Analysis</div></div>
+        <div class="arw">&rarr;</div>
+        <div class="pill pillI"><div class="pn">tutor</div><div class="pt">Adaptive Feedback</div></div>
+        <div class="arw">&rarr;</div>
+        <div class="pill pillO"><div class="pn">faculty</div><div class="pt">Faculty Dashboard</div></div>
+      </div>
+    </div>
+
+    <div class="foot"><span>st thomas institute · cse dept</span><span>07 / 15</span></div>
+  </section>
+
+  <!-- ============ 08 · DEVELOPMENT METHODOLOGY ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">07 · development methodology</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:114px;font-size:50px">
+      an <span class="serif" style="font-size:50px">iterative</span> build</h3>
+    <p class="lead" style="position:absolute;left:64px;top:186px;right:64px;font-size:18px;max-width:88ch">Each module is designed, tested and integrated step by step across five phases.</p>
+    <div style="position:absolute;left:64px;right:64px;top:250px;display:grid;grid-template-columns:repeat(5,1fr);gap:13px">
+      <div class="card" style="padding:20px 18px"><div class="lab">phase 01</div><div class="hl" style="font-size:19px;margin:9px 0 12px">requirement analysis</div><div class="blist" style="margin-top:0"><div class="bitem" style="font-size:13px">study existing platforms.</div><div class="bitem" style="font-size:13px">identify the core problems.</div><div class="bitem" style="font-size:13px">gather requirements.</div></div></div>
+      <div class="card" style="padding:20px 18px"><div class="lab">phase 02</div><div class="hl" style="font-size:19px;margin:9px 0 12px">system design</div><div class="blist" style="margin-top:0"><div class="bitem" style="font-size:13px">architect the system.</div><div class="bitem" style="font-size:13px">UI wireframes &amp; schema.</div><div class="bitem" style="font-size:13px">plan agents &amp; tutor.</div></div></div>
+      <div class="card cardI" style="padding:20px 18px"><div class="lab labI">phase 03</div><div class="hl" style="font-size:19px;margin:9px 0 12px">development</div><div class="blist" style="margin-top:0"><div class="bitem bI" style="font-size:13px">video generation module.</div><div class="bitem bI" style="font-size:13px">adaptive tutor + LLMs.</div><div class="bitem bI" style="font-size:13px">faculty dashboard.</div></div></div>
+      <div class="card" style="padding:20px 18px"><div class="lab">phase 04</div><div class="hl" style="font-size:19px;margin:9px 0 12px">testing</div><div class="blist" style="margin-top:0"><div class="bitem" style="font-size:13px">unit &amp; integration tests.</div><div class="bitem" style="font-size:13px">validate AI outputs.</div><div class="bitem" style="font-size:13px">fix bugs, optimize.</div></div></div>
+      <div class="card" style="padding:20px 18px"><div class="lab">phase 05</div><div class="hl" style="font-size:19px;margin:9px 0 12px">deployment</div><div class="blist" style="margin-top:0"><div class="bitem" style="font-size:13px">deploy to the cloud.</div><div class="bitem" style="font-size:13px">monitor &amp; gather feedback.</div><div class="bitem" style="font-size:13px">update &amp; maintain.</div></div></div>
+    </div>
+    <div class="foot"><span>st thomas institute · cse dept</span><span>08 / 15</span></div>
+  </section>
+
+  <!-- ============ 09 · PROJECT TIMELINE ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">08 · project timeline</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:118px;font-size:54px">
+      fourteen weeks, five <span class="serif" style="font-size:54px">phases</span></h3>
+    <div style="position:absolute;left:64px;right:64px;top:236px">
+      <div class="lab" style="color:var(--i-300);margin-bottom:14px">weeks 1 &ndash; 14</div>
+      <div class="gantt">
+        <div class="seg" style="flex:2;background:rgba(91,91,240,0.14)"><div class="sn">Requirement Analysis</div><div class="sw">week 1&ndash;2</div></div>
+        <div class="seg" style="flex:2;background:rgba(91,91,240,0.22)"><div class="sn">System Design</div><div class="sw">week 3&ndash;4</div></div>
+        <div class="seg" style="flex:6;background:linear-gradient(150deg,#3A2BB8,#251a7e)"><div class="sn">Development</div><div class="sw" style="color:var(--i-200)">week 5&ndash;10</div></div>
+        <div class="seg" style="flex:2;background:rgba(91,91,240,0.22)"><div class="sn">Testing</div><div class="sw">week 11&ndash;12</div></div>
+        <div class="seg" style="flex:2;background:rgba(91,91,240,0.14)"><div class="sn">Deploy &amp; Docs</div><div class="sw">week 13&ndash;14</div></div>
+      </div>
+    </div>
+    <div style="position:absolute;left:64px;right:64px;top:456px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+      <div class="card"><div class="lab">total duration</div><div class="kpi" style="font-size:52px;margin-top:12px">14 wks</div><div class="ctxt">across the full build cycle.</div></div>
+      <div class="card"><div class="lab">phases</div><div class="kpi" style="font-size:52px;margin-top:12px">5</div><div class="ctxt">analysis &rarr; design &rarr; dev &rarr; test &rarr; deploy.</div></div>
+      <div class="card cardI"><div class="lab labI">longest phase</div><div class="kpi" style="font-size:52px;margin-top:12px">6 wks</div><div class="ctxt" style="color:var(--i-200)">development · weeks 5&ndash;10.</div></div>
+    </div>
+    <div class="foot"><span>st thomas institute · cse dept</span><span>09 / 15</span></div>
+  </section>
+
+  <!-- ============ 10 · EXPECTED OUTCOME ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">09 · expected outcome</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:118px;font-size:54px">
+      what we&rsquo;ll <span class="serif" style="font-size:54px">ship</span></h3>
+    <div style="position:absolute;left:64px;right:64px;top:230px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px">
+      <div class="card" style="padding:22px 20px"><div class="kpi" style="font-size:34px;color:var(--i-300)">01</div><div class="hl" style="font-size:20px;margin-top:14px">the platform</div><div class="ctxt" style="font-size:14px">a fully functional AI learning platform — Eduflick AI.</div></div>
+      <div class="card" style="padding:22px 20px"><div class="kpi" style="font-size:34px;color:var(--i-300)">02</div><div class="hl" style="font-size:20px;margin-top:14px">video generation</div><div class="ctxt" style="font-size:14px">automated educational video via Agentic AI.</div></div>
+      <div class="card" style="padding:22px 20px"><div class="kpi" style="font-size:34px;color:var(--i-300)">03</div><div class="hl" style="font-size:20px;margin-top:14px">adaptive tutor</div><div class="ctxt" style="font-size:14px">tutoring for C, C++, Java &amp; Python.</div></div>
+      <div class="card" style="padding:22px 20px"><div class="kpi" style="font-size:34px;color:var(--i-300)">04</div><div class="hl" style="font-size:20px;margin-top:14px">error analysis</div><div class="ctxt" style="font-size:14px">classifies syntax, logical &amp; runtime errors with hints.</div></div>
+      <div class="card cardI" style="padding:22px 20px"><div class="kpi" style="font-size:34px;color:var(--i-200)">05</div><div class="hl" style="font-size:20px;margin-top:14px">faculty dashboard</div><div class="ctxt" style="font-size:14px;color:var(--i-200)">progress, performance &amp; learning analytics.</div></div>
+    </div>
+    <div style="position:absolute;left:64px;right:64px;top:512px"><div class="spec"><span class="k">in short</span><span class="v">one integrated system — from automated content to adaptive feedback to faculty analytics.</span></div></div>
+    <div class="foot"><span>st thomas institute · cse dept</span><span>10 / 15</span></div>
+  </section>
+
+  <!-- ============ 11 · EXPECTED IMPACT ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">10 · expected impact</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:114px;font-size:52px">
+      who it <span class="serif" style="font-size:52px">helps</span></h3>
+    <div style="position:absolute;left:64px;right:64px;top:216px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+      <div class="card">
+        <div class="lab">for students</div>
+        <div class="blist">
+          <div class="bitem">better understanding of programming concepts.</div>
+          <div class="bitem">personalized learning via adaptive recommendations.</div>
+          <div class="bitem">improved coding skills with instant AI feedback.</div>
+          <div class="bitem">higher engagement through AI-generated videos.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="lab">for educators</div>
+        <div class="blist">
+          <div class="bitem">less time and effort creating content.</div>
+          <div class="bitem">automated student performance tracking.</div>
+          <div class="bitem">data-driven insight into who needs support.</div>
+        </div>
+      </div>
+      <div class="card cardI">
+        <div class="lab labI">for institutions</div>
+        <div class="blist">
+          <div class="bitem bI">a scalable, cost-effective e-learning solution.</div>
+          <div class="bitem bI">improved teaching efficiency &amp; outcomes.</div>
+          <div class="bitem bI">easy integration into colleges &amp; platforms.</div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>st thomas institute · cse dept</span><span>11 / 15</span></div>
+  </section>
+
+  <!-- ============ 12 · EVALUATION METRICS ============ -->
+  <section class="stage">
+    <div class="bar"><div class="eyebrow">11 · evaluation metrics</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:118px;font-size:54px">
+      how we&rsquo;ll <span class="serif" style="font-size:54px">measure</span> it</h3>
+    <div style="position:absolute;left:64px;right:64px;top:222px">
+      <div class="spec" style="padding:16px 0"><span class="k">video quality</span><span class="v">generated videos are clear, accurate and easy to understand.</span></div>
+      <div class="spec" style="padding:16px 0"><span class="k">error detection</span><span class="v">correctly identifies syntax, logical and runtime errors.</span></div>
+      <div class="spec" style="padding:16px 0"><span class="k">ai feedback</span><span class="v">students receive useful hints and explanations, not direct answers.</span></div>
+      <div class="spec" style="padding:16px 0"><span class="k">system performance</span><span class="v">responses are quick and the platform runs reliably.</span></div>
+      <div class="spec" style="padding:16px 0"><span class="k">user experience</span><span class="v">the application is simple, user-friendly and easy to navigate.</span></div>
+    </div>
+    <div class="foot"><span>st thomas institute · cse dept</span><span>12 / 15</span></div>
+  </section>
+
+  <!-- ============ 13 · SUCCESS CRITERIA ============ -->
+  <section class="stage">
+    <div class="glow-tr" style="background:radial-gradient(640px 440px at 12% 8%, rgba(91,91,240,0.16), transparent 62%)"></div>
+    <div class="bar"><div class="eyebrow">12 · success criteria</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <h3 class="hl" style="position:absolute;left:64px;top:118px;font-size:54px">
+      we succeed <span class="serif" style="font-size:54px">when&hellip;</span></h3>
+    <div style="position:absolute;left:64px;right:64px;top:222px">
+      <div class="chk"><span class="cb">&#10003;</span><span class="ct">it generates educational videos automatically.</span></div>
+      <div class="chk"><span class="cb">&#10003;</span><span class="ct">it provides accurate programming error analysis.</span></div>
+      <div class="chk"><span class="cb">&#10003;</span><span class="ct">it helps students improve their coding skills.</span></div>
+      <div class="chk"><span class="cb">&#10003;</span><span class="ct">it saves time in creating educational content.</span></div>
+      <div class="chk"><span class="cb">&#10003;</span><span class="ct">it lets faculty monitor student progress effectively.</span></div>
+    </div>
+    <div class="foot"><span>st thomas institute · cse dept</span><span>13 / 15</span></div>
+  </section>
+
+  <!-- ============ 14 · CONCLUSION ============ -->
+  <section class="stage">
+    <div class="glow-tr" style="background:radial-gradient(680px 460px at 50% 0%, rgba(91,91,240,0.16), transparent 64%)"></div>
+    <div class="bar"><div class="eyebrow">13 · conclusion</div><span class="wmsm">eduflick<i>AI</i></span></div>
+    <div style="position:absolute;left:96px;right:96px;top:50%;transform:translateY(-50%)">
+      <div style="text-align:center;margin-bottom:34px">
+        <svg viewBox="0 0 180 180" width="40" height="40"><path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#5B5BF0"/></svg>
+      </div>
+      <p style="font-family:var(--font-serif);font-style:italic;font-size:42px;line-height:1.28;color:var(--paper);text-align:center">
+        Eduflick AI unites <span style="color:var(--i-300)">Agentic AI</span> and <span style="color:var(--i-300)">LLMs</span> to automate educational video generation and deliver personalized, adaptive programming guidance.</p>
+      <p style="font-family:var(--font-display);font-weight:500;font-size:19px;line-height:1.5;color:var(--paper-dim);text-align:center;margin-top:26px;max-width:82ch;margin-left:auto;margin-right:auto">
+        It cuts content-creation time, deepens student learning and gives faculty real analytics — a scalable, intelligent system ready for engineering colleges, universities and online learning platforms.</p>
+    </div>
+    <div class="foot"><span>st thomas institute · cse dept</span><span>14 / 15</span></div>
+  </section>
+
+  <!-- ============ 15 · CLOSING / THANK YOU ============ -->
+  <section class="stage" style="background:linear-gradient(150deg,#3A2BB8 0%,#0B0822 80%)">
+    <div class="grid-tex"></div>
+    <div style="position:absolute;right:-50px;bottom:-70px;opacity:0.1">
+      <svg viewBox="0 0 180 180" width="460" height="460"><path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#F5F2EA"/></svg>
+    </div>
+    <div style="position:absolute;left:64px;top:84px;display:flex;align-items:center;gap:12px">
+      <svg viewBox="0 0 180 180" width="30" height="30"><path d="M 13 13 L 167 13 L 167 82 L 120 112.5 L 167 143 L 167 167 L 13 167 Z" fill="#F5F2EA"/></svg>
+      <span class="wm" style="font-size:24px;color:#F5F2EA">eduflick<i style="color:#B7C0FF">AI</i></span>
+    </div>
+    <div style="position:absolute;left:64px;top:270px;right:64px">
+      <h2 class="hl" style="font-weight:900;font-size:120px;letter-spacing:-0.05em;line-height:0.9">
+        thank <span class="serif" style="color:var(--i-200);font-size:120px">you</span></h2>
+      <p class="lead" style="font-size:22px;margin-top:26px;max-width:64ch;color:rgba(245,242,234,0.82)">
+        an agentic ai-driven platform for interactive educational video generation &amp; adaptive programming tutoring.</p>
+      <div style="margin-top:30px;font-family:var(--font-mono);font-size:13px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(245,242,234,0.72)">
+        questions &amp; discussion welcome</div>
+    </div>
+    <div class="foot" style="color:var(--i-200)"><span>nijin · abhijith · akul · gifton &nbsp;·&nbsp; guide: asha liza</span><span>15 / 15</span></div>
+  </section>
+
+</div>
+
+<div class="pdf-bar"><span class="hint">16:9 · 15 slides</span><button id="downloadPdfBtn" type="button">Download PDF</button></div>
+
+<!-- PDF engine: html2canvas + jsPDF (UMD) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous"></script>
+<script>
+/* ============================================================================
+   PdfExport — client-side multi-page HTML → PDF.
+   Adapted from the web-to-pdf skill engine (itself generalized from the Eduflick
+   brochure exporter), with an added `orientation` option so a *landscape* deck
+   maps to wide pages instead of jsPDF swapping the format back to portrait.
+   Each .stage → one landscape PDF page. Inline assets only (no taint).
+   ============================================================================ */
+(function (global) {
+  "use strict";
+  function resolveVar(value, root){
+    if (typeof value !== "string" || value.indexOf("var(") !== 0) return value;
+    var inner = value.slice(4, -1).trim();
+    var resolved = getComputedStyle(root).getPropertyValue(inner).trim();
+    return resolved || "#000";
+  }
+  function resolveUseElements(container){
+    var root = document.documentElement;
+    container.querySelectorAll("use").forEach(function (use){
+      var href = use.getAttribute("href") || use.getAttribute("xlink:href");
+      if (!href || href.charAt(0) !== "#") return;
+      var symbol = document.getElementById(href.slice(1)); if (!symbol) return;
+      var svgNS = "http://www.w3.org/2000/svg";
+      var group = document.createElementNS(svgNS, "g");
+      var useFill = use.getAttribute("fill");
+      var fillColor = useFill ? resolveVar(useFill, root) : getComputedStyle(use).color;
+      if (!fillColor || fillColor === "rgb(0, 0, 0)") fillColor = getComputedStyle(use.parentElement).color;
+      var keepAttrs = ["x","y","width","height","transform","opacity","role","aria-label"];
+      for (var a=0;a<use.attributes.length;a++){var attr=use.attributes[a];
+        if (attr.name==="href"||attr.name==="xlink:href"||attr.name==="fill") continue;
+        if (keepAttrs.indexOf(attr.name)!==-1) group.setAttribute(attr.name, attr.value);}
+      var children = Array.prototype.slice.call(symbol.children);
+      for (var c=0;c<children.length;c++){var clone=children[c].cloneNode(true);
+        if (fillColor){ if (clone.getAttribute("fill")==="currentColor") clone.setAttribute("fill", fillColor);
+          var cur = clone.querySelectorAll ? clone.querySelectorAll('[fill="currentColor"]') : [];
+          for (var cc=0;cc<cur.length;cc++) cur[cc].setAttribute("fill", fillColor);} group.appendChild(clone);}
+      use.parentNode.replaceChild(group, use);
+    });
+    container.querySelectorAll("svg").forEach(function (svg){ svg.style.setProperty("filter","none","important"); });
+  }
+  async function download(opts){
+    opts = opts || {};
+    var sheetSelector = opts.sheetSelector || ".sheet";
+    var filename = opts.filename || "document.pdf";
+    var pageWidthPx = opts.pageWidthPx || 794, pageHeightPx = opts.pageHeightPx || 1123;
+    var pageWidthMm = opts.pageWidthMm || 210;
+    var orientation = opts.orientation || "portrait";
+    var quality = opts.quality == null ? 0.92 : opts.quality;
+    var background = opts.background || "#ffffff";
+    var onProgress = opts.onProgress || function(){};
+    if (typeof html2canvas === "undefined" || !global.jspdf) throw new Error("PDF libraries not loaded (need html2canvas + jsPDF).");
+    var sheets = document.querySelectorAll(sheetSelector);
+    if (!sheets.length) throw new Error("No sheets matched selector: " + sheetSelector);
+    if (document.fonts && document.fonts.ready){ try { await document.fonts.ready; } catch(e){} }
+    var jsPDF = global.jspdf.jsPDF, pdf = null;
+    var hidden = document.createElement("div");
+    hidden.style.cssText = "position:absolute;left:-9999px;top:0;width:" + pageWidthPx + "px;";
+    document.body.appendChild(hidden);
+    try {
+      for (var i=0;i<sheets.length;i++){
+        onProgress(i+1, sheets.length);
+        var clone = sheets[i].cloneNode(true);
+        hidden.innerHTML = ""; hidden.appendChild(clone);
+        clone.style.margin = "0"; clone.style.boxShadow = "none"; clone.style.transform = "none";
+        resolveUseElements(clone);
+        var canvas;
+        try {
+          canvas = await html2canvas(clone, { scale: opts.scale || 2, useCORS:true, backgroundColor:background, logging:false, allowTaint:true, width:pageWidthPx, height:pageHeightPx });
+        } catch(e){
+          canvas = await html2canvas(clone, { scale:1, useCORS:true, backgroundColor:background, logging:false, allowTaint:true, width:pageWidthPx, height:pageHeightPx });
+        }
+        var imgWidth = pageWidthMm, imgHeight = (canvas.height * imgWidth) / canvas.width;
+        if (i===0) pdf = new jsPDF({ unit:"mm", format:[imgWidth, imgHeight], orientation:orientation });
+        else pdf.addPage([imgWidth, imgHeight], orientation);
+        pdf.addImage(canvas.toDataURL("image/jpeg", quality), "JPEG", 0, 0, imgWidth, imgHeight);
+      }
+      pdf.save(filename);
+    } finally { document.body.removeChild(hidden); }
+  }
+  function attachButton(target, opts){
+    var btn = typeof target === "string" ? document.querySelector(target) : target;
+    if (!btn) throw new Error("PDF button not found: " + target);
+    btn.addEventListener("click", async function(){
+      if (typeof html2canvas === "undefined" || !global.jspdf){ alert("PDF libraries still loading. Please wait a moment and try again."); return; }
+      var originalHTML = btn.innerHTML; btn.disabled = true;
+      try { await download(Object.assign({}, opts, { onProgress:function(n,total){ btn.textContent = "Slide " + n + " of " + total + "…"; } })); }
+      catch(err){ console.error("PDF generation failed:", err); alert("PDF generation failed: " + err.message); }
+      btn.disabled = false; btn.innerHTML = originalHTML;
+    });
+  }
+  global.PdfExport = { download: download, attachButton: attachButton, resolveUseElements: resolveUseElements };
+})(window);
+
+PdfExport.attachButton('#downloadPdfBtn', {
+  sheetSelector: '.stage',
+  filename: 'Eduflick_AI_Project_Presentation.pdf',
+  pageWidthPx: 1280, pageHeightPx: 720,
+  pageWidthMm: 338.67, orientation: 'landscape',
+  background: '#0A0B10', quality: 0.95, scale: 2
+});
+
+/* Screen-only: scale the whole deck to fit the viewport width (export is unaffected —
+   it clones each .stage out of #deck, so this transform never reaches the canvas). */
+function fitDeck(){
+  var d = document.getElementById('deck');
+  var k = Math.min(1, (window.innerWidth - 40) / 1280);
+  d.style.transform = 'scale(' + k + ')';
+  document.body.style.height = (d.scrollHeight * k + 40) + 'px';
+}
+window.addEventListener('resize', fitDeck);
+window.addEventListener('load', fitDeck);
+document.addEventListener('DOMContentLoaded', fitDeck);
+[80,300,800].forEach(function(t){ setTimeout(fitDeck, t); });
+</script>
+</body></html>

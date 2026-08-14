@@ -46,9 +46,9 @@
     },
     {
       "assetRef": {
-        "assetId": "doc:brochures/Eduflick_AI_Brochure.html",
+        "assetId": "doc:brochures/company/Eduflick_AI_Brochure.html",
         "kind": "iframe-brochure",
-        "source": "brochures/Eduflick_AI_Brochure.html",
+        "source": "brochures/company/Eduflick_AI_Brochure.html",
         "label": "eduflick ai brochure",
         "anchor": {
           "type": "normalized",

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-label="Eduflick AI avatar">
+  <title>Eduflick AI — profile avatar</title>
+  <desc>Paper mark on the brand diagonal indigo gradient (140°: i-violet → indigo-ink). True vector rebuild of avatar-pf-av-1024.png.</desc>
+  <defs>
+    <linearGradient id="eduflick-av" gradientUnits="userSpaceOnUse" x1="48.35" y1="-40.56" x2="975.65" y2="1064.56">
+      <stop offset="0" stop-color="#4A3DD9"/>
+      <stop offset="0.28" stop-color="#3A2BB8"/>
+      <stop offset="0.56" stop-color="#261A82"/>
+      <stop offset="0.80" stop-color="#150D52"/>
+      <stop offset="1" stop-color="#0B0822"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#eduflick-av)"/>
+  <svg x="286.72" y="286.72" width="450.56" height="450.56" viewBox="0 0 180 180">
+    <path d="M13 13 L167 13 L167 82 L120 112.5 L167 143 L167 167 L13 167 Z" fill="#F5F2EA"/>
+  </svg>
+</svg>
