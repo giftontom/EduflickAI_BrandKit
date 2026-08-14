@@ -372,7 +372,7 @@ p.deck.on-dark strong{color:var(--paper)}
 
 /* ═══ PRICING (rounded cards) ═══ */
 .price-split{display:grid;grid-template-columns:1.1fr 1fr;gap:36px;margin-top:6px}
-.price-hero{border-radius:18px;padding:30px 32px;color:var(--paper);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;
+.price-hero{border-radius:18px;padding:24px 32px;color:var(--paper);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;
   background:radial-gradient(240px 240px at 106% -8%,rgba(91,91,240,0.36),transparent 64%),linear-gradient(150deg,var(--i-ink),var(--i-700))}
 .price-hero > *{position:relative;z-index:1}
 .price-hero::before{display:none}
@@ -391,11 +391,11 @@ p.deck.on-dark strong{color:var(--paper)}
 .price-hero .ph-foot{margin-top:0;padding-top:18px;border-top:1px solid rgba(245,242,234,0.16);font-size:11px;color:rgba(245,242,234,0.72);line-height:1.6;max-width:42ch}
 .price-hero .ph-foot b{color:var(--i-200);font-weight:700}
 
-.pay-card{padding:22px 28px;display:flex;flex-direction:column}
+.pay-card{padding:16px 28px;display:flex;flex-direction:column}
 .pay-card .pc-h{font-family:'Manrope',sans-serif;font-weight:800;font-size:17px;letter-spacing:-0.02em;color:var(--text);margin-bottom:4px;text-transform:lowercase}
 .pay-card .pc-h em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--i-500)}
 .pay-card .pc-sub{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:14px}
-.pay-row{display:flex;align-items:center;justify-content:space-between;padding:15px 0;border-bottom:1px solid var(--line)}
+.pay-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line)}
 .pay-row .pr-l{display:flex;align-items:center;gap:13px}
 .pay-row .pr-step{width:28px;height:28px;border-radius:9px;background:rgba(91,91,240,0.10);border:1px solid rgba(91,91,240,0.18);color:var(--i-500);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .pay-row .pr-name{font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;color:var(--text)}
@@ -1017,18 +1017,30 @@ p.deck.on-dark strong{color:var(--paper)}
       </div>
     </div>
 
-    <div style="margin:10px 0 6px"><div class="kick">how to enroll</div></div>
-    <div class="enroll-steps grid-fill">
+    <div style="margin:8px 0 4px"><div class="kick">how to enroll</div></div>
+    <div class="enroll-steps">
       <div class="estep"><div class="es-n">step 01</div><div class="es-t">apply online</div><div class="es-d">Apply at eduflickai.com/apply to register your interest.</div></div>
       <div class="estep"><div class="es-n">step 02</div><div class="es-t">quick screening</div><div class="es-d">A short call confirms fit for the cohort — seats are merit-capped.</div></div>
       <div class="estep"><div class="es-n">step 03</div><div class="es-t">book your seat</div><div class="es-d">Pay the ₹5,000 reservation to secure your place in Cohort 01.</div></div>
     </div>
 
-    <div class="anchor" style="margin-top:18px">
-      <svg width="46" height="46" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#5B5BF0"/></svg>
-      <div class="a-copy">
-        <h3>20 <em>selective seats.</em></h3>
-        <p>Cohort 01 is intentionally small so every engineer gets hands-on mentorship, real infrastructure, and direct faculty access. When it's full, it's full.</p>
+    <div style="margin-top:10px;display:grid;grid-template-columns:142px 1fr;gap:14px;align-items:stretch">
+      <div style="background:#FFFFFF;border:1px solid var(--line);border-radius:16px;padding:13px 13px 11px;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div style="width:110px">
+<svg style="display:block;width:100%;height:auto" role="img" aria-label="UPI pay-to-account QR" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45" shape-rendering="crispEdges"><path fill="#FFFFFF" d="M0 0h45v45H0z"/><path stroke="#0B0822" d="M0 0.5h7m2 0h3m1 0h2m1 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m2 0h1m2 0h1m2 0h1m1 0h7M0 1.5h1m5 0h1m8 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h4m3 0h1m1 0h1m2 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m1 0h3m1 0h2m6 0h2m1 0h1m1 0h5m2 0h1m2 0h1m2 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m1 0h1m1 0h2m6 0h1m2 0h1m2 0h1m1 0h3m6 0h2m1 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m1 0h4m4 0h1m1 0h1m1 0h7m3 0h2m2 0h3m1 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m1 0h1m3 0h1m1 0h1m3 0h1m1 0h1m3 0h1m3 0h1m1 0h1m1 0h2m4 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M8 7.5h2m2 0h7m1 0h1m3 0h1m3 0h1m4 0h3M0 8.5h1m1 0h5m4 0h1m6 0h1m1 0h5m1 0h3m1 0h3m5 0h5M1 9.5h5m2 0h1m1 0h5m2 0h2m1 0h1m1 0h1m1 0h2m1 0h2m1 0h1m2 0h1m1 0h2m3 0h2m1 0h2M1 10.5h1m3 0h2m2 0h3m1 0h2m2 0h1m3 0h3m1 0h1m1 0h1m4 0h1m1 0h1m3 0h1m1 0h1m1 0h2M1 11.5h1m3 0h1m3 0h2m5 0h1m2 0h4m2 0h2m7 0h2m1 0h4m2 0h1M1 12.5h1m2 0h1m1 0h4m1 0h1m2 0h1m3 0h1m1 0h2m1 0h1m3 0h1m1 0h4m3 0h1m3 0h1m1 0h2M1 13.5h1m1 0h1m3 0h1m1 0h3m2 0h1m3 0h4m2 0h1m4 0h1m4 0h2m1 0h2m2 0h1M1 14.5h1m4 0h2m1 0h1m1 0h2m1 0h2m1 0h1m5 0h2m1 0h2m2 0h2m1 0h1m1 0h2m3 0h4M1 15.5h3m3 0h2m1 0h1m2 0h1m1 0h1m2 0h1m2 0h1m3 0h3m3 0h1m3 0h7m2 0h1M0 16.5h3m1 0h1m1 0h1m1 0h5m2 0h2m3 0h1m2 0h1m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1m4 0h1m1 0h2M0 17.5h2m1 0h1m1 0h1m1 0h2m1 0h2m1 0h4m2 0h1m1 0h1m3 0h7m2 0h5m2 0h2M0 18.5h1m4 0h3m3 0h3m1 0h1m1 0h2m2 0h2m1 0h1m1 0h1m2 0h1m1 0h3m1 0h2m1 0h1m1 0h1M1 19.5h2m1 0h2m3 0h2m1 0h2m7 0h1m1 0h2m2 0h3m2 0h1m3 0h5m1 0h2M3 20.5h9m1 0h1m4 0h1m1 0h6m2 0h3m1 0h2m2 0h5m1 0h3M2 21.5h3m3 0h2m1 0h2m2 0h2m2 0h2m3 0h1m4 0h1m1 0h2m1 0h1m1 0h1m3 0h1m1 0h1m1 0h1M0 22.5h1m3 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h2m1 0h1m1 0h2m2 0h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h1m1 0h2M1 23.5h2m1 0h1m3 0h3m1 0h2m1 0h2m3 0h1m3 0h1m1 0h2m4 0h1m1 0h3m3 0h3m1 0h1M0 24.5h1m3 0h5m3 0h1m3 0h2m2 0h5m1 0h2m2 0h1m1 0h1m1 0h7m2 0h2M2 25.5h1m1 0h2m1 0h1m1 0h1m4 0h2m2 0h1m2 0h3m3 0h1m3 0h2m4 0h1m1 0h1m3 0h2M1 26.5h1m1 0h1m2 0h4m3 0h1m1 0h1m2 0h1m8 0h1m3 0h1m2 0h4m3 0h3M1 27.5h1m2 0h1m2 0h2m2 0h1m1 0h1m5 0h3m2 0h4m4 0h1m1 0h3m1 0h1m1 0h4M1 28.5h1m1 0h4m1 0h1m2 0h1m4 0h2m2 0h3m1 0h1m1 0h1m1 0h1m4 0h8m2 0h2M4 29.5h2m2 0h1m7 0h1m1 0h1m2 0h2m1 0h1m1 0h6m1 0h1m3 0h3m1 0h1m2 0h1M1 30.5h1m2 0h1m1 0h3m1 0h1m3 0h1m2 0h2m1 0h1m2 0h2m3 0h1m1 0h4m1 0h3m1 0h4m1 0h1M0 31.5h2m2 0h2m1 0h1m2 0h2m1 0h1m2 0h3m2 0h1m2 0h4m2 0h3m1 0h2m1 0h5M0 32.5h1m1 0h1m3 0h1m1 0h3m2 0h4m4 0h5m3 0h1m3 0h2m1 0h5m2 0h1M7 33.5h1m1 0h1m1 0h5m1 0h2m1 0h3m1 0h1m2 0h2m2 0h1m1 0h2m3 0h1m1 0h2m2 0h1M4 34.5h1m1 0h2m1 0h3m4 0h2m4 0h1m6 0h2m2 0h1m1 0h3m4 0h2M1 35.5h4m2 0h2m1 0h1m5 0h1m2 0h5m1 0h3m1 0h2m1 0h1m1 0h2m2 0h1m1 0h3M0 36.5h1m2 0h2m1 0h2m1 0h2m1 0h1m7 0h5m1 0h4m2 0h2m2 0h5m1 0h3M8 37.5h2m1 0h5m4 0h1m3 0h5m3 0h1m3 0h1m3 0h1M0 38.5h7m2 0h1m1 0h1m4 0h3m1 0h1m1 0h1m1 0h1m2 0h2m2 0h4m1 0h1m1 0h1m1 0h3M0 39.5h1m5 0h1m1 0h1m3 0h2m2 0h1m1 0h3m3 0h1m2 0h1m1 0h2m2 0h1m2 0h1m3 0h1m1 0h1M0 40.5h1m1 0h3m1 0h1m1 0h4m2 0h5m1 0h5m1 0h3m1 0h4m2 0h6M0 41.5h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h1m1 0h2m3 0h1m1 0h3m1 0h3m2 0h1m5 0h3m1 0h2M0 42.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h3m2 0h1m1 0h1m1 0h1m1 0h1m2 0h1m4 0h4m1 0h2m1 0h4M0 43.5h1m5 0h1m3 0h1m1 0h4m2 0h1m1 0h3m1 0h4m2 0h1m1 0h1m1 0h3m4 0h1M0 44.5h7m1 0h3m2 0h1m2 0h2m5 0h2m1 0h2m2 0h2m1 0h1m1 0h1m2 0h1m1 0h1m1 0h2"/></svg>
+
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--i-500);font-weight:700">scan to pay</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:6.5px;letter-spacing:0.1em;color:var(--muted);margin-top:2px">any upi app</div>
+        </div>
+      </div>
+      <div class="anchor" style="margin:0">
+        <svg width="46" height="46" viewBox="0 0 180 180" aria-hidden="true"><use href="#b-mark" fill="#5B5BF0"/></svg>
+        <div class="a-copy">
+          <h3>20 <em>selective seats.</em></h3>
+          <p>Cohort 01 is intentionally small so every engineer gets hands-on mentorship, real infrastructure, and direct faculty access. When it's full, it's full.</p>
+        </div>
       </div>
     </div>
   </div>
