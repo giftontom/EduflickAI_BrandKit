@@ -78,6 +78,16 @@ Export gotchas, learned the hard way:
   past WhatsApp's 100 MB document limit.
 - The export script must run `resolveUseElements` before rasterising, or every
   `<use href="#b-mark">` logo mark comes out **blank**.
+- **Never paint a logo with a CSS `background-image`.** Use a real
+  `<img src="data:…">`. html2canvas does not implement `background-size` /
+  `background-position` faithfully — it lays the image out with its own
+  approximation and clips it, so the logo arrives in the PDF cut off or
+  mangled while looking perfect in the browser. This bit the Tomatrix mark
+  once and the UXP mark again; all 22 logos were converted on 2026-08-16.
+  To reproduce `contain` without `object-fit` (html2canvas ignores that too):
+  set only the dimension that actually constrains the fit and let the other
+  be `auto` — e.g. the UXP art is 142×60 in a 48×20 box, so it is
+  height-constrained → `height:20px;width:auto`.
 
 ## Editing rules
 
