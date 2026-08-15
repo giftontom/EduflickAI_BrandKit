@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eduflick AI — logo motion · glitch (9:16)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@800&display=swap" rel="stylesheet">
+<style>
+  /* S0 · tokens */
+  :root{
+    --i-500:#5B5BF0; --i-400:#6E78F5; --i-300:#8B97FF; --i-700:#3A2BB8; --i-ink:#0B0822;
+    --paper:#F5F2EA; --paper-dim:#C9C5BA; --ink:#0A0B10; --ink-2:#11131C; --ink-3:#181B28;
+    --font-d:'Manrope',sans-serif;
+    --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    --flick:polygon(7.2222% 7.2222%, 92.7778% 7.2222%, 92.7778% 45.5556%,
+      66.6667% 62.5%, 92.7778% 79.4444%, 92.7778% 92.7778%, 7.2222% 92.7778%);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-d);background:#07080C;color:var(--paper);-webkit-font-smoothing:antialiased;
+    display:flex;justify-content:center;padding:48px}
+  body.export{padding:0;display:block}
+
+  /* CONCEPT · signal materialize — the mark tunes in from a broken signal:
+     brief chromatic RGB-split slices and jitter (700–1500ms, kept premium:
+     small area, few steps), then locks clean with an electric halo. Same
+     deterministic rules as logo-motion.html; all motion ends ≤5200ms. */
+
+  .stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#050609}
+
+  .bg{position:absolute;inset:0;z-index:0;
+    background:
+      radial-gradient(78% 48% at 50% 42%, rgba(32,26,96,0.46), rgba(17,14,52,0.22) 48%, transparent 76%),
+      linear-gradient(180deg, #08081A 0%, #0A0824 46%, #07080C 100%);
+    animation:fade-in 400ms cubic-bezier(0.3,0,0.4,1) 0ms both}
+  @keyframes fade-in{from{opacity:0}to{opacity:1}}
+
+  /* static CRT scanlines — texture only, never animates */
+  .lines{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0.06;
+    background:repeating-linear-gradient(0deg, rgba(245,242,234,0.5) 0 1px, transparent 1px 4px)}
+
+  .camera{position:absolute;inset:0;z-index:1;transform-origin:50% 44%;
+    animation:push 2600ms cubic-bezier(0.30,0,0.40,1) 2600ms both}
+  @keyframes push{from{transform:scale(1)}to{transform:scale(1.04)}}
+
+  /* lockup block — same final geometry as logo-motion.html */
+  .block{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;margin-top:-84px}
+  .mark-wrap{position:relative;width:300px;height:300px;
+    animation:stabilize 350ms cubic-bezier(0.3,0,0.3,1) 1500ms both}
+  @keyframes stabilize{
+    0%{transform:translateX(3px)} 35%{transform:translateX(-2px)}
+    70%{transform:translateX(1px)} 100%{transform:none}}
+
+  /* electric halo — blooms with two quick flicker dips, then steady */
+  .halo{position:absolute;left:50%;top:50%;width:920px;height:920px;pointer-events:none;
+    border-radius:50%;filter:blur(14px);
+    background:radial-gradient(closest-side, rgba(91,91,240,0.50), rgba(91,91,240,0.17) 45%, transparent 72%);
+    animation:bloom-flicker 800ms cubic-bezier(0.2,0.6,0.2,1) 1600ms both}
+  @keyframes bloom-flicker{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(0.85)}
+    35%{opacity:0.9} 45%{opacity:0.55} 55%{opacity:0.95} 68%{opacity:0.72}
+    100%{opacity:0.92;transform:translate(-50%,-50%) scale(1)}}
+
+  /* ghost pre-flicker before the signal locks */
+  .pre{position:absolute;inset:0;background:var(--paper);clip-path:var(--flick);
+    animation:pre-flick 200ms linear 480ms both}
+  @keyframes pre-flick{
+    0%,42%{opacity:0} 46%{opacity:0.22} 54%{opacity:0} 78%{opacity:0.16} 100%{opacity:0}}
+
+  /* the three signal layers: paper main + two chromatic ghosts */
+  .g{position:absolute;inset:0;clip-path:var(--flick)}
+  .g-main{background:var(--paper);
+    animation:g-main 800ms linear 700ms both}
+  @keyframes g-main{
+    0%{opacity:0;transform:translate(-14px,0)}
+    5%{opacity:1}
+    11.9%{transform:translate(-14px,0)}
+    12%{transform:translate(10px,-6px)}
+    23.9%{transform:translate(10px,-6px);opacity:1}
+    24%{transform:translate(-6px,4px);opacity:0.7}
+    35.9%{transform:translate(-6px,4px)}
+    36%{transform:translate(13px,-9px);opacity:1}
+    49.9%{transform:translate(13px,-9px)}
+    50%{transform:translate(-9px,7px)}
+    63.9%{transform:translate(-9px,7px)}
+    64%{transform:translate(4px,-2px)}
+    79.9%{transform:translate(4px,-2px)}
+    80%{transform:none}
+    100%{opacity:1;transform:none}}
+  .g-ghost{mix-blend-mode:screen}
+  .g-cyan{background:var(--i-300);
+    animation:g-cyan 800ms linear 700ms both}
+  @keyframes g-cyan{
+    0%{opacity:0;transform:translateX(-26px)}
+    6%{opacity:0.55}
+    17.9%{transform:translateX(-26px)}
+    18%{transform:translateX(18px)}
+    33.9%{transform:translateX(18px);opacity:0.55}
+    34%{transform:translateX(-13px);opacity:0.32}
+    51.9%{transform:translateX(-13px)}
+    52%{transform:translateX(10px);opacity:0.5}
+    71.9%{transform:translateX(10px)}
+    72%{transform:translateX(3px);opacity:0.25}
+    91.9%{transform:translateX(3px)}
+    92%{opacity:0.12}
+    100%{opacity:0;transform:none}}
+  .g-indigo{background:var(--i-500);
+    animation:g-indigo 800ms linear 700ms both}
+  @keyframes g-indigo{
+    0%{opacity:0;transform:translateX(24px)}
+    8%{opacity:0.5}
+    15.9%{transform:translateX(24px)}
+    16%{transform:translateX(-16px)}
+    29.9%{transform:translateX(-16px);opacity:0.5}
+    30%{transform:translateX(12px);opacity:0.3}
+    47.9%{transform:translateX(12px)}
+    48%{transform:translateX(-8px);opacity:0.45}
+    67.9%{transform:translateX(-8px)}
+    68%{transform:translateX(-3px);opacity:0.2}
+    89.9%{transform:translateX(-3px)}
+    90%{opacity:0.1}
+    100%{opacity:0;transform:none}}
+
+  /* horizontal tear bands that slice across during the glitch */
+  .tear{position:absolute;left:-6%;right:-6%;background:rgba(139,151,255,0.14);
+    animation:tear 800ms linear 700ms both}
+  .tear.t1{top:30%;height:9%}
+  .tear.t2{top:58%;height:6%;animation-name:tear2}
+  @keyframes tear{
+    0%,11.9%{opacity:0;transform:translateX(0)}
+    12%{opacity:1;transform:translateX(-26px)}
+    23.9%{opacity:1;transform:translateX(-26px)}
+    24%,49.9%{opacity:0}
+    50%{opacity:1;transform:translateX(19px)}
+    63.9%{opacity:1;transform:translateX(19px)}
+    64%,100%{opacity:0;transform:none}}
+  @keyframes tear2{
+    0%,17.9%{opacity:0;transform:translateX(0)}
+    18%{opacity:1;transform:translateX(21px)}
+    33.9%{opacity:1;transform:translateX(21px)}
+    34%,71.9%{opacity:0}
+    72%{opacity:1;transform:translateX(-14px)}
+    79.9%{opacity:1;transform:translateX(-14px)}
+    80%,100%{opacity:0;transform:none}}
+  /* vertical tear — one column shears during the heaviest hits */
+  .tear.t3{left:38%;right:auto;top:-6%;bottom:-6%;width:8%;height:auto;
+    background:rgba(91,91,240,0.16);animation-name:tear3}
+  @keyframes tear3{
+    0%,23.9%{opacity:0;transform:translateY(0)}
+    24%{opacity:1;transform:translateY(-22px)}
+    35.9%{opacity:1;transform:translateY(-22px)}
+    36%,49.9%{opacity:0}
+    50%{opacity:1;transform:translateY(17px)}
+    63.9%{opacity:1;transform:translateY(17px)}
+    64%,100%{opacity:0;transform:none}}
+
+  /* CRT sync-roll — one brightness band rolls down the frame as the signal
+     locks (1500–2100), then never again */
+  .roll{position:absolute;left:0;right:0;top:-160px;height:150px;pointer-events:none;z-index:3;
+    background:linear-gradient(180deg, transparent, rgba(245,242,234,0.055) 45%, rgba(139,151,255,0.05) 55%, transparent);
+    animation:roll 600ms cubic-bezier(0.4,0,0.5,1) 1500ms both}
+  @keyframes roll{
+    0%{transform:translateY(0);opacity:0}
+    12%{opacity:1} 85%{opacity:1}
+    100%{transform:translateY(2240px);opacity:0}}
+
+  /* wordmark — letters tune in with a two-step flicker, then AI glows */
+  .word{margin-top:64px;font-weight:800;font-size:150px;line-height:1;
+    letter-spacing:-0.038em;color:var(--paper);white-space:nowrap;font-feature-settings:'liga' 0}
+  .ch{display:inline-block;
+    animation:resolve 300ms linear calc(2600ms + var(--i)*60ms) both}
+  @keyframes resolve{
+    0%{opacity:0;transform:translateX(6px);
+      text-shadow:-4px 0 rgba(91,91,240,0.65), 4px 0 rgba(139,151,255,0.65)}
+    35%{opacity:0.4;transform:translateX(-3px);
+      text-shadow:-3px 0 rgba(91,91,240,0.5), 3px 0 rgba(139,151,255,0.5)}
+    60%{opacity:0.9;transform:translateX(1px);
+      text-shadow:-1px 0 rgba(91,91,240,0.25), 1px 0 rgba(139,151,255,0.25)}
+    100%{opacity:1;transform:none;text-shadow:0 0 rgba(91,91,240,0), 0 0 rgba(139,151,255,0)}}
+  .ai{color:var(--i-300);margin-left:0.10em;
+    animation:resolve 300ms linear calc(2600ms + var(--i)*60ms) both,
+              ai-glow 600ms cubic-bezier(0.3,0,0.3,1) 3700ms both}
+  @keyframes ai-glow{
+    0%{text-shadow:0 0 0 rgba(139,151,255,0)}
+    35%{text-shadow:0 0 42px rgba(139,151,255,0.9), 0 0 12px rgba(139,151,255,0.6)}
+    48%{text-shadow:0 0 10px rgba(139,151,255,0.25)}
+    62%{text-shadow:0 0 42px rgba(139,151,255,0.85), 0 0 12px rgba(139,151,255,0.55)}
+    100%{text-shadow:0 0 22px rgba(139,151,255,0.32)}}
+
+  .vig{position:absolute;inset:0;z-index:8;pointer-events:none;
+    background:radial-gradient(130% 120% at 50% 40%, transparent 48%, rgba(7,5,22,0.55) 100%)}
+  .grain{position:absolute;inset:0;z-index:9;pointer-events:none;
+    background-image:var(--grain);background-size:140px 140px}
+
+  .replay{position:fixed;right:24px;bottom:24px;z-index:99;font-family:var(--font-d);font-weight:800;
+    font-size:14px;letter-spacing:0.08em;text-transform:uppercase;color:var(--paper);
+    background:var(--i-500);border:0;border-radius:999px;padding:12px 22px;cursor:pointer}
+  body.export .replay{display:none}
+</style>
+</head>
+<body>
+
+  <div class="stage" data-export="logo-motion">
+    <div class="bg"></div>
+    <div class="camera">
+      <div class="block">
+        <div class="mark-wrap">
+          <div class="halo"></div>
+          <div class="pre"></div>
+          <div class="g g-ghost g-cyan"></div>
+          <div class="g g-ghost g-indigo"></div>
+          <div class="g g-main"></div>
+          <div class="tear t1"></div>
+          <div class="tear t2"></div>
+          <div class="tear t3"></div>
+        </div>
+        <div class="word"><span class="ch" style="--i:0">e</span><span class="ch" style="--i:1">d</span><span class="ch" style="--i:2">u</span><span class="ch" style="--i:3">f</span><span class="ch" style="--i:4">l</span><span class="ch" style="--i:5">i</span><span class="ch" style="--i:6">c</span><span class="ch" style="--i:7">k</span><span class="ch ai" style="--i:8">AI</span></div>
+      </div>
+    </div>
+    <div class="roll"></div>
+    <div class="lines"></div>
+    <div class="vig"></div>
+    <div class="grain"></div>
+  </div>
+
+  <button class="replay" onclick="document.getAnimations().forEach(a=>{a.currentTime=0;a.play()})">↺ replay</button>
+
+  <script>
+    window.__TOTAL_MS = 6000;
+    window.__SFX = {
+      bed: { type: 'hum', gain: 0.12 },
+      cues: [
+        { t: 490,  type: 'tick', freq: 900, gain: 0.07 },          // pre-flicker
+        { t: 700,  type: 'glitch', dur: 180, gain: 0.36 },         // signal fights
+        { t: 940,  type: 'glitch', dur: 140, gain: 0.3 },
+        { t: 1120, type: 'glitch', dur: 120, gain: 0.3 },
+        { t: 1210, type: 'glitch', dur: 200, gain: 0.38 },
+        { t: 1420, type: 'glitch', dur: 90,  gain: 0.24 },
+        { t: 1350, type: 'riser', dur: 150, f0: 400, f1: 880, gain: 0.22 },   // tune-in sweep
+        { t: 1500, type: 'impact', freq: 65, gain: 0.55 },         // lock
+        { t: 1550, type: 'whoosh', dur: 520, panFrom: 0, panTo: 0, f0: 600, f1: 150, gain: 0.16 }, // sync roll
+        { t: 1620, type: 'bloom', dur: 1100, gain: 0.26 },
+        ...Array.from({ length: 9 }, (_, i) => ({ t: 2600 + i * 60, type: 'tick', gain: 0.08, freq: 1700 + i * 55 })),
+        { t: 3720, type: 'chime', detune: 1.2, gain: 0.38 },       // AI tunes in
+      ],
+    };
+    window.__seek = (t) => {
+      // synchronous by design: the exporter's screenshot forces the BeginFrame
+      // that renders this state (a pending rAF handshake would deadlock a fully
+      // paused page in headless — nothing else ever schedules a frame).
+      for (const a of document.getAnimations()) { a.pause(); a.currentTime = t; }
+    };
+    if (new URLSearchParams(location.search).has('export')) document.body.classList.add('export');
+  </script>
+</body>
+</html>

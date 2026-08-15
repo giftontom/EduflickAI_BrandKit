@@ -1332,7 +1332,7 @@ const SURFACES_DEFAULT = [
   {
     id: 'deck',
     label: 'program deck',
-    source: 'brochures/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html',
+    source: 'brochures/fae-offline/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html',
     exportDir: 'exports/full-stack-ai-engineer',
     script: 'export:slides',
     aspect: '1920x1080',
@@ -1368,7 +1368,7 @@ const KIT_DOCS = [
 
 // Brand-specific document paths — from config.paths.* with the current hardcoded
 // values as the fallback (a non-string config value also falls back).
-const DECK_FILE = strOr(cfgOr('paths.deck', null), 'brochures/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html');
+const DECK_FILE = strOr(cfgOr('paths.deck', null), 'brochures/fae-offline/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html');
 const BRAND_BOOK_FILE = strOr(cfgOr('paths.brandBook', null), 'brand-book/Eduflick_Brand_Book_v4.html');
 
 // Caption shape (content-studio/drafts/instagram-posts-captions.md):
@@ -1475,12 +1475,21 @@ function buildDocuments(commentCounts) {
       openCount: counts ? counts.open : 0,
     });
   };
+  // brochures/ is grouped into product sub-folders (fae-offline/, fae-online/,
+  // payment/, company/), so collect one level deep as well as the top level.
   let brochureFiles = [];
   try {
-    brochureFiles = fs
-      .readdirSync(path.join(ROOT, 'brochures'))
-      .filter((f) => f.endsWith('.html'))
-      .sort();
+    const base = path.join(ROOT, 'brochures');
+    for (const entry of fs.readdirSync(base, { withFileTypes: true })) {
+      if (entry.isDirectory()) {
+        for (const f of fs.readdirSync(path.join(base, entry.name))) {
+          if (f.endsWith('.html')) brochureFiles.push(`${entry.name}/${f}`);
+        }
+      } else if (entry.name.endsWith('.html')) {
+        brochureFiles.push(entry.name);
+      }
+    }
+    brochureFiles.sort();
   } catch {
     /* no brochures dir */
   }

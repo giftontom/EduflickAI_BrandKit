@@ -12,6 +12,7 @@
     "export:wa": "node export-wa-poster.mjs",
     "export:stories": "node export-stories.mjs",
     "export:ig": "node export-ig.mjs",
+    "export:motion": "node export-logo-motion.mjs",
     "gen:backdrops": "node --env-file-if-exists=../.env.local gen-backdrops.mjs",
     "gen:backdrops:proc": "node gen-backdrops-proc.mjs",
     "gen:recraft": "PROVIDER=recraft node --env-file-if-exists=../.env.local gen-backdrops.mjs",
