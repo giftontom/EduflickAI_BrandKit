@@ -295,7 +295,7 @@ test('default-identical: server boots with the real config and serves the expect
     }
     // The config's surface DATA must be reflected verbatim for known fields.
     const deck = body.surfaces.find((s) => s.id === 'deck');
-    assert.equal(deck.source, 'brochures/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html');
+    assert.equal(deck.source, 'brochures/fae-offline/Eduflick_Full_Stack_AI_Engineer_Program_Deck.html');
     assert.equal(deck.script, 'export:slides');
     assert.equal(deck.aspect, '1920x1080');
 

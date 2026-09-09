@@ -73,6 +73,6 @@ Open `templates/starter.html` in a real browser (not the file preview), click **
 
 ## Provenance
 
-Generalized from `brochures/Eduflick_Full_Stack_AI_Engineer_Brochure.html` (the `downloadPdfBtn`
+Generalized from `brochures/fae-offline/Eduflick_Full_Stack_AI_Engineer_Brochure.html` (the `downloadPdfBtn`
 handler + `resolveVar`/`resolveUseElements`). Brand specifics (filename, the `#F5F2EA` background)
 became options; the mechanism is unchanged and battle-tested on real multi-page brochures.

@@ -28,13 +28,19 @@
     { "binding": "APPLICATIONS", "id": "e50b343a745d4081940f36eeefb71cc0" }
   ],
 
-  // Path-based routes — EXACTLY the two that already exist for script "apply".
-  // The deploy token lacks Workers Routes Edit, so wrangler can't change routes;
-  // keeping them identical means no route change is attempted and the existing
-  // "eduflickai.com/*" route (which catches every path) serves the new code.
+  // Path-based routes. The apex pair is pre-existing; "eduflickai.com/*" catches
+  // every path and serves this script.
+  //
+  // www.eduflickai.com is a SEPARATE proxied hostname — the apex routes do not
+  // match it, so www fell through to an unconfigured Squarespace parking page
+  // ("Coming Soon"): /apply was dead there, and so was the bare domain. The
+  // whole hostname is claimed here, and the canonical-host block in
+  // src/worker.js 301s every www request to the apex (path + query preserved).
+  // The apex is the single origin; www exists only to forward to it.
   "routes": [
     { "pattern": "eduflickai.com/apply", "zone_name": "eduflickai.com" },
-    { "pattern": "eduflickai.com/*", "zone_name": "eduflickai.com" }
+    { "pattern": "eduflickai.com/*", "zone_name": "eduflickai.com" },
+    { "pattern": "www.eduflickai.com/*", "zone_name": "eduflickai.com" }
   ],
 
   "observability": { "enabled": true },
@@ -52,6 +58,10 @@
     "staging": {
       "name": "apply-staging",
       "workers_dev": true,
+      // Explicitly empty: `routes` is an inheritable key, so without this the
+      // staging deploy tries to claim the production patterns and fails with
+      // "A route with the same pattern already exists (used by Worker: apply)".
+      "routes": [],
       "kv_namespaces": [
         { "binding": "APPLICATIONS", "id": "c57e85b397634c6dbac77664c721e136" }
       ]

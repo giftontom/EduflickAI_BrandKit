@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eduflick AI — logo motion · ink (9:16)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@800&display=swap" rel="stylesheet">
+<style>
+  /* S0 · tokens */
+  :root{
+    --i-500:#5B5BF0; --i-400:#6E78F5; --i-300:#8B97FF; --i-700:#3A2BB8; --i-ink:#0B0822;
+    --paper:#F5F2EA; --paper-dim:#C9C5BA; --ink:#0A0B10; --ink-2:#11131C; --ink-3:#181B28;
+    --font-d:'Manrope',sans-serif;
+    --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    --flick:polygon(7.2222% 7.2222%, 92.7778% 7.2222%, 92.7778% 45.5556%,
+      66.6667% 62.5%, 92.7778% 79.4444%, 92.7778% 92.7778%, 7.2222% 92.7778%);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-d);background:#07080C;color:var(--paper);-webkit-font-smoothing:antialiased;
+    display:flex;justify-content:center;padding:48px}
+  body.export{padding:0;display:block}
+
+  /* CONCEPT · ink rise — paper ink pours upward inside the flick silhouette,
+     a slow-rolling liquid crest sweeping the surface, then the wordmark
+     condenses in from a blur. Deterministic rules as logo-motion.html:
+     fill-mode both, nothing infinite, stage box never animates, all motion
+     ends ≤5200ms. */
+
+  .stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#050609}
+
+  .bg{position:absolute;inset:0;z-index:0;
+    background:
+      radial-gradient(78% 48% at 50% 42%, rgba(38,26,130,0.40), rgba(21,13,82,0.18) 48%, transparent 76%),
+      linear-gradient(180deg, #090818 0%, #0B0822 46%, #07080C 100%);
+    animation:fade-in 400ms cubic-bezier(0.3,0,0.4,1) 0ms both}
+  @keyframes fade-in{from{opacity:0}to{opacity:1}}
+
+  .camera{position:absolute;inset:0;z-index:1;transform-origin:50% 44%;
+    animation:push 2600ms cubic-bezier(0.30,0,0.40,1) 2600ms both}
+  @keyframes push{from{transform:scale(1)}to{transform:scale(1.04)}}
+
+  .dots{position:absolute;inset:-4%;
+    background-image:radial-gradient(circle, rgba(245,242,234,0.05) 1px, transparent 1px);
+    background-size:46px 46px;
+    -webkit-mask-image:radial-gradient(70% 52% at 50% 44%, #000 32%, transparent 100%);
+    mask-image:radial-gradient(70% 52% at 50% 44%, #000 32%, transparent 100%);
+    animation:fade-in 600ms cubic-bezier(0.3,0,0.4,1) 100ms both}
+
+  /* lockup block — same final geometry as logo-motion.html */
+  .block{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;margin-top:-84px}
+  .mark-wrap{position:relative;width:300px;height:300px;
+    animation:settle 550ms ease-in-out 2050ms both}
+  @keyframes settle{
+    0%{transform:scale(1)} 30%{transform:scale(0.985)} 70%{transform:scale(1.007)} 100%{transform:scale(1)}}
+
+  .halo{position:absolute;left:50%;top:50%;width:920px;height:920px;pointer-events:none;
+    border-radius:50%;filter:blur(14px);
+    background:radial-gradient(closest-side, rgba(91,91,240,0.50), rgba(91,91,240,0.17) 45%, transparent 72%);
+    animation:bloom 800ms cubic-bezier(0.2,0.6,0.2,1) 2050ms both}
+  @keyframes bloom{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(0.85)}
+    70%{opacity:1}
+    100%{opacity:0.92;transform:translate(-50%,-50%) scale(1)}}
+
+  /* the vessel: flick silhouette, hinted empty, filling with liquid paper */
+  .mark-clip{position:absolute;inset:0;clip-path:var(--flick);overflow:hidden}
+  .hint{position:absolute;inset:0;background:rgba(245,242,234,0.07);
+    animation:hint-in 400ms linear 300ms both}
+  @keyframes hint-in{from{opacity:0}to{opacity:1}}
+  /* the liquid: an oversized rounded blob that rises while slowly turning —
+     its irregular border reads as a rolling crest sweeping the surface */
+  .liquid{position:absolute;left:-110%;top:104%;width:320%;height:320%;background:var(--paper);
+    border-radius:41% 47% 43% 49%;
+    animation:rise 1600ms cubic-bezier(0.33,0.05,0.28,1) 500ms both}
+  @keyframes rise{
+    0%{transform:translateY(0) rotate(0deg)}
+    100%{transform:translateY(-64%) rotate(200deg)}}
+
+  /* surface ripple when the vessel tops out */
+  .ripple{position:absolute;left:50%;top:50%;width:560px;height:560px;margin:-280px 0 0 -280px;
+    border:1.5px solid rgba(139,151,255,0.55);border-radius:50%;
+    animation:ripple 600ms cubic-bezier(0.2,0.5,0.3,1) 2000ms both}
+  /* 0% must be hidden — fill:both backfills it during the delay */
+  @keyframes ripple{
+    0%{opacity:0;transform:scale(0.5)}
+    10%{opacity:0.7}
+    100%{opacity:0;transform:scale(1.6)}}
+
+  /* wordmark — condenses in from a blur */
+  .word{margin-top:64px;font-weight:800;font-size:150px;line-height:1;
+    letter-spacing:-0.038em;color:var(--paper);white-space:nowrap;font-feature-settings:'liga' 0}
+  .ch{display:inline-block;
+    animation:condense 520ms cubic-bezier(0.2,0.7,0.2,1) calc(2600ms + var(--i)*55ms) both}
+  /* blur capped at 6px — 14px text-blur layers at 2× supersample are a GPU
+     wedge trigger (same class as stamp's removed drop-shadow) */
+  @keyframes condense{
+    from{opacity:0;transform:translateY(0.4em);filter:blur(6px)}
+    to{opacity:1;transform:none;filter:blur(0)}}
+  .ai{color:var(--i-300);margin-left:0.10em;
+    animation:condense 520ms cubic-bezier(0.2,0.7,0.2,1) calc(2600ms + var(--i)*55ms) both,
+              ai-glow 600ms cubic-bezier(0.3,0,0.3,1) 3650ms both}
+  @keyframes ai-glow{
+    0%{text-shadow:0 0 0 rgba(139,151,255,0)}
+    40%{text-shadow:0 0 42px rgba(139,151,255,0.85), 0 0 12px rgba(139,151,255,0.55)}
+    100%{text-shadow:0 0 22px rgba(139,151,255,0.32)}}
+
+  .vig{position:absolute;inset:0;z-index:8;pointer-events:none;
+    background:radial-gradient(130% 120% at 50% 40%, transparent 48%, rgba(7,5,22,0.55) 100%)}
+  .grain{position:absolute;inset:0;z-index:9;pointer-events:none;
+    background-image:var(--grain);background-size:140px 140px}
+
+  .replay{position:fixed;right:24px;bottom:24px;z-index:99;font-family:var(--font-d);font-weight:800;
+    font-size:14px;letter-spacing:0.08em;text-transform:uppercase;color:var(--paper);
+    background:var(--i-500);border:0;border-radius:999px;padding:12px 22px;cursor:pointer}
+  body.export .replay{display:none}
+</style>
+</head>
+<body>
+
+  <div class="stage" data-export="logo-motion">
+    <div class="bg"></div>
+    <div class="camera">
+      <div class="dots"></div>
+      <div class="block">
+        <div class="mark-wrap">
+          <div class="halo"></div>
+          <div class="mark-clip">
+            <div class="hint"></div>
+            <div class="liquid"></div>
+          </div>
+          <div class="ripple"></div>
+        </div>
+        <div class="word"><span class="ch" style="--i:0">e</span><span class="ch" style="--i:1">d</span><span class="ch" style="--i:2">u</span><span class="ch" style="--i:3">f</span><span class="ch" style="--i:4">l</span><span class="ch" style="--i:5">i</span><span class="ch" style="--i:6">c</span><span class="ch" style="--i:7">k</span><span class="ch ai" style="--i:8">AI</span></div>
+      </div>
+    </div>
+    <div class="vig"></div>
+    <div class="grain"></div>
+  </div>
+
+  <button class="replay" onclick="document.getAnimations().forEach(a=>{a.currentTime=0;a.play()})">↺ replay</button>
+
+  <script>
+    window.__TOTAL_MS = 6000;
+    window.__SFX = {
+      bed: { type: 'drone', gain: 0.12 },
+      cues: [
+        { t: 450,  type: 'riser', dur: 1500, f0: 45, f1: 95, gain: 0.3 },                 // the pour builds
+        { t: 500,  type: 'whoosh', dur: 1500, panFrom: -0.2, panTo: 0.2, f0: 180, f1: 620, gain: 0.22 }, // liquid wash
+        { t: 2020, type: 'impact', freq: 50, gain: 0.45 },                                 // vessel tops out
+        { t: 2060, type: 'bloom', dur: 1500, gain: 0.34 },
+        ...Array.from({ length: 9 }, (_, i) => ({ t: 2600 + i * 55, type: 'tick', gain: 0.08, freq: 1600 + i * 55 })),
+        { t: 3670, type: 'chime', gain: 0.38 },
+      ],
+    };
+    window.__seek = (t) => {
+      // synchronous by design: the exporter's screenshot forces the BeginFrame
+      // that renders this state (a pending rAF handshake would deadlock a fully
+      // paused page in headless — nothing else ever schedules a frame).
+      for (const a of document.getAnimations()) { a.pause(); a.currentTime = t; }
+    };
+    if (new URLSearchParams(location.search).has('export')) document.body.classList.add('export');
+  </script>
+</body>
+</html>

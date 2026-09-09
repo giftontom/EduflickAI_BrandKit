@@ -50,6 +50,19 @@ function decorate(resp) {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    // Canonical host. www.eduflickai.com is a separate proxied hostname in the
+    // zone whose origin is the (unconfigured) Squarespace parking page — so
+    // www.eduflickai.com/apply served "Coming Soon" while the apex worked. The
+    // www /apply* route now lands here; send it to the apex, keeping path +
+    // query, so assets and the form POST resolve on the one canonical origin.
+    // Host-scoped on purpose: it must not fire on the workers.dev staging host.
+    if (url.hostname.startsWith('www.')) {
+      const canonical = new URL(url);
+      canonical.hostname = url.hostname.slice(4);
+      return decorate(Response.redirect(canonical.toString(), 301));
+    }
+
     const path = url.pathname.replace(/\/+$/, '') || '/';
     const isRead = request.method === 'GET' || request.method === 'HEAD';
     try {
