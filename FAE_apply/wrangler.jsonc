@@ -32,15 +32,15 @@
   // every path and serves this script.
   //
   // www.eduflickai.com is a SEPARATE proxied hostname — the apex routes do not
-  // match it, so www/apply fell through to the Squarespace parking page
-  // ("Coming Soon"). Claiming just /apply* on www hands those requests to the
-  // Worker, which 301s them to the apex (see the canonical-host block in
-  // src/worker.js). Deliberately NOT "www.eduflickai.com/*": the rest of www
-  // stays with its current origin.
+  // match it, so www fell through to an unconfigured Squarespace parking page
+  // ("Coming Soon"): /apply was dead there, and so was the bare domain. The
+  // whole hostname is claimed here, and the canonical-host block in
+  // src/worker.js 301s every www request to the apex (path + query preserved).
+  // The apex is the single origin; www exists only to forward to it.
   "routes": [
     { "pattern": "eduflickai.com/apply", "zone_name": "eduflickai.com" },
     { "pattern": "eduflickai.com/*", "zone_name": "eduflickai.com" },
-    { "pattern": "www.eduflickai.com/apply*", "zone_name": "eduflickai.com" }
+    { "pattern": "www.eduflickai.com/*", "zone_name": "eduflickai.com" }
   ],
 
   "observability": { "enabled": true },
